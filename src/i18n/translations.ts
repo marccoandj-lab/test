@@ -135,6 +135,13 @@ export const translations = {
       tax_liable: "You are now liable for taxes again.",
       jail_warning: "You Are In Jail!",
       jail_wait: "Your turn has been skipped because you are in jail. You must wait for your next turn to play again.",
+    },
+    invites: {
+      title: "Game Invitation",
+      from: "From",
+      message: "Hey! You've been invited to join a multiplayer match. Ready to build your empire?",
+      join: "Join Session 🎮",
+      skip: "Skip",
     }
   },
   sr: {
@@ -273,6 +280,13 @@ export const translations = {
       tax_liable: "Sada ste ponovo obveznik poreza.",
       jail_warning: "U zatvoru ste!",
       jail_wait: "Vaš red je preskočen jer ste u zatvoru. Morate sačekati sledeći red da biste ponovo igrali.",
+    },
+    invites: {
+      title: "Poziv za igru",
+      from: "Od",
+      message: "Hej! Pozvani ste da se pridružite partiji. Da li ste spremni da izgradite svoje carstvo?",
+      join: "Pridruži se 🎮",
+      skip: "Preskoči",
     }
   }
 };

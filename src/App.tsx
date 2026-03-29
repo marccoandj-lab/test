@@ -304,6 +304,7 @@ export const App: React.FC = () => {
           filter: `receiver_id=eq.${session.user.id}`
         },
         async (payload) => {
+          console.log("Invite received:", payload);
           const invite = payload.new;
           const { data: issuer } = await supabase
             .from('profiles')
@@ -538,103 +539,6 @@ export const App: React.FC = () => {
     return <Auth />;
   }
 
-  if (gameState === 'start') {
-    return (
-      <div className="min-h-screen bg-slate-900 overflow-hidden">
-        <StartScreen 
-          onStart={handleStart} 
-          initialName={userName} 
-          initialAvatar={userAvatar} 
-          profileData={profile}
-          onProfileUpdate={(newName, newAvatar) => {
-            setUserName(newName);
-            setUserAvatar(newAvatar as AvatarType);
-            if (profile) {
-              setProfile({ ...profile, username: newName, avatar_url: newAvatar });
-            }
-          }} 
-          language={language}
-          onOpenSettings={() => setIsSettingsOpen(true)}
-        />
-        <SettingsModal 
-          isOpen={isSettingsOpen}
-          onClose={() => setIsSettingsOpen(false)}
-          volume={volume}
-          onVolumeChange={setVolume}
-          isPlaying={isMusicPlaying}
-          onTogglePlay={toggleMusic}
-          mode={mode}
-          showMobileSidebar={showMobileSidebar}
-          onToggleSidebar={setShowMobileSidebar}
-          language={language}
-          onLanguageChange={setLanguage}
-        />
-        <audio ref={audioRef} src={MUSIC_TRACKS[trackIndex]} loop />
-      </div>
-    );
-  }
-
-  if (gameState === 'lobby' && mpState) {
-    return (
-      <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 z-50">
-        <div className="max-w-md w-full bg-white/5 p-8 rounded-[32px] border border-white/10 backdrop-blur-xl space-y-8">
-          <div className="text-center space-y-2">
-            <h2 className="text-3xl font-bold text-white tracking-tight">{t.lobby.waiting_for_players}</h2>
-            <p className="text-blue-400 font-mono tracking-wider text-lg">{t.lobby.room_code}: <span className="text-white font-black">{mpState.roomId}</span></p>
-            <p className="text-slate-500 text-xs">Share this code with your friends!</p>
-          </div>
-
-          <div className="space-y-3">
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest px-2">
-               Connected Friends ({mpState.players.length}/6)
-            </p>
-            <div className="space-y-2">
-              {mpState.players.map((p) => (
-                <div key={p.id} className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5 animate-fade-in">
-                  <div className="flex items-center gap-4">
-                    <img
-                      src={`/assets/${p.avatar}.png`}
-                      alt=""
-                      className="w-10 h-10 object-contain rounded-lg bg-white/5 p-1"
-                    />
-                    <span className="text-white font-medium">{p.name} {p.id === multiplayer.getMyId() && t.ui.you}</span>
-                  </div>
-                  {p.isHost && <span className="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full font-bold uppercase tracking-tighter">Host</span>}
-                </div>
-              ))}
-              {mpState.players.length < 2 && (
-                <div className="p-4 border border-dashed border-white/10 rounded-2xl text-center">
-                  <p className="text-slate-600 text-sm italic">{t.lobby.waiting_for_players}</p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="flex gap-3">
-            <button
-              onClick={handleLeaveRoom}
-              className="flex-1 py-4 rounded-2xl font-bold bg-white/5 text-slate-400 hover:bg-white/10 transition-all border border-white/10"
-            >
-              {t.ui.back_to_menu}
-            </button>
-            {mpState.players.find(p => p.id === multiplayer.getMyId())?.isHost && (
-              <button
-                disabled={mpState.players.length < 2}
-                onClick={() => multiplayer.startGame()}
-                className={`flex-[2] py-4 rounded-2xl font-bold transition-all shadow-xl ${mpState.players.length < 2
-                  ? 'bg-slate-700 text-slate-500 cursor-not-allowed opacity-50'
-                  : 'bg-gradient-to-r from-blue-600 to-green-600 text-white hover:scale-105 active:scale-95 shadow-blue-900/40'
-                  }`}
-              >
-                {t.lobby.start_game}
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   const gameMode = isSinglePlayer ? mode : (mpState?.mode || 'finance');
 
   return (
@@ -651,126 +555,204 @@ export const App: React.FC = () => {
         <source src={MUSIC_TRACKS[trackIndex]} type="audio/mpeg" />
       </audio>
 
-      <Sidebar
-        players={isSinglePlayer ? [myProfile as Player] : (mpState?.players || [])}
-        currentTurnIndex={mpState?.currentTurnIndex || 0}
-        myId={isSinglePlayer ? 'single' : multiplayer.getMyId()}
-        levels={levels}
-        showOnMobile={showMobileSidebar}
-        language={language}
-      />
-
-
-      <GameMap
-        levels={levels}
-        currentLevel={currentLevelIndex}
-        currentPlayer={myProfile as Player}
-        mode={gameMode}
-        balance={currentBalance}
-        onRollDice={handleRollDice}
-        jailed={myProfile?.status === 'jail'}
-        diceValue={lastDiceRoll}
-        isRolling={isRolling}
-        isMoving={isMoving}
-        animatingLevel={currentLevelIndex}
-        taxExemptionTurns={isSinglePlayer ? 0 : (myProfile?.taxExemptTurns || 0)}
-        isMyTurn={isSinglePlayer ? true : (mpState?.currentTurnIndex === mpState?.players.findIndex(p => p.id === multiplayer.getMyId()))}
-        players={isSinglePlayer ? [myProfile as Player] : (mpState?.players || [])}
-        currentTurnIndex={isSinglePlayer ? 0 : (mpState?.currentTurnIndex || 0)}
-        language={language}
-      />
-
-      <GameModal
-        activeField={activeModal}
-        onClose={() => {
-          setActiveModal(null);
-          if (!isSinglePlayer) {
-            multiplayer.sendAction({ type: 'ACTION_INTERACTION_END' });
-          }
-        }}
-        balance={currentBalance}
-        levelIndex={currentLevelIndex}
-        mode={gameMode}
-        levels={levels}
-        players={isSinglePlayer ? [myProfile as Player] : (mpState?.players || [])}
-        isSinglePlayer={isSinglePlayer}
-        onBalanceChange={(change, metadata) => {
-          if (change > 0 && profile) {
-            updateSupabaseProfile({ total_capital: (profile.total_capital || 0) + change });
-          }
-
-          // SFX based on change and context
-          if (activeModal === 'quiz') {
-            playSFX(change > 0 ? 'correct' : 'incorrect');
-          } else if (activeModal === 'investment') {
-            playSFX(change > 0 ? 'win' : change < 0 ? 'loss' : 'click');
-          } else if (change > 0) {
-            playSFX('win');
-          } else if (change < 0) {
-            playSFX('loss');
-          }
-
-          if (isSinglePlayer) {
-            setBalance(prev => prev + change);
-            if (activeModal === 'quiz') {
-              if (change > 0) setSinglePlayerStats(prev => ({ ...prev, correctQuizzes: prev.correctQuizzes + 1 }));
-              else setSinglePlayerStats(prev => ({ ...prev, wrongQuizzes: prev.wrongQuizzes + 1 }));
-            } else if (activeModal === 'investment') {
-              if (change > 0) setSinglePlayerStats(prev => ({ ...prev, investmentGains: prev.investmentGains + change }));
-              else if (change < 0) setSinglePlayerStats(prev => ({ ...prev, investmentLosses: prev.investmentLosses + Math.abs(change) }));
-            } else if (activeModal === 'tax_small') {
-              setSinglePlayerStats(prev => ({ ...prev, taxesPaid: prev.taxesPaid + 1 }));
-            }
-          } else {
-            // Multiplayer Stats Tracking
+      {/* Screen Routing */}
+      {gameState === 'start' ? (
+        <StartScreen 
+          onStart={handleStart} 
+          initialName={userName} 
+          initialAvatar={userAvatar} 
+          profileData={profile}
+          onProfileUpdate={(newName, newAvatar) => {
+            setUserName(newName);
+            setUserAvatar(newAvatar as AvatarType);
             if (profile) {
-              if (activeModal === 'quiz') {
-                if (change > 0) updateSupabaseProfile({ correct_quizzes: (profile.correct_quizzes || 0) + 1 });
-                else updateSupabaseProfile({ wrong_quizzes: (profile.wrong_quizzes || 0) + 1 });
-              } else if (activeModal === 'investment') {
-                if (change > 0) updateSupabaseProfile({ investment_gains: (profile.investment_gains || 0) + change });
-                else if (change < 0) updateSupabaseProfile({ investment_losses: (profile.investment_losses || 0) + Math.abs(change) });
+              setProfile({ ...profile, username: newName, avatar_url: newAvatar });
+            }
+          }} 
+          language={language}
+          onOpenSettings={() => setIsSettingsOpen(true)}
+        />
+      ) : gameState === 'lobby' && mpState ? (
+        <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 z-50">
+          <div className="max-w-md w-full bg-white/5 p-8 rounded-[32px] border border-white/10 backdrop-blur-xl space-y-8">
+            <div className="text-center space-y-2">
+              <h2 className="text-3xl font-bold text-white tracking-tight">{t.lobby.waiting_for_players}</h2>
+              <p className="text-blue-400 font-mono tracking-wider text-lg">{t.lobby.room_code}: <span className="text-white font-black">{mpState.roomId}</span></p>
+              <p className="text-slate-500 text-xs">Share this code with your friends!</p>
+            </div>
+
+            <div className="space-y-3">
+              <p className="text-xs font-bold text-slate-500 uppercase tracking-widest px-2">
+                 Connected Friends ({mpState.players.length}/6)
+              </p>
+              <div className="space-y-2">
+                {mpState.players.map((p) => (
+                  <div key={p.id} className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5 animate-fade-in">
+                    <div className="flex items-center gap-4">
+                      <img
+                        src={`/assets/${p.avatar}.png`}
+                        alt=""
+                        className="w-10 h-10 object-contain rounded-lg bg-white/5 p-1"
+                      />
+                      <span className="text-white font-medium">{p.name} {p.id === multiplayer.getMyId() && t.ui.you}</span>
+                    </div>
+                    {p.isHost && <span className="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full font-bold uppercase tracking-tighter">Host</span>}
+                  </div>
+                ))}
+                {mpState.players.length < 2 && (
+                  <div className="p-4 border border-dashed border-white/10 rounded-2xl text-center">
+                    <p className="text-slate-600 text-sm italic">{t.lobby.waiting_for_players}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={handleLeaveRoom}
+                className="flex-1 py-4 rounded-2xl font-bold bg-white/5 text-slate-400 hover:bg-white/10 transition-all border border-white/10"
+              >
+                {t.ui.back_to_menu}
+              </button>
+              {mpState.players.find(p => p.id === multiplayer.getMyId())?.isHost && (
+                <button
+                  disabled={mpState.players.length < 2}
+                  onClick={() => multiplayer.startGame()}
+                  className={`flex-[2] py-4 rounded-2xl font-bold transition-all shadow-xl ${mpState.players.length < 2
+                    ? 'bg-slate-700 text-slate-500 cursor-not-allowed opacity-50'
+                    : 'bg-gradient-to-r from-blue-600 to-green-600 text-white hover:scale-105 active:scale-95 shadow-blue-900/40'
+                    }`}
+                >
+                  {t.lobby.start_game}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
+          <Sidebar
+            players={isSinglePlayer ? [myProfile as Player] : (mpState?.players || [])}
+            currentTurnIndex={mpState?.currentTurnIndex || 0}
+            myId={isSinglePlayer ? 'single' : multiplayer.getMyId()}
+            levels={levels}
+            showOnMobile={showMobileSidebar}
+            language={language}
+          />
+
+
+          <GameMap
+            levels={levels}
+            currentLevel={currentLevelIndex}
+            currentPlayer={myProfile as Player}
+            mode={gameMode}
+            balance={currentBalance}
+            onRollDice={handleRollDice}
+            jailed={myProfile?.status === 'jail'}
+            diceValue={lastDiceRoll}
+            isRolling={isRolling}
+            isMoving={isMoving}
+            animatingLevel={currentLevelIndex}
+            taxExemptionTurns={isSinglePlayer ? 0 : (myProfile?.taxExemptTurns || 0)}
+            isMyTurn={isSinglePlayer ? true : (mpState?.currentTurnIndex === mpState?.players.findIndex(p => p.id === multiplayer.getMyId()))}
+            players={isSinglePlayer ? [myProfile as Player] : (mpState?.players || [])}
+            currentTurnIndex={isSinglePlayer ? 0 : (mpState?.currentTurnIndex || 0)}
+            language={language}
+          />
+
+          <GameModal
+            activeField={activeModal}
+            onClose={() => {
+              setActiveModal(null);
+              if (!isSinglePlayer) {
+                multiplayer.sendAction({ type: 'ACTION_INTERACTION_END' });
               }
-            }
+            }}
+            balance={currentBalance}
+            levelIndex={currentLevelIndex}
+            mode={gameMode}
+            levels={levels}
+            players={isSinglePlayer ? [myProfile as Player] : (mpState?.players || [])}
+            isSinglePlayer={isSinglePlayer}
+            onBalanceChange={(change, metadata) => {
+              if (change > 0 && profile) {
+                updateSupabaseProfile({ total_capital: (profile.total_capital || 0) + change });
+              }
 
-            if (activeModal === 'investment' && metadata?.type === 'investment') {
-              multiplayer.sendAction({
-                type: 'ACTION_INVEST',
-                result: metadata.multiplier || 1.0,
-                stake: metadata.stake || 0,
-                amount: change
-              });
-            } else {
-              // Quiz or other reward/penalty
-              multiplayer.sendAction({
-                type: 'ACTION_QUIZ_RESULT',
-                reward: change > 0 ? change : 0,
-                penalty: change < 0 ? -change : 0,
-                success: change > 0
-              });
-            }
-          }
-        }}
+              // SFX based on change and context
+              if (activeModal === 'quiz') {
+                playSFX(change > 0 ? 'correct' : 'incorrect');
+              } else if (activeModal === 'investment') {
+                playSFX(change > 0 ? 'win' : change < 0 ? 'loss' : 'click');
+              } else if (change > 0) {
+                playSFX('win');
+              } else if (change < 0) {
+                playSFX('loss');
+              }
 
-        onModeChange={(newMode) => {
-          if (isSinglePlayer) {
-            setMode(newMode);
-          } else {
-            multiplayer.sendAction({ type: 'ACTION_THEME_SWITCH', mode: newMode });
-          }
-        }}
-        onTaxExemption={(turns) => {
-          if (!isSinglePlayer) {
-            multiplayer.sendAction({ type: 'ACTION_TAX_EXEMPT', turns });
-          }
-        }}
-        onAuctionWin={() => {
-          if (profile) {
-            updateSupabaseProfile({ auction_wins: (profile.auction_wins || 0) + 1 });
-          }
-        }}
-        language={language}
-      />
+              if (isSinglePlayer) {
+                setBalance(prev => prev + change);
+                if (activeModal === 'quiz') {
+                  if (change > 0) setSinglePlayerStats(prev => ({ ...prev, correctQuizzes: prev.correctQuizzes + 1 }));
+                  else setSinglePlayerStats(prev => ({ ...prev, wrongQuizzes: prev.wrongQuizzes + 1 }));
+                } else if (activeModal === 'investment') {
+                  if (change > 0) setSinglePlayerStats(prev => ({ ...prev, investmentGains: prev.investmentGains + change }));
+                  else if (change < 0) setSinglePlayerStats(prev => ({ ...prev, investmentLosses: prev.investmentLosses + Math.abs(change) }));
+                } else if (activeModal === 'tax_small') {
+                  setSinglePlayerStats(prev => ({ ...prev, taxesPaid: prev.taxesPaid + 1 }));
+                }
+              } else {
+                // Multiplayer Stats Tracking
+                if (profile) {
+                  if (activeModal === 'quiz') {
+                    if (change > 0) updateSupabaseProfile({ correct_quizzes: (profile.correct_quizzes || 0) + 1 });
+                    else updateSupabaseProfile({ wrong_quizzes: (profile.wrong_quizzes || 0) + 1 });
+                  } else if (activeModal === 'investment') {
+                    if (change > 0) updateSupabaseProfile({ investment_gains: (profile.investment_gains || 0) + change });
+                    else if (change < 0) updateSupabaseProfile({ investment_losses: (profile.investment_losses || 0) + Math.abs(change) });
+                  }
+                }
+
+                if (activeModal === 'investment' && metadata?.type === 'investment') {
+                  multiplayer.sendAction({
+                    type: 'ACTION_INVEST',
+                    result: metadata.multiplier || 1.0,
+                    stake: metadata.stake || 0,
+                    amount: change
+                  });
+                } else {
+                  // Quiz or other reward/penalty
+                  multiplayer.sendAction({
+                    type: 'ACTION_QUIZ_RESULT',
+                    reward: change > 0 ? change : 0,
+                    penalty: change < 0 ? -change : 0,
+                    success: change > 0
+                  });
+                }
+              }
+            }}
+
+            onModeChange={(newMode) => {
+              if (isSinglePlayer) {
+                setMode(newMode);
+              } else {
+                multiplayer.sendAction({ type: 'ACTION_THEME_SWITCH', mode: newMode });
+              }
+            }}
+            onTaxExemption={(turns) => {
+              if (!isSinglePlayer) {
+                multiplayer.sendAction({ type: 'ACTION_TAX_EXEMPT', turns });
+              }
+            }}
+            onAuctionWin={() => {
+              if (profile) {
+                updateSupabaseProfile({ auction_wins: (profile.auction_wins || 0) + 1 });
+              }
+            }}
+            language={language}
+          />
+        </>
+      )}
 
       {/* Exemption Expiry Notification - Fixed Position to top-24 */}
       {showExpiry && (
@@ -836,15 +818,15 @@ export const App: React.FC = () => {
                 🎮
               </div>
               <div>
-                <h4 className="text-white font-black text-sm tracking-tight">Game Invitation</h4>
+                <h4 className="text-white font-black text-sm tracking-tight">{t.invites.title}</h4>
                 <p className="text-indigo-300 text-[10px] font-bold uppercase tracking-widest">
-                  From {pendingInvite.issuerName}
+                  {t.invites.from} {pendingInvite.issuerName}
                 </p>
               </div>
             </div>
             
             <p className="text-slate-400 text-xs leading-relaxed">
-              Hey! You've been invited to join a multiplayer match. Ready to build your empire?
+              {t.invites.message}
             </p>
 
             <div className="flex gap-2">
@@ -852,13 +834,13 @@ export const App: React.FC = () => {
                 onClick={handleAcceptInvite}
                 className="flex-1 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-black text-[10px] uppercase tracking-widest py-3 rounded-xl transition-all shadow-lg active:scale-95"
               >
-                Join Match 🎮
+                {t.invites.join}
               </button>
               <button
                 onClick={handleDeclineInvite}
                 className="px-4 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white font-black text-[10px] uppercase tracking-widest py-3 rounded-xl transition-all border border-white/5 active:scale-95"
               >
-                Skip
+                {t.invites.skip}
               </button>
             </div>
           </div>
