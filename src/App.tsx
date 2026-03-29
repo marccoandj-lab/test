@@ -59,7 +59,7 @@ export const App: React.FC = () => {
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
 
   // Audio state
-  const [volume, setVolume] = useState(0.4);
+  const [volume, setVolume] = useState(0.1);
   const [trackIndex, setTrackIndex] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
@@ -332,24 +332,33 @@ export const App: React.FC = () => {
     setTrackIndex(prev => (prev + 1) % MUSIC_TRACKS.length);
   }, []);
 
-  // Auto-play music on first click/touch
+  // Auto-play music on first user interaction (Browser compliance)
   useEffect(() => {
     const playOnFirstInteraction = () => {
-      if (audioRef.current && !isMusicPlaying) {
+      if (audioRef.current) {
         audioRef.current.play()
-          .then(() => setIsMusicPlaying(true))
-          .catch(err => console.log("Auto-play failed:", err));
+          .then(() => {
+            setIsMusicPlaying(true);
+            console.log("Music started successfully on interaction");
+          })
+          .catch(err => console.log("Auto-play interaction failed:", err));
       }
-      window.removeEventListener('click', playOnFirstInteraction);
-      window.removeEventListener('touchstart', playOnFirstInteraction);
+      // Remove all listeners after first successful or attempted interaction
+      ['click', 'touchstart', 'mousedown', 'keydown'].forEach(event => 
+        window.removeEventListener(event, playOnFirstInteraction)
+      );
     };
-    window.addEventListener('click', playOnFirstInteraction);
-    window.addEventListener('touchstart', playOnFirstInteraction);
+
+    ['click', 'touchstart', 'mousedown', 'keydown'].forEach(event => 
+      window.addEventListener(event, playOnFirstInteraction)
+    );
+
     return () => {
-      window.removeEventListener('click', playOnFirstInteraction);
-      window.removeEventListener('touchstart', playOnFirstInteraction);
+      ['click', 'touchstart', 'mousedown', 'keydown'].forEach(event => 
+        window.removeEventListener(event, playOnFirstInteraction)
+      );
     };
-  }, [isMusicPlaying]);
+  }, []);
 
   useEffect(() => {
     multiplayer.init((state) => {
@@ -548,7 +557,7 @@ export const App: React.FC = () => {
       <audio
         ref={audioRef}
         src={MUSIC_TRACKS[trackIndex]}
-        autoPlay={false}
+        autoPlay={true}
         preload="auto"
         onEnded={handleTrackEnd}
       >
