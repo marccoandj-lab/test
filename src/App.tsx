@@ -22,8 +22,8 @@ const MUSIC_TRACKS = [
 
 export const App: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
-  const [profile, setProfile] = useState<{ 
-    username: string, 
+  const [profile, setProfile] = useState<{
+    username: string,
     avatar_url: string,
     wins: number,
     games_played: number,
@@ -59,7 +59,7 @@ export const App: React.FC = () => {
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
 
   // Audio state
-  const [volume, setVolume] = useState(0.1);
+  const [volume, setVolume] = useState(0.05);
   const [trackIndex, setTrackIndex] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
@@ -108,7 +108,7 @@ export const App: React.FC = () => {
         .single();
 
       if (error && error.code !== 'PGRST116') throw error;
-      
+
       if (data) {
         setProfile(data);
         const newName = data.username || "Player";
@@ -122,10 +122,10 @@ export const App: React.FC = () => {
         // Create initial profile if it doesn't exist
         const { data: { user } } = await supabase.auth.getUser();
         const initialName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || "Player";
-        
-        const newProfile = { 
-          id: userId, 
-          username: initialName, 
+
+        const newProfile = {
+          id: userId,
+          username: initialName,
           avatar_url: '1',
           wins: 0,
           games_played: 0,
@@ -140,7 +140,7 @@ export const App: React.FC = () => {
         };
 
         const { error: insertError } = await supabase.from('profiles').insert([newProfile]);
-        
+
         if (!insertError) {
           setProfile(newProfile as any);
           setUserName(initialName);
@@ -153,8 +153,8 @@ export const App: React.FC = () => {
     }
   };
 
-  const updateSupabaseProfile = async (updates: Partial<{ 
-    username: string, 
+  const updateSupabaseProfile = async (updates: Partial<{
+    username: string,
     avatar_url: string,
     wins: number,
     games_played: number,
@@ -176,16 +176,16 @@ export const App: React.FC = () => {
           updated_at: new Date().toISOString()
         })
         .eq('id', session.user.id);
-      
+
       if (error) throw error;
-      
+
       // Refresh local profile
       const { data } = await supabase
         .from('profiles')
         .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, investment_gains, investment_losses, jail_visits, auction_wins')
         .eq('id', session.user.id)
         .single();
-      
+
       if (data) setProfile(data);
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -198,10 +198,10 @@ export const App: React.FC = () => {
 
   const handleAcceptInvite = async () => {
     if (!pendingInvite) return;
-    
+
     // Update invite status
     await supabase.from('game_invites').update({ status: 'accepted' }).eq('id', pendingInvite.id);
-    
+
     // Join room
     multiplayer.joinRoom(pendingInvite.roomCode, userName, userAvatar as any);
     setIsSinglePlayer(false);
@@ -311,7 +311,7 @@ export const App: React.FC = () => {
             .select('username')
             .eq('id', invite.issuer_id)
             .single();
-          
+
           setPendingInvite({
             id: invite.id,
             roomCode: invite.room_code,
@@ -344,17 +344,17 @@ export const App: React.FC = () => {
           .catch(err => console.log("Auto-play interaction failed:", err));
       }
       // Remove all listeners after first successful or attempted interaction
-      ['click', 'touchstart', 'mousedown', 'keydown'].forEach(event => 
+      ['click', 'touchstart', 'mousedown', 'keydown'].forEach(event =>
         window.removeEventListener(event, playOnFirstInteraction)
       );
     };
 
-    ['click', 'touchstart', 'mousedown', 'keydown'].forEach(event => 
+    ['click', 'touchstart', 'mousedown', 'keydown'].forEach(event =>
       window.addEventListener(event, playOnFirstInteraction)
     );
 
     return () => {
-      ['click', 'touchstart', 'mousedown', 'keydown'].forEach(event => 
+      ['click', 'touchstart', 'mousedown', 'keydown'].forEach(event =>
         window.removeEventListener(event, playOnFirstInteraction)
       );
     };
@@ -411,7 +411,7 @@ export const App: React.FC = () => {
     setIsSinglePlayer(isSingle);
     setUserName(name);
     setUserAvatar(avatar as AvatarType);
-    
+
     // Start music on first interaction
     startMusic();
 
@@ -473,7 +473,7 @@ export const App: React.FC = () => {
 
     if (!isSinglePlayer) {
       multiplayer.sendAction({ type: 'ACTION_DICE_ROLL', steps });
-      
+
       // Track jail visits for multiplayer profile
       const landingField = levels[currentPos].type;
       if (landingField === 'jail') {
@@ -529,7 +529,7 @@ export const App: React.FC = () => {
       setGameState('victory');
       playSFX('victory');
       if (profile) {
-        updateSupabaseProfile({ 
+        updateSupabaseProfile({
           wins: (profile.wins || 0) + 1
         });
       }
@@ -566,10 +566,10 @@ export const App: React.FC = () => {
 
       {/* Screen Routing */}
       {gameState === 'start' ? (
-        <StartScreen 
-          onStart={handleStart} 
-          initialName={userName} 
-          initialAvatar={userAvatar} 
+        <StartScreen
+          onStart={handleStart}
+          initialName={userName}
+          initialAvatar={userAvatar}
           profileData={profile}
           onProfileUpdate={(newName, newAvatar) => {
             setUserName(newName);
@@ -577,7 +577,7 @@ export const App: React.FC = () => {
             if (profile) {
               setProfile({ ...profile, username: newName, avatar_url: newAvatar });
             }
-          }} 
+          }}
           language={language}
           onOpenSettings={() => setIsSettingsOpen(true)}
         />
@@ -592,7 +592,7 @@ export const App: React.FC = () => {
 
             <div className="space-y-3">
               <p className="text-xs font-bold text-slate-500 uppercase tracking-widest px-2">
-                 Connected Friends ({mpState.players.length}/6)
+                Connected Friends ({mpState.players.length}/6)
               </p>
               <div className="space-y-2">
                 {mpState.players.map((p) => (
@@ -835,7 +835,7 @@ export const App: React.FC = () => {
                 </p>
               </div>
             </div>
-            
+
             <p className="text-slate-400 text-xs leading-relaxed">
               {t.invites.message}
             </p>
