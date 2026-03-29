@@ -205,7 +205,6 @@ export const App: React.FC = () => {
     // Join room
     multiplayer.joinRoom(pendingInvite.roomCode, userName, userAvatar as any);
     setIsSinglePlayer(false);
-    setGameState('playing'); // Move directly or to lobby? Socials plan says transition to lobby
     setGameState('lobby');
     setPendingInvite(null);
   };
@@ -214,6 +213,12 @@ export const App: React.FC = () => {
     if (!pendingInvite) return;
     await supabase.from('game_invites').update({ status: 'declined' }).eq('id', pendingInvite.id);
     setPendingInvite(null);
+  };
+
+  const handleLeaveRoom = () => {
+    multiplayer.leaveRoom();
+    setGameState('start');
+    setMpState(null);
   };
 
   // Taxation track
@@ -605,18 +610,26 @@ export const App: React.FC = () => {
             </div>
           </div>
 
-          {mpState.players.find(p => p.id === multiplayer.getMyId())?.isHost && (
+          <div className="flex gap-3">
             <button
-              disabled={mpState.players.length < 2}
-              onClick={() => multiplayer.startGame()}
-              className={`w-full py-4 rounded-2xl font-bold transition-all shadow-xl ${mpState.players.length < 2
-                ? 'bg-slate-700 text-slate-500 cursor-not-allowed opacity-50'
-                : 'bg-gradient-to-r from-blue-600 to-green-600 text-white hover:scale-105 active:scale-95 shadow-blue-900/40'
-                }`}
+              onClick={handleLeaveRoom}
+              className="flex-1 py-4 rounded-2xl font-bold bg-white/5 text-slate-400 hover:bg-white/10 transition-all border border-white/10"
             >
-              {t.lobby.start_game}
+              {t.ui.back_to_menu}
             </button>
-          )}
+            {mpState.players.find(p => p.id === multiplayer.getMyId())?.isHost && (
+              <button
+                disabled={mpState.players.length < 2}
+                onClick={() => multiplayer.startGame()}
+                className={`flex-[2] py-4 rounded-2xl font-bold transition-all shadow-xl ${mpState.players.length < 2
+                  ? 'bg-slate-700 text-slate-500 cursor-not-allowed opacity-50'
+                  : 'bg-gradient-to-r from-blue-600 to-green-600 text-white hover:scale-105 active:scale-95 shadow-blue-900/40'
+                  }`}
+              >
+                {t.lobby.start_game}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -837,9 +850,9 @@ export const App: React.FC = () => {
             <div className="flex gap-2">
               <button
                 onClick={handleAcceptInvite}
-                className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-black text-[10px] uppercase tracking-widest py-3 rounded-xl transition-all shadow-lg active:scale-95"
+                className="flex-1 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-black text-[10px] uppercase tracking-widest py-3 rounded-xl transition-all shadow-lg active:scale-95"
               >
-                Accept
+                Join Match 🎮
               </button>
               <button
                 onClick={handleDeclineInvite}

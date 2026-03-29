@@ -26,6 +26,7 @@ interface FriendRelation {
 
 export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentUserId, language }) => {
   const t = translations[language];
+  const ts = t.socials as any;
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
   const [friends, setFriends] = useState<FriendRelation[]>([]);
@@ -120,7 +121,7 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
         .from('friends')
         .update({ status: 'accepted' })
         .eq('id', requestId);
-      
+
       if (error) throw error;
       fetchFriends();
     } catch (err) {
@@ -128,8 +129,23 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
     }
   };
 
-  const inviteToPlay = async (friendId: string) => {
+  const removeFriend = async (relationId: string) => {
+    if (!confirm(ts.confirm_remove)) return;
+    
     try {
+      const { error } = await supabase
+        .from('friends')
+        .delete()
+        .eq('id', relationId);
+
+      if (error) throw error;
+      setFriends(prev => prev.filter(f => f.id !== relationId));
+    } catch (err) {
+      console.error('Error removing friend:', err);
+    }
+  };
+
+  const inviteToPlay = async (friendId: string) => {    try {
       // 1. Create a room locally
       const myProfile = (await supabase.from('profiles').select('username, avatar_url').eq('id', currentUserId).single()).data;
       const roomCode = multiplayer.createRoom(myProfile?.username || 'Host', (myProfile?.avatar_url as any) || '1');
@@ -248,12 +264,21 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
                       <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">{language === 'en' ? 'Friend' : 'Prijatelj'}</p>
                     </div>
                   </div>
-                  <button
-                    onClick={() => f.profiles && inviteToPlay(f.profiles.id)}
-                    className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] shadow-lg shadow-blue-900/40 transition-all active:scale-95"
-                  >
-                    {language === 'en' ? 'Invite' : 'Pozovi'} 🎮
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => f.profiles && inviteToPlay(f.profiles.id)}
+                      className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] shadow-lg shadow-blue-900/40 transition-all active:scale-95"
+                    >
+                      {language === 'en' ? 'Invite' : 'Pozovi'} 🎮
+                    </button>
+                    <button
+                      onClick={() => removeFriend(f.id)}
+                      className="p-2 text-slate-500 hover:text-rose-500 transition-colors"
+                      title={ts.remove}
+                    >
+                      🗑️
+                    </button>
+                  </div>
                 </div>
               ))}
               {acceptedFriends.length === 0 && (

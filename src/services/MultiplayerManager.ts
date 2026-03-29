@@ -430,6 +430,26 @@ class MultiplayerManager {
     conn.send(msg);
   }
 
+  leaveRoom() {
+    if (this.peer) {
+      this.peer.destroy();
+      this.peer = null;
+    }
+    this.connections.clear();
+    this.hostConnection = null;
+    this.state = {
+      roomId: '',
+      players: [],
+      currentTurnIndex: 0,
+      status: 'waiting',
+      turnTimeLeft: 60,
+      mode: 'finance',
+      auction: { active: false, rolls: {}, turnIndex: 0 },
+      levels: []
+    };
+    this.onStateUpdate({ ...this.state });
+  }
+
   startGame() {
     if (this.myProfile?.isHost && this.state.players.length >= 2) {
       this.state.status = 'playing';

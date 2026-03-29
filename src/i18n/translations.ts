@@ -93,6 +93,8 @@ export const translations = {
       online: "Online",
       offline: "Offline",
       sent: "Sent",
+      remove: "Remove",
+      confirm_remove: "Are you sure you want to remove this friend?",
     },
     leaderboard: {
       global_rank: "Global Rank",
@@ -229,6 +231,8 @@ export const translations = {
       online: "Na mreži",
       offline: "Nije na mreži",
       sent: "Poslato",
+      remove: "Ukloni",
+      confirm_remove: "Da li ste sigurni da želite da uklonite ovog prijatelja?",
     },
     leaderboard: {
       global_rank: "Globalni rang",
