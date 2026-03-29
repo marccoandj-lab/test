@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback, memo } from 'react';
 import { Level, GameMode } from '../data/gameData';
 import { Player } from '../types/game';
 
@@ -31,7 +31,7 @@ function getCol(idx: number): number {
 }
 
 // ── 3D Dice Component ──
-function DiceRoller({ value, isRolling, onRoll, disabled, isFinance, isJailed, language }: {
+const DiceRoller = memo(({ value, isRolling, onRoll, disabled, isFinance, isJailed, language }: {
   value: number | null;
   isRolling: boolean;
   onRoll: () => void;
@@ -39,7 +39,7 @@ function DiceRoller({ value, isRolling, onRoll, disabled, isFinance, isJailed, l
   isFinance: boolean;
   isJailed: boolean;
   language: 'en' | 'sr';
-}) {
+}) => {
   const t = translations[language as keyof typeof translations];
   const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
   const [displayFace, setDisplayFace] = useState(0);
@@ -110,7 +110,78 @@ function DiceRoller({ value, isRolling, onRoll, disabled, isFinance, isJailed, l
       </button>
     </div>
   );
+});
+
+DiceRoller.displayName = 'DiceRoller';
+
+interface FieldItemProps {
+  level: Level;
+  actualIdx: number;
+  isCurrent: boolean;
+  isCompleted: boolean;
+  isFinance: boolean;
+  columnPct: number;
+  label: string;
+  fieldRefs: React.MutableRefObject<(HTMLDivElement | null)[]>;
 }
+
+const FieldItem = memo(({ level, actualIdx, isCurrent, isCompleted, isFinance, columnPct, label, fieldRefs }: FieldItemProps) => {
+  let ml = '22%';
+  let mr = '22%';
+  if (columnPct <= 20) { ml = '2%'; mr = '42%'; }
+  else if (columnPct >= 80) { ml = '42%'; mr = '2%'; }
+
+  return (
+    <div style={{ marginLeft: ml, marginRight: mr }} className="relative mb-0.5">
+      <div
+        ref={(el) => { fieldRefs.current[actualIdx] = el; }}
+        className={`
+          relative flex flex-col items-center justify-center
+          rounded-xl border-2 select-none
+          transition-all duration-300
+          ${level.bgColor} ${level.borderColor}
+          ${isCurrent
+            ? 'scale-105 ring-[3px] ring-white/50 shadow-xl'
+            : isCompleted
+              ? 'opacity-60 scale-[0.92]'
+              : 'opacity-85'
+          }
+        `}
+        style={{
+          width: level.type === 'tax_large' ? '115%' : '100%',
+          paddingTop: level.type === 'tax_large' ? '18px' : '12px',
+          paddingBottom: level.type === 'tax_large' ? '12px' : '8px',
+          boxShadow: isCurrent
+            ? '0 0 20px 4px rgba(255,255,255,0.15), 0 6px 24px rgba(0,0,0,0.4)'
+            : undefined,
+        }}
+      >
+        {isCompleted && (
+          <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black/25">
+            <span className="text-lg text-white/70">✓</span>
+          </div>
+        )}
+
+        <span className="text-xl drop-shadow-md">
+          {level.type === 'auction_insurance' ? (isFinance ? '⚖️' : '🛡️') : level.icon}
+        </span>
+        <span className={`text-[10px] font-bold ${level.color} text-center leading-tight px-1 mt-0.5`}>
+          {label}
+        </span>
+        <span className="text-white/40 text-[9px] mt-0.5">{actualIdx + 1}</span>
+
+        {isCurrent && (
+          <span className="absolute -top-1 -right-1 flex h-3 w-3">
+            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isFinance ? 'bg-blue-300' : 'bg-green-300'}`} />
+            <span className={`relative inline-flex rounded-full h-3 w-3 border-2 border-white ${isFinance ? 'bg-blue-400' : 'bg-green-400'}`} />
+          </span>
+        )}
+      </div>
+    </div>
+  );
+});
+
+FieldItem.displayName = 'FieldItem';
 
 export function GameMap({ levels, currentLevel, currentPlayer, mode, balance, onRollDice, jailed, diceValue, isRolling, isMoving, animatingLevel, taxExemptionTurns, isMyTurn, players, currentTurnIndex, language }: GameMapProps) {
   const t = translations[language as keyof typeof translations];
@@ -134,7 +205,7 @@ export function GameMap({ levels, currentLevel, currentPlayer, mode, balance, on
   const scrollRef = useRef<HTMLDivElement>(null);
   const fieldRefs = useRef<(HTMLDivElement | null)[]>([]);
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const [avatarPos, setAvatarPos] = useState<{ x: number; y: number } | null>(null);
+  const [fieldPositions, setFieldPositions] = useState<Record<number, { x: number, y: number }>>({});
 
   const isFinance = mode === 'finance';
   const bgClass = isFinance
@@ -147,41 +218,39 @@ export function GameMap({ levels, currentLevel, currentPlayer, mode, balance, on
     return `${b.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC`;
   };
 
-  // The level to show avatar on
   const avatarLevel = isMoving ? animatingLevel : currentLevel;
 
-  // Calculate avatar position relative to mapContainer
-  const recalcAvatarPos = useCallback((level: number) => {
-    const el = fieldRefs.current[level];
+  const updateAllPositions = useCallback(() => {
     const container = mapContainerRef.current;
-    if (!el || !container) return;
+    if (!container) return;
     const containerRect = container.getBoundingClientRect();
-    const elRect = el.getBoundingClientRect();
-    setAvatarPos({
-      x: elRect.left - containerRect.left + elRect.width / 2,
-      y: elRect.top - containerRect.top,
+    
+    const newPositions: Record<number, { x: number, y: number }> = {};
+    fieldRefs.current.forEach((el, idx) => {
+      if (el) {
+        const elRect = el.getBoundingClientRect();
+        newPositions[idx] = {
+          x: elRect.left - containerRect.left + elRect.width / 2,
+          y: elRect.top - containerRect.top,
+        };
+      }
     });
+
+    setFieldPositions(newPositions);
   }, []);
 
-  // Recalc avatar pos when avatarLevel changes
+  // Update positions once map is rendered and on resize
   useEffect(() => {
-    // Small timeout to let DOM update
-    const t = setTimeout(() => recalcAvatarPos(avatarLevel), 20);
-    return () => clearTimeout(t);
-  }, [avatarLevel, recalcAvatarPos]);
-
-  // Resize listener
-  useEffect(() => {
-    const handleResize = () => recalcAvatarPos(avatarLevel);
+    const t = setTimeout(updateAllPositions, 500); // Initial calc
+    const handleResize = () => updateAllPositions();
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [avatarLevel, recalcAvatarPos]);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [updateAllPositions, levels.length]);
 
-  // Initial position
-  useEffect(() => {
-    const t = setTimeout(() => recalcAvatarPos(currentLevel), 400);
-    return () => clearTimeout(t);
-  }, []);
+  const avatarPos = fieldPositions[avatarLevel];
 
   // Scroll logic
   const scrollToField = useCallback((level: number) => {
@@ -278,18 +347,16 @@ export function GameMap({ levels, currentLevel, currentPlayer, mode, balance, on
             </div>
           </div>
 
-          {/* ── PLAYER AVATAR (absolute within map container, smooth transitions) ── */}
+          {/* ── PLAYER AVATAR (GPU Accelerated translate3d) ── */}
           {avatarPos && (
             <div
               className="absolute z-20 pointer-events-none"
               style={{
-                left: avatarPos.x,
-                top: avatarPos.y - 56,
-                transform: 'translateX(-50%)',
+                transform: `translate3d(${avatarPos.x}px, ${avatarPos.y - 56}px, 0) translateX(-50%)`,
                 transition: isMoving
-                  ? 'left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
-                  : 'left 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                willChange: 'left, top',
+                  ? 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                  : 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                willChange: 'transform',
               }}
             >
               {/* Drop shadow under avatar */}
@@ -333,11 +400,6 @@ export function GameMap({ levels, currentLevel, currentPlayer, mode, balance, on
               const isCompleted = actualIdx < currentLevel;
               const colPct = getCol(actualIdx);
 
-              let ml = '22%';
-              let mr = '22%';
-              if (colPct <= 20) { ml = '2%'; mr = '42%'; }
-              else if (colPct >= 80) { ml = '42%'; mr = '2%'; }
-
               return (
                 <div key={level.id} className="relative">
                   {/* Connector dots */}
@@ -349,65 +411,16 @@ export function GameMap({ levels, currentLevel, currentPlayer, mode, balance, on
                     />
                   )}
 
-                  {/* Field bubble */}
-                  <div style={{ marginLeft: ml, marginRight: mr }} className="relative mb-0.5">
-                    <div
-                      ref={(el) => { fieldRefs.current[actualIdx] = el; }}
-                      className={`
-                        relative flex flex-col items-center justify-center
-                        rounded-xl border-2 select-none
-                        transition-all duration-300
-                        ${level.bgColor} ${level.borderColor}
-                        ${isCurrent
-                          ? 'scale-105 ring-[3px] ring-white/50 shadow-xl'
-                          : isCompleted
-                            ? 'opacity-60 scale-[0.92]'
-                            : 'opacity-85'
-                        }
-                      `}
-                      style={{
-                        width: level.type === 'tax_large' ? '115%' : '100%',
-                        paddingTop: level.type === 'tax_large' ? '18px' : '12px',
-                        paddingBottom: level.type === 'tax_large' ? '12px' : '8px',
-                        boxShadow: isCurrent
-                          ? '0 0 20px 4px rgba(255,255,255,0.15), 0 6px 24px rgba(0,0,0,0.4)'
-                          : undefined,
-                      }}
-                    >
-                      {/* Completed overlay */}
-                      {isCompleted && (
-                        <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black/25">
-                          <span className="text-lg text-white/70">✓</span>
-                        </div>
-                      )}
-
-                      {/* Field content */}
-                      <span className="text-xl drop-shadow-md">
-                        {level.type === 'auction_insurance'
-                          ? (isFinance ? '⚖️' : '🛡️')
-                          : level.icon
-                        }
-                      </span>
-                      <span className={`text-[10px] font-bold ${level.color} text-center leading-tight px-1 mt-0.5`}>
-                        {getTranslatedLabel(level)}
-                      </span>
-                      <span className="text-white/40 text-[9px] mt-0.5">{actualIdx + 1}</span>
-
-                      {/* Pulse ring on current */}
-                      {isCurrent && (
-                        <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                          <span
-                            className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isFinance ? 'bg-blue-300' : 'bg-green-300'
-                              }`}
-                          />
-                          <span
-                            className={`relative inline-flex rounded-full h-3 w-3 border-2 border-white ${isFinance ? 'bg-blue-400' : 'bg-green-400'
-                              }`}
-                          />
-                        </span>
-                      )}
-                    </div>
-                  </div>
+                  <FieldItem
+                    level={level}
+                    actualIdx={actualIdx}
+                    isCurrent={isCurrent}
+                    isCompleted={isCompleted}
+                    isFinance={isFinance}
+                    columnPct={colPct}
+                    label={getTranslatedLabel(level)}
+                    fieldRefs={fieldRefs}
+                  />
                 </div>
               );
             })}
@@ -497,7 +510,7 @@ export function GameMap({ levels, currentLevel, currentPlayer, mode, balance, on
 }
 
 // ── Connector dots ──
-function ConnectorDots({ isCompleted, isFinance, isStartGap }: { isCompleted: boolean; isFinance: boolean, isStartGap?: boolean }) {
+const ConnectorDots = memo(({ isCompleted, isFinance, isStartGap }: { isCompleted: boolean; isFinance: boolean, isStartGap?: boolean }) => {
   const dotColor = isCompleted
     ? isFinance ? 'bg-blue-400/70' : 'bg-green-400/70'
     : 'bg-white/15';
@@ -515,4 +528,6 @@ function ConnectorDots({ isCompleted, isFinance, isStartGap }: { isCompleted: bo
       ))}
     </div>
   );
-}
+});
+
+ConnectorDots.displayName = 'ConnectorDots';
