@@ -800,14 +800,16 @@ export const App: React.FC = () => {
         onLanguageChange={setLanguage}
       />
 
-      {/* Floating Settings Button */}
-      <button
-        onClick={() => setIsSettingsOpen(true)}
-        className="fixed top-6 right-6 z-[60] w-12 h-12 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full backdrop-blur-xl flex items-center justify-center text-xl shadow-2xl transition-all active:scale-90"
-        title="Settings"
-      >
-        ⚙️
-      </button>
+      {/* Floating Settings Button - Hidden on Start and Lobby screens */}
+      {gameState !== 'start' && gameState !== 'lobby' && (
+        <button
+          onClick={() => setIsSettingsOpen(true)}
+          className="fixed top-6 right-6 z-[60] w-12 h-12 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full backdrop-blur-xl flex items-center justify-center text-xl shadow-2xl transition-all active:scale-90"
+          title="Settings"
+        >
+          ⚙️
+        </button>
+      )}
 
       {/* Invite Notification Popup */}
       {pendingInvite && (
