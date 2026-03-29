@@ -39,30 +39,37 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
   const fetchFriends = async () => {
     setLoading(true);
     try {
-      // Get accepted friends
+      // Get all friend relations
       const { data, error } = await supabase
         .from('friends')
-        .select(`
-          id,
-          user_id,
-          friend_id,
-          status,
-          profiles:friend_id (id, username, avatar_url)
-        `)
+        .select('id, user_id, friend_id, status')
         .or(`user_id.eq.${currentUserId},friend_id.eq.${currentUserId}`);
 
       if (error) throw error;
 
       // Transform data to ensure we have the "other" person's profile
-      const transformedFriends = await Promise.all((data || []).map(async (f: any) => {
+      const otherIds = (data || []).map((f: any) => 
+        f.user_id === currentUserId ? f.friend_id : f.user_id
+      );
+
+      if (otherIds.length === 0) {
+        setFriends([]);
+        setLoading(false);
+        return;
+      }
+
+      const { data: profiles, error: profileError } = await supabase
+        .from('profiles')
+        .select('id, username, avatar_url')
+        .in('id', otherIds);
+
+      if (profileError) throw profileError;
+
+      const transformedFriends = (data || []).map((f: any) => {
         const otherId = f.user_id === currentUserId ? f.friend_id : f.user_id;
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('id, username, avatar_url')
-          .eq('id', otherId)
-          .single();
+        const profile = profiles?.find(p => p.id === otherId);
         return { ...f, profiles: profile };
-      }));
+      });
 
       setFriends(transformedFriends as any);
     } catch (err) {
@@ -242,7 +249,7 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
                     </div>
                   </div>
                   <button
-                    onClick={() => inviteToPlay(f.profiles!.id)}
+                    onClick={() => f.profiles && inviteToPlay(f.profiles.id)}
                     className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] shadow-lg shadow-blue-900/40 transition-all active:scale-95"
                   >
                     {language === 'en' ? 'Invite' : 'Pozovi'} 🎮
