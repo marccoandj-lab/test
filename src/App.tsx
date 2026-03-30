@@ -62,7 +62,18 @@ export const App: React.FC = () => {
     slots: ["09:00", "18:00"]
   });
 
-  const VAPID_PUBLIC_KEY = "BAivaAO37KI9mGt0aA3LJnwXtco6rN9Bf1Kca6Wqap-LFPoVFi7SjcPlWAtliakzVnB3D4SHPh_s6AoaHFbxsT8";
+  const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY || "BF-7c3glrSbaxtlAiMCeXWNt2pb8XRgTtIEoiN45ExScF1fGeQxBsk17Xg8w0jDizluKCbjQGCEmK7WU8v4bScA";
+
+  const urlBase64ToUint8Array = (base64String: string) => {
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  };
 
   const subscribeToPush = async (settings: NotificationSettings) => {
     if (!session?.user.id) return;
@@ -74,7 +85,7 @@ export const App: React.FC = () => {
           const registration = await navigator.serviceWorker.ready;
           const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,
-            applicationServerKey: VAPID_PUBLIC_KEY
+            applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
           });
 
           // Save subscription to backend
