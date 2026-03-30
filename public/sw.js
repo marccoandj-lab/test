@@ -29,6 +29,11 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+    // Ignore backend API calls to avoid breaking CORS/Service Worker cache logic
+    if (event.request.url.includes('/api/')) {
+        return; 
+    }
+
     // Network-first strategy for index.html/root to ensure fresh builds
     if (event.request.mode === 'navigate') {
         event.respondWith(
@@ -39,7 +44,9 @@ self.addEventListener('fetch', (event) => {
 
     event.respondWith(
         caches.match(event.request)
-            .then((response) => response || fetch(event.request))
+            .then((response) => response || fetch(event.request).catch(err => {
+                console.warn('SW Fetch fail (usually implies offline or blocked network):', event.request.url, err);
+            }))
     );
 });
 
