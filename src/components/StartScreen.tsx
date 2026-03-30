@@ -44,6 +44,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   const [userId, setUserId] = useState<string | null>(null);
   const [isEditingName, setIsEditingName] = useState(false);
   const [isChangingAvatar, setIsChangingAvatar] = useState(false);
+  const [showMultiplayerMenu, setShowMultiplayerMenu] = useState(false);
 
   useEffect(() => {
     if (initialName) setName(initialName);
@@ -358,35 +359,61 @@ export const StartScreen: React.FC<StartScreenProps> = ({
               </div>
             </button>
 
-            <button
-              onClick={() => { (window as any).playSFX?.('click'); setMode('create'); }}
-              className="group relative p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all"
-            >
-              <div className="flex items-center gap-4 text-left">
-                <div className="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                  🏠
+            {!showMultiplayerMenu ? (
+              <button
+                onClick={() => { (window as any).playSFX?.('click'); setShowMultiplayerMenu(true); }}
+                className="group relative p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all"
+              >
+                <div className="flex items-center gap-4 text-left">
+                  <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                    🌐
+                  </div>
+                  <div>
+                    <h3 className="text-white font-bold">{language === 'en' ? 'Multiplayer' : 'Multiplayer'}</h3>
+                    <p className="text-slate-500 text-xs">{language === 'en' ? 'Play with friends online' : 'Igraj sa prijateljima online'}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-white font-bold">{t.lobby.create_game}</h3>
-                  <p className="text-slate-500 text-xs">{language === 'en' ? 'Be the host and invite friends' : 'Budi host i pozovi prijatelje'}</p>
-                </div>
-              </div>
-            </button>
+              </button>
+            ) : (
+              <div className="flex flex-col gap-4 animate-fade-in pl-4 border-l-2 border-white/10 ml-2">
+                <button
+                  onClick={() => { (window as any).playSFX?.('click'); setMode('create'); }}
+                  className="group relative p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all"
+                >
+                  <div className="flex items-center gap-4 text-left">
+                    <div className="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                      🏠
+                    </div>
+                    <div>
+                      <h3 className="text-white font-bold">{t.lobby.create_game}</h3>
+                      <p className="text-slate-500 text-xs">{language === 'en' ? 'Be the host and invite friends' : 'Budi host i pozovi prijatelje'}</p>
+                    </div>
+                  </div>
+                </button>
 
-            <button
-              onClick={() => { (window as any).playSFX?.('click'); setMode('join'); }}
-              className="group relative p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all"
-            >
-              <div className="flex items-center gap-4 text-left">
-                <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                  🔑
-                </div>
-                <div>
-                  <h3 className="text-white font-bold">{t.lobby.join_game}</h3>
-                  <p className="text-slate-500 text-xs">{language === 'en' ? 'Enter code to join friends' : 'Unesi kod da se pridružiš'}</p>
-                </div>
+                <button
+                  onClick={() => { (window as any).playSFX?.('click'); setMode('join'); }}
+                  className="group relative p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all"
+                >
+                  <div className="flex items-center gap-4 text-left">
+                    <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                      🔑
+                    </div>
+                    <div>
+                      <h3 className="text-white font-bold">{t.lobby.join_game}</h3>
+                      <p className="text-slate-500 text-xs">{language === 'en' ? 'Enter code to join friends' : 'Unesi kod da se pridružiš'}</p>
+                    </div>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => { (window as any).playSFX?.('click'); setShowMultiplayerMenu(false); }}
+                  className="text-slate-500 hover:text-white transition-colors text-sm text-left flex items-center gap-2 mt-1 px-4"
+                >
+                  ← {t.ui.back_to_menu}
+                </button>
               </div>
-            </button>
+            )}
 
             <button
               onClick={() => { (window as any).playSFX?.('click'); setMode('profile'); }}
