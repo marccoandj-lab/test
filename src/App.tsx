@@ -83,6 +83,12 @@ export const App: React.FC = () => {
         const permission = await Notification.requestPermission();
         if (permission === 'granted') {
           const registration = await navigator.serviceWorker.ready;
+          
+          const existingSubscription = await registration.pushManager.getSubscription();
+          if (existingSubscription) {
+            await existingSubscription.unsubscribe();
+          }
+
           const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,
             applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
@@ -157,7 +163,7 @@ export const App: React.FC = () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, investment_gains, investment_losses, jail_visits, auction_wins, notification_settings')
+        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, investment_gains, investment_losses, jail_visits, auction_wins')
         .eq('id', userId)
         .single();
 
@@ -169,9 +175,6 @@ export const App: React.FC = () => {
         const newAvatar = (data.avatar_url as AvatarType) || "1";
         setUserName(newName);
         setUserAvatar(newAvatar);
-        if (data.notification_settings) {
-          setNotificationSettings(data.notification_settings);
-        }
         localStorage.setItem('eib_username', newName);
         localStorage.setItem('eib_avatar', newAvatar);
         multiplayer.setMyId(userId);
