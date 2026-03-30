@@ -1,6 +1,7 @@
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import cors from 'cors';
 import { ExpressPeerServer } from 'peer';
 import { initNotifications } from './src/services/NotificationService.js';
 
@@ -8,6 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+app.use(cors()); // Allow Cross-Origin requests
 app.use(express.json()); // Enable JSON body parsing
 const port = process.env.PORT || 9000;
 
