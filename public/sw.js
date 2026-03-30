@@ -42,3 +42,36 @@ self.addEventListener('fetch', (event) => {
             .then((response) => response || fetch(event.request))
     );
 });
+
+self.addEventListener('push', (event) => {
+    let data = { title: 'EIB Board Game', body: 'Time to check your circular economy!' };
+    try {
+        if (event.data) {
+            data = event.data.json();
+        }
+    } catch (e) {
+        console.error('Error parsing push data:', e);
+    }
+
+    const options = {
+        body: data.body,
+        icon: '/logo.png',
+        badge: '/logo.png',
+        data: {
+            url: self.location.origin
+        },
+        vibrate: [100, 50, 100]
+    };
+
+    event.waitUntil(
+        self.registration.showNotification(data.title, options)
+    );
+});
+
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    event.waitUntil(
+        clients.openWindow(event.notification.data.url)
+    );
+});
+

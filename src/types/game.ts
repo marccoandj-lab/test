@@ -5,6 +5,11 @@ export type AvatarType = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
 
 export type SessionState = 'WAITING_FOR_PLAYERS' | 'READY_TO_START' | 'IN_GAME' | 'PAUSED' | 'ENDED';
 
+export interface NotificationSettings {
+  enabled: boolean;
+  slots: string[];
+}
+
 export interface Player {
   id: string;
   name: string;

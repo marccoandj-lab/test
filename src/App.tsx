@@ -6,7 +6,7 @@ import { Sidebar } from './components/Sidebar';
 import { generateLevels } from './data/levelGenerator';
 import { Level, GameMode } from './data/gameData';
 import { multiplayer, GameState as MPState } from './services/MultiplayerManager';
-import { AvatarType, Player } from './types/game';
+import { AvatarType, Player, NotificationSettings } from './types/game';
 
 import { SettingsModal } from './components/SettingsModal';
 import { supabase } from './lib/supabase';
@@ -57,6 +57,49 @@ export const App: React.FC = () => {
   const [showTurnModal, setShowTurnModal] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>({
+    enabled: false,
+    slots: ["09:00", "18:00"]
+  });
+
+  const VAPID_PUBLIC_KEY = "BAivaAO37KI9mGt0aA3LJnwXtco6rN9Bf1Kca6Wqap-LFPoVFi7SjcPlWAtliakzVnB3D4SHPh_s6AoaHFbxsT8";
+
+  const subscribeToPush = async (settings: NotificationSettings) => {
+    if (!session?.user.id) return;
+
+    try {
+      if (settings.enabled) {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+          const registration = await navigator.serviceWorker.ready;
+          const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: VAPID_PUBLIC_KEY
+          });
+
+          // Save subscription to backend
+          const backendUrl = import.meta.env.VITE_BACKEND_URL || window.location.origin;
+          await fetch(`${backendUrl}/api/notifications/subscribe`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId: session.user.id,
+              subscription: subscription
+            })
+          });
+        } else {
+          // If denied, disable in settings
+          settings.enabled = false;
+        }
+      }
+      
+      // Update profile with new settings
+      setNotificationSettings(settings);
+      updateSupabaseProfile({ notification_settings: settings });
+    } catch (err) {
+      console.error('Push subscription failed:', err);
+    }
+  };
 
   // Audio state
   const [volume, setVolume] = useState(0.05);
@@ -103,7 +146,7 @@ export const App: React.FC = () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, investment_gains, investment_losses, jail_visits, auction_wins')
+        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, investment_gains, investment_losses, jail_visits, auction_wins, notification_settings')
         .eq('id', userId)
         .single();
 
@@ -115,6 +158,9 @@ export const App: React.FC = () => {
         const newAvatar = (data.avatar_url as AvatarType) || "1";
         setUserName(newName);
         setUserAvatar(newAvatar);
+        if (data.notification_settings) {
+          setNotificationSettings(data.notification_settings);
+        }
         localStorage.setItem('eib_username', newName);
         localStorage.setItem('eib_avatar', newAvatar);
         multiplayer.setMyId(userId);
@@ -136,7 +182,8 @@ export const App: React.FC = () => {
           investment_gains: 0,
           investment_losses: 0,
           jail_visits: 0,
-          auction_wins: 0
+          auction_wins: 0,
+          notification_settings: { enabled: false, slots: ["09:00", "18:00"] }
         };
 
         const { error: insertError } = await supabase.from('profiles').insert([newProfile]);
@@ -165,7 +212,8 @@ export const App: React.FC = () => {
     investment_gains: number,
     investment_losses: number,
     jail_visits: number,
-    auction_wins: number
+    auction_wins: number,
+    notification_settings: NotificationSettings
   }>) => {
     if (!session?.user.id) return;
     try {
@@ -182,11 +230,16 @@ export const App: React.FC = () => {
       // Refresh local profile
       const { data } = await supabase
         .from('profiles')
-        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, investment_gains, investment_losses, jail_visits, auction_wins')
+        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, investment_gains, investment_losses, jail_visits, auction_wins, notification_settings')
         .eq('id', session.user.id)
         .single();
 
-      if (data) setProfile(data);
+      if (data) {
+        setProfile(data);
+        if (data.notification_settings) {
+          setNotificationSettings(data.notification_settings);
+        }
+      }
     } catch (error) {
       console.error('Error updating profile:', error);
     }
@@ -807,6 +860,8 @@ export const App: React.FC = () => {
         onToggleSidebar={setShowMobileSidebar}
         language={language}
         onLanguageChange={setLanguage}
+        notificationSettings={notificationSettings}
+        onNotificationSettingsChange={subscribeToPush}
       />
 
       {/* Floating Settings Button - Hidden on Start and Lobby screens */}

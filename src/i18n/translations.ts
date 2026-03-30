@@ -47,6 +47,11 @@ export const translations = {
       field_auction: "Auction",
       field_insurance: "Insurance",
       field_generic: "Field",
+      push_notifications: "Push Reminders",
+      notifications_enabled: "Reminders Active",
+      notifications_disabled: "Reminders Inactive",
+      notification_slots: "Reminder Times",
+      notification_info: "Get creative reminders to build your economic empire!",
     },
     lobby: {
       profile: "My Profile",
@@ -192,6 +197,11 @@ export const translations = {
       field_auction: "Aukcija",
       field_insurance: "Osiguranje",
       field_generic: "Polje",
+      push_notifications: "Push Podsetnici",
+      notifications_enabled: "Podsetnici Aktivni",
+      notifications_disabled: "Podsetnici Neaktivni",
+      notification_slots: "Vreme podsetnika",
+      notification_info: "Dobijajte kreativne podsetnike da gradite svoje ekonomsko carstvo!",
     },
     lobby: {
       profile: "Moj Profil",

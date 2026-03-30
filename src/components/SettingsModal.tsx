@@ -1,5 +1,7 @@
 import React from 'react';
 import { GameMode } from '../data/gameData';
+import { NotificationSettings } from '../types/game';
+import { translations } from '../i18n/translations';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -13,6 +15,8 @@ interface SettingsModalProps {
   onToggleSidebar: (show: boolean) => void;
   language: 'en' | 'sr';
   onLanguageChange: (lang: 'en' | 'sr') => void;
+  notificationSettings: NotificationSettings;
+  onNotificationSettingsChange: (settings: NotificationSettings) => void;
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
@@ -26,9 +30,21 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   showMobileSidebar,
   onToggleSidebar,
   language,
-  onLanguageChange
+  onLanguageChange,
+  notificationSettings,
+  onNotificationSettingsChange
 }) => {
   if (!isOpen) return null;
+
+  const t = translations[language].ui;
+  const availableSlots = ["09:00", "13:00", "18:00", "21:00"];
+
+  const toggleSlot = (slot: string) => {
+    const newSlots = notificationSettings.slots.includes(slot)
+      ? notificationSettings.slots.filter(s => s !== slot)
+      : [...notificationSettings.slots, slot];
+    onNotificationSettingsChange({ ...notificationSettings, slots: newSlots });
+  };
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -39,10 +55,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       />
       
       {/* Modal Content */}
-      <div className={`relative w-full max-w-sm bg-slate-900 border-2 ${mode === 'finance' ? 'border-blue-500/30' : 'border-green-500/30'} rounded-[2.5rem] shadow-2xl overflow-hidden animate-modal-pop`}>
+      <div className={`relative w-full max-w-sm bg-slate-900 border-2 ${mode === 'finance' ? 'border-blue-500/30' : 'border-green-500/30'} rounded-[2.5rem] shadow-2xl overflow-y-auto max-h-[90vh] animate-modal-pop`}>
         <div className="p-8">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-black text-white uppercase tracking-tight">{language === 'en' ? 'Game Center' : 'Centar igre'}</h2>
+            <h2 className="text-2xl font-black text-white uppercase tracking-tight">{t.game_center}</h2>
             <button 
               onClick={onClose}
               className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all"
@@ -52,7 +68,41 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </div>
 
           <div className="space-y-6">
+            {/* Push Notifications Toggle */}
+            <div className="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/5">
+              <div className="flex justify-between items-center">
+                <label className="text-white/60 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+                  <span>🔔</span> {t.push_notifications}
+                </label>
+                <div 
+                    onClick={() => onNotificationSettingsChange({ ...notificationSettings, enabled: !notificationSettings.enabled })}
+                    className={`w-12 h-6 rounded-full p-1 cursor-pointer transition-colors ${notificationSettings.enabled ? 'bg-blue-600' : 'bg-slate-700'}`}
+                >
+                    <div className={`w-4 h-4 bg-white rounded-full transition-transform ${notificationSettings.enabled ? 'translate-x-6' : 'translate-x-0'}`} />
+                </div>
+              </div>
+              <p className="text-[10px] text-white/30 italic">{t.notification_info}</p>
+              
+              {notificationSettings.enabled && (
+                <div className="mt-4 space-y-3 pt-3 border-t border-white/5">
+                  <p className="text-[10px] text-white/60 font-black uppercase tracking-widest">{t.notification_slots}</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {availableSlots.map(slot => (
+                      <button
+                        key={slot}
+                        onClick={() => toggleSlot(slot)}
+                        className={`py-2 rounded-xl text-xs font-black transition-all ${notificationSettings.slots.includes(slot) ? 'bg-blue-600 text-white' : 'bg-slate-800 text-white/40'}`}
+                      >
+                        {slot}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Music Control Row */}
+
             <div className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/5">
                 <button 
                     onClick={onTogglePlay}
