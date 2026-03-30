@@ -94,16 +94,16 @@ export const App: React.FC = () => {
             applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
           });
 
-          // Save subscription to backend
-          const backendUrl = import.meta.env.VITE_BACKEND_URL || window.location.origin;
-          await fetch(`${backendUrl}/api/notifications/subscribe`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              userId: session.user.id,
-              subscription: subscription
-            })
-          });
+          // Save subscription directly to Supabase to bypass Server-Side missing Authorization header!
+          const { error: dbError } = await supabase.from('push_subscriptions').upsert({
+            user_id: session.user.id,
+            subscription: subscription
+          }, { onConflict: 'user_id, subscription' });
+
+          if (dbError) {
+              console.error("DB error saving subscription:", dbError);
+              throw dbError;
+          }
         } else {
           // If denied, disable in settings
           settings.enabled = false;
