@@ -279,11 +279,13 @@ export const App: React.FC = () => {
   const handleAcceptInvite = async () => {
     if (!pendingInvite) return;
 
-    // Update invite status
+    // 1. Mark invite as accepted in DB
     await supabase.from('game_invites').update({ status: 'accepted' }).eq('id', pendingInvite.id);
 
-    // Join room
+    // 2. Join the specified room
     multiplayer.joinRoom(pendingInvite.roomCode, userName, userAvatar as any);
+    
+    // 3. Update local state to show lobby
     setIsSinglePlayer(false);
     setGameState('lobby');
     setPendingInvite(null);

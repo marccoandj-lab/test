@@ -243,7 +243,7 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
                       </div>
                       <div className="flex flex-col">
                         <span className="text-white font-bold">{user.username}</span>
-                        <span className="text-blue-400 font-mono text-[9px] font-black uppercase tracking-widest">#{user.id.substring(0, 6).toUpperCase()}</span>
+                        {user.id && <span className="text-blue-400 font-mono text-[9px] font-black uppercase tracking-widest">#{user.id.substring(0, 6).toUpperCase()}</span>}
                       </div>
                     </div>
                     <button

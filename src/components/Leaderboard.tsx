@@ -167,7 +167,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
                     </div>
                     <div className="text-center">
                       <p className="text-white font-black text-xs truncate max-w-[80px]">{top3[1].username}</p>
-                      <p className="text-blue-400 font-mono text-[8px] font-black uppercase tracking-widest -mt-0.5">#{top3[1].id.substring(0, 6).toUpperCase()}</p>
+                      {top3[1].id && <p className="text-blue-400 font-mono text-[8px] font-black uppercase tracking-widest -mt-0.5">#{top3[1].id.substring(0, 6).toUpperCase()}</p>}
                       <p className="text-slate-500 text-[10px] whitespace-nowrap mt-1">{getCategoryValue(top3[1], activeTab)}</p>
                     </div>
                     <div className="h-16 w-full bg-gradient-to-b from-slate-400/20 to-transparent rounded-t-xl border-x border-t border-slate-400/10" />
@@ -187,7 +187,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
                     </div>
                     <div className="text-center">
                       <p className="text-amber-500 font-black text-sm truncate max-w-[100px]">{top3[0].username}</p>
-                      <p className="text-blue-400/60 font-mono text-[8px] font-black uppercase tracking-widest -mt-0.5">#{top3[0].id.substring(0, 6).toUpperCase()}</p>
+                      {top3[0].id && <p className="text-blue-400/60 font-mono text-[8px] font-black uppercase tracking-widest -mt-0.5">#{top3[0].id.substring(0, 6).toUpperCase()}</p>}
                       <p className="text-amber-200/50 text-[10px] whitespace-nowrap mt-1">{getCategoryValue(top3[0], activeTab)}</p>
                     </div>
                     <div className="h-24 w-full bg-gradient-to-b from-amber-500/30 to-transparent rounded-t-2xl border-x border-t border-amber-500/20" />
@@ -205,7 +205,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
                     </div>
                     <div className="text-center">
                       <p className="text-white font-black text-xs truncate max-w-[70px]">{top3[2].username}</p>
-                      <p className="text-blue-400/60 font-mono text-[8px] font-black uppercase tracking-widest -mt-0.5">#{top3[2].id.substring(0, 6).toUpperCase()}</p>
+                      {top3[2].id && <p className="text-blue-400/60 font-mono text-[8px] font-black uppercase tracking-widest -mt-0.5">#{top3[2].id.substring(0, 6).toUpperCase()}</p>}
                       <p className="text-slate-500 text-[10px] whitespace-nowrap mt-1">{getCategoryValue(top3[2], activeTab)}</p>
                     </div>
                     <div className="h-12 w-full bg-gradient-to-b from-orange-700/20 to-transparent rounded-t-xl border-x border-t border-orange-700/10" />
@@ -229,7 +229,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
                     <div>
                       <div className="flex items-center gap-2">
                         <h4 className="text-white font-bold text-xs">{player.username}</h4>
-                        <span className="text-blue-400 font-mono text-[8px] font-black uppercase tracking-widest">#{player.id.substring(0, 6).toUpperCase()}</span>
+                        {player.id && <span className="text-blue-400 font-mono text-[8px] font-black uppercase tracking-widest">#{player.id.substring(0, 6).toUpperCase()}</span>}
                       </div>
                       {player.id === currentUserId && <span className="text-indigo-400 text-[8px] font-black uppercase tracking-widest italic">{language === 'en' ? "That's You" : "To si ti"}</span>}
                     </div>
@@ -255,7 +255,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
               <div>
                 <div className="flex items-center gap-2">
                   <h4 className="text-white font-bold text-xs">{myRank.stats.username}</h4>
-                  <span className="text-blue-400 font-mono text-[8px] font-black uppercase tracking-widest">#{myRank.stats.id.substring(0, 6).toUpperCase()}</span>
+                  {myRank.stats.id && <span className="text-blue-400 font-mono text-[8px] font-black uppercase tracking-widest">#{myRank.stats.id.substring(0, 6).toUpperCase()}</span>}
                 </div>
                 <span className="text-indigo-400 text-[8px] font-black uppercase tracking-widest italic">{language === 'en' ? "That's You" : "To si ti"}</span>
               </div>
