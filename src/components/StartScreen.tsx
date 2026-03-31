@@ -29,15 +29,15 @@ interface StartScreenProps {
 }
 
 const AVATAR_MAP: Record<string, string> = {
-  '1': 'Market Maverick',
-  '2': 'Eco Warrior',
-  '3': 'Capital Crusader',
-  '4': 'Green Guardian',
-  '5': 'Fortune Finder',
-  '6': 'Nature Knight',
-  '7': 'Asset Ace',
-  '8': 'Flora Force',
-  '9': 'Wealth Wizard'
+  '1': 'Novak Switchovic',
+  '2': 'Leonardo Da Switchy',
+  '3': 'Switchola Jokić',
+  '4': 'Switchopatra',
+  '5': 'Wolfgang Switchodeus Mozart',
+  '6': 'Switchbert Einstein',
+  '7': 'Switchola Tesla',
+  '8': 'Frida Switchlo',
+  '9': 'Switch'
 };
 
 export const StartScreen: React.FC<StartScreenProps> = ({ 
@@ -366,13 +366,13 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   }
 
   return (
-    <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 z-50">
-      <div className="absolute inset-0 opacity-30 pointer-events-none overflow-hidden">
+    <div className="fixed inset-0 bg-slate-900 flex flex-col items-center p-6 z-50 overflow-y-auto custom-scrollbar">
+      <div className="absolute inset-0 opacity-30 pointer-events-none overflow-hidden fixed">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600 rounded-full blur-[120px] animate-pulse" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-green-600 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
 
-      <div className="relative z-10 max-w-lg w-full flex flex-col items-center gap-8">
+      <div className="relative z-10 max-w-lg w-full flex flex-col items-center gap-6 py-8 my-auto">
         <div className="text-center space-y-2 animate-modal-pop">
           <div className="inline-block p-4 bg-white/5 rounded-[32px] border border-white/10 mb-4 backdrop-blur-xl shadow-2xl">
             <img src="/logo.png" alt="EconomySwitch Logo" className="w-24 h-24 object-contain" />
@@ -428,14 +428,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
                 </div>
               </button>
 
-              <div className="grid grid-cols-3 gap-4 mt-2">
-                <button
-                  onClick={() => setMode('profile')}
-                  className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-all group"
-                >
-                  <span className="text-2xl group-hover:scale-110 transition-transform">👤</span>
-                  <span className="text-[10px] font-black text-white uppercase tracking-widest">{language === 'en' ? 'Profile' : 'Profil'}</span>
-                </button>
+              <div className="grid grid-cols-2 gap-4 mt-2">
                 <button
                   onClick={() => setMode('socials')}
                   className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-all group"
