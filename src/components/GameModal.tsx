@@ -40,7 +40,7 @@ function FloatingSymbols({ symbols, count = 12, animationClass }: { symbols: str
           className={`absolute text-3xl opacity-20 ${animationClass}`}
           style={{
             left: `${(i * (100 / count)) + Math.random() * 5}%`,
-            animationDelay: `${Math.random() * 5}s`,
+            animationDelay: `-${Math.random() * 10}s`,
             animationDuration: `${3 + Math.random() * 3}s`,
             fontSize: `${1.5 + Math.random() * 2}rem`
           }}
@@ -453,62 +453,65 @@ export function SwitchModal({ fromMode, toMode, onClose, language }: SwitchModal
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
-    }, 2000);
+    }, 3500);
     return () => clearTimeout(timer);
   }, [onClose]);
 
-  const patternClass = toMode === 'finance' ? 'bg-finance-pattern' : 'bg-eco-pattern';
-  const gradientClass = toMode === 'finance'
-    ? 'from-blue-900/95 via-indigo-950/98 to-slate-900/98 border-blue-400/30'
-    : 'from-green-900/95 via-teal-950/98 to-slate-900/98 border-green-400/30';
+  const symbols = toMode === 'finance' ? ['💼', '📈', '💹', '🏦'] : ['🌱', '🌿', '🍃', '🌞'];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/80 animate-backdrop-fade" />
-      <div className={`relative w-full max-w-sm bg-gradient-to-br ${gradientClass} ${patternClass} rounded-3xl border shadow-2xl p-8 text-center animate-modal-pop overflow-hidden`}>
+    <Modal onClose={() => { }} mode={toMode} language={language}>
+      <FloatingSymbols symbols={symbols} animationClass="animate-float-up" count={12} />
+      <div className="p-8 text-center relative z-10">
+        <div className="text-7xl mb-6 animate-bounce drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">🔄</div>
+        <h2 className="text-3xl font-black text-white mb-2 tracking-tighter uppercase italic">{language === 'en' ? 'Topic Switched!' : 'Tema promenjena!'}</h2>
+        <p className="text-white/60 mb-8 text-sm leading-relaxed px-4">{language === 'en' ? 'The entire market is switching its focus!' : 'Čitavo tržište menja svoj fokus!'}</p>
 
-        <div className={`absolute -top-24 -left-24 w-48 h-48 rounded-full blur-3xl opacity-20 ${toMode === 'finance' ? 'bg-blue-400' : 'bg-green-400'}`} />
-        <div className={`absolute -bottom-24 -right-24 w-48 h-48 rounded-full blur-3xl opacity-20 ${toMode === 'finance' ? 'bg-indigo-400' : 'bg-teal-400'}`} />
+        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-[2.5rem] p-6 mb-8 shadow-inner relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+          <div className="flex items-center justify-center gap-8">
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-4xl border border-white/10 grayscale opacity-50">
+                {fromMode === 'finance' ? '💼' : '🌱'}
+              </div>
+              <span className="text-[10px] text-white/40 uppercase font-black tracking-widest">{fromMode === 'finance' ? (language === 'en' ? 'Finance' : 'Finansije') : (language === 'en' ? 'Sustainability' : 'Održivost')}</span>
+            </div>
+            
+            <div className="text-white/20 text-4xl animate-pulse">➜</div>
 
-        <div className="relative z-10 text-6xl mb-4 animate-bounce">🔄</div>
-        <h2 className="text-2xl font-black text-white mb-4">{language === 'en' ? 'Topic Switched!' : 'Tema promenjena!'}</h2>
-
-        <div className="flex items-center justify-center gap-6 mb-5">
-          <div className="flex flex-col items-center gap-1">
-            <span className="text-4xl">{fromMode === 'finance' ? '💼' : '🌱'}</span>
-            <span className="text-white/40 text-xs">{fromMode === 'finance' ? (language === 'en' ? 'Finance' : 'Finansije') : (language === 'en' ? 'Sustainability' : 'Održivost')}</span>
-          </div>
-          <div className="text-white/30 text-3xl font-bold">→</div>
-          <div className="flex flex-col items-center gap-1">
-            <span className="text-4xl">{toMode === 'finance' ? '💼' : '🌱'}</span>
-            <span className={`text-xs font-bold ${toMode === 'finance' ? 'text-blue-300' : 'text-green-300'}`}>
-              {toMode === 'finance' ? (language === 'en' ? 'Finance' : 'Finansije') : (language === 'en' ? 'Environment' : 'Ekologija')}
-            </span>
+            <div className="flex flex-col items-center gap-2">
+              <div className={`w-20 h-20 rounded-[1.5rem] flex items-center justify-center text-5xl border-2 shadow-2xl animate-modal-pop ${toMode === 'finance' ? 'bg-blue-500/20 border-blue-400/50' : 'bg-emerald-500/20 border-emerald-400/50'}`}>
+                {toMode === 'finance' ? '💼' : '🌱'}
+              </div>
+              <span className={`text-xs font-black uppercase tracking-widest ${toMode === 'finance' ? 'text-blue-400' : 'text-emerald-400'}`}>
+                {toMode === 'finance' ? (language === 'en' ? 'Finance' : 'Finansije') : (language === 'en' ? 'Sustainability' : 'Održivost')}
+              </span>
+            </div>
           </div>
         </div>
 
-        <div className={`rounded-2xl p-4 mb-6 border ${toMode === 'sustainability'
-          ? 'bg-green-500/20 border-green-400/30'
-          : 'bg-blue-500/20 border-blue-400/30'
+        <div className={`rounded-2xl p-5 border-2 shadow-2xl transition-all ${toMode === 'sustainability'
+          ? 'bg-emerald-500/30 border-emerald-400/30'
+          : 'bg-blue-500/30 border-blue-400/30'
           }`}>
-          <p className={`text-lg font-bold mb-1 ${toMode === 'sustainability' ? 'text-green-300' : 'text-blue-300'}`}>
-            {toMode === 'sustainability' ? (language === 'en' ? '🌱 Now in Environment Mode!' : '🌱 Sada u ekološkom modu!') : (language === 'en' ? '💼 Now in Finance Mode!' : '💼 Sada u finansijskom modu!')}
+          <p className={`text-xl font-black mb-2 uppercase tracking-tighter ${toMode === 'sustainability' ? 'text-emerald-300' : 'text-blue-300'}`}>
+            {toMode === 'sustainability' ? (language === 'en' ? '🌱 Eco Era' : '🌱 Ekološka Era') : (language === 'en' ? '💼 Market Boom' : '💼 Tržišni Bum')}
           </p>
-          <p className="text-white/60 text-sm leading-relaxed">
+          <p className="text-white/80 text-sm leading-relaxed font-medium">
             {toMode === 'sustainability'
               ? (language === 'en' ? 'Questions are now about ecology, ESG and green energy.' : 'Pitanja su sada o ekologiji, ESG kriterijumima i zelenoj energiji.')
               : (language === 'en' ? 'Questions are now about budgeting, investing and finance.' : 'Pitanja su sada o budžetiranju, investiranju i finansijama.')}
           </p>
         </div>
 
-        <div className="flex items-center justify-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-white/30 animate-pulse" />
-          <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold">
-            {language === 'en' ? 'Closing Automatically...' : 'Zatvaranje automatski...'}
+        <div className="mt-8 flex items-center justify-center gap-3">
+          <div className="w-2 h-2 rounded-full bg-white/20 animate-ping" />
+          <p className="text-white/30 text-[10px] uppercase tracking-[0.2em] font-black">
+            {language === 'en' ? 'Switching Perspective...' : 'Menjanje perspektive...'}
           </p>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }
 

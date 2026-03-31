@@ -130,10 +130,16 @@ export const App: React.FC = () => {
   };
 
   // Audio state
-  const [volume, setVolume] = useState(0.05);
+  const [volume, setVolume] = useState(() => {
+    const saved = localStorage.getItem('eib_volume');
+    return saved !== null ? parseFloat(saved) : 0.1;
+  });
   const [trackIndex, setTrackIndex] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(() => {
+    const saved = localStorage.getItem('eib_music_enabled');
+    return saved !== null ? saved === 'true' : false;
+  });
   const [language, setLanguage] = useState<Language>(() => (localStorage.getItem('eib_language') as Language) || 'en');
 
   const t = translations[language];
@@ -351,9 +357,11 @@ export const App: React.FC = () => {
     if (isMusicPlaying) {
       audioRef.current.pause();
       setIsMusicPlaying(false);
+      localStorage.setItem('eib_music_enabled', 'false');
     } else {
       audioRef.current.play().then(() => {
         setIsMusicPlaying(true);
+        localStorage.setItem('eib_music_enabled', 'true');
       }).catch(err => console.log("Toggle play failed:", err));
     }
   }, [isMusicPlaying]);
@@ -496,8 +504,10 @@ export const App: React.FC = () => {
     setUserName(name);
     setUserAvatar(avatar as AvatarType);
 
-    // Start music on first interaction
-    startMusic();
+    // Start music ONLY if it's supposed to be playing
+    if (isMusicPlaying) {
+      startMusic();
+    }
 
     if (isSingle) {
       // Use existing already generated levels instead of resetting to 0/100
@@ -883,7 +893,10 @@ export const App: React.FC = () => {
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
         volume={volume}
-        onVolumeChange={setVolume}
+        onVolumeChange={(v) => {
+          setVolume(v);
+          localStorage.setItem('eib_volume', v.toString());
+        }}
         isPlaying={isMusicPlaying}
         onTogglePlay={toggleMusic}
         mode={gameMode}
