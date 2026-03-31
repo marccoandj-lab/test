@@ -14,6 +14,7 @@ interface UserProfile {
   id: string;
   username: string;
   avatar_url: string;
+  display_id?: string;
 }
 
 interface FriendRelation {
@@ -61,7 +62,7 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
 
       const { data: profiles, error: profileError } = await supabase
         .from('profiles')
-        .select('id, username, avatar_url')
+        .select('id, username, avatar_url, display_id')
         .in('id', otherIds);
 
       if (profileError) throw profileError;
@@ -84,12 +85,23 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
     if (searchQuery.length < 3) return;
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      // Check if searching by ID (e.g. #A1B2C3)
+      const isIdSearch = searchQuery.startsWith('#') || searchQuery.length === 6;
+      const cleanQuery = searchQuery.startsWith('#') ? searchQuery.substring(1) : searchQuery;
+
+      let query = supabase
         .from('profiles')
-        .select('id, username, avatar_url')
-        .ilike('username', `%${searchQuery}%`)
+        .select('id, username, avatar_url, display_id')
         .neq('id', currentUserId)
-        .limit(5);
+        .limit(10);
+
+      if (isIdSearch) {
+        query = query.ilike('display_id', `%${cleanQuery}%`);
+      } else {
+        query = query.ilike('username', `%${cleanQuery}%`);
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
       setSearchResults(data || []);
@@ -233,7 +245,10 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
                       <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center border border-blue-500/20">
                         <img src={`/assets/${user.avatar_url || '1'}.png`} alt="" className="w-8 h-8 object-contain" />
                       </div>
-                      <span className="text-white font-bold">{user.username}</span>
+                      <div className="flex flex-col">
+                        <span className="text-white font-bold">{user.username}</span>
+                        {user.display_id && <span className="text-blue-400 font-mono text-[9px] font-black uppercase tracking-widest">#{user.display_id}</span>}
+                      </div>
                     </div>
                     <button
                       onClick={() => sendFriendRequest(user.id)}
@@ -261,6 +276,7 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
                     </div>
                     <div>
                       <h4 className="text-white font-black text-sm tracking-tight">{f.profiles?.username}</h4>
+                      {f.profiles?.display_id && <p className="text-blue-400/60 font-mono text-[9px] font-black tracking-widest mb-1">#{f.profiles.display_id}</p>}
                       <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">{language === 'en' ? 'Friend' : 'Prijatelj'}</p>
                     </div>
                   </div>
@@ -302,7 +318,10 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
                 <div key={r.id} className="bg-amber-500/5 p-4 rounded-2xl border border-amber-500/10 flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <img src={`/assets/${r.profiles?.avatar_url || '1'}.png`} className="w-10 h-10 object-contain rounded-xl bg-white/5" />
-                    <span className="text-white font-bold">{r.profiles?.username}</span>
+                    <div className="flex flex-col">
+                      <span className="text-white font-bold">{r.profiles?.username}</span>
+                      {r.profiles?.display_id && <span className="text-blue-400 font-mono text-[9px] font-black uppercase tracking-widest">#{r.profiles.display_id}</span>}
+                    </div>
                   </div>
                   <button
                     onClick={() => acceptFriendRequest(r.id)}

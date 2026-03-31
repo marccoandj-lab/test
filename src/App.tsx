@@ -24,6 +24,7 @@ export const App: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<{
     username: string,
+    display_id: string,
     avatar_url: string,
     wins: number,
     games_played: number,
@@ -37,6 +38,16 @@ export const App: React.FC = () => {
     auction_wins: number
   } | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
+
+  // Helper to generate a unique short display ID
+  const generateDisplayId = () => {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let result = '';
+    for (let i = 0; i < 6; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  };
 
   const [gameState, setGameState] = useState<'start' | 'lobby' | 'playing' | 'victory'>('start');
   const [isSinglePlayer, setIsSinglePlayer] = useState(true);
@@ -163,7 +174,7 @@ export const App: React.FC = () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, investment_gains, investment_losses, jail_visits, auction_wins')
+        .select('username, display_id, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, investment_gains, investment_losses, jail_visits, auction_wins')
         .eq('id', userId)
         .single();
 
@@ -182,10 +193,12 @@ export const App: React.FC = () => {
         // Create initial profile if it doesn't exist
         const { data: { user } } = await supabase.auth.getUser();
         const initialName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || "Player";
+        const newDisplayId = generateDisplayId();
 
         const newProfile = {
           id: userId,
           username: initialName,
+          display_id: newDisplayId,
           avatar_url: '1',
           wins: 0,
           games_played: 0,
@@ -203,6 +216,14 @@ export const App: React.FC = () => {
         const { error: insertError } = await supabase.from('profiles').insert([newProfile]);
 
         if (!insertError) {
+          setProfile(newProfile as any);
+          setUserName(initialName);
+          setUserAvatar('1');
+          multiplayer.setMyId(userId);
+        } else if (insertError.code === '23505') {
+          // Retry once with different ID if conflict
+          newProfile.display_id = generateDisplayId();
+          await supabase.from('profiles').insert([newProfile]);
           setProfile(newProfile as any);
           setUserName(initialName);
           setUserAvatar('1');

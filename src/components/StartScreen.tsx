@@ -12,6 +12,7 @@ interface StartScreenProps {
   initialAvatar?: string;
   onProfileUpdate?: (name: string, avatar: string) => void;
   profileData?: {
+    display_id?: string;
     wins: number;
     games_played: number;
     total_capital: number;
@@ -45,6 +46,8 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   const [isEditingName, setIsEditingName] = useState(false);
   const [isChangingAvatar, setIsChangingAvatar] = useState(false);
   const [showMultiplayerMenu, setShowMultiplayerMenu] = useState(false);
+  const [isCheckingName, setIsCheckingName] = useState(false);
+  const [nameError, setNameError] = useState<string | null>(null);
 
   useEffect(() => {
     if (initialName) setName(initialName);
@@ -60,19 +63,42 @@ export const StartScreen: React.FC<StartScreenProps> = ({
     });
   }, []);
 
-  const saveProfile = async () => {
+  const checkUsernameUnique = async (newName: string) => {
+    if (newName === initialName) return true;
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('username', newName)
+      .maybeSingle();
+    
+    if (error) return false;
+    return !data;
+  };
+
+  const saveProfile = async (overrideName?: string) => {
+    const finalName = overrideName || name;
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
+      // Check uniqueness if name changed
+      if (finalName !== initialName) {
+        setIsCheckingName(true);
+        const isUnique = await checkUsernameUnique(finalName);
+        setIsCheckingName(false);
+        if (!isUnique) {
+          setNameError(language === 'en' ? 'Username already taken!' : 'Korisničko ime je zauzeto!');
+          return false;
+        }
+      }
+
       const currentUsage = profileData?.character_usage || {};
-      // Increment character usage and games_played if starting ANY game session
       const isStartingGame = mode === 'create' || mode === 'join' || mode === 'single';
       const newUsage = isStartingGame 
         ? { ...currentUsage, [avatar]: (currentUsage[avatar] || 0) + 1 }
         : currentUsage;
       
-      await supabase.from('profiles').upsert({
+      const { error } = await supabase.from('profiles').upsert({
         id: user.id,
-        username: name,
+        username: finalName,
         avatar_url: avatar,
         updated_at: new Date().toISOString(),
         games_played: isStartingGame ? (profileData?.games_played || 0) + 1 : (profileData?.games_played || 0),
@@ -87,20 +113,32 @@ export const StartScreen: React.FC<StartScreenProps> = ({
         auction_wins: profileData?.auction_wins || 0
       });
 
-      localStorage.setItem('eib_username', name);
+      if (error) {
+        if (error.code === '23505') {
+          setNameError(language === 'en' ? 'Username already taken!' : 'Korisničko ime je zauzeto!');
+          return false;
+        }
+        throw error;
+      }
+
+      localStorage.setItem('eib_username', finalName);
       localStorage.setItem('eib_avatar', avatar);
 
       if (onProfileUpdate) {
-        onProfileUpdate(name, avatar);
+        onProfileUpdate(finalName, avatar);
       }
+      setNameError(null);
+      return true;
     }
+    return false;
   };
 
   const handleAction = async () => {
     if (!name) return alert(language === 'en' ? 'Enter your name!' : 'Unesite svoje ime!');
 
     (window as any).playSFX?.('click');
-    await saveProfile();
+    const saved = await saveProfile();
+    if (!saved) return;
 
     if (mode === 'single') {
       onStart(name, avatar, true);
@@ -149,23 +187,35 @@ export const StartScreen: React.FC<StartScreenProps> = ({
             <div className="flex-1">
               {isEditingName ? (
                 <div className="space-y-2">
-                  <input 
-                    type="text" 
-                    value={name} 
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full bg-black/30 border border-white/10 rounded-lg p-2 text-white outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder={language === 'en' ? 'Enter name' : 'Unesite ime'}
-                    autoFocus
-                  />
+                  <div className="relative">
+                    <input 
+                      type="text" 
+                      value={name} 
+                      onChange={(e) => { setName(e.target.value); setNameError(null); }}
+                      className={`w-full bg-black/30 border ${nameError ? 'border-rose-500' : 'border-white/10'} rounded-lg p-2 text-white outline-none focus:ring-2 ${nameError ? 'focus:ring-rose-500' : 'focus:ring-blue-500'}`}
+                      placeholder={language === 'en' ? 'Enter name' : 'Unesite ime'}
+                      autoFocus
+                    />
+                    {isCheckingName && (
+                      <div className="absolute right-3 top-2.5">
+                        <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                      </div>
+                    )}
+                  </div>
+                  {nameError && <p className="text-rose-500 text-[10px] font-bold uppercase">{nameError}</p>}
                   <div className="flex gap-2">
                     <button 
-                      onClick={async () => { await saveProfile(); setIsEditingName(false); }} 
-                      className="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded-lg text-xs font-bold transition-colors"
+                      onClick={async () => { 
+                        const success = await saveProfile(); 
+                        if (success) setIsEditingName(false); 
+                      }} 
+                      disabled={isCheckingName}
+                      className="bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white px-3 py-1 rounded-lg text-xs font-bold transition-colors"
                     >
                       {t.ui.save}
                     </button>
                     <button 
-                      onClick={() => { setName(initialName); setIsEditingName(false); }} 
+                      onClick={() => { setName(initialName); setNameError(null); setIsEditingName(false); }} 
                       className="bg-white/5 hover:bg-white/10 text-white px-3 py-1 rounded-lg text-xs font-bold transition-colors"
                     >
                       {t.ui.cancel}
@@ -173,18 +223,23 @@ export const StartScreen: React.FC<StartScreenProps> = ({
                   </div>
                 </div>
               ) : (
-                <div className="flex items-center gap-2 group">
-                  <h2 className="text-2xl font-black text-white truncate max-w-[180px]">{name}</h2>
-                  <button 
-                    onClick={() => setIsEditingName(true)} 
-                    className="text-slate-500 hover:text-white transition-colors p-1"
-                    title={language === 'en' ? 'Edit Name' : 'Promeni ime'}
-                  >
-                    ✏️
-                  </button>
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-2 group">
+                    <h2 className="text-2xl font-black text-white truncate max-w-[180px]">{name}</h2>
+                    <button 
+                      onClick={() => setIsEditingName(true)} 
+                      className="text-slate-500 hover:text-white transition-colors p-1"
+                      title={language === 'en' ? 'Edit Name' : 'Promeni ime'}
+                    >
+                      ✏️
+                    </button>
+                  </div>
+                  {profileData?.display_id && (
+                    <p className="text-blue-400 font-mono text-[10px] font-black tracking-widest">#{profileData.display_id}</p>
+                  )}
                 </div>
               )}
-              <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">{AVATAR_MAP[avatar] || 'Economy Strategist'}</p>
+              <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">{AVATAR_MAP[avatar] || 'Economy Strategist'}</p>
             </div>
           </div>
 
