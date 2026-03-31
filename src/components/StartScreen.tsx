@@ -377,8 +377,8 @@ export const StartScreen: React.FC<StartScreenProps> = ({
           <div className="inline-block p-4 bg-white/5 rounded-[32px] border border-white/10 mb-4 backdrop-blur-xl shadow-2xl">
             <img src="/logo.png" alt="EconomySwitch Logo" className="w-24 h-24 object-contain" />
           </div>
-          <h1 className="text-5xl font-black text-white italic tracking-tighter uppercase drop-shadow-2xl">
-            Economy<span className="text-blue-500 underline decoration-green-500 underline-offset-8">Switch</span>
+          <h1 className="text-5xl font-black italic tracking-tighter uppercase drop-shadow-2xl">
+            <span className="text-blue-500">Economy</span><span className="text-emerald-500">Switch</span>
           </h1>
           <p className="text-slate-400 font-bold uppercase tracking-[0.4em] text-[10px]">Financial & Sustainability Strategy</p>
         </div>
