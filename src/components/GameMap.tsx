@@ -319,9 +319,8 @@ export function GameMap({ levels, currentLevel, currentPlayer, mode, balance, on
                   className="w-12 h-12 object-contain"
                 />
                 <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[9px] font-bold tracking-wide text-white/90 drop-shadow-md whitespace-nowrap bg-black/40 px-2 py-0.5 rounded-full">
-                  {currentPlayer.name.toUpperCase()}
-                </span>
-              </div>
+                  {(currentPlayer?.name || '').toUpperCase()}
+                </span>              </div>
             </div>
           )}
 

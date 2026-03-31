@@ -358,7 +358,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   }
 
   if (mode === 'socials') {
-    return <Socials onBack={() => setMode('initial')} onInviteSent={(code) => { setRoomCode(code); setMode('initial'); }} currentUserId={userId || ''} language={language} />;
+    return <Socials onBack={() => setMode('initial')} onInviteSent={(code) => { setRoomCode(code); onStart(name, avatar, false); }} currentUserId={userId || ''} language={language} />;
   }
 
   if (mode === 'leaderboard') {
@@ -375,7 +375,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
       <div className="relative z-10 max-w-lg w-full flex flex-col items-center gap-8">
         <div className="text-center space-y-2 animate-modal-pop">
           <div className="inline-block p-4 bg-white/5 rounded-[32px] border border-white/10 mb-4 backdrop-blur-xl shadow-2xl">
-            <img src="/logo.png" alt="EIB Logo" className="w-24 h-24 object-contain" />
+            <img src="/logo.png" alt="EconomySwitch Logo" className="w-24 h-24 object-contain" />
           </div>
           <h1 className="text-5xl font-black text-white italic tracking-tighter uppercase drop-shadow-2xl">
             Economy<span className="text-blue-500 underline decoration-green-500 underline-offset-8">Switch</span>
@@ -383,123 +383,126 @@ export const StartScreen: React.FC<StartScreenProps> = ({
           <p className="text-slate-400 font-bold uppercase tracking-[0.4em] text-[10px]">Financial & Sustainability Strategy</p>
         </div>
 
-        {!showMultiplayerMenu ? (
-          <div className="w-full flex flex-col gap-4 animate-modal-pop" style={{ animationDelay: '0.2s' }}>
-            <div className="bg-black/30 p-4 rounded-2xl border border-white/10 mb-2">
-              <p className="text-[10px] text-white/40 uppercase font-black tracking-widest mb-3 text-center">{language === 'en' ? 'Quick Profile' : 'Brzi profil'}</p>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
-                  <img src={`/assets/${avatar}.png`} alt="" className="w-9 h-9 object-contain" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-white font-black text-sm">{name}</p>
-                  {userId && <p className="text-blue-400 font-mono text-[9px] font-black tracking-widest">#{userId.substring(0, 6).toUpperCase()}</p>}
-                </div>
-                <button onClick={() => setMode('profile')} className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors text-xs">✏️</button>
+        <div className="w-full animate-modal-pop" style={{ animationDelay: '0.2s' }}>
+          {/* Always show Quick Profile for easy access */}
+          <div className="bg-black/30 p-4 rounded-2xl border border-white/10 mb-4 backdrop-blur-md">
+            <p className="text-[10px] text-white/40 uppercase font-black tracking-widest mb-3 text-center">{language === 'en' ? 'Game Profile' : 'Profil za igru'}</p>
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
+                <img src={`/assets/${avatar}.png`} alt="" className="w-9 h-9 object-contain" />
               </div>
-            </div>
-
-            <button
-              onClick={() => { onStart(name, avatar, true); }}
-              className="group relative w-full bg-gradient-to-br from-white to-slate-200 p-6 rounded-[2rem] shadow-2xl transition-all hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative flex items-center justify-between">
-                <div className="text-left">
-                  <h3 className="text-slate-900 font-black text-2xl italic tracking-tight">{t.lobby.single_player}</h3>
-                  <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">Master the economy alone</p>
-                </div>
-                <span className="text-4xl">🚀</span>
+              <div className="flex-1">
+                <p className="text-white font-black text-sm">{name}</p>
+                {userId && <p className="text-blue-400 font-mono text-[9px] font-black tracking-widest">#{userId.substring(0, 6).toUpperCase()}</p>}
               </div>
-            </button>
-
-            <button
-              onClick={() => { setMode('create'); setShowMultiplayerMenu(true); }}
-              className="group relative w-full bg-slate-800 border border-white/10 p-6 rounded-[2rem] shadow-2xl transition-all hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
-            >
-              <div className="relative flex items-center justify-between">
-                <div className="text-left">
-                  <h3 className="text-white font-black text-2xl italic tracking-tight">{t.lobby.multiplayer}</h3>
-                  <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Compete with the world</p>
-                </div>
-                <span className="text-4xl group-hover:rotate-12 transition-transform">👥</span>
-              </div>
-            </button>
-
-            <div className="grid grid-cols-3 gap-4 mt-2">
-              <button
-                onClick={() => setMode('profile')}
-                className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-all group"
-              >
-                <span className="text-2xl group-hover:scale-110 transition-transform">👤</span>
-                <span className="text-[10px] font-black text-white uppercase tracking-widest">{language === 'en' ? 'Profile' : 'Profil'}</span>
-              </button>
-              <button
-                onClick={() => setMode('socials')}
-                className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-all group"
-              >
-                <span className="text-2xl group-hover:scale-110 transition-transform">🤝</span>
-                <span className="text-[10px] font-black text-white uppercase tracking-widest">{language === 'en' ? 'Social' : 'Prijatelji'}</span>
-              </button>
-              <button
-                onClick={() => setMode('leaderboard')}
-                className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-all group"
-              >
-                <span className="text-2xl group-hover:scale-110 transition-transform">🏆</span>
-                <span className="text-[10px] font-black text-white uppercase tracking-widest">{language === 'en' ? 'Global' : 'Rang lista'}</span>
-              </button>
+              <button onClick={() => setMode('profile')} className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors text-xs border border-white/5">✏️</button>
             </div>
           </div>
-        ) : (
-          <div className="w-full space-y-4 animate-modal-pop">
-            <div className="bg-white/5 border border-white/10 p-8 rounded-[2.5rem] backdrop-blur-xl shadow-2xl">
-              <div className="flex gap-4 mb-8 p-1 bg-black/40 rounded-2xl border border-white/5">
-                <button
-                  onClick={() => setMode('create')}
-                  className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${mode === 'create' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
-                >
-                  {t.lobby.create_room}
-                </button>
-                <button
-                  onClick={() => setMode('join')}
-                  className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${mode === 'join' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
-                >
-                  {t.lobby.join_room}
-                </button>
-              </div>
 
-              {mode === 'join' && (
-                <div className="space-y-4 mb-6">
-                  <div className="relative group">
-                    <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-blue-500 font-bold">#</div>
-                    <input
-                      type="text"
-                      maxLength={6}
-                      value={roomCode}
-                      onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
-                      placeholder="ENTER ROOM CODE"
-                      className="w-full bg-black/40 border-2 border-white/10 rounded-2xl py-4 pl-10 pr-4 text-white font-black tracking-[0.3em] outline-none focus:border-blue-500 transition-all text-center placeholder:text-slate-700 placeholder:tracking-normal placeholder:font-bold placeholder:text-xs"
-                    />
+          {!showMultiplayerMenu ? (
+            <div className="flex flex-col gap-4">
+              <button
+                onClick={() => { onStart(name, avatar, true); }}
+                className="group relative w-full bg-gradient-to-br from-white to-slate-200 p-6 rounded-[2rem] shadow-2xl transition-all hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative flex items-center justify-between">
+                  <div className="text-left">
+                    <h3 className="text-slate-900 font-black text-2xl italic tracking-tight">{t.lobby.single_player}</h3>
+                    <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">Master the economy alone</p>
                   </div>
+                  <span className="text-4xl">🚀</span>
                 </div>
-              )}
+              </button>
 
               <button
-                onClick={() => handleAction()}
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black py-5 rounded-[1.5rem] transition-all active:scale-95 shadow-xl shadow-blue-900/20 text-lg italic tracking-tight"
+                onClick={() => { setMode('create'); setShowMultiplayerMenu(true); }}
+                className="group relative w-full bg-slate-800 border border-white/10 p-6 rounded-[2rem] shadow-2xl transition-all hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
               >
-                {mode === 'create' ? t.lobby.create_room.toUpperCase() : t.lobby.join_room.toUpperCase()} ➔
+                <div className="relative flex items-center justify-between">
+                  <div className="text-left">
+                    <h3 className="text-white font-black text-2xl italic tracking-tight">{t.lobby.multiplayer}</h3>
+                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Compete with the world</p>
+                  </div>
+                  <span className="text-4xl group-hover:rotate-12 transition-transform">👥</span>
+                </div>
+              </button>
+
+              <div className="grid grid-cols-3 gap-4 mt-2">
+                <button
+                  onClick={() => setMode('profile')}
+                  className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-all group"
+                >
+                  <span className="text-2xl group-hover:scale-110 transition-transform">👤</span>
+                  <span className="text-[10px] font-black text-white uppercase tracking-widest">{language === 'en' ? 'Profile' : 'Profil'}</span>
+                </button>
+                <button
+                  onClick={() => setMode('socials')}
+                  className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-all group"
+                >
+                  <span className="text-2xl group-hover:scale-110 transition-transform">🤝</span>
+                  <span className="text-[10px] font-black text-white uppercase tracking-widest">{language === 'en' ? 'Social' : 'Prijatelji'}</span>
+                </button>
+                <button
+                  onClick={() => setMode('leaderboard')}
+                  className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-all group"
+                >
+                  <span className="text-2xl group-hover:scale-110 transition-transform">🏆</span>
+                  <span className="text-[10px] font-black text-white uppercase tracking-widest">{language === 'en' ? 'Global' : 'Rang lista'}</span>
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="w-full space-y-4">
+              <div className="bg-white/5 border border-white/10 p-8 rounded-[2.5rem] backdrop-blur-xl shadow-2xl">
+                <div className="flex gap-4 mb-8 p-1 bg-black/40 rounded-2xl border border-white/5">
+                  <button
+                    onClick={() => setMode('create')}
+                    className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${mode === 'create' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+                  >
+                    {t.lobby.create_game}
+                  </button>
+                  <button
+                    onClick={() => setMode('join')}
+                    className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${mode === 'join' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+                  >
+                    {t.lobby.join_game}
+                  </button>
+                </div>
+
+                {mode === 'join' && (
+                  <div className="space-y-4 mb-6">
+                    <div className="relative group">
+                      <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-blue-500 font-bold">#</div>
+                      <input
+                        type="text"
+                        maxLength={6}
+                        value={roomCode}
+                        onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
+                        placeholder="ENTER ROOM CODE"
+                        className="w-full bg-black/40 border-2 border-white/10 rounded-2xl py-4 pl-10 pr-4 text-white font-black tracking-[0.3em] outline-none focus:border-blue-500 transition-all text-center placeholder:text-slate-700 placeholder:tracking-normal placeholder:font-bold placeholder:text-xs"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <button
+                  onClick={() => handleAction()}
+                  className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black py-5 rounded-[1.5rem] transition-all active:scale-95 shadow-xl shadow-blue-900/20 text-lg italic tracking-tight"
+                >
+                  {mode === 'create' ? t.lobby.create_game.toUpperCase() : t.lobby.join_game.toUpperCase()} ➔
+                </button>
+              </div>
+
+              <button
+                onClick={() => setShowMultiplayerMenu(false)}
+                className="w-full py-4 text-slate-500 font-bold uppercase tracking-widest text-[10px] hover:text-white transition-colors"
+              >
+                ← {t.ui.back_to_menu}
               </button>
             </div>
-
-            <button
-              onClick={() => setShowMultiplayerMenu(false)}
-              className="w-full py-4 text-slate-500 font-bold uppercase tracking-widest text-[10px] hover:text-white transition-colors"
-            >
-              ← {t.ui.back_to_menu}
-            </button>
-          </div>
-        )}
+          )}
+        </div>
 
         <div className="mt-4 flex flex-col items-center gap-2 opacity-40">
           <p className="text-[9px] text-slate-500 font-black uppercase tracking-[0.3em]">Version 2.0.4 - Strategic Edition</p>

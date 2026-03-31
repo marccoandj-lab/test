@@ -24,7 +24,7 @@ export const App: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<{
     username: string,
-    display_id: string,
+    display_id?: string,
     avatar_url: string,
     wins: number,
     games_played: number,
@@ -181,7 +181,7 @@ export const App: React.FC = () => {
       if (error && error.code !== 'PGRST116') throw error;
 
       if (data) {
-        setProfile(data);
+        setProfile(data as any);
         const newName = data.username || "Player";
         const newAvatar = (data.avatar_url as AvatarType) || "1";
         setUserName(newName);
@@ -195,10 +195,12 @@ export const App: React.FC = () => {
         // Use part of UUID as fallback for professional default name
         const shortId = userId.substring(0, 6).toUpperCase();
         const initialName = user?.user_metadata?.full_name || `Investor_${shortId}`;
+        const newDisplayId = generateDisplayId();
 
         const newProfile = {
           id: userId,
           username: initialName,
+          display_id: newDisplayId,
           avatar_url: '1',
           wins: 0,
           games_played: 0,

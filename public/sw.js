@@ -51,7 +51,7 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener('push', (event) => {
-    let data = { title: 'EIB Board Game', body: 'Time to check your circular economy!' };
+    let data = { title: 'EconomySwitch', body: 'Time to check your circular economy!' };
     try {
         if (event.data) {
             data = event.data.json();

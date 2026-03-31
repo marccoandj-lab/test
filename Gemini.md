@@ -1,9 +1,9 @@
-# EIB WEBAPP - Development & Technical Specification
+# EconomySwitch - Development & Technical Specification
 
-Ovaj fajl služi kao "Source of Truth" za projekat EIB WEBAPP. Svi razvojni koraci i komunikacija sa AI asistentom moraju se pridržavati informacija u ovom dokumentu kako bi se izbegli nesporazumi i tehničke greške.
+Ovaj fajl služi kao "Source of Truth" za projekat EconomySwitch. Svi razvojni koraci i komunikacija sa AI asistentom moraju se pridržavati informacija u ovom dokumentu kako bi se izbegli nesporazumi i tehničke greške.
 
 ## 1. Pregled Projekta
-EIB WEBAPP je edukativna "board game" aplikacija koja simulira finansijsko tržište i ekološku održivost. Igrači se kreću po mapi, rešavaju kvizove, investiraju kapital i upravljaju porezima u cilju dostizanja kapitala od 1,000,000.
+EconomySwitch je edukativna "board game" aplikacija koja simulira finansijsko tržište i ekološku održivost. Igrači se kreću po mapi, rešavaju kvizove, investiraju kapital i upravljaju porezima u cilju dostizanja kapitala od 1,000,000.
 
 ## 2. Tehnološki Stack
 - **Frontend**: React 19 (Vite), TypeScript 5.9
