@@ -174,7 +174,7 @@ export const App: React.FC = () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, display_id, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, investment_gains, investment_losses, jail_visits, auction_wins')
+        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, investment_gains, investment_losses, jail_visits, auction_wins')
         .eq('id', userId)
         .single();
 
@@ -192,14 +192,13 @@ export const App: React.FC = () => {
       } else {
         // Create initial profile if it doesn't exist
         const { data: { user } } = await supabase.auth.getUser();
-        const newDisplayId = generateDisplayId();
-        // Professional default name using the unique short ID
-        const initialName = user?.user_metadata?.full_name || `Investor_${newDisplayId}`;
+        // Use part of UUID as fallback for professional default name
+        const shortId = userId.substring(0, 6).toUpperCase();
+        const initialName = user?.user_metadata?.full_name || `Investor_${shortId}`;
 
         const newProfile = {
           id: userId,
           username: initialName,
-          display_id: newDisplayId,
           avatar_url: '1',
           wins: 0,
           games_played: 0,
@@ -217,14 +216,6 @@ export const App: React.FC = () => {
         const { error: insertError } = await supabase.from('profiles').insert([newProfile]);
 
         if (!insertError) {
-          setProfile(newProfile as any);
-          setUserName(initialName);
-          setUserAvatar('1');
-          multiplayer.setMyId(userId);
-        } else if (insertError.code === '23505') {
-          // Retry once with different ID if conflict
-          newProfile.display_id = generateDisplayId();
-          await supabase.from('profiles').insert([newProfile]);
           setProfile(newProfile as any);
           setUserName(initialName);
           setUserAvatar('1');

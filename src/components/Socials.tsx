@@ -62,7 +62,7 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
 
       const { data: profiles, error: profileError } = await supabase
         .from('profiles')
-        .select('id, username, avatar_url, display_id')
+        .select('id, username, avatar_url')
         .in('id', otherIds);
 
       if (profileError) throw profileError;
@@ -86,16 +86,17 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
     if (trimmed.length < 3) return;
     setLoading(true);
     try {
+      // Check if searching by ID (e.g. #A1B2C3)
       const cleanQuery = trimmed.startsWith('#') ? trimmed.substring(1) : trimmed;
       
-      // Intelligent combined query:
-      // If query is exactly 6 chars, prioritize ID but check username too
-      // Otherwise search both fields with OR logic
+      // Since display_id doesn't exist in DB, we search by username
+      // We also check if the cleanQuery matches the beginning of ANY UUID (partially)
+      // but primarily we search by name now.
       const { data, error } = await supabase
         .from('profiles')
-        .select('id, username, avatar_url, display_id')
+        .select('id, username, avatar_url')
         .neq('id', currentUserId)
-        .or(`username.ilike.%${cleanQuery}%,display_id.ilike.%${cleanQuery}%`)
+        .ilike('username', `%${cleanQuery}%`)
         .limit(15);
 
       if (error) throw error;
@@ -242,7 +243,7 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
                       </div>
                       <div className="flex flex-col">
                         <span className="text-white font-bold">{user.username}</span>
-                        {user.display_id && <span className="text-blue-400 font-mono text-[9px] font-black uppercase tracking-widest">#{user.display_id}</span>}
+                        <span className="text-blue-400 font-mono text-[9px] font-black uppercase tracking-widest">#{user.id.substring(0, 6).toUpperCase()}</span>
                       </div>
                     </div>
                     <button
@@ -271,7 +272,7 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
                     </div>
                     <div>
                       <h4 className="text-white font-black text-sm tracking-tight">{f.profiles?.username}</h4>
-                      {f.profiles?.display_id && <p className="text-blue-400/60 font-mono text-[9px] font-black tracking-widest mb-1">#{f.profiles.display_id}</p>}
+                      {f.profiles?.id && <p className="text-blue-400/60 font-mono text-[9px] font-black tracking-widest mb-1">#{f.profiles.id.substring(0, 6).toUpperCase()}</p>}
                       <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">{language === 'en' ? 'Friend' : 'Prijatelj'}</p>
                     </div>
                   </div>
@@ -315,7 +316,7 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
                     <img src={`/assets/${r.profiles?.avatar_url || '1'}.png`} className="w-10 h-10 object-contain rounded-xl bg-white/5" />
                     <div className="flex flex-col">
                       <span className="text-white font-bold">{r.profiles?.username}</span>
-                      {r.profiles?.display_id && <span className="text-blue-400 font-mono text-[9px] font-black uppercase tracking-widest">#{r.profiles.display_id}</span>}
+                      {r.profiles?.id && <span className="text-blue-400 font-mono text-[9px] font-black uppercase tracking-widest">#{r.profiles.id.substring(0, 6).toUpperCase()}</span>}
                     </div>
                   </div>
                   <button

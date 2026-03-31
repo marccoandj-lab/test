@@ -76,6 +76,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   }, []);
 
   const copyToClipboard = (text: string) => {
+    if (!text) return;
     navigator.clipboard.writeText(text);
     (window as any).playSFX?.('click');
     alert(language === 'en' ? 'ID copied to clipboard!' : 'ID kopiran u clipboard!');
@@ -222,12 +223,9 @@ export const StartScreen: React.FC<StartScreenProps> = ({
                   </div>
                   {nameError && <p className="text-rose-500 text-[10px] font-bold uppercase">{nameError}</p>}
                   
-                  {profileData?.display_id && (
-                    <div 
-                      onClick={() => copyToClipboard(profileData.display_id!)}
-                      className="inline-flex items-center gap-1.5 bg-blue-600/10 px-2 py-0.5 rounded cursor-pointer border border-blue-500/10 mb-2"
-                    >
-                      <span className="text-blue-400 font-mono text-[9px] font-black tracking-widest">#{profileData.display_id}</span>
+                  {userId && (
+                    <div className="inline-flex items-center gap-1.5 bg-blue-600/10 px-2 py-0.5 rounded border border-blue-500/10 mb-2">
+                      <span className="text-blue-400 font-mono text-[9px] font-black tracking-widest">#{userId.substring(0, 6).toUpperCase()}</span>
                     </div>
                   )}
 
@@ -262,13 +260,13 @@ export const StartScreen: React.FC<StartScreenProps> = ({
                       ✏️
                     </button>
                   </div>
-                  {profileData?.display_id && (
+                  {userId && (
                     <div className="flex items-center gap-2 mt-1">
                       <div 
-                        onClick={() => copyToClipboard(profileData.display_id!)}
+                        onClick={() => copyToClipboard(userId.substring(0, 6).toUpperCase())}
                         className="bg-blue-600/20 border border-blue-500/30 px-2 py-0.5 rounded flex items-center gap-1.5 cursor-pointer hover:bg-blue-600/30 transition-all group/id"
                       >
-                        <span className="text-blue-400 font-mono text-[10px] font-black tracking-widest">#{profileData.display_id}</span>
+                        <span className="text-blue-400 font-mono text-[10px] font-black tracking-widest">#{userId.substring(0, 6).toUpperCase()}</span>
                         <span className="text-[8px] opacity-40 group-hover/id:opacity-100 transition-opacity">📋</span>
                       </div>
                     </div>
@@ -377,7 +375,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
       <div className="relative z-10 max-w-lg w-full flex flex-col items-center gap-8">
         <div className="text-center space-y-2 animate-modal-pop">
           <div className="inline-block p-4 bg-white/5 rounded-[32px] border border-white/10 mb-4 backdrop-blur-xl shadow-2xl">
-            <img src="/logo/logo.png" alt="EIB Logo" className="w-24 h-24 object-contain" />
+            <img src="/logo.png" alt="EIB Logo" className="w-24 h-24 object-contain" />
           </div>
           <h1 className="text-5xl font-black text-white italic tracking-tighter uppercase drop-shadow-2xl">
             EIB <span className="text-blue-500 underline decoration-green-500 underline-offset-8">WEBAPP</span>
