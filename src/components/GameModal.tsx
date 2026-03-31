@@ -13,20 +13,44 @@ interface ModalProps {
 
 export function Modal({ onClose, children, mode, language }: ModalProps) {
   const bgClass = mode === 'finance'
-    ? 'from-blue-900/90 to-indigo-900/90'
-    : 'from-green-900/90 to-teal-900/90';
+    ? 'from-blue-900/90 to-indigo-900/90 bg-finance-pattern'
+    : 'from-green-900/90 to-teal-900/90 bg-eco-pattern';
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4" lang={language}>
       <div className="absolute inset-0 bg-black/70 animate-backdrop-fade" onClick={onClose} />
-      <div className={`relative w-full sm:max-w-lg bg-gradient-to-br ${bgClass} rounded-[2rem] border border-white/20 shadow-2xl max-h-[95vh] overflow-y-auto animate-modal-pop`}>
-        {children}
+      <div className={`relative w-full sm:max-w-lg bg-gradient-to-br ${bgClass} rounded-[2rem] border border-white/20 shadow-2xl max-h-[95vh] overflow-hidden animate-modal-pop`}>
+        <div className="absolute inset-0 pointer-events-none opacity-10">
+          <div className="absolute top-0 left-0 w-full h-full bg-grid-white/[0.05] [mask-image:linear-gradient(to_bottom,white,transparent)]" />
+        </div>
+        <div className="relative z-10 overflow-y-auto max-h-[95vh]">
+          {children}
+        </div>
       </div>
     </div>
   );
 }
 
-
+function FloatingSymbols({ symbols, count = 12, animationClass }: { symbols: string[], count?: number, animationClass: string }) {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      {Array.from({ length: count }).map((_, i) => (
+        <span
+          key={i}
+          className={`absolute text-3xl opacity-20 ${animationClass}`}
+          style={{
+            left: `${(i * (100 / count)) + Math.random() * 5}%`,
+            animationDelay: `${Math.random() * 5}s`,
+            animationDuration: `${3 + Math.random() * 3}s`,
+            fontSize: `${1.5 + Math.random() * 2}rem`
+          }}
+        >
+          {symbols[i % symbols.length]}
+        </span>
+      ))}
+    </div>
+  );
+}
 
 const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
 
@@ -62,29 +86,31 @@ export function IncomeModal({ title, description, icon, mode, onResult, language
   };
 
   const finalAmount = diceValue * 20000;
+  const symbols = mode === 'finance' ? ['$', '💰', '💵', '💎'] : ['🌱', '✨', '🍃', '🌞'];
 
   return (
     <Modal onClose={() => { }} mode={mode} language={language}>
-      <div className="p-6 text-center">
-        <div className="text-6xl mb-4 animate-bounce">{icon}</div>
-        <h2 className="text-2xl font-bold text-white mb-2">{title[language]}</h2>
-        <p className="text-white/70 mb-6 text-sm">{description[language]}</p>
+      <FloatingSymbols symbols={symbols} animationClass="animate-float-up" count={15} />
+      <div className="p-6 text-center relative z-10">
+        <div className="text-6xl mb-4 animate-bounce drop-shadow-[0_0_15px_rgba(52,211,153,0.5)]">{icon}</div>
+        <h2 className="text-2xl font-black text-white mb-2 tracking-tight">{title[language]}</h2>
+        <p className="text-white/70 mb-6 text-sm leading-relaxed">{description[language]}</p>
 
         {phase === 'intro' && (
           <div className="space-y-6">
-            <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-6 mb-4">
-              <p className="text-emerald-400 font-bold mb-3 uppercase tracking-widest text-xs">
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-6 mb-4 shadow-inner">
+              <p className="text-emerald-400 font-black mb-3 uppercase tracking-[0.2em] text-xs">
                 {language === 'en' ? 'Income Formula' : 'Formula prihoda'}
               </p>
-              <div className="flex items-center justify-center gap-4">
-                <div className="text-3xl">🎲</div>
-                <div className="text-white font-black text-xl">x</div>
-                <div className="text-emerald-400 font-black text-xl">20,000 SC</div>
+              <div className="flex items-center justify-center gap-6">
+                <div className="text-4xl animate-pulse">🎲</div>
+                <div className="text-white font-black text-2xl">×</div>
+                <div className="text-emerald-400 font-black text-2xl">20,000 SC</div>
               </div>
             </div>
             <button
               onClick={handleRoll}
-              className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-4 rounded-2xl transition-all active:scale-95 text-lg shadow-xl shadow-emerald-500/20"
+              className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black py-5 rounded-[1.5rem] transition-all active:scale-95 text-xl shadow-[0_10px_20px_-5px_rgba(16,185,129,0.3)] border-b-4 border-emerald-700 active:border-b-0"
             >
               {language === 'en' ? 'ROLL TO EARN! 🎲' : 'BACI ZA ZARADU! 🎲'}
             </button>
@@ -93,12 +119,12 @@ export function IncomeModal({ title, description, icon, mode, onResult, language
 
         {phase === 'rolling' && (
           <div className="py-8">
-            <div className="flex justify-center mb-6">
-              <div className="w-24 h-24 rounded-2xl border-2 border-white/30 bg-white/10 flex items-center justify-center animate-dice-spin shadow-inner">
-                <span className="text-6xl text-white">{diceFaces[displayDice]}</span>
+            <div className="flex justify-center mb-8">
+              <div className="w-28 h-28 rounded-3xl border-4 border-white/30 bg-white/10 flex items-center justify-center animate-dice-spin shadow-2xl backdrop-blur-sm">
+                <span className="text-7xl text-white">{diceFaces[displayDice]}</span>
               </div>
             </div>
-            <p className="text-emerald-400 font-bold animate-pulse uppercase tracking-widest text-sm">
+            <p className="text-emerald-400 font-black animate-pulse uppercase tracking-[0.25em] text-sm">
               {language === 'en' ? 'Calculating Income...' : 'Obračunavanje prihoda...'}
             </p>
           </div>
@@ -107,24 +133,27 @@ export function IncomeModal({ title, description, icon, mode, onResult, language
         {phase === 'result' && (
           <div className="space-y-6 animate-modal-pop">
             <div className="flex justify-center">
-              <div className="w-20 h-20 rounded-2xl border-2 border-emerald-400/50 bg-emerald-500/20 flex items-center justify-center shadow-lg shadow-emerald-500/10 scale-110">
-                <span className="text-5xl text-white">{diceFaces[diceValue - 1]}</span>
+              <div className="w-24 h-24 rounded-3xl border-4 border-emerald-400/50 bg-emerald-500/30 flex items-center justify-center shadow-[0_0_30px_rgba(52,211,153,0.3)] scale-110">
+                <span className="text-6xl text-white drop-shadow-md">{diceFaces[diceValue - 1]}</span>
               </div>
             </div>
             
-            <div className="bg-emerald-500/30 rounded-2xl p-5 border border-emerald-400/30 shadow-inner">
-              <p className="text-emerald-300 text-[10px] uppercase font-black tracking-widest mb-1">{language === 'en' ? 'TOTAL PROFIT' : 'UKUPAN PROFIT'}</p>
-              <p className="text-4xl font-black text-emerald-400">+{finalAmount.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC</p>
-              <p className="text-emerald-200/50 text-[10px] mt-2 italic">
-                {diceValue} x 20,000
-              </p>
+            <div className="bg-emerald-500/40 rounded-[2rem] p-6 border-2 border-emerald-400/30 shadow-2xl relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              <p className="text-emerald-200 text-[10px] uppercase font-black tracking-[0.3em] mb-2">{language === 'en' ? 'TOTAL PROFIT' : 'UKUPAN PROFIT'}</p>
+              <p className="text-5xl font-black text-white drop-shadow-sm">+{finalAmount.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC</p>
+              <div className="mt-4 flex items-center justify-center gap-2">
+                <span className="px-3 py-1 bg-emerald-950/40 rounded-full text-emerald-200/70 text-[10px] font-bold">
+                  {diceValue} × 20,000
+                </span>
+              </div>
             </div>
 
-            <p className="text-white/60 text-[10px] italic">💡 {language === 'en' ? 'Smart income management is the key to financial freedom!' : 'Pametno upravljanje prihodima je ključ finansijske slobode!'}</p>
+            <p className="text-white/60 text-[11px] italic font-medium">💡 {language === 'en' ? 'Smart income management is the key to financial freedom!' : 'Pametno upravljanje prihodima je ključ finansijske slobode!'}</p>
 
             <button
               onClick={() => onResult(finalAmount)}
-              className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-4 rounded-2xl transition-all active:scale-95 text-lg shadow-xl"
+              className="w-full bg-white text-emerald-900 font-black py-5 rounded-[1.5rem] transition-all active:scale-95 text-xl shadow-xl hover:bg-emerald-50"
             >
               {language === 'en' ? 'Collect & Continue ▶' : 'Pokupi i nastavi ▶'}
             </button>
@@ -168,37 +197,39 @@ export function ExpenseModal({ title, description, icon, mode, isInsured, onResu
   };
 
   const finalAmount = isInsured ? 0 : diceValue * 20000;
+  const symbols = mode === 'finance' ? ['-', '📉', '💸', '🏦'] : ['🥀', '⚠️', '🌪️', '🧊'];
 
   return (
     <Modal onClose={() => { }} mode={mode} language={language}>
-      <div className="p-6 text-center">
-        <div className="relative">
-          <div className="text-6xl mb-4">{icon}</div>
+      {!isInsured && <FloatingSymbols symbols={symbols} animationClass="animate-rain-down" count={15} />}
+      <div className="p-6 text-center relative z-10">
+        <div className="relative inline-block">
+          <div className="text-6xl mb-4 drop-shadow-[0_0_15px_rgba(244,63,94,0.3)]">{icon}</div>
           {!isInsured && (
-            <div className="absolute -top-2 -right-2 bg-rose-500 text-white text-[10px] font-black px-2 py-1 rounded-full animate-pulse shadow-lg">
+            <div className="absolute -top-1 -right-4 bg-rose-500 text-white text-[9px] font-black px-3 py-1 rounded-full animate-bounce shadow-lg border border-white/20">
               {language === 'en' ? 'LIABILITY' : 'OBAVEZA'}
             </div>
           )}
         </div>
 
-        <h2 className="text-2xl font-bold text-white mb-2">{title[language]}</h2>
-        <p className="text-white/70 mb-6 text-sm">{description[language]}</p>
+        <h2 className="text-2xl font-black text-white mb-2 tracking-tight">{title[language]}</h2>
+        <p className="text-white/70 mb-6 text-sm leading-relaxed">{description[language]}</p>
 
         {phase === 'intro' && (
           <div className="space-y-6">
-            <div className="bg-rose-500/10 border border-rose-500/20 rounded-2xl p-6 mb-4">
-              <p className="text-rose-400 font-bold mb-3 uppercase tracking-widest text-xs">
+            <div className="bg-white/10 backdrop-blur-md border border-rose-500/20 rounded-3xl p-6 mb-4 shadow-inner">
+              <p className="text-rose-400 font-black mb-3 uppercase tracking-[0.2em] text-xs">
                 {language === 'en' ? 'Expense Formula' : 'Formula troška'}
               </p>
-              <div className="flex items-center justify-center gap-4">
-                <div className="text-3xl">🎲</div>
-                <div className="text-white font-black text-xl">x</div>
-                <div className="text-rose-400 font-black text-xl">20,000 SC</div>
+              <div className="flex items-center justify-center gap-6">
+                <div className="text-4xl animate-pulse">🎲</div>
+                <div className="text-white font-black text-2xl">×</div>
+                <div className="text-rose-400 font-black text-2xl">20,000 SC</div>
               </div>
             </div>
             <button
               onClick={handleRoll}
-              className="w-full bg-rose-500 hover:bg-rose-400 text-white font-bold py-4 rounded-2xl transition-all active:scale-95 text-lg shadow-xl shadow-rose-500/20"
+              className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-400 hover:to-pink-500 text-white font-black py-5 rounded-[1.5rem] transition-all active:scale-95 text-xl shadow-[0_10px_20px_-5px_rgba(244,63,94,0.3)] border-b-4 border-rose-800 active:border-b-0"
             >
               {language === 'en' ? 'ROLL TO PAY! 🎲' : 'BACI ZA PLAĆANJE! 🎲'}
             </button>
@@ -207,12 +238,12 @@ export function ExpenseModal({ title, description, icon, mode, isInsured, onResu
 
         {phase === 'rolling' && (
           <div className="py-8">
-            <div className="flex justify-center mb-6">
-              <div className="w-24 h-24 rounded-2xl border-2 border-white/30 bg-white/10 flex items-center justify-center animate-dice-spin shadow-inner">
-                <span className="text-6xl text-white">{diceFaces[displayDice]}</span>
+            <div className="flex justify-center mb-8">
+              <div className="w-28 h-28 rounded-3xl border-4 border-white/30 bg-white/10 flex items-center justify-center animate-dice-spin shadow-2xl backdrop-blur-sm">
+                <span className="text-7xl text-white">{diceFaces[displayDice]}</span>
               </div>
             </div>
-            <p className="text-rose-400 font-bold animate-pulse uppercase tracking-widest text-sm">
+            <p className="text-rose-400 font-black animate-pulse uppercase tracking-[0.25em] text-sm">
               {language === 'en' ? 'Calculating Expense...' : 'Obračunavanje troškova...'}
             </p>
           </div>
@@ -222,38 +253,40 @@ export function ExpenseModal({ title, description, icon, mode, isInsured, onResu
           <div className="space-y-6 animate-modal-pop">
             {!isInsured && (
               <div className="flex justify-center">
-                <div className="w-20 h-20 rounded-2xl border-2 border-rose-400/50 bg-rose-500/20 flex items-center justify-center shadow-lg shadow-rose-500/10 scale-110">
-                  <span className="text-5xl text-white">{diceFaces[diceValue - 1]}</span>
+                <div className="w-24 h-24 rounded-3xl border-4 border-rose-400/50 bg-rose-500/30 flex items-center justify-center shadow-[0_0_30px_rgba(244,63,94,0.3)] scale-110">
+                  <span className="text-6xl text-white drop-shadow-md">{diceFaces[diceValue - 1]}</span>
                 </div>
               </div>
             )}
             
-            <div className={`${isInsured ? 'bg-emerald-500/30 border-emerald-400/30' : 'bg-rose-500/30 border-rose-400/30'} rounded-2xl p-5 border shadow-inner`}>
-              <p className={`${isInsured ? 'text-emerald-300' : 'text-rose-300'} text-[10px] uppercase font-black tracking-widest mb-1`}>
+            <div className={`${isInsured ? 'bg-emerald-500/30 border-emerald-400/30' : 'bg-rose-500/40 border-rose-400/30'} rounded-[2rem] p-6 border-2 shadow-2xl relative overflow-hidden`}>
+              <p className={`${isInsured ? 'text-emerald-300' : 'text-rose-200'} text-[10px] uppercase font-black tracking-[0.3em] mb-2`}>
                 {isInsured ? (language === 'en' ? '🛡️ PROTECTED' : '🛡️ ZAŠTIĆENO') : (language === 'en' ? 'TOTAL DEBT' : 'UKUPAN DUG')}
               </p>
-              <p className={`text-4xl font-black ${isInsured ? 'text-emerald-400' : 'text-rose-400'}`}>
+              <p className={`text-5xl font-black ${isInsured ? 'text-emerald-400' : 'text-white'} drop-shadow-sm`}>
                 {isInsured ? '0 SC' : `-${finalAmount.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC`}
               </p>
               {!isInsured && (
-                 <p className="text-rose-200/50 text-[10px] mt-2 italic">
-                  {diceValue} x 20,000
-                </p>
+                 <div className="mt-4 flex items-center justify-center gap-2">
+                  <span className="px-3 py-1 bg-rose-950/40 rounded-full text-rose-200/70 text-[10px] font-bold">
+                    {diceValue} × 20,000
+                  </span>
+                </div>
               )}
             </div>
 
             {isInsured ? (
-              <div className="bg-emerald-500/20 border border-emerald-400/30 rounded-xl p-3 mb-6 animate-pulse">
-                <p className="text-emerald-400 font-black text-xs uppercase mb-1 tracking-tighter">{language === 'en' ? '🛡️ Insurance Covered!' : '🛡️ Osiguranje pokriveno!'}</p>
-                <p className="text-[10px] text-emerald-100/70">{language === 'en' ? 'Your insurance saved you from this expense.' : 'Vaše osiguranje vas je poštedelo ovog troška.'}</p>
+              <div className="bg-emerald-500/20 border border-emerald-400/30 rounded-2xl p-4 mb-6 animate-pulse shadow-inner">
+                <p className="text-emerald-400 font-black text-sm uppercase mb-1 tracking-tight">{language === 'en' ? '🛡️ Insurance Covered!' : '🛡️ Osiguranje pokriveno!'}</p>
+                <p className="text-xs text-emerald-100/70">{language === 'en' ? 'Your insurance saved you from this expense.' : 'Vaše osiguranje vas je poštedelo ovog troška.'}</p>
               </div>
             ) : (
-              <p className="text-white/60 text-[10px] italic">💡 {language === 'en' ? 'Always keep an emergency fund for 3-6 months of expenses!' : 'Uvek imajte fond za hitne slučajeve za 3-6 meseci troškova!'}</p>
+              <p className="text-white/60 text-[11px] italic font-medium">💡 {language === 'en' ? 'Always keep an emergency fund for 3-6 months of expenses!' : 'Uvek imajte fond za hitne slučajeve za 3-6 meseci troškova!'}</p>
             )}
 
             <button
               onClick={() => onResult(finalAmount)}
-              className={`w-full ${isInsured ? 'bg-emerald-500 hover:bg-emerald-400' : 'bg-rose-500 hover:bg-rose-400'} text-white font-bold py-4 rounded-2xl transition-all active:scale-95 text-lg shadow-xl`}
+              className={`w-full ${isInsured ? 'bg-emerald-500 hover:bg-emerald-400' : 'bg-white text-rose-900'} font-black py-5 rounded-[1.5rem] transition-all active:scale-95 text-xl shadow-xl`}
             >
               {isInsured ? (language === 'en' ? 'Thank you Insurance ▶' : 'Hvala osiguranju ▶') : (language === 'en' ? 'Continue ▶' : 'Nastavi ▶')}
             </button>
@@ -315,73 +348,89 @@ export function QuizModal({ quiz, mode, onResult, language }: QuizModalProps) {
 
   const getOptionClass = (idx: number) => {
     const c = OPTION_COLORS[idx];
-    if (!answered) return `${c.base} cursor-pointer`;
-    if (idx === quiz.correct) return `${c.correct} cursor-default`;
-    if (idx === selected && idx !== quiz.correct) return `${c.wrong} cursor-default`;
-    return `bg-white/5 border-white/10 text-white/30 cursor-default`;
+    if (!answered) return `${c.base} cursor-pointer hover:translate-x-1 shadow-md hover:shadow-lg transition-all duration-300`;
+    if (idx === quiz.correct) return `${c.correct} cursor-default scale-[1.02] shadow-emerald-500/20 shadow-xl border-emerald-400 z-10`;
+    if (idx === selected && idx !== quiz.correct) return `${c.wrong} cursor-default grayscale-[0.5] opacity-80`;
+    return `bg-white/5 border-white/10 text-white/30 cursor-default opacity-40 scale-[0.98]`;
   };
 
   const timerColor = timeLeft > 15 ? 'text-emerald-400' : timeLeft > 8 ? 'text-amber-400' : 'text-rose-400';
 
   return (
     <Modal onClose={() => { }} mode={mode} language={language}>
-      <div className="p-5">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="text-3xl">❓</div>
+      <FloatingSymbols symbols={['❓', '❔', '🤔', '💡']} animationClass="animate-float-random" count={8} />
+      <div className="p-6 relative z-10">
+        <div className="flex items-center gap-4 mb-6">
+          <div className="relative">
+            <div className="text-4xl animate-bounce">❓</div>
+            <div className="absolute inset-0 bg-white/20 blur-xl rounded-full -z-10" />
+          </div>
           <div className="flex-1">
-            <p className="text-white/60 text-xs uppercase tracking-wider">{language === 'en' ? 'Quiz Question' : 'Kviz pitanje'}</p>
-            <p className="text-white font-semibold text-sm">{mode === 'finance' ? (language === 'en' ? '💼 Financial Literacy' : '💼 Finansijska pismenost') : (language === 'en' ? '🌱 Sustainability' : '🌱 Održivost')}</p>
+            <p className="text-white/40 text-[10px] uppercase font-black tracking-[0.2em] mb-0.5">{language === 'en' ? 'CHALLENGE' : 'IZAZOV'}</p>
+            <p className="text-white font-black text-lg tracking-tight leading-tight">
+              {mode === 'finance' ? (language === 'en' ? 'Financial Literacy' : 'Finansijska pismenost') : (language === 'en' ? 'Eco Awareness' : 'Ekološka svest')}
+            </p>
           </div>
           {!answered && (
-            <div className={`text-2xl font-black mr-2 ${timerColor} animate-pulse`}>
-              {timeLeft}s
+            <div className={`relative w-14 h-14 flex items-center justify-center rounded-2xl border-2 border-white/20 bg-white/5 ${timerColor} font-black text-xl shadow-inner animate-pulse`}>
+              {timeLeft}
             </div>
           )}
-          <div className="flex gap-2">
-            <div className="bg-emerald-500/20 border border-emerald-400/30 rounded-lg px-2 py-1 text-center">
-              <p className="text-emerald-300 text-[10px]">✅ {language === 'en' ? 'Win' : 'Dobitak'}</p>
-              <p className="text-emerald-400 font-black text-xs">+{quiz.reward.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC</p>
-            </div>
-            <div className="bg-rose-500/20 border border-rose-400/30 rounded-lg px-2 py-1 text-center">
-              <p className="text-rose-300 text-[10px]">❌ {language === 'en' ? 'Lose' : 'Gubitak'}</p>
-              <p className="text-rose-400 font-black text-xs">-{quiz.penalty.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC</p>
-            </div>
+        </div>
+
+        <div className="bg-white/10 backdrop-blur-md rounded-3xl p-5 mb-6 border border-white/20 shadow-2xl relative group">
+          <div className="absolute -top-3 left-6 px-3 py-1 bg-white text-slate-900 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
+            {language === 'en' ? 'Question' : 'Pitanje'}
           </div>
+          <p className="text-white text-base font-bold leading-relaxed tracking-tight">{quiz.question[language]}</p>
         </div>
 
-        <div className="bg-white/10 rounded-2xl p-4 mb-4 border border-white/10">
-          <p className="text-white text-sm font-semibold leading-snug">{quiz.question[language]}</p>
-        </div>
-
-        <div className="flex flex-col gap-2 mb-4">
+        <div className="flex flex-col gap-3 mb-6">
           {quiz.options[language].map((option, idx) => (
             <button
               key={idx}
               onClick={() => handleSelect(idx)}
               disabled={answered}
               className={`
-                w-full text-left px-4 py-3 rounded-xl border-2 transition-all duration-200
-                text-sm font-medium leading-snug active:scale-98
+                w-full text-left px-5 py-4 rounded-2xl border-2 transition-all duration-300
+                text-sm font-bold leading-snug active:scale-[0.97]
                 ${getOptionClass(idx)}
               `}
             >
-              <span className="font-black mr-2">{OPTION_LABELS[idx]})</span>
-              {option.replace(/^[A-D]\)\s*/, '')}
-              {answered && idx === quiz.correct && <span className="float-right ml-2 font-serif">✅</span>}
-              {answered && idx === selected && idx !== quiz.correct && <span className="float-right ml-2 font-serif">❌</span>}
+              <div className="flex items-center gap-3">
+                <span className={`w-8 h-8 flex items-center justify-center rounded-xl bg-white/10 border border-white/10 font-black`}>
+                  {OPTION_LABELS[idx]}
+                </span>
+                <span className="flex-1">{option.replace(/^[A-D]\)\s*/, '')}</span>
+                {answered && idx === quiz.correct && <span className="text-xl animate-bounce">✨</span>}
+              </div>
             </button>
           ))}
         </div>
 
+        <div className="flex gap-3 mt-auto">
+          <div className="flex-1 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-3 flex flex-col items-center">
+            <p className="text-emerald-400/60 text-[8px] font-black uppercase tracking-widest mb-1">{language === 'en' ? 'REWARD' : 'NAGRADA'}</p>
+            <p className="text-emerald-400 font-black text-sm">+{quiz.reward.toLocaleString()} SC</p>
+          </div>
+          <div className="flex-1 bg-rose-500/10 border border-rose-500/20 rounded-2xl p-3 flex flex-col items-center">
+            <p className="text-rose-400/60 text-[8px] font-black uppercase tracking-widest mb-1">{language === 'en' ? 'PENALTY' : 'KAZNA'}</p>
+            <p className="text-rose-400 font-black text-sm">-{quiz.penalty.toLocaleString()} SC</p>
+          </div>
+        </div>
+
         {answered && (
-          <div className={`rounded-2xl p-3 border animate-fade-in ${selected === quiz.correct ? 'bg-emerald-500/20 border-emerald-400/30' : 'bg-rose-500/20 border-rose-400/30'}`}>
-            <p className="text-white font-black text-base mb-1">
-              {selected === quiz.correct ? tDict.modals.correct : tDict.modals.wrong}
-            </p>
-            <p className="text-white/80 text-xs leading-relaxed mb-2">{quiz.explanation[language]}</p>
-            <p className={`font-black text-lg ${selected === quiz.correct ? 'text-emerald-400' : 'text-rose-400'}`}>
-              {selected === quiz.correct ? `+${quiz.reward.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC` : `-${quiz.penalty.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC`}
-            </p>
+          <div className={`mt-6 rounded-3xl p-5 border-2 animate-modal-pop shadow-2xl ${selected === quiz.correct ? 'bg-emerald-500/30 border-emerald-400/30' : 'bg-rose-500/30 border-rose-400/30'}`}>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-2xl">{selected === quiz.correct ? '🎉' : '💨'}</span>
+              <p className="text-white font-black text-xl">
+                {selected === quiz.correct ? tDict.modals.correct : tDict.modals.wrong}
+              </p>
+            </div>
+            <p className="text-white/80 text-xs leading-relaxed mb-4 font-medium">{quiz.explanation[language]}</p>
+            <div className={`inline-block px-4 py-2 rounded-xl font-black text-lg shadow-lg ${selected === quiz.correct ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'}`}>
+              {selected === quiz.correct ? `+${quiz.reward.toLocaleString()} SC` : `-${quiz.penalty.toLocaleString()} SC`}
+            </div>
           </div>
         )}
       </div>
@@ -529,39 +578,55 @@ export function InvestmentModal({ balance, mode, onResult, language }: Investmen
   };
 
   const timerColor = timeLeft > 15 ? 'text-emerald-400' : timeLeft > 8 ? 'text-amber-400' : 'text-rose-400';
+  const symbols = mode === 'finance' ? ['📈', '💹', '🏢', '🏦'] : ['🌿', '☀️', '⚡', '🌊'];
 
   return (
     <Modal onClose={() => { }} mode={mode} language={language}>
-      <div className="p-6 text-center relative">
+      <FloatingSymbols symbols={symbols} animationClass="animate-float-up" count={10} />
+      <div className="p-6 text-center relative z-10">
         {phase === 'choose' && (
-          <div className={`absolute top-6 right-6 text-2xl font-black ${timerColor} animate-pulse`}>
-            {timeLeft}s
+          <div className={`absolute top-0 right-0 w-12 h-12 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 font-black ${timerColor} animate-pulse`}>
+            {timeLeft}
           </div>
         )}
-        <div className="text-5xl mb-3">📊</div>
-        <h2 className="text-2xl font-bold text-white mb-1">{language === 'en' ? 'Investment' : 'Investicija'}</h2>
-        <p className="text-white/60 text-sm mb-4">{language === 'en' ? 'The fate of your investment depends on luck.' : 'Sudbina vaše investicije zavisi od sreće.'}</p>
+        <div className="text-5xl mb-4 drop-shadow-xl">📊</div>
+        <h2 className="text-2xl font-black text-white mb-2 tracking-tight">{language === 'en' ? 'Investment Opportunity' : 'Prilika za investiciju'}</h2>
+        <p className="text-white/60 text-xs mb-6 leading-relaxed px-4">{language === 'en' ? 'The market is volatile. Choose your stake wisely and let the dice decide your fate.' : 'Tržište je promenljivo. Mudro odaberite svoj ulog i pustite kockicu da odluči o vašoj sudbini.'}</p>
 
         {phase === 'choose' && (
           <>
-            <div className="bg-white/10 rounded-2xl p-4 mb-4 border border-white/10">
-              <p className="text-white/60 text-xs uppercase tracking-wider mb-1">{language === 'en' ? 'Your Capital' : 'Vaš kapital'}</p>
-              <p className="text-2xl font-black text-white">{balance.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC</p>
+            <div className="bg-white/10 backdrop-blur-md rounded-3xl p-5 mb-6 border border-white/20 shadow-inner">
+              <p className="text-white/40 text-[10px] uppercase font-black tracking-[0.2em] mb-1">{language === 'en' ? 'Available Capital' : 'Raspoloživi kapital'}</p>
+              <p className="text-3xl font-black text-white">{balance.toLocaleString()} SC</p>
             </div>
 
-            <div className="bg-white/5 rounded-xl p-3 mb-4 border border-white/10">
-              <p className="text-white/50 text-xs mb-2">{language === 'en' ? 'Outcomes:' : 'Ishodi:'}</p>
-              <div className="grid grid-cols-3 gap-1.5 text-[10px]">
-                <div className="bg-rose-500/20 rounded-lg p-1.5 text-rose-300">⚀ 1=0x</div>
-                <div className="bg-rose-500/15 rounded-lg p-1.5 text-rose-300">⚁ 2=0x</div>
-                <div className="bg-rose-500/10 rounded-lg p-1.5 text-rose-300">⚂ 3=0.5x</div>
-                <div className="bg-white/10 rounded-lg p-1.5 text-white/60">⚃ 4=1x</div>
-                <div className="bg-emerald-500/20 rounded-lg p-1.5 text-emerald-300">⚄ 5=2x</div>
-                <div className="bg-yellow-500/20 rounded-lg p-1.5 text-yellow-300 font-bold">⚅ 6=4x</div>
+            <div className="bg-white/5 rounded-[2rem] p-4 mb-6 border border-white/10 overflow-hidden">
+              <p className="text-white/40 text-[9px] font-black uppercase tracking-widest mb-3">{language === 'en' ? 'Probable Outcomes:' : 'Mogući ishodi:'}</p>
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-rose-500/20 rounded-xl p-2 border border-rose-500/30">
+                  <span className="block text-[10px] text-rose-300 font-bold mb-0.5">⚀ ⚁</span>
+                  <span className="block text-xs font-black text-white">0x</span>
+                </div>
+                <div className="bg-rose-500/10 rounded-xl p-2 border border-rose-500/20">
+                  <span className="block text-[10px] text-rose-300 font-bold mb-0.5">⚂</span>
+                  <span className="block text-xs font-black text-white">0.5x</span>
+                </div>
+                <div className="bg-white/5 rounded-xl p-2 border border-white/10">
+                  <span className="block text-[10px] text-white/40 font-bold mb-0.5">⚃</span>
+                  <span className="block text-xs font-black text-white">1x</span>
+                </div>
+                <div className="bg-emerald-500/20 rounded-xl p-2 border border-emerald-500/30">
+                  <span className="block text-[10px] text-emerald-300 font-bold mb-0.5">⚄</span>
+                  <span className="block text-xs font-black text-white">2x</span>
+                </div>
+                <div className="bg-amber-500/30 rounded-xl p-2 border border-amber-400/50 col-span-2">
+                  <span className="block text-[10px] text-amber-300 font-black mb-0.5 tracking-tighter">⚅ JACKPOT</span>
+                  <span className="block text-xs font-black text-white text-center">4x</span>
+                </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 mb-4">
+            <div className="grid grid-cols-2 gap-3 mb-6">
               {investOptions.map(amount => {
                 const canAfford = balance >= amount;
                 return (
@@ -569,42 +634,54 @@ export function InvestmentModal({ balance, mode, onResult, language }: Investmen
                     key={amount}
                     disabled={!canAfford}
                     onClick={() => handleInvest(amount)}
-                    className={`font-bold py-3 rounded-xl border transition-all ${canAfford ? "bg-blue-500/30 hover:bg-blue-500/50 border-blue-400/30 text-white" : "bg-gray-800 border-white/5 text-white/20 cursor-not-allowed"}`}
+                    className={`font-black py-4 rounded-2xl border-2 transition-all active:scale-95 text-sm ${canAfford ? "bg-blue-600/30 hover:bg-blue-500 border-blue-400/30 text-white shadow-lg" : "bg-slate-800 border-white/5 text-white/20 cursor-not-allowed opacity-50"}`}
                   >
-                    {amount.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC
+                    {amount.toLocaleString()} SC
                   </button>
                 );
               })}
             </div>
-            <button onClick={handleSkip} className="w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 rounded-xl transition-all text-sm">{language === 'en' ? 'Skip Investment' : 'Preskoči investiciju'} ▶</button>
+            <button onClick={handleSkip} className="w-full text-white/40 hover:text-white/60 font-black py-3 text-xs uppercase tracking-widest transition-colors">{language === 'en' ? 'Skip Opportunity' : 'Preskoči priliku'} ▶</button>
           </>
         )}
 
         {phase === 'rolling' && (
-          <>
-            <p className="text-white/70 mb-4">{language === 'en' ? 'Invested' : 'Investirano'}: <span className="text-blue-400 font-bold">{investAmount.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC</span></p>
-            <div className="flex justify-center mb-6">
-              <div className="w-24 h-24 rounded-2xl border-2 border-white/30 bg-white/10 flex items-center justify-center animate-dice-spin">
-                <span className="text-6xl">{diceFaces[displayDice]}</span>
+          <div className="py-10">
+            <p className="text-white/50 text-xs font-black uppercase tracking-[0.2em] mb-4">{language === 'en' ? 'Invested' : 'Investirano'}: <span className="text-blue-400">{investAmount.toLocaleString()} SC</span></p>
+            <div className="flex justify-center mb-8">
+              <div className="w-32 h-32 rounded-[2.5rem] border-4 border-white/30 bg-white/10 flex items-center justify-center animate-dice-spin shadow-2xl backdrop-blur-md">
+                <span className="text-8xl text-white">{diceFaces[displayDice]}</span>
               </div>
             </div>
-          </>
+          </div>
         )}
 
         {phase === 'result' && resultInfo && (
-          <>
-            <p className="text-white/70 mb-3">{language === 'en' ? 'Invested' : 'Investirano'}: <span className="text-blue-400 font-bold">{investAmount.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC</span></p>
-            <div className="flex justify-center mb-4">
-              <div className="w-20 h-20 rounded-2xl border-2 border-white/30 bg-white/10 flex items-center justify-center relative">
-                <span className="text-5xl">{diceFaces[diceValue - 1]}</span>
+          <div className="animate-modal-pop">
+            <div className="mb-6 relative inline-block">
+               <div className="text-8xl mb-2">
+                 {resultInfo.result === 'win' ? '🐂' : resultInfo.result === 'lose' ? '🐻' : '⚖️'}
+               </div>
+               <div className={`absolute -bottom-2 -right-2 w-14 h-14 rounded-2xl border-4 border-white bg-slate-900 flex items-center justify-center shadow-xl text-3xl`}>
+                 {diceFaces[diceValue - 1]}
+               </div>
+            </div>
+            
+            <h3 className={`text-2xl font-black mb-2 ${resultInfo.result === 'win' ? 'text-emerald-400' : resultInfo.result === 'lose' ? 'text-rose-400' : 'text-white'}`}>
+              {resultInfo.message[language]}
+            </h3>
+            
+            <div className={`rounded-[2.5rem] p-8 mb-8 border-2 shadow-2xl relative overflow-hidden group ${resultInfo.result === 'win' ? 'bg-emerald-500/30 border-emerald-400/30' : resultInfo.result === 'lose' ? 'bg-rose-500/30 border-rose-400/30' : 'bg-white/10 border-white/20'}`}>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em] mb-2">{language === 'en' ? 'NET PROFIT' : 'NETO PROFIT'}</p>
+              <p className="text-5xl font-black text-white">{(Math.round(investAmount * resultInfo.multiplier) - investAmount).toLocaleString()} SC</p>
+              <div className="mt-4 inline-block px-4 py-1.5 bg-black/30 rounded-full text-white/60 text-[10px] font-black">
+                {investAmount.toLocaleString()} × {resultInfo.multiplier}x
               </div>
             </div>
-            <p className="text-lg font-bold text-white mb-3">{resultInfo.message[language]}</p>
-            <div className={`rounded-2xl p-4 mb-4 border ${resultInfo.result === 'win' ? 'bg-emerald-500/20 border-emerald-400/30' : resultInfo.result === 'lose' ? 'bg-rose-500/20 border-rose-400/30' : 'bg-white/10 border-white/20'}`}>
-              <p className="text-2xl font-black text-white">{(Math.round(investAmount * resultInfo.multiplier) - investAmount).toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')}</p>
-            </div>
-            <button onClick={handleClose} className={`w-full font-bold py-4 rounded-2xl transition-all text-lg ${resultInfo.result === 'win' ? 'bg-emerald-500 hover:bg-emerald-400 text-white' : 'bg-rose-500 hover:bg-rose-400 text-white'}`}>{language === 'en' ? 'Continue' : 'Nastavi'} ▶</button>
-          </>
+
+            <button onClick={handleClose} className={`w-full font-black py-5 rounded-[1.5rem] transition-all text-xl shadow-2xl active:scale-95 ${resultInfo.result === 'win' ? 'bg-emerald-500 hover:bg-emerald-400 text-white' : 'bg-rose-500 hover:bg-rose-400 text-white'}`}>{language === 'en' ? 'Claim & Continue' : 'Preuzmi i nastavi'} ▶</button>
+          </div>
         )}
       </div>
     </Modal>
@@ -614,6 +691,7 @@ export function InvestmentModal({ balance, mode, onResult, language }: Investmen
 // ── TAX SMALL MODAL ──
 export function TaxSmallModal({ taxExemptionTurns, onClose, mode, amount, language }: { taxExemptionTurns: number, onClose: () => void, mode: GameMode, amount: number, language: 'en' | 'sr' }) {
   const isExempt = taxExemptionTurns > 0;
+  const symbols = ['⚠️', '💸', '🏦', '📑'];
 
   useEffect(() => {
     if (isExempt) {
@@ -624,36 +702,37 @@ export function TaxSmallModal({ taxExemptionTurns, onClose, mode, amount, langua
 
   return (
     <Modal onClose={() => { }} mode={mode} language={language}>
-      <div className="p-6 text-center">
-        <div className="text-6xl mb-4">⚠️</div>
-        <h2 className="text-2xl font-bold text-white mb-2">{language === 'en' ? 'Caution!' : 'Pažnja!'}</h2>
+      {!isExempt && <FloatingSymbols symbols={symbols} animationClass="animate-rain-down" count={8} />}
+      <div className="p-8 text-center relative z-10">
+        <div className="text-7xl mb-6 drop-shadow-2xl animate-pulse">⚠️</div>
+        <h2 className="text-3xl font-black text-white mb-2 tracking-tighter italic uppercase">{language === 'en' ? 'Caution!' : 'Pažnja!'}</h2>
         {isExempt ? (
-          <div className="bg-emerald-500/20 border border-emerald-400/30 rounded-2xl p-6 mb-4">
-            <p className="text-emerald-400 font-bold text-xl mb-1 text-center">{language === 'en' ? '🛡️ Tax Exempted!' : '🛡️ Oslobođeni poreza!'}</p>
-            <p className="text-white/40 text-[10px] mt-2">
+          <div className="bg-emerald-500/20 border-2 border-emerald-400/30 rounded-[2rem] p-8 mb-4 shadow-xl backdrop-blur-sm">
+            <p className="text-emerald-400 font-black text-2xl mb-2 text-center">{language === 'en' ? '🛡️ Tax Exempted!' : '🛡️ Oslobođeni poreza!'}</p>
+            <p className="text-white/50 text-xs mt-2 font-medium">
               {language === 'en' ? `You are safe from collection for ${taxExemptionTurns} more turns.` : `Sigurni ste od naplate još ${taxExemptionTurns} poteza.`}
             </p>
           </div>
         ) : (
           <>
-            <div className="bg-amber-500/20 border border-amber-400/30 rounded-2xl p-6 mb-4">
-              <p className="text-amber-400 font-bold text-lg mb-2">{language === 'en' ? 'Vulnerable Zone' : 'Ranjiva zona'}</p>
-              <p className="text-white/70 text-sm leading-relaxed mb-4">
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-[2rem] p-6 mb-6 shadow-inner">
+              <p className="text-amber-400 font-black text-xl mb-3 uppercase tracking-tight">{language === 'en' ? 'Vulnerable Zone' : 'Ranjiva zona'}</p>
+              <p className="text-white/70 text-sm leading-relaxed mb-6 font-medium">
                 {language === 'en' ? 'You are standing on a small tax field. This incurs a fee and makes you vulnerable to large tax collections!' : 'Nalazite se na polju za mali porez. Ovo povlači naknadu i čini vas ranjivim na velike naplate poreza!'}
               </p>
-              <div className="bg-rose-500/20 border border-rose-500/30 rounded-xl p-3 inline-block">
-                <p className="text-rose-400 font-black text-xl">{language === 'en' ? 'Tax Fee' : 'Taksa'}: {amount.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC</p>
+              <div className="bg-rose-500/30 border-2 border-rose-500/40 rounded-2xl p-4 inline-block shadow-lg">
+                <p className="text-white font-black text-2xl">{language === 'en' ? 'Tax Fee' : 'Taksa'}: {amount.toLocaleString()} SC</p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="w-full bg-rose-500 hover:bg-rose-400 text-white font-black py-4 rounded-2xl transition-all shadow-lg active:scale-95"
+              className="w-full bg-white text-rose-900 font-black py-5 rounded-[1.5rem] transition-all shadow-2xl active:scale-95 text-lg"
             >
               {language === 'en' ? 'PAY TAX & CONTINUE' : 'PLATI POREZ I NASTAVI'}
             </button>
           </>
         )}
-        {isExempt && <p className="text-white/30 text-[10px] animate-pulse">{language === 'en' ? 'Closing in 3s...' : 'Zatvaranje za 3s...'}</p>}
+        {isExempt && <p className="text-white/30 text-[10px] animate-pulse font-black uppercase tracking-widest mt-4">{language === 'en' ? 'Closing in 3s...' : 'Zatvaranje za 3s...'}</p>}
       </div>
     </Modal>
   );
@@ -671,54 +750,57 @@ interface TaxLargeModalProps {
 export function TaxLargeModal({ targets, onCollect, onClose, mode, language }: TaxLargeModalProps) {
   const amountPerPlayer = 35000;
   const totalPotential = targets.length * amountPerPlayer;
+  const symbols = ['💰', '🏦', '📜', '⚖️'];
 
   return (
     <Modal onClose={onClose} mode={mode} language={language}>
-      <div className="p-6 text-center">
-        <div className="text-6xl mb-4 animate-pulse">🏦</div>
-        <h2 className="text-2xl font-bold text-white mb-2">{language === 'en' ? 'Tax Inspection' : 'Poreska inspekcija'}</h2>
-        <p className="text-white/60 text-sm mb-6 italic">{language === 'en' ? 'Collect taxes from players currently on small tax fields.' : 'Naplatite porez od igrača koji su trenutno na poljima malog poreza.'}</p>
+      <FloatingSymbols symbols={symbols} animationClass="animate-float-up" count={10} />
+      <div className="p-8 text-center relative z-10">
+        <div className="text-7xl mb-6 animate-bounce drop-shadow-2xl">🏦</div>
+        <h2 className="text-3xl font-black text-white mb-2 tracking-tighter italic uppercase">{language === 'en' ? 'Tax Inspection' : 'Poreska inspekcija'}</h2>
+        <p className="text-white/60 text-sm mb-8 leading-relaxed px-4">{language === 'en' ? 'Collect taxes from players currently on small tax fields.' : 'Naplatite porez od igrača koji su trenutno na poljima malog poreza.'}</p>
 
         {targets.length > 0 ? (
-          <div className="space-y-4">
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 max-h-48 overflow-y-auto">
-              <p className="text-[10px] text-white/40 uppercase font-bold mb-3 tracking-widest">{language === 'en' ? 'Liable Players:' : 'Obveznici:'}</p>
-              <div className="space-y-2">
+          <div className="space-y-6">
+            <div className="bg-white/5 border border-white/10 rounded-[2rem] p-5 max-h-56 overflow-y-auto custom-scrollbar">
+              <p className="text-[10px] text-white/40 uppercase font-black mb-4 tracking-[0.2em]">{language === 'en' ? 'Liable Players:' : 'Obveznici:'}</p>
+              <div className="space-y-3">
                 {targets.map(p => (
-                  <div key={p.id} className="flex items-center justify-between bg-white/5 p-2 rounded-xl">
-                    <div className="flex items-center gap-2">
-                      <img
-                        src={`/assets/${p.avatar}.png`}
-                        alt=""
-                        className="w-8 h-8 object-contain rounded-lg bg-white/5 p-1"
-                      />
-                      <span className="text-xs font-medium text-white">{p.name}</span>
+                  <div key={p.id} className="flex items-center justify-between bg-white/5 p-3 rounded-2xl border border-white/5 hover:border-white/10 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-white/5 p-1.5 border border-white/10 flex items-center justify-center">
+                        <img src={`/assets/${p.avatar}.png`} alt="" className="w-full h-full object-contain" />
+                      </div>
+                      <span className="text-sm font-black text-white">{p.name}</span>
                     </div>
-                    <span className="text-rose-400 text-xs font-bold">{p.taxExemptTurns > 0 ? (language === 'en' ? '🛡️ EXEMPT' : '🛡️ OSLOBOĐEN') : `-${amountPerPlayer.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC`}</span>
+                    <span className={`text-sm font-black ${p.taxExemptTurns > 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      {p.taxExemptTurns > 0 ? (language === 'en' ? '🛡️ EXEMPT' : '🛡️ OSLOBOĐEN') : `-${amountPerPlayer.toLocaleString()} SC`}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-emerald-500/20 border border-emerald-400/30 rounded-2xl p-4">
-              <p className="text-white/60 text-[10px] uppercase font-bold tracking-widest mb-1">{language === 'en' ? 'Total Collection' : 'Ukupna naplata'}</p>
-              <p className="text-3xl font-black text-emerald-400">{totalPotential.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC</p>
+            <div className="bg-emerald-500/20 border-2 border-emerald-400/30 rounded-[2rem] p-6 shadow-inner relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              <p className="text-emerald-300 text-[10px] uppercase font-black tracking-[0.3em] mb-2">{language === 'en' ? 'TOTAL COLLECTION' : 'UKUPNA NAPLATA'}</p>
+              <p className="text-4xl font-black text-white drop-shadow-md">{totalPotential.toLocaleString()} SC</p>
             </div>
 
             <button
               onClick={() => onCollect(targets.filter(p => p.taxExemptTurns === 0).map(p => p.id))}
-              className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-black py-4 rounded-2xl transition-all shadow-xl shadow-emerald-500/20 text-lg"
+              className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-black py-5 rounded-[1.5rem] transition-all shadow-2xl text-xl border-b-4 border-emerald-700 active:border-b-0"
             >
               {language === 'en' ? 'COLLECT ALL 💰' : 'NAPLATI SVE 💰'}
             </button>
           </div>
         ) : (
           <div className="space-y-6">
-            <div className="bg-rose-500/10 border border-rose-400/20 rounded-2xl p-8">
-              <p className="text-rose-300 font-bold mb-2">{language === 'en' ? 'No Takers!' : 'Nema obveznika!'}</p>
-              <p className="text-white/40 text-xs">{language === 'en' ? 'There are no players currently on small tax fields. You collect nothing this time.' : 'Trenutno nema igrača na poljima malog poreza. Ovog puta ne naplaćujete ništa.'}</p>
+            <div className="bg-rose-500/10 border-2 border-rose-400/20 rounded-[2rem] p-10 shadow-inner">
+              <p className="text-rose-300 font-black text-xl mb-3 tracking-tight">{language === 'en' ? 'No Takers!' : 'Nema obveznika!'}</p>
+              <p className="text-white/40 text-sm leading-relaxed">{language === 'en' ? 'There are no players currently on small tax fields. You collect nothing this time.' : 'Trenutno nema igrača na poljima malog poreza. Ovog puta ne naplaćujete ništa.'}</p>
             </div>
-            <button onClick={onClose} className="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-4 rounded-2xl transition-all">{language === 'en' ? 'Continue' : 'Nastavi'} ▶</button>
+            <button onClick={onClose} className="w-full bg-slate-800 hover:bg-slate-700 text-white font-black py-5 rounded-[1.5rem] transition-all text-lg shadow-xl uppercase tracking-widest border border-white/5">{language === 'en' ? 'Continue' : 'Nastavi'} ▶</button>
           </div>
         )}
       </div>
@@ -770,53 +852,55 @@ export function AuctionModal({ onResult, mode, players, currentPlayerIndex, canC
   const isMyTurnToRoll = myIndex === turnIndex;
   const activeRoller = players[turnIndex] || players[0];
 
+  const symbols = ['⚖️', '🔨', '📜', '💎'];
+
   return (
     <Modal onClose={() => { }} mode={mode} language={language}>
-      <div className="p-6 text-center">
-        <div className="text-6xl mb-4">⚖️</div>
-        <h2 className="text-2xl font-bold text-white mb-2">{language === 'en' ? 'Multiplayer Auction' : 'Multiplayer aukcija'}</h2>
-        <p className="text-white/70 mb-6 italic text-sm">{language === 'en' ? 'Everyone in the session is rolling for the Exemption Card!' : 'Svi u sesiji se takmiče za karticu oslobađanja od poreza!'}</p>
+      <FloatingSymbols symbols={symbols} animationClass="animate-float-random" count={8} />
+      <div className="p-8 text-center relative z-10">
+        <div className="text-7xl mb-6 drop-shadow-2xl">⚖️</div>
+        <h2 className="text-3xl font-black text-white mb-2 tracking-tighter italic uppercase">{language === 'en' ? 'Multiplayer Auction' : 'Multiplayer aukcija'}</h2>
+        <p className="text-white/60 mb-8 italic text-sm leading-relaxed px-4">{language === 'en' ? 'Everyone in the session is rolling for the Exemption Card!' : 'Svi u sesiji se takmiče za karticu oslobađanja od poreza!'}</p>
 
         {!allRolled ? (
-          <div className="space-y-6">
-            <div className="bg-white/5 rounded-2xl p-4 border border-white/10 mb-4 text-center">
-              <p className="text-[10px] text-white/40 uppercase font-bold tracking-widest mb-1">{language === 'en' ? 'Upcoming Roller' : 'Sledeći na redu'}:</p>
-              <div className="flex items-center justify-center gap-2">
-                <img
-                  src={`/assets/${activeRoller.avatar}.png`}
-                  alt=""
-                  className="w-8 h-8 object-contain"
-                />
-                <span className="text-white font-bold">{activeRoller.name} {activeRoller.id === myId && `(${language === 'en' ? 'You' : 'Ti'})`}</span>
+          <div className="space-y-8">
+            <div className="bg-white/10 backdrop-blur-md rounded-[2.5rem] p-6 border border-white/20 mb-6 text-center shadow-2xl relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              <p className="text-[10px] text-white/40 uppercase font-black tracking-[0.3em] mb-3">{language === 'en' ? 'Upcoming Roller' : 'Sledeći na redu'}:</p>
+              <div className="flex items-center justify-center gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-white/5 p-1.5 border border-white/10 flex items-center justify-center">
+                  <img src={`/assets/${activeRoller.avatar}.png`} alt="" className="w-full h-full object-contain" />
+                </div>
+                <span className="text-2xl font-black text-white tracking-tight">{activeRoller.name} {activeRoller.id === myId && `(${language === 'en' ? 'You' : 'Ti'})`}</span>
               </div>
             </div>
 
             <button
               onClick={handleRoll}
               disabled={!isMyTurnToRoll || hasRolled}
-              className={`w-full py-4 rounded-2xl font-bold text-lg transition-all shadow-xl ${!isMyTurnToRoll || hasRolled
-                ? 'bg-slate-700 text-slate-500 cursor-not-allowed opacity-50'
-                : 'bg-gradient-to-r from-amber-500 to-yellow-600 text-white hover:scale-105 active:scale-95 shadow-amber-900/40'
+              className={`w-full py-6 rounded-[2rem] font-black text-2xl transition-all shadow-2xl ${!isMyTurnToRoll || hasRolled
+                ? 'bg-slate-800 text-slate-600 cursor-not-allowed border border-white/5 opacity-50'
+                : 'bg-gradient-to-r from-amber-500 to-yellow-600 text-white hover:scale-105 active:scale-95 shadow-amber-900/40 border-b-4 border-amber-800 active:border-b-0'
                 }`}
             >
-              {hasRolled ? (language === 'en' ? 'Rolled! ⏳' : 'Bačeno! ⏳') : isMyTurnToRoll ? (language === 'en' ? 'Roll Dice! 🎲' : 'Baci kockicu! 🎲') : (language === 'en' ? 'Waiting for Turn... ⏳' : 'Čekanje na red... ⏳')}
+              {hasRolled ? (language === 'en' ? 'Rolled! ⏳' : 'Bačeno! ⏳') : isMyTurnToRoll ? (language === 'en' ? 'ROLL DICE! 🎲' : 'BACI KOCKICU! 🎲') : (language === 'en' ? 'Waiting... ⏳' : 'Čekanje... ⏳')}
             </button>
 
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-4">
               {players.map(p => {
                 const pRoll = rolls[p.id];
                 const isRollingNow = players[turnIndex]?.id === p.id;
                 return (
-                  <div key={p.id} className="flex flex-col items-center gap-1">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl border-2 transition-all ${pRoll
-                      ? 'bg-emerald-500/20 border-emerald-400'
+                  <div key={p.id} className="flex flex-col items-center gap-2">
+                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl border-2 transition-all shadow-lg ${pRoll
+                      ? 'bg-emerald-500/20 border-emerald-400 shadow-emerald-500/10'
                       : isRollingNow
-                        ? 'bg-blue-500/20 border-blue-400 animate-pulse'
-                        : 'bg-white/5 border-white/10 opacity-50'
+                        ? 'bg-blue-500/20 border-blue-400 animate-pulse shadow-blue-500/10'
+                        : 'bg-white/5 border-white/10 opacity-30'
                       }`}>
                       {pRoll ? pRoll : '🎲'}
                     </div>
-                    <span className={`text-[10px] truncate w-16 text-center ${isRollingNow ? 'text-blue-400 font-bold' : 'text-white/40'}`}>
+                    <span className={`text-[10px] font-black uppercase tracking-widest truncate w-full text-center ${isRollingNow ? 'text-blue-400' : 'text-white/40'}`}>
                       {p.name}
                     </span>
                   </div>
@@ -825,37 +909,36 @@ export function AuctionModal({ onResult, mode, players, currentPlayerIndex, canC
             </div>
           </div>
         ) : (
-          <>
-            <div className="grid grid-cols-1 gap-2 mb-6 max-h-40 overflow-y-auto pr-1">
+          <div className="animate-modal-pop">
+            <div className="grid grid-cols-1 gap-3 mb-8 max-h-56 overflow-y-auto pr-2 custom-scrollbar">
               {players.map(p => (
-                <div key={p.id} className={`flex items-center justify-between p-3 rounded-xl border ${p.id === winnerId ? 'bg-emerald-500/20 border-emerald-400/40' : 'bg-white/5 border-white/5'}`}>
-                  <div className="flex items-center gap-2">
-                    <img
-                      src={`/assets/${p.avatar}.png`}
-                      alt=""
-                      className="w-6 h-6 object-contain"
-                    />
-                    <span className={`text-xs font-bold ${p.id === winnerId ? 'text-emerald-300' : 'text-white/60'}`}>{p.name}</span>
+                <div key={p.id} className={`flex items-center justify-between p-4 rounded-2xl border-2 transition-all ${p.id === winnerId ? 'bg-emerald-500/30 border-emerald-400 shadow-xl scale-[1.02] z-10' : 'bg-white/5 border-white/5 opacity-60'}`}>
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-white/5 p-1 border border-white/10 flex items-center justify-center">
+                      <img src={`/assets/${p.avatar}.png`} alt="" className="w-full h-full object-contain" />
+                    </div>
+                    <span className={`text-sm font-black ${p.id === winnerId ? 'text-white' : 'text-white/60'}`}>{p.name}</span>
                   </div>
-                  <span className={`font-black text-xl ${p.id === winnerId ? 'text-emerald-400' : 'text-white/40'}`}>{rolls[p.id]}</span>
+                  <span className={`font-black text-2xl ${p.id === winnerId ? 'text-white drop-shadow-md' : 'text-white/40'}`}>{rolls[p.id]}</span>
                 </div>
               ))}
             </div>
-            <div className={`rounded-2xl p-4 mb-6 ${winnerId === multiplayer.getMyId() ? 'bg-emerald-500/20 border border-emerald-400/30' : 'bg-white/5 border border-white/10'}`}>
-              <p className="text-white font-bold text-center">
+            <div className={`rounded-[2rem] p-6 mb-8 border-2 shadow-2xl relative overflow-hidden group ${winnerId === multiplayer.getMyId() ? 'bg-emerald-500/30 border-emerald-400/40 animate-pulse' : 'bg-white/5 border-white/10'}`}>
+               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              <p className="text-white font-black text-center text-lg tracking-tight">
                 {winnerId === multiplayer.getMyId() ? (language === 'en' ? '🎉 You Won Tax Exemption!' : '🎉 Osvojili ste oslobađanje od poreza!') : `😢 ${players.find(p => p.id === winnerId)?.name} ${language === 'en' ? 'Won' : 'je pobedio'}!`}
               </p>
             </div>
             {canContinue ? (
-              <button onClick={() => onResult(winnerId === players[currentPlayerIndex].id)} className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-4 rounded-2xl transition-all shadow-lg active:scale-95 animate-pulse">
+              <button onClick={() => onResult(winnerId === players[currentPlayerIndex].id)} className="w-full bg-white text-emerald-900 hover:bg-emerald-50 font-black py-5 rounded-[1.5rem] transition-all shadow-2xl text-xl uppercase tracking-[0.1em]">
                 {language === 'en' ? 'Continue' : 'Nastavi'} ▶
               </button>
             ) : (
-              <div className="p-4 bg-white/5 rounded-2xl border border-white/10 italic text-white/40 text-sm">
+              <div className="p-6 bg-white/5 rounded-[1.5rem] border-2 border-dashed border-white/10 italic text-white/30 text-sm font-medium">
                 {language === 'en' ? `Waiting for ${players[currentPlayerIndex]?.name} to continue...` : `Čekanje da ${players[currentPlayerIndex]?.name} nastavi...`}
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
     </Modal>
@@ -867,32 +950,43 @@ export function JailModal({ title, description, icon, jailFine, balance, mode, o
   const canAfford = balance >= jailFine;
   return (
     <Modal onClose={() => { }} mode={mode} language={language}>
-      <div className="p-6 text-center">
-        <div className="text-5xl mb-4">{icon}</div>
-        <h2 className="text-2xl font-bold text-white mb-2">{title[language]}</h2>
-        <p className="text-white/60 text-sm mb-6">{description[language]}</p>
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute inset-0 opacity-40" style={{ 
+          backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,0.1) 40px, rgba(255,255,255,0.1) 60px)',
+          backgroundSize: '100% 100%' 
+        }} />
+      </div>
+      <div className="p-8 text-center relative z-10">
+        <div className="relative inline-block mb-6">
+          <div className="text-7xl mb-2 drop-shadow-2xl grayscale-[0.3]">⛓️</div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl animate-shake-gentle">{icon}</div>
+        </div>
+        
+        <h2 className="text-3xl font-black text-white mb-3 tracking-tighter uppercase italic">{title[language]}</h2>
+        <p className="text-white/60 text-sm mb-8 leading-relaxed px-6">{description[language]}</p>
 
-        <div className="bg-rose-500/10 border border-rose-500/20 rounded-2xl p-4 mb-6">
-          <p className="text-rose-400 text-[10px] uppercase font-bold tracking-widest mb-1">{language === 'en' ? 'Get out fine' : 'Kazna za izlazak'}</p>
-          <p className="text-3xl font-black text-white">{jailFine.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC</p>
+        <div className="bg-rose-950/40 border-2 border-rose-500/30 rounded-[2rem] p-6 mb-8 shadow-inner relative overflow-hidden group">
+          <div className="absolute -top-10 -left-10 w-24 h-24 bg-rose-500/10 blur-2xl rounded-full" />
+          <p className="text-rose-400 text-[10px] uppercase font-black tracking-[0.3em] mb-1">{language === 'en' ? 'Bail Amount' : 'Iznos kaucije'}</p>
+          <p className="text-4xl font-black text-white">{jailFine.toLocaleString()} SC</p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <button
-            onClick={onSkip}
-            className="bg-slate-700 hover:bg-slate-600 text-white font-bold py-4 rounded-2xl transition-all active:scale-95"
-          >
-            {language === 'en' ? 'Skip Turn' : 'Preskoči red'}
-          </button>
+        <div className="grid grid-cols-1 gap-4">
           <button
             onClick={onPay}
             disabled={!canAfford}
-            className={`font-bold py-4 rounded-2xl transition-all ${canAfford
-              ? "bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/20"
-              : "bg-gray-800 text-white/20 cursor-not-allowed border border-white/5"
+            className={`w-full font-black py-5 rounded-[1.5rem] transition-all active:scale-95 text-lg shadow-xl ${canAfford
+              ? "bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-emerald-950/40 border-b-4 border-emerald-800 active:border-b-0"
+              : "bg-slate-800 text-white/10 cursor-not-allowed border-2 border-white/5 opacity-50"
               }`}
           >
-            {language === 'en' ? 'Pay and Continue' : 'Plati i nastavi'}
+            {language === 'en' ? 'PAY BAIL & EXIT' : 'PLATI KAUCIJU I IZAĐI'}
+          </button>
+          <button
+            onClick={onSkip}
+            className="w-full bg-slate-800/80 hover:bg-slate-700 text-white/60 font-black py-4 rounded-[1.25rem] transition-all active:scale-95 text-xs uppercase tracking-widest border border-white/5"
+          >
+            {language === 'en' ? 'Wait & Skip Turn' : 'Čekaj i preskoči red'}
           </button>
         </div>
       </div>
@@ -903,41 +997,45 @@ export function JailModal({ title, description, icon, jailFine, balance, mode, o
 // ── INSURANCE MODAL ──
 export function InsuranceModal({ balance, price, onBuy, onClose, mode, language }: { balance: number, price: number, onBuy: (price: number) => void, onClose: () => void, mode: GameMode, language: 'en' | 'sr' }) {
   const canAfford = balance >= price;
+  const symbols = ['🛡️', '📜', '💎', '✨'];
+
   return (
     <Modal onClose={onClose} mode={mode} language={language}>
-      <div className="p-6 text-center">
-        <div className="text-6xl mb-4">🛡️</div>
-        <h2 className="text-2xl font-bold text-white mb-2">{language === 'en' ? 'Purchase Insurance' : 'Kupite osiguranje'}</h2>
-        <p className="text-white/60 text-sm mb-6">{language === 'en' ? 'Invest in insurance to stay exempt from taxes and fees for the next 3 rounds.' : 'Investirajte u osiguranje kako biste bili oslobođeni poreza i naknada u naredna 3 kruga.'}</p>
+      <FloatingSymbols symbols={symbols} animationClass="animate-float-up" count={10} />
+      <div className="p-8 text-center relative z-10">
+        <div className="text-7xl mb-6 drop-shadow-2xl animate-float">🛡️</div>
+        <h2 className="text-3xl font-black text-white mb-2 tracking-tighter italic uppercase">{language === 'en' ? 'Purchase Insurance' : 'Kupite osiguranje'}</h2>
+        <p className="text-white/60 text-sm mb-8 leading-relaxed px-4">{language === 'en' ? 'Invest in insurance to stay exempt from taxes and fees for the next 3 rounds.' : 'Investirajte u osiguranje kako biste bili oslobođeni poreza i naknada u naredna 3 kruga.'}</p>
 
-        <div className="bg-amber-500/20 border border-amber-400/30 rounded-2xl p-4 mb-6 text-center">
-          <p className="text-amber-300 text-[10px] uppercase mb-1 tracking-widest font-bold">{language === 'en' ? 'Insurance Premium' : 'Premija osiguranja'}</p>
-          <p className="text-4xl font-black text-amber-400">{price.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC</p>
+        <div className="bg-white/10 backdrop-blur-md border-2 border-amber-500/20 rounded-[2.5rem] p-8 mb-8 shadow-inner relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+          <p className="text-amber-300 text-[10px] uppercase mb-2 tracking-[0.3em] font-black opacity-80">{language === 'en' ? 'Insurance Premium' : 'Premija osiguranja'}</p>
+          <p className="text-5xl font-black text-amber-400 drop-shadow-md">{price.toLocaleString()} SC</p>
         </div>
 
         {!canAfford && (
-          <div className="bg-rose-500/20 border border-rose-400/30 rounded-xl p-3 mb-6">
-            <p className="text-rose-400 text-sm font-bold">⚠️ {language === 'en' ? 'Insufficient Funds' : 'Nedovoljno sredstava'}</p>
-            <p className="text-white/60 text-xs">{language === 'en' ? 'You cannot afford this insurance right now.' : 'Trenutno ne možete priuštiti ovo osiguranje.'}</p>
+          <div className="bg-rose-500/20 border-2 border-rose-500/30 rounded-[1.5rem] p-4 mb-8 animate-shake-gentle">
+            <p className="text-rose-400 text-sm font-black mb-1">⚠️ {language === 'en' ? 'Insufficient Funds' : 'Nedovoljno sredstava'}</p>
+            <p className="text-white/50 text-[10px] font-medium leading-tight">{language === 'en' ? 'You need more capital to secure this protection.' : 'Potrebno vam je više kapitala za ovu zaštitu.'}</p>
           </div>
         )}
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-4">
           <button
             onClick={onClose}
-            className="bg-slate-700 hover:bg-slate-600 text-white font-bold py-4 rounded-2xl transition-all active:scale-95"
+            className="bg-slate-800 hover:bg-slate-700 text-white/50 font-black py-5 rounded-[1.5rem] transition-all active:scale-95 border border-white/5 text-xs uppercase tracking-widest"
           >
             ❌ {language === 'en' ? 'Skip' : 'Preskoči'}
           </button>
           <button
             onClick={() => onBuy(price)}
             disabled={!canAfford}
-            className={`font-bold py-4 rounded-2xl transition-all ${canAfford
-              ? "bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/20 scale-105"
-              : "bg-gray-700 text-white/30 cursor-not-allowed border border-white/5 opacity-50"
+            className={`font-black py-5 rounded-[1.5rem] transition-all text-lg shadow-2xl ${canAfford
+              ? "bg-white text-emerald-900 hover:bg-emerald-50 scale-105"
+              : "bg-slate-900 text-white/10 cursor-not-allowed border-2 border-white/5 opacity-50"
               }`}
           >
-            ✅ {language === 'en' ? 'Buy' : 'Kupi'}
+            ✅ {language === 'en' ? 'Buy Now' : 'Kupi sada'}
           </button>
         </div>
       </div>

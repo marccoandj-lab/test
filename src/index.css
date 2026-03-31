@@ -99,6 +99,45 @@ html {
 .animate-dice-spin    { animation: diceSpin 0.4s linear infinite; }
 .animate-bounce-step  { animation: bounceStep 0.35s ease-out; }
 
+/* ── New Animations ── */
+@keyframes floatUp {
+  0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+  20% { opacity: 0.6; }
+  80% { opacity: 0.6; }
+  100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
+}
+
+@keyframes rainDown {
+  0% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
+  20% { opacity: 0.6; }
+  80% { opacity: 0.6; }
+  100% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+}
+
+@keyframes floatRandom {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(15px, -15px) rotate(10deg); }
+  66% { transform: translate(-10px, 10px) rotate(-10deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes shakeGentle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-2deg); }
+  75% { transform: rotate(2deg); }
+}
+
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(40px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(40px) rotate(-360deg); }
+}
+
+.animate-float-up      { animation: floatUp 4s linear infinite; }
+.animate-rain-down    { animation: rainDown 4s linear infinite; }
+.animate-float-random  { animation: floatRandom 4s ease-in-out infinite; }
+.animate-shake-gentle  { animation: shakeGentle 0.5s ease-in-out infinite; }
+.animate-orbit        { animation: orbit 6s linear infinite; }
+
 @keyframes modalPop {
   0% { transform: scale(0.9) translateY(20px); opacity: 0; }
   100% { transform: scale(1) translateY(0); opacity: 1; }
