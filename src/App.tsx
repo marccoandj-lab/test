@@ -192,8 +192,9 @@ export const App: React.FC = () => {
       } else {
         // Create initial profile if it doesn't exist
         const { data: { user } } = await supabase.auth.getUser();
-        const initialName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || "Player";
         const newDisplayId = generateDisplayId();
+        // Professional default name using the unique short ID
+        const initialName = user?.user_metadata?.full_name || `Investor_${newDisplayId}`;
 
         const newProfile = {
           id: userId,

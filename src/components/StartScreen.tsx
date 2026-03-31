@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { translations } from '../i18n/translations';
 import { multiplayer } from '../services/MultiplayerManager';
 import { supabase } from '../lib/supabase';
-import { AVATARS, AVATAR_MAP } from '../data/avatars';
+import { AvatarType } from '../types/game';
 import { Socials } from './Socials';
 import { Leaderboard } from './Leaderboard';
-import { translations } from '../i18n/translations';
 
 interface StartScreenProps {
   onStart: (name: string, avatar: string, isSingle: boolean) => void;
@@ -27,6 +27,18 @@ interface StartScreenProps {
   language: 'en' | 'sr';
   onOpenSettings?: () => void;
 }
+
+const AVATAR_MAP: Record<string, string> = {
+  '1': 'Market Maverick',
+  '2': 'Eco Warrior',
+  '3': 'Capital Crusader',
+  '4': 'Green Guardian',
+  '5': 'Fortune Finder',
+  '6': 'Nature Knight',
+  '7': 'Asset Ace',
+  '8': 'Flora Force',
+  '9': 'Wealth Wizard'
+};
 
 export const StartScreen: React.FC<StartScreenProps> = ({ 
   onStart, 
@@ -62,6 +74,12 @@ export const StartScreen: React.FC<StartScreenProps> = ({
       if (user) setUserId(user.id);
     });
   }, []);
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    (window as any).playSFX?.('click');
+    alert(language === 'en' ? 'ID copied to clipboard!' : 'ID kopiran u clipboard!');
+  };
 
   const checkUsernameUnique = async (newName: string) => {
     if (newName === initialName) return true;
@@ -163,7 +181,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
 
     return (
       <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 z-50 overflow-hidden">
-        <div className="max-w-md w-full space-y-6 bg-white/5 p-8 rounded-[32px] border border-white/10 backdrop-blur-xl max-h-[90vh] overflow-y-auto custom-scrollbar">
+        <div className="max-w-md w-full space-y-6 bg-white/5 p-8 rounded-[32px] border border-white/10 backdrop-blur-xl max-h-[90vh] overflow-y-auto custom-scrollbar shadow-2xl">
           <button
             onClick={() => setMode('initial')}
             className="text-slate-500 hover:text-white transition-colors text-sm flex items-center gap-2 mb-4"
@@ -203,6 +221,16 @@ export const StartScreen: React.FC<StartScreenProps> = ({
                     )}
                   </div>
                   {nameError && <p className="text-rose-500 text-[10px] font-bold uppercase">{nameError}</p>}
+                  
+                  {profileData?.display_id && (
+                    <div 
+                      onClick={() => copyToClipboard(profileData.display_id!)}
+                      className="inline-flex items-center gap-1.5 bg-blue-600/10 px-2 py-0.5 rounded cursor-pointer border border-blue-500/10 mb-2"
+                    >
+                      <span className="text-blue-400 font-mono text-[9px] font-black tracking-widest">#{profileData.display_id}</span>
+                    </div>
+                  )}
+
                   <div className="flex gap-2">
                     <button 
                       onClick={async () => { 
@@ -235,7 +263,15 @@ export const StartScreen: React.FC<StartScreenProps> = ({
                     </button>
                   </div>
                   {profileData?.display_id && (
-                    <p className="text-blue-400 font-mono text-[10px] font-black tracking-widest">#{profileData.display_id}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <div 
+                        onClick={() => copyToClipboard(profileData.display_id!)}
+                        className="bg-blue-600/20 border border-blue-500/30 px-2 py-0.5 rounded flex items-center gap-1.5 cursor-pointer hover:bg-blue-600/30 transition-all group/id"
+                      >
+                        <span className="text-blue-400 font-mono text-[10px] font-black tracking-widest">#{profileData.display_id}</span>
+                        <span className="text-[8px] opacity-40 group-hover/id:opacity-100 transition-opacity">📋</span>
+                      </div>
+                    </div>
                   )}
                 </div>
               )}
@@ -245,21 +281,18 @@ export const StartScreen: React.FC<StartScreenProps> = ({
 
           {isChangingAvatar && (
             <div className="bg-black/30 p-4 rounded-2xl border border-white/10 animate-fade-in">
-              <p className="text-white text-xs font-black uppercase tracking-widest mb-4">{language === 'en' ? 'Choose Profile Character' : 'Izaberi lik za profil'}</p>
+              <p className="text-[10px] text-white/40 uppercase font-black tracking-widest mb-3 text-center">{language === 'en' ? 'Select Your Identity' : 'Odaberi identitet'}</p>
               <div className="grid grid-cols-3 gap-2">
-                {AVATARS.map((a) => (
+                {Object.entries(AVATAR_MAP).map(([id]) => (
                   <button
-                    key={a.id}
-                    onClick={async () => { setAvatar(a.id); setIsChangingAvatar(false); await saveProfile(); }}
-                    className={`p-2 rounded-xl border transition-all flex flex-col items-center justify-center gap-1 ${avatar === a.id
+                    key={id}
+                    onClick={async () => { setAvatar(id); setIsChangingAvatar(false); setName(name); await saveProfile(); }}
+                    className={`p-2 rounded-xl border transition-all flex flex-col items-center justify-center gap-1 ${avatar === id
                       ? 'bg-blue-600/20 border-blue-500 scale-105 ring-2 ring-blue-500/50'
-                      : 'bg-white/5 border-white/10 opacity-60 hover:opacity-100 hover:bg-white/10'
+                      : 'bg-white/5 border-white/10 hover:bg-white/10'
                       }`}
                   >
-                    <img src={`/assets/${a.id}.png`} alt={a.name} className="w-10 h-10 object-contain" />
-                    <span className="text-[8px] text-white/50 font-black text-center leading-tight h-6 flex items-center">
-                      {a.name}
-                    </span>
+                    <img src={`/assets/${id}.png`} alt="" className="w-10 h-10 object-contain" />
                   </button>
                 ))}
               </div>
@@ -267,385 +300,202 @@ export const StartScreen: React.FC<StartScreenProps> = ({
           )}
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-black/30 p-4 rounded-2xl border border-white/5">
-              <p className="text-slate-500 text-[10px] font-black uppercase tracking-tighter mb-1">{t.stats.wins}</p>
-              <p className="text-2xl font-black text-green-500">{profileData?.wins || 0}</p>
+            <div className="bg-white/5 p-4 rounded-2xl border border-white/5 text-center">
+              <p className="text-blue-400 text-2xl font-black">{profileData?.wins || 0}</p>
+              <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">{t.leaderboard.wins}</p>
             </div>
-            <div className="bg-black/30 p-4 rounded-2xl border border-white/5">
-              <p className="text-slate-500 text-[10px] font-black uppercase tracking-tighter mb-1">{t.stats.games_played}</p>
-              <p className="text-2xl font-black text-blue-500">{profileData?.games_played || 0}</p>
+            <div className="bg-white/5 p-4 rounded-2xl border border-white/5 text-center">
+              <p className="text-emerald-400 text-2xl font-black">{profileData?.games_played || 0}</p>
+              <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">{language === 'en' ? 'Played' : 'Odigrano'}</p>
             </div>
-            <div className="col-span-2 bg-black/30 p-4 rounded-2xl border border-white/5 flex items-center justify-between">
+          </div>
+
+          <div className="space-y-3 bg-white/5 p-5 rounded-2xl border border-white/5">
+            <p className="text-[10px] text-white/40 uppercase font-black tracking-widest mb-2">{language === 'en' ? 'Detailed Statistics' : 'Detaljna statistika'}</p>
+            <div className="grid grid-cols-2 gap-y-4">
               <div>
-                <p className="text-slate-500 text-[10px] font-black uppercase tracking-tighter mb-1">{t.stats.total_capital}</p>
-                <p className="text-xl font-black text-amber-500">${(profileData?.total_capital || 0).toLocaleString()}</p>
+                <p className="text-white font-bold text-sm">{profileData?.correct_quizzes || 0}</p>
+                <p className="text-slate-500 text-[9px] font-bold uppercase tracking-tighter">{language === 'en' ? 'Correct Quizzes' : 'Tačni kvizovi'}</p>
               </div>
-              <div className="text-3xl">💰</div>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-white text-xs font-black uppercase tracking-[0.2em]">{language === 'en' ? 'Economy Mastery' : 'Ekonomsko majstorstvo'}</h3>
-            <div className="grid grid-cols-3 gap-3">
-              <div className="bg-black/30 p-3 rounded-xl border border-white/5 text-center">
-                <p className="text-emerald-500 text-lg font-black">{profileData?.correct_quizzes || 0}</p>
-                <p className="text-slate-500 text-[8px] font-bold uppercase">Correct</p>
+              <div>
+                <p className="text-white font-bold text-sm">{(profileData?.investment_gains || 0).toLocaleString()} SC</p>
+                <p className="text-slate-500 text-[9px] font-bold uppercase tracking-tighter">{language === 'en' ? 'Investment Gains' : 'Dobici od invest.'}</p>
               </div>
-              <div className="bg-black/30 p-3 rounded-xl border border-white/5 text-center">
-                <p className="text-rose-500 text-lg font-black">{profileData?.wrong_quizzes || 0}</p>
-                <p className="text-slate-500 text-[8px] font-bold uppercase">Wrong</p>
+              <div>
+                <p className="text-white font-bold text-sm">{profileData?.jail_visits || 0}</p>
+                <p className="text-slate-500 text-[9px] font-bold uppercase tracking-tighter">{language === 'en' ? 'Jail Visits' : 'Posete zatvoru'}</p>
               </div>
-              <div className="bg-black/30 p-3 rounded-xl border border-white/5 text-center">
-                <p className="text-blue-500 text-lg font-black">{profileData?.auction_wins || 0}</p>
-                <p className="text-slate-500 text-[8px] font-bold uppercase">Auctions</p>
+              <div>
+                <p className="text-white font-bold text-sm">{(profileData?.total_capital || 0).toLocaleString()} SC</p>
+                <p className="text-slate-500 text-[9px] font-bold uppercase tracking-tighter">{language === 'en' ? 'Lifetime Capital' : 'Ukupan kapital'}</p>
               </div>
             </div>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-white text-xs font-black uppercase tracking-[0.2em]">{language === 'en' ? 'Financial History' : 'Finansijska istorija'}</h3>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-black/30 p-3 rounded-xl border border-white/5 flex items-center gap-3">
-                <div className="text-xl">📈</div>
-                <div>
-                  <p className="text-emerald-400 font-black text-sm">${(profileData?.investment_gains || 0).toLocaleString()}</p>
-                  <p className="text-slate-500 text-[8px] font-bold uppercase">Total Gains</p>
-                </div>
-              </div>
-              <div className="bg-black/30 p-3 rounded-xl border border-white/5 flex items-center gap-3">
-                <div className="text-xl">📉</div>
-                <div>
-                  <p className="text-rose-400 font-black text-sm">${(profileData?.investment_losses || 0).toLocaleString()}</p>
-                  <p className="text-slate-500 text-[8px] font-bold uppercase">Total Losses</p>
-                </div>
-              </div>
-              <div className="bg-black/30 p-3 rounded-xl border border-white/5 flex items-center gap-3">
-                <div className="text-xl">🔒</div>
-                <div>
-                  <p className="text-amber-400 font-black text-sm">{profileData?.jail_visits || 0}</p>
-                  <p className="text-slate-500 text-[8px] font-bold uppercase">Jail Visits</p>
-                </div>
-              </div>
-              <div className="bg-black/30 p-3 rounded-xl border border-white/5 flex items-center gap-3">
-                <div className="text-xl">⚖️</div>
-                <div>
-                  <p className="text-blue-400 font-black text-sm">${((profileData?.investment_gains || 0) - (profileData?.investment_losses || 0)).toLocaleString()}</p>
-                  <p className="text-slate-500 text-[8px] font-bold uppercase">Net Profit</p>
-                </div>
-              </div>
+          <div className="bg-amber-500/10 p-4 rounded-2xl border border-amber-500/20 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center text-2xl">🏆</div>
+            <div>
+              <p className="text-white font-bold text-sm">{AVATAR_MAP[mostUsedAvatarId] || 'Strategist'}</p>
+              <p className="text-amber-500/70 text-[9px] font-black uppercase tracking-widest">{language === 'en' ? 'Most Used Character' : 'Najčešći karakter'}</p>
             </div>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-white text-xs font-black uppercase tracking-[0.2em]">{language === 'en' ? 'Character Stats' : 'Statistika likova'}</h3>
-            <div className="bg-black/30 p-4 rounded-2xl border border-white/5">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-slate-400 text-xs font-bold">Most Used Character:</span>
-                <div className="flex items-center gap-2">
-                  <img src={`/assets/${mostUsedAvatarId || '1'}.png`} className="w-6 h-6 object-contain" />
-                  <span className="text-white font-black text-[10px]">{AVATAR_MAP[mostUsedAvatarId] || 'Unknown'}</span>
-                </div>
-              </div>
-              <div className="grid grid-cols-9 gap-1">
-                {AVATARS.map(a => {
-                  const usage = profileData?.character_usage?.[a.id] || 0;
-                  const maxUsage = Math.max(...Object.values(profileData?.character_usage || { '1': 1 }));
-                  const height = usage > 0 ? (usage / maxUsage) * 100 : 5;
-                  return (
-                    <div key={a.id} className="flex flex-col items-center gap-1">
-                      <div className="w-full bg-white/5 rounded-t-sm relative h-12 overflow-hidden" title={a.name}>
-                        <div 
-                          className="absolute bottom-0 left-0 right-0 bg-blue-500/40" 
-                          style={{ height: `${height}%` }}
-                        />
-                      </div>
-                      <span className="text-[6px] text-slate-600 font-bold rotate-45 mt-2 truncate w-8">{AVATAR_MAP[a.id]?.split(' ')[0]}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-4 space-y-3">
+          <div className="flex gap-3 pt-4">
+            <button
+              onClick={onOpenSettings}
+              className="flex-1 bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-2xl border border-white/10 transition-all active:scale-95"
+            >
+              ⚙️ {t.ui.settings}
+            </button>
             <button
               onClick={handleSignOut}
-              className="w-full bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-500 font-bold py-3 rounded-xl transition-all text-sm uppercase tracking-widest"
+              className="flex-1 bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white font-bold py-4 rounded-2xl border border-rose-500/20 transition-all active:scale-95"
             >
-              {language === 'en' ? 'Sign Out' : 'Odjavi se'}
+              🚪 {language === 'en' ? 'Sign Out' : 'Odjavi se'}
             </button>
           </div>
         </div>
       </div>
-    );
-  }
-  if (mode === 'initial') {
-    return (
-      <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 text-center z-50 overflow-hidden">
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500 rounded-full blur-[120px]" />
-          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-green-500 rounded-full blur-[120px]" />
-        </div>
-
-        <div className="relative z-10 max-w-sm w-full space-y-8">
-          <div className="space-y-2">
-            <h1 className="text-4xl font-black tracking-tight text-white italic drop-shadow-2xl">
-              <span className="text-blue-500">Economy</span>
-              <span className="text-green-500">Switch</span>
-            </h1>
-            <p className="text-slate-400 text-sm font-medium uppercase tracking-widest">
-              {language === 'en' ? 'Financial & Eco Strategy' : 'Finansijska i eko strategija'}
-            </p>
-          </div>
-
-          <div className="grid gap-4">
-            <button
-              onClick={() => { (window as any).playSFX?.('click'); setMode('single'); }}
-              className="group relative p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all"
-            >
-              <div className="flex items-center gap-4 text-left">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                  🚀
-                </div>
-                <div>
-                  <h3 className="text-white font-bold">{t.lobby.single_player}</h3>
-                  <p className="text-slate-500 text-xs">{language === 'en' ? 'Play alone and learn' : 'Igraj sam i nauči'}</p>
-                </div>
-              </div>
-            </button>
-
-            {!showMultiplayerMenu ? (
-              <button
-                onClick={() => { (window as any).playSFX?.('click'); setShowMultiplayerMenu(true); }}
-                className="group relative p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all"
-              >
-                <div className="flex items-center gap-4 text-left">
-                  <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                    🌐
-                  </div>
-                  <div>
-                    <h3 className="text-white font-bold">{language === 'en' ? 'Multiplayer' : 'Multiplayer'}</h3>
-                    <p className="text-slate-500 text-xs">{language === 'en' ? 'Play with friends online' : 'Igraj sa prijateljima online'}</p>
-                  </div>
-                </div>
-              </button>
-            ) : (
-              <div className="flex flex-col gap-4 animate-fade-in pl-4 border-l-2 border-white/10 ml-2">
-                <button
-                  onClick={() => { (window as any).playSFX?.('click'); setMode('create'); }}
-                  className="group relative p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all"
-                >
-                  <div className="flex items-center gap-4 text-left">
-                    <div className="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                      🏠
-                    </div>
-                    <div>
-                      <h3 className="text-white font-bold">{t.lobby.create_game}</h3>
-                      <p className="text-slate-500 text-xs">{language === 'en' ? 'Be the host and invite friends' : 'Budi host i pozovi prijatelje'}</p>
-                    </div>
-                  </div>
-                </button>
-
-                <button
-                  onClick={() => { (window as any).playSFX?.('click'); setMode('join'); }}
-                  className="group relative p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all"
-                >
-                  <div className="flex items-center gap-4 text-left">
-                    <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                      🔑
-                    </div>
-                    <div>
-                      <h3 className="text-white font-bold">{t.lobby.join_game}</h3>
-                      <p className="text-slate-500 text-xs">{language === 'en' ? 'Enter code to join friends' : 'Unesi kod da se pridružiš'}</p>
-                    </div>
-                  </div>
-                </button>
-
-                <button
-                  onClick={() => { (window as any).playSFX?.('click'); setShowMultiplayerMenu(false); }}
-                  className="text-slate-500 hover:text-white transition-colors text-sm text-left flex items-center gap-2 mt-1 px-4"
-                >
-                  ← {t.ui.back_to_menu}
-                </button>
-              </div>
-            )}
-
-            <button
-              onClick={() => { (window as any).playSFX?.('click'); setMode('profile'); }}
-              className="group relative p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all"
-            >
-              <div className="flex items-center gap-4 text-left">
-                <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                  👤
-                </div>
-                <div>
-                  <h3 className="text-white font-bold">{t.lobby.profile}</h3>
-                  <p className="text-slate-500 text-xs">{language === 'en' ? 'Stats, Wins & Settings' : 'Statistika, pobede i podešavanja'}</p>
-                </div>
-              </div>
-            </button>
-
-            <button
-              onClick={() => { (window as any).playSFX?.('click'); setMode('socials'); }}
-              className="group relative p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all"
-            >
-              <div className="flex items-center gap-4 text-left">
-                <div className="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                  👥
-                </div>
-                <div>
-                  <h3 className="text-white font-bold">{t.lobby.socials}</h3>
-                  <p className="text-slate-500 text-xs">{language === 'en' ? 'Friends & Invitations' : 'Prijatelji i pozivnice'}</p>
-                </div>
-              </div>
-            </button>
-
-            <button
-              onClick={() => { (window as any).playSFX?.('click'); setMode('leaderboard'); }}
-              className="group relative p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all"
-            >
-              <div className="flex items-center gap-4 text-left">
-                <div className="w-12 h-12 rounded-xl bg-amber-600/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                  🏆
-                </div>
-                <div>
-                  <h3 className="text-white font-bold">{t.lobby.leaderboard}</h3>
-                  <p className="text-slate-500 text-xs">{language === 'en' ? 'Global Rankings & Winners' : 'Globalno rangiranje i pobednici'}</p>
-                </div>
-              </div>
-            </button>
-
-            <button
-              onClick={() => { (window as any).playSFX?.('click'); onOpenSettings?.(); }}
-              className="group relative p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all"
-            >
-              <div className="flex items-center gap-4 text-left">
-                <div className="w-12 h-12 rounded-xl bg-slate-500/20 flex items-center justify-center text-2xl group-hover:rotate-45 transition-transform">
-                  ⚙️
-                </div>
-                <div>
-                  <h3 className="text-white font-bold">{t.ui.settings}</h3>
-                  <p className="text-slate-500 text-xs">{language === 'en' ? 'Audio & Language' : 'Audio i jezik'}</p>
-                </div>
-              </div>
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (mode === 'leaderboard') {
-    return (
-      <Leaderboard 
-        currentUserId={userId || undefined}
-        onBack={() => setMode('initial')}
-        language={language}
-      />
     );
   }
 
   if (mode === 'socials') {
-    if (!userId) {
-      return (
-        <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 z-50">
-          <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin mb-4" />
-          <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Loading Socials...</p>
-        </div>
-      );
-    }
-    return (
-      <Socials 
-        currentUserId={userId}
-        onBack={() => setMode('initial')}
-        onInviteSent={() => {
-          onStart(name, avatar, false);
-        }}
-        language={language}
-      />
-    );
+    return <Socials onBack={() => setMode('initial')} onInviteSent={(code) => { setRoomCode(code); setMode('initial'); }} currentUserId={userId || ''} language={language} />;
+  }
+
+  if (mode === 'leaderboard') {
+    return <Leaderboard onBack={() => setMode('initial')} currentUserId={userId || ''} language={language} />;
   }
 
   return (
-    <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 z-50 overflow-hidden">
-      <div className="max-w-sm w-full space-y-8 bg-white/5 p-8 rounded-[32px] border border-white/10 backdrop-blur-xl">
-        <button
-          onClick={() => setMode('initial')}
-          className="text-slate-500 hover:text-white transition-colors text-sm flex items-center gap-2"
-        >
-          ← {t.ui.back_to_menu}
-        </button>
+    <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 z-50">
+      <div className="absolute inset-0 opacity-30 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-green-600 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
+      </div>
 
-        <div className="space-y-6">
-          <div className="space-y-4 text-center">
-            <h2 className="text-2xl font-bold text-white capitalize">
-              {mode.replace('_', ' ')} Mode
-            </h2>
+      <div className="relative z-10 max-w-lg w-full flex flex-col items-center gap-8">
+        <div className="text-center space-y-2 animate-modal-pop">
+          <div className="inline-block p-4 bg-white/5 rounded-[32px] border border-white/10 mb-4 backdrop-blur-xl shadow-2xl">
+            <img src="/logo/logo.png" alt="EIB Logo" className="w-24 h-24 object-contain" />
           </div>
+          <h1 className="text-5xl font-black text-white italic tracking-tighter uppercase drop-shadow-2xl">
+            EIB <span className="text-blue-500 underline decoration-green-500 underline-offset-8">WEBAPP</span>
+          </h1>
+          <p className="text-slate-400 font-bold uppercase tracking-[0.4em] text-[10px]">Financial & Sustainability Strategy</p>
+        </div>
 
-          <div className="space-y-4">
-            <div>
-              <label className="text-slate-400 text-xs uppercase font-bold tracking-wider mb-2 block">
-                Player Name
-              </label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Enter your name..."
-                className="w-full bg-black/30 border border-white/10 rounded-xl p-3 text-white placeholder:text-slate-700 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-              />
-            </div>
-
-            {mode === 'join' && (
-              <div>
-                <label className="text-slate-400 text-xs uppercase font-bold tracking-wider mb-2 block">
-                  Room Code
-                </label>
-                <input
-                  type="text"
-                  value={roomCode}
-                  onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
-                  placeholder="CODE123"
-                  className="w-full bg-black/30 border border-white/10 rounded-xl p-3 text-white font-mono placeholder:text-slate-700 outline-none focus:ring-2 focus:ring-purple-500 transition-all"
-                />
+        {!showMultiplayerMenu ? (
+          <div className="w-full flex flex-col gap-4 animate-modal-pop" style={{ animationDelay: '0.2s' }}>
+            <button
+              onClick={() => { setMode('single'); handleAction(); }}
+              className="group relative w-full bg-gradient-to-br from-white to-slate-200 p-6 rounded-[2rem] shadow-2xl transition-all hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative flex items-center justify-between">
+                <div className="text-left">
+                  <h3 className="text-slate-900 font-black text-2xl italic tracking-tight">{t.lobby.single_player}</h3>
+                  <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">Master the economy alone</p>
+                </div>
+                <span className="text-4xl">🚀</span>
               </div>
-            )}
+            </button>
 
-            <div>
-              <label className="text-slate-400 text-xs uppercase font-bold tracking-wider mb-2 block text-center">
-                Select Character
-              </label>
-              <div className="grid grid-cols-3 gap-2">
-                {AVATARS.map((a) => (
-                  <button
-                    key={a.id}
-                    onClick={() => setAvatar(a.id)}
-                    className={`p-2 rounded-xl border transition-all flex flex-col items-center justify-center gap-1 ${avatar === a.id
-                      ? 'bg-blue-600/20 border-blue-500 scale-105 ring-2 ring-blue-500/50'
-                      : 'bg-white/5 border-white/10 opacity-60 hover:opacity-100 hover:bg-white/10'
-                      }`}
-                  >
-                    <img
-                      src={`/assets/${a.id}.png`}
-                      alt={a.name}
-                      className="w-12 h-12 object-contain"
+            <button
+              onClick={() => setShowMultiplayerMenu(true)}
+              className="group relative w-full bg-slate-800 border border-white/10 p-6 rounded-[2rem] shadow-2xl transition-all hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
+            >
+              <div className="relative flex items-center justify-between">
+                <div className="text-left">
+                  <h3 className="text-white font-black text-2xl italic tracking-tight">{t.lobby.multiplayer}</h3>
+                  <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Compete with the world</p>
+                </div>
+                <span className="text-4xl group-hover:rotate-12 transition-transform">👥</span>
+              </div>
+            </button>
+
+            <div className="grid grid-cols-3 gap-4 mt-2">
+              <button
+                onClick={() => setMode('profile')}
+                className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-all group"
+              >
+                <span className="text-2xl group-hover:scale-110 transition-transform">👤</span>
+                <span className="text-[10px] font-black text-white uppercase tracking-widest">{language === 'en' ? 'Profile' : 'Profil'}</span>
+              </button>
+              <button
+                onClick={() => setMode('socials')}
+                className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-all group"
+              >
+                <span className="text-2xl group-hover:scale-110 transition-transform">🤝</span>
+                <span className="text-[10px] font-black text-white uppercase tracking-widest">{language === 'en' ? 'Social' : 'Prijatelji'}</span>
+              </button>
+              <button
+                onClick={() => setMode('leaderboard')}
+                className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-all group"
+              >
+                <span className="text-2xl group-hover:scale-110 transition-transform">🏆</span>
+                <span className="text-[10px] font-black text-white uppercase tracking-widest">{language === 'en' ? 'Global' : 'Rang lista'}</span>
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="w-full space-y-4 animate-modal-pop">
+            <div className="bg-white/5 border border-white/10 p-8 rounded-[2.5rem] backdrop-blur-xl shadow-2xl">
+              <div className="flex gap-4 mb-8 p-1 bg-black/40 rounded-2xl border border-white/5">
+                <button
+                  onClick={() => setMode('create')}
+                  className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${mode === 'create' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+                >
+                  {t.lobby.create_room}
+                </button>
+                <button
+                  onClick={() => setMode('join')}
+                  className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${mode === 'join' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+                >
+                  {t.lobby.join_room}
+                </button>
+              </div>
+
+              {mode === 'join' && (
+                <div className="space-y-4 mb-6">
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-blue-500 font-bold">#</div>
+                    <input
+                      type="text"
+                      maxLength={6}
+                      value={roomCode}
+                      onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
+                      placeholder="ENTER ROOM CODE"
+                      className="w-full bg-black/40 border-2 border-white/10 rounded-2xl py-4 pl-10 pr-4 text-white font-black tracking-[0.3em] outline-none focus:border-blue-500 transition-all text-center placeholder:text-slate-700 placeholder:tracking-normal placeholder:font-bold placeholder:text-xs"
                     />
-                    <span className="text-[8px] text-white/50 uppercase font-black text-center leading-tight h-6 flex items-center">
-                      {a.name}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
+                  </div>
+                </div>
+              )}
 
-          <button
-            onClick={handleAction}
-            className="w-full bg-gradient-to-r from-blue-600 to-green-600 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-900/20 hover:scale-105 active:scale-95 transition-all"
-          >
-            {mode === 'join' ? 'CONNECT' : 'START ADVENTURE'}
-          </button>
+              <button
+                onClick={handleAction}
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black py-5 rounded-[1.5rem] transition-all active:scale-95 shadow-xl shadow-blue-900/20 text-lg italic tracking-tight"
+              >
+                {mode === 'create' ? t.lobby.create_room.toUpperCase() : t.lobby.join_room.toUpperCase()} ➔
+              </button>
+            </div>
+
+            <button
+              onClick={() => setShowMultiplayerMenu(false)}
+              className="w-full py-4 text-slate-500 font-bold uppercase tracking-widest text-[10px] hover:text-white transition-colors"
+            >
+              ← {t.ui.back_to_menu}
+            </button>
+          </div>
+        )}
+
+        <div className="mt-4 flex flex-col items-center gap-2 opacity-40">
+          <p className="text-[9px] text-slate-500 font-black uppercase tracking-[0.3em]">Version 2.0.4 - Strategic Edition</p>
+          <div className="flex gap-4">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" style={{ animationDelay: '0.5s' }} />
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" style={{ animationDelay: '1s' }} />
+          </div>
         </div>
       </div>
     </div>

@@ -82,26 +82,21 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
   };
 
   const handleSearch = async () => {
-    if (searchQuery.length < 3) return;
+    const trimmed = searchQuery.trim();
+    if (trimmed.length < 3) return;
     setLoading(true);
     try {
-      // Check if searching by ID (e.g. #A1B2C3)
-      const isIdSearch = searchQuery.startsWith('#') || searchQuery.length === 6;
-      const cleanQuery = searchQuery.startsWith('#') ? searchQuery.substring(1) : searchQuery;
-
-      let query = supabase
+      const cleanQuery = trimmed.startsWith('#') ? trimmed.substring(1) : trimmed;
+      
+      // Intelligent combined query:
+      // If query is exactly 6 chars, prioritize ID but check username too
+      // Otherwise search both fields with OR logic
+      const { data, error } = await supabase
         .from('profiles')
         .select('id, username, avatar_url, display_id')
         .neq('id', currentUserId)
-        .limit(10);
-
-      if (isIdSearch) {
-        query = query.ilike('display_id', `%${cleanQuery}%`);
-      } else {
-        query = query.ilike('username', `%${cleanQuery}%`);
-      }
-
-      const { data, error } = await query;
+        .or(`username.ilike.%${cleanQuery}%,display_id.ilike.%${cleanQuery}%`)
+        .limit(15);
 
       if (error) throw error;
       setSearchResults(data || []);

@@ -29,6 +29,9 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
 
   useEffect(() => {
     fetchLeaderboard();
+    // Auto-refresh every 30 seconds while leaderboard is open
+    const interval = setInterval(fetchLeaderboard, 30000);
+    return () => clearInterval(interval);
   }, [activeTab]);
 
   const fetchLeaderboard = async () => {
