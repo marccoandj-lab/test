@@ -311,6 +311,18 @@ export const App: React.FC = () => {
     setMpState(null);
   };
 
+  const handleExitGame = () => {
+    if (!isSinglePlayer) {
+      multiplayer.leaveRoom();
+    }
+    setGameState('start');
+    setMpState(null);
+    setCurrentLevelIndex(0);
+    setBalance(150000);
+    setMode('finance');
+    setIsSettingsOpen(false);
+  };
+
   // Taxation track
   const myExemption = isSinglePlayer ? 0 : (mpState?.players.find(p => p.id === multiplayer.getMyId())?.taxExemptTurns || 0);
   const prevExemption = useRef(myExemption);
@@ -917,6 +929,8 @@ export const App: React.FC = () => {
         onLanguageChange={setLanguage}
         notificationSettings={notificationSettings}
         onNotificationSettingsChange={subscribeToPush}
+        isInGame={gameState !== 'start'}
+        onExitGame={handleExitGame}
       />
 
       {/* Floating Settings Button - Hidden on Start and Lobby screens */}

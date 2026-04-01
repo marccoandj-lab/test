@@ -17,6 +17,8 @@ interface SettingsModalProps {
   onLanguageChange: (lang: 'en' | 'sr') => void;
   notificationSettings: NotificationSettings;
   onNotificationSettingsChange: (settings: NotificationSettings) => void;
+  isInGame: boolean;
+  onExitGame: () => void;
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
@@ -32,7 +34,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   language,
   onLanguageChange,
   notificationSettings,
-  onNotificationSettingsChange
+  onNotificationSettingsChange,
+  isInGame,
+  onExitGame
 }) => {
   if (!isOpen) return null;
 
@@ -179,12 +183,23 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </div>
           </div>
 
-          <button
-            onClick={onClose}
-            className={`w-full mt-8 py-4 ${mode === 'finance' ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-600 hover:bg-green-500'} text-white font-black rounded-2xl transition-all shadow-xl active:scale-95`}
-          >
-            {language === 'en' ? 'DONE' : 'GOTOVO'}
-          </button>
+          <div className="mt-8 space-y-3">
+            {isInGame && (
+              <button
+                onClick={onExitGame}
+                className="w-full py-4 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 border border-rose-500/20 font-black rounded-2xl transition-all active:scale-95 flex items-center justify-center gap-2"
+              >
+                <span>🚪</span> {language === 'en' ? 'EXIT GAME' : 'IZAĐI IZ IGRE'}
+              </button>
+            )}
+
+            <button
+              onClick={onClose}
+              className={`w-full py-4 ${mode === 'finance' ? 'bg-blue-600 hover:bg-blue-500' : 'bg-green-600 hover:bg-green-500'} text-white font-black rounded-2xl transition-all shadow-xl active:scale-95`}
+            >
+              {language === 'en' ? 'DONE' : 'GOTOVO'}
+            </button>
+          </div>
         </div>
       </div>
     </div>

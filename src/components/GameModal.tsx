@@ -604,11 +604,11 @@ export function InvestmentModal({ balance, mode, onResult, language }: Investmen
   };
 
   const timerColor = timeLeft > 15 ? 'text-emerald-400' : timeLeft > 8 ? 'text-amber-400' : 'text-rose-400';
-  const symbols = mode === 'finance' ? ['📈', '💹', '🏢', '🏦'] : ['🌿', '☀️', '⚡', '🌊'];
+  const symbols = mode === 'finance' ? ['📈', '💹', '🏢', '🏦', '💰', '💵', '📊'] : ['🌿', '☀️', '⚡', '🌊', '🌱', '🌳'];
 
   return (
     <Modal onClose={() => { }} mode={mode} language={language}>
-      <FloatingSymbols symbols={symbols} animationClass="animate-float-up" count={10} />
+      <FloatingSymbols symbols={symbols} animationClass="animate-float-up" count={14} />
       <div className="p-6 text-center relative z-10">
         {phase === 'choose' && (
           <div className={`absolute top-0 right-0 w-12 h-12 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 font-black ${timerColor} animate-pulse`}>
@@ -686,7 +686,11 @@ export function InvestmentModal({ balance, mode, onResult, language }: Investmen
           <div className="animate-modal-pop">
             <div className="mb-6 relative inline-block">
                <div className="text-8xl mb-2">
-                 {resultInfo.result === 'win' ? '🐂' : resultInfo.result === 'lose' ? '🐻' : '⚖️'}
+                 {mode === 'finance' ? (
+                   resultInfo.result === 'win' ? '💰' : resultInfo.result === 'lose' ? '📉' : '⚖️'
+                 ) : (
+                   resultInfo.result === 'win' ? '🌱' : resultInfo.result === 'lose' ? '🏭' : '⚖️'
+                 )}
                </div>
                <div className={`absolute -bottom-2 -right-2 w-14 h-14 rounded-2xl border-4 border-white bg-slate-900 flex items-center justify-center shadow-xl text-3xl`}>
                  {diceFaces[diceValue - 1]}
