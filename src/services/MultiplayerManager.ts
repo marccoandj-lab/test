@@ -11,6 +11,7 @@ export type GameState = {
   status: 'waiting' | 'starting' | 'playing' | 'ended' | 'finished';
   turnTimeLeft: number;
   mode: 'finance' | 'sustainability';
+  globalModal: 'switch' | null;
   auction: {
     active: boolean;
     rolls: Record<string, number>;
@@ -56,6 +57,7 @@ class MultiplayerManager {
     status: 'waiting',
     turnTimeLeft: 60,
     mode: 'finance',
+    globalModal: null,
     auction: { active: false, rolls: {}, turnIndex: 0 },
     levels: []
   };
@@ -324,6 +326,7 @@ class MultiplayerManager {
         break;
       case 'ACTION_THEME_SWITCH':
         this.state.mode = msg.mode;
+        this.state.globalModal = 'switch';
         break;
       case 'ACTION_AUCTION_START':
         this.state.auction = { active: true, rolls: {}, turnIndex: 0 };
@@ -391,6 +394,7 @@ class MultiplayerManager {
         break;
       case 'ACTION_INTERACTION_END':
         player.isInteracting = false;
+        this.state.globalModal = null; // Clear global modal if active
         const nextI = (this.state.currentTurnIndex + 1) % this.state.players.length;
         const nextIP = this.state.players[nextI];
         if (nextIP.status === 'jail' && nextIP.jailSkipped) {
@@ -401,6 +405,7 @@ class MultiplayerManager {
         break;
       case 'ACTION_AUCTION_END':
         this.state.auction.active = false;
+        this.state.globalModal = null; // Clear global modal if active
         this.state.players.forEach(p => p.isInteracting = false);
         const aNex = (this.state.currentTurnIndex + 1) % this.state.players.length;
         const aNexP = this.state.players[aNex];

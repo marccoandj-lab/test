@@ -38,13 +38,14 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
 }) => {
   const isAuctionActive = multiplayer.state.auction.active;
   const isGameOver = multiplayer.state.status === 'finished';
+  const globalModal = multiplayer.state.globalModal;
 
   // Jail Skip logic: If it's MY turn and I am in jail, show JailSkipModal
   const myProfile = multiplayer.getMyProfile();
   const isMyTurn = players[multiplayer.state.currentTurnIndex]?.id === myProfile?.id;
   const showJailSkip = isMyTurn && myProfile?.status === 'jail' && !myProfile?.jailSkipped && !multiplayer.state.auction.active;
 
-  const showModal = activeField || isAuctionActive || isGameOver || showJailSkip;
+  const showModal = activeField || isAuctionActive || isGameOver || showJailSkip || globalModal;
 
   if (!showModal) return null;
 
@@ -93,6 +94,27 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
           // ACTION_JAIL_SKIP already increments the turn index,
           // which will cause showJailSkip to become false and the modal to hide.
           // Calling onClose() triggers ACTION_INTERACTION_END, incrementing turn AGAIN.
+        }}
+      />
+    );
+  }
+
+  // Handle Global Switch Modal (Multiplayer Sync)
+  if (globalModal === 'switch') {
+    return (
+      <SwitchModal
+        fromMode={mode}
+        toMode={mode === 'finance' ? 'sustainability' : 'finance'}
+        language={language}
+        onClose={() => {
+          onModeChange(mode === 'finance' ? 'sustainability' : 'finance');
+          if (!isSinglePlayer) {
+            multiplayer.sendAction({ type: 'ACTION_INTERACTION_END' });
+          }
+          // Also call the standard onClose if we landed on this field to clear activeField local state
+          if (activeField === 'switch') {
+             onClose();
+          }
         }}
       />
     );

@@ -453,61 +453,84 @@ export function SwitchModal({ fromMode, toMode, onClose, language }: SwitchModal
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
-    }, 3500);
+    }, 4000);
     return () => clearTimeout(timer);
   }, [onClose]);
 
   const symbols = toMode === 'finance' ? ['💼', '📈', '💹', '🏦'] : ['🌱', '🌿', '🍃', '🌞'];
+  const isToEco = toMode === 'sustainability';
 
   return (
     <Modal onClose={() => { }} mode={toMode} language={language}>
-      <FloatingSymbols symbols={symbols} animationClass="animate-float-up" count={12} />
+      <FloatingSymbols symbols={symbols} animationClass={isToEco ? "animate-float-up" : "animate-rain-down"} count={16} />
+      
       <div className="p-8 text-center relative z-10">
-        <div className="text-7xl mb-6 animate-bounce drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">🔄</div>
-        <h2 className="text-3xl font-black text-white mb-2 tracking-tighter uppercase italic">{language === 'en' ? 'Topic Switched!' : 'Tema promenjena!'}</h2>
-        <p className="text-white/60 mb-8 text-sm leading-relaxed px-4">{language === 'en' ? 'The entire market is switching its focus!' : 'Čitavo tržište menja svoj fokus!'}</p>
+        <div className="relative inline-block mb-6">
+          <div className="text-8xl animate-bounce drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">🔄</div>
+          <div className="absolute -top-2 -right-2 w-10 h-10 bg-white rounded-full flex items-center justify-center text-2xl shadow-lg animate-pulse">
+            {isToEco ? '🌱' : '💼'}
+          </div>
+        </div>
 
-        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-[2.5rem] p-6 mb-8 shadow-inner relative overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-          <div className="flex items-center justify-center gap-8">
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-4xl border border-white/10 grayscale opacity-50">
+        <h2 className="text-4xl font-black text-white mb-2 tracking-tighter uppercase italic leading-none">
+          {language === 'en' ? 'Market Switch!' : 'Promena tržišta!'}
+        </h2>
+        <p className="text-white/60 mb-8 text-sm font-medium tracking-wide">
+          {language === 'en' ? 'The entire world is shifting focus...' : 'Čitav svet menja svoj fokus...'}
+        </p>
+
+        <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-[3rem] p-8 mb-8 shadow-2xl overflow-hidden group">
+          {/* Animated background glow */}
+          <div className={`absolute inset-0 opacity-20 transition-colors duration-1000 ${isToEco ? 'bg-emerald-500' : 'bg-blue-500'}`} />
+          
+          <div className="relative z-10 flex items-center justify-between gap-4">
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-20 h-20 rounded-3xl bg-white/5 flex items-center justify-center text-5xl border border-white/10 grayscale opacity-40 transition-all">
                 {fromMode === 'finance' ? '💼' : '🌱'}
               </div>
-              <span className="text-[10px] text-white/40 uppercase font-black tracking-widest">{fromMode === 'finance' ? (language === 'en' ? 'Finance' : 'Finansije') : (language === 'en' ? 'Sustainability' : 'Održivost')}</span>
+              <span className="text-[10px] text-white/30 uppercase font-black tracking-[0.2em]">
+                {fromMode === 'finance' ? (language === 'en' ? 'Finance' : 'Finansije') : (language === 'en' ? 'Eco' : 'Eko')}
+              </span>
             </div>
             
-            <div className="text-white/20 text-4xl animate-pulse">➜</div>
+            <div className="flex flex-col items-center gap-1">
+              <div className="text-white/20 text-4xl animate-pulse">➜</div>
+              <div className={`h-1 w-12 rounded-full ${isToEco ? 'bg-emerald-500' : 'bg-blue-500'} animate-width-grow`} />
+            </div>
 
-            <div className="flex flex-col items-center gap-2">
-              <div className={`w-20 h-20 rounded-[1.5rem] flex items-center justify-center text-5xl border-2 shadow-2xl animate-modal-pop ${toMode === 'finance' ? 'bg-blue-500/20 border-blue-400/50' : 'bg-emerald-500/20 border-emerald-400/50'}`}>
+            <div className="flex flex-col items-center gap-3">
+              <div className={`w-24 h-24 rounded-[2rem] flex items-center justify-center text-6xl border-4 shadow-[0_0_40px_rgba(255,255,255,0.2)] animate-modal-pop transition-all ${isToEco ? 'bg-emerald-500/30 border-emerald-400' : 'bg-blue-500/30 border-blue-400'}`}>
                 {toMode === 'finance' ? '💼' : '🌱'}
               </div>
-              <span className={`text-xs font-black uppercase tracking-widest ${toMode === 'finance' ? 'text-blue-400' : 'text-emerald-400'}`}>
-                {toMode === 'finance' ? (language === 'en' ? 'Finance' : 'Finansije') : (language === 'en' ? 'Sustainability' : 'Održivost')}
+              <span className={`text-xs font-black uppercase tracking-[0.3em] ${isToEco ? 'text-emerald-400' : 'text-blue-400'}`}>
+                {toMode === 'finance' ? (language === 'en' ? 'FINANCE' : 'FINANSIJE') : (language === 'en' ? 'ECO ERA' : 'EKO ERA')}
               </span>
             </div>
           </div>
         </div>
 
-        <div className={`rounded-2xl p-5 border-2 shadow-2xl transition-all ${toMode === 'sustainability'
-          ? 'bg-emerald-500/30 border-emerald-400/30'
-          : 'bg-blue-500/30 border-blue-400/30'
+        <div className={`rounded-3xl p-6 border-2 shadow-2xl transition-all duration-700 ${isToEco
+          ? 'bg-emerald-500/20 border-emerald-400/30'
+          : 'bg-blue-500/20 border-blue-400/30'
           }`}>
-          <p className={`text-xl font-black mb-2 uppercase tracking-tighter ${toMode === 'sustainability' ? 'text-emerald-300' : 'text-blue-300'}`}>
-            {toMode === 'sustainability' ? (language === 'en' ? '🌱 Eco Era' : '🌱 Ekološka Era') : (language === 'en' ? '💼 Market Boom' : '💼 Tržišni Bum')}
+          <p className={`text-2xl font-black mb-3 uppercase tracking-tighter italic ${isToEco ? 'text-emerald-300' : 'text-blue-300'}`}>
+            {isToEco ? (language === 'en' ? '🌱 Green Revolution' : '🌱 Zelena revolucija') : (language === 'en' ? '💼 Global Market' : '💼 Globalno tržište')}
           </p>
-          <p className="text-white/80 text-sm leading-relaxed font-medium">
-            {toMode === 'sustainability'
-              ? (language === 'en' ? 'Questions are now about ecology, ESG and green energy.' : 'Pitanja su sada o ekologiji, ESG kriterijumima i zelenoj energiji.')
-              : (language === 'en' ? 'Questions are now about budgeting, investing and finance.' : 'Pitanja su sada o budžetiranju, investiranju i finansijama.')}
+          <p className="text-white/80 text-sm leading-relaxed font-bold px-2">
+            {isToEco
+              ? (language === 'en' ? 'Get ready for ESG challenges and sustainable investments!' : 'Spremite se za ESG izazove i održive investicije!')
+              : (language === 'en' ? 'Focus on profit, budgeting, and financial growth strategies!' : 'Fokusirajte se na profit, budžetiranje i strategije rasta!')}
           </p>
         </div>
 
-        <div className="mt-8 flex items-center justify-center gap-3">
-          <div className="w-2 h-2 rounded-full bg-white/20 animate-ping" />
-          <p className="text-white/30 text-[10px] uppercase tracking-[0.2em] font-black">
-            {language === 'en' ? 'Switching Perspective...' : 'Menjanje perspektive...'}
+        <div className="mt-10 flex flex-col items-center gap-2">
+          <div className="flex gap-1.5">
+            {[0, 1, 2].map(i => (
+              <div key={i} className={`w-2 h-2 rounded-full ${isToEco ? 'bg-emerald-500' : 'bg-blue-500'} animate-bounce`} style={{ animationDelay: `${i * 0.1}s` }} />
+            ))}
+          </div>
+          <p className="text-white/30 text-[10px] uppercase tracking-[0.3em] font-black">
+            {language === 'en' ? 'SYNCHRONIZING WORLD...' : 'SINHRONIZACIJA SVETA...'}
           </p>
         </div>
       </div>

@@ -504,8 +504,9 @@ export const App: React.FC = () => {
     setUserName(name);
     setUserAvatar(avatar as AvatarType);
 
-    // Start music ONLY if it's supposed to be playing
-    if (isMusicPlaying) {
+    // Start music ONLY if it's supposed to be playing (checked from localStorage/state)
+    const musicEnabled = localStorage.getItem('eib_music_enabled') !== 'false';
+    if (musicEnabled && isMusicPlaying) {
       startMusic();
     }
 
