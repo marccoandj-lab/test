@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { GameMode, QuizQuestion, getInvestmentResult } from '../data/gameData';
+import { GameMode, QuizQuestion, getInvestmentResult, CostAnalysisScenario } from '../data/gameData';
 import { Player } from '../types/game';
 import { multiplayer } from '../services/MultiplayerManager';
 import { translations } from '../i18n/translations';
@@ -1211,5 +1211,145 @@ export function TurnAnnouncementModal({ onComplete, language }: { onComplete: ()
         </h2>
       </div>
     </div>
+  );
+}
+
+// ── COST ANALYSIS MODAL ──
+export interface CostAnalysisModalProps {
+  scenario: CostAnalysisScenario;
+  mode: GameMode;
+  onResult: (correct: boolean, reward: number, penalty: number) => void;
+  language: 'en' | 'sr';
+}
+
+const COST_OPTION_LABELS = ['A', 'B', 'C'];
+const COST_OPTION_COLORS = [
+  { base: 'bg-indigo-500/20 border-indigo-400/30 hover:bg-indigo-500/40 text-indigo-100', selected: 'bg-indigo-500/60 border-indigo-300 text-white', correct: 'bg-emerald-500/40 border-emerald-400 text-emerald-100', wrong: 'bg-rose-500/40 border-rose-400 text-rose-100' },
+  { base: 'bg-purple-500/20 border-purple-400/30 hover:bg-purple-500/40 text-purple-100', selected: 'bg-purple-500/60 border-purple-300 text-white', correct: 'bg-emerald-500/40 border-emerald-400 text-emerald-100', wrong: 'bg-rose-500/40 border-rose-400 text-rose-100' },
+  { base: 'bg-fuchsia-500/20 border-fuchsia-400/30 hover:bg-fuchsia-500/40 text-fuchsia-100', selected: 'bg-fuchsia-500/60 border-fuchsia-300 text-white', correct: 'bg-emerald-500/40 border-emerald-400 text-emerald-100', wrong: 'bg-rose-500/40 border-rose-400 text-rose-100' },
+];
+
+export function CostAnalysisModal({ scenario, mode, onResult, language }: CostAnalysisModalProps) {
+  const tDict = translations[language];
+  const [selected, setSelected] = useState<number | null>(null);
+  const [answered, setAnswered] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(60);
+
+  useEffect(() => {
+    if (answered) return;
+    const timer = setInterval(() => {
+      setTimeLeft(t => {
+        if (t <= 1) {
+          clearInterval(timer);
+          if (!answered) {
+            handleSelect(-1); // Timeout as wrong answer
+          }
+          return 0;
+        }
+        return t - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [answered]);
+
+  const handleSelect = (idx: number) => {
+    if (answered) return;
+    setSelected(idx);
+    setAnswered(true);
+    const isCorrect = idx === scenario.correct;
+    setTimeout(() => {
+      onResult(isCorrect, scenario.reward, scenario.penalty);
+    }, 2200);
+  };
+
+  const getOptionClass = (idx: number) => {
+    const c = COST_OPTION_COLORS[idx];
+    if (!answered) return `${c.base} cursor-pointer hover:translate-x-1 shadow-md hover:shadow-lg transition-all duration-300`;
+    if (idx === scenario.correct) return `${c.correct} cursor-default scale-[1.02] shadow-emerald-500/20 shadow-xl border-emerald-400 z-10`;
+    if (idx === selected && idx !== scenario.correct) return `${c.wrong} cursor-default grayscale-[0.5] opacity-80`;
+    return `bg-white/5 border-white/10 text-white/30 cursor-default opacity-40 scale-[0.98]`;
+  };
+
+  const timerColor = timeLeft > 15 ? 'text-emerald-400' : timeLeft > 8 ? 'text-amber-400' : 'text-rose-400';
+
+  return (
+    <Modal onClose={() => { }} mode={mode} language={language}>
+      <FloatingSymbols symbols={['🧐', '📊', '⚖️', '💡']} animationClass="animate-float-random" count={8} />
+      <div className="p-6 relative z-10">
+        <div className="flex items-center gap-4 mb-6">
+          <div className="relative">
+            <div className="text-4xl animate-bounce">🧐</div>
+            <div className="absolute inset-0 bg-white/20 blur-xl rounded-full -z-10" />
+          </div>
+          <div className="flex-1">
+            <p className="text-white/40 text-[10px] uppercase font-black tracking-[0.2em] mb-0.5">{language === 'en' ? 'CHALLENGE' : 'IZAZOV'}</p>
+            <p className="text-white font-black text-lg tracking-tight leading-tight">
+              {language === 'en' ? 'Cost Analysis' : 'Analiza troškova'}
+            </p>
+          </div>
+          {!answered && (
+            <div className={`relative w-14 h-14 flex items-center justify-center rounded-2xl border-2 border-white/20 bg-white/5 ${timerColor} font-black text-xl shadow-inner animate-pulse`}>
+              {timeLeft}
+            </div>
+          )}
+        </div>
+
+        <div className="bg-white/10 backdrop-blur-md rounded-3xl p-5 mb-6 border border-white/20 shadow-2xl relative group">
+          <div className="absolute -top-3 left-6 px-3 py-1 bg-white text-slate-900 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
+            {language === 'en' ? 'Scenario' : 'Scenario'}
+          </div>
+          <p className="text-white text-base font-bold leading-relaxed tracking-tight">{scenario.scenario[language]}</p>
+        </div>
+
+        <div className="flex flex-col gap-3 mb-6">
+          {scenario.options[language].map((option, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleSelect(idx)}
+              disabled={answered}
+              className={`
+                w-full text-left px-5 py-4 rounded-2xl border-2 transition-all duration-300
+                text-sm font-bold leading-snug active:scale-[0.97]
+                ${getOptionClass(idx)}
+              `}
+            >
+              <div className="flex items-center gap-3">
+                <span className={`w-8 h-8 flex items-center justify-center rounded-xl bg-white/10 border border-white/10 font-black`}>
+                  {COST_OPTION_LABELS[idx]}
+                </span>
+                <span className="flex-1">{option.replace(/^[A-C]\)\s*/, '')}</span>
+                {answered && idx === scenario.correct && <span className="text-xl animate-bounce">✨</span>}
+              </div>
+            </button>
+          ))}
+        </div>
+
+        <div className="flex gap-3 mt-auto">
+          <div className="flex-1 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-3 flex flex-col items-center">
+            <p className="text-emerald-400/60 text-[8px] font-black uppercase tracking-widest mb-1">{language === 'en' ? 'REWARD' : 'NAGRADA'}</p>
+            <p className="text-emerald-400 font-black text-sm">+{scenario.reward.toLocaleString()} SC</p>
+          </div>
+          <div className="flex-1 bg-rose-500/10 border border-rose-500/20 rounded-2xl p-3 flex flex-col items-center">
+            <p className="text-rose-400/60 text-[8px] font-black uppercase tracking-widest mb-1">{language === 'en' ? 'PENALTY' : 'KAZNA'}</p>
+            <p className="text-rose-400 font-black text-sm">-{scenario.penalty.toLocaleString()} SC</p>
+          </div>
+        </div>
+
+        {answered && (
+          <div className={`mt-6 rounded-3xl p-5 border-2 animate-modal-pop shadow-2xl ${selected === scenario.correct ? 'bg-emerald-500/30 border-emerald-400/30' : 'bg-rose-500/30 border-rose-400/30'}`}>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-2xl">{selected === scenario.correct ? '🎉' : '💨'}</span>
+              <p className="text-white font-black text-xl">
+                {selected === scenario.correct ? tDict.modals.correct : tDict.modals.wrong}
+              </p>
+            </div>
+            <p className="text-white/80 text-xs leading-relaxed mb-4 font-medium">{scenario.explanation[language]}</p>
+            <div className={`inline-block px-4 py-2 rounded-xl font-black text-lg shadow-lg ${selected === scenario.correct ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'}`}>
+              {selected === scenario.correct ? `+${scenario.reward.toLocaleString()} SC` : `-${scenario.penalty.toLocaleString()} SC`}
+            </div>
+          </div>
+        )}
+      </div>
+    </Modal>
   );
 }

@@ -1,4 +1,4 @@
-export type FieldType = 'start' | 'income' | 'expense' | 'quiz' | 'jail' | 'switch' | 'investment' | 'tax_small' | 'tax_large' | 'auction_insurance';
+export type FieldType = 'start' | 'income' | 'expense' | 'quiz' | 'jail' | 'switch' | 'investment' | 'tax_small' | 'tax_large' | 'auction_insurance' | 'cost_analysis';
 export type GameMode = 'finance' | 'sustainability';
 
 export interface Level {
@@ -22,8 +22,15 @@ export interface QuizQuestion {
   penalty: number;
 }
 
-
-
+export interface CostAnalysisScenario {
+  scenario: { en: string; sr: string };
+  options: { en: string[]; sr: string[] };
+  correct: number;
+  explanation: { en: string; sr: string };
+  mode: GameMode;
+  reward: number;
+  penalty: number;
+}
 export interface IncomeEvent {
   title: { en: string; sr: string };
   description: { en: string; sr: string };
@@ -2511,4 +2518,734 @@ export const jailMessages = [
 export const switchMessages = [
   { from: 'finance', to: 'sustainability', message: { en: "🌱 Switching to Sustainability! Your decisions affect the planet!", sr: "🌱 Prelazak na održivost! Vaše odluke utiču na planetu!" }, icon: "🔄" },
   { from: 'sustainability', to: 'finance', message: { en: "💼 Back to Financial Literacy! Use smart investing to fund a green future!", sr: "💼 Povratak na finansije! Koristite pametne investicije za zelenu budućnost!" }, icon: "🔄" },
+];
+
+
+// ─────────────────────────────────────────────
+// COST ANALYSIS SCENARIOS
+// ─────────────────────────────────────────────
+export const financeCostAnalysis: CostAnalysisScenario[] = [
+  {
+    scenario: { en: "Financial Scenario 1: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 1: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 2: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 2: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 3: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 3: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 4: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 4: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 5: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 5: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 6: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 6: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 7: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 7: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 8: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 8: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 9: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 9: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 10: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 10: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 11: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 11: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 12: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 12: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 13: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 13: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 14: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 14: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 15: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 15: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 16: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 16: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 17: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 17: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 18: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 18: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 19: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 19: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 20: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 20: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 21: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 21: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 22: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 22: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 23: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 23: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 24: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 24: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 25: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 25: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 26: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 26: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 27: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 27: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 28: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 28: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 29: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 29: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Financial Scenario 30: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 30: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    options: {
+      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
+      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+    },
+    correct: 1,
+    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
+    mode: 'finance',
+    reward: 40000,
+    penalty: 15000
+  },
+];
+
+export const sustainabilityCostAnalysis: CostAnalysisScenario[] = [
+  {
+    scenario: { en: "Eco Scenario 1: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 1: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 2: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 2: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 3: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 3: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 4: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 4: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 5: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 5: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 6: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 6: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 7: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 7: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 8: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 8: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 9: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 9: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 10: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 10: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 11: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 11: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 12: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 12: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 13: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 13: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 14: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 14: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 15: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 15: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 16: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 16: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 17: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 17: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 18: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 18: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 19: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 19: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 20: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 20: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 21: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 21: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 22: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 22: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 23: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 23: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 24: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 24: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 25: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 25: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 26: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 26: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 27: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 27: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 28: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 28: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 29: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 29: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
+  {
+    scenario: { en: "Eco Scenario 30: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 30: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    options: {
+      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
+      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+    },
+    correct: 1,
+    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
+    mode: 'sustainability',
+    reward: 40000,
+    penalty: 15000
+  },
 ];

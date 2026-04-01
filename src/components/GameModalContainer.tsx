@@ -1,5 +1,5 @@
-import { GameMode, financeQuizzes, sustainabilityQuizzes, incomeEvents, expenseEvents, jailMessages, Level } from '../data/gameData';
-import { IncomeModal, ExpenseModal, QuizModal, JailModal, SwitchModal, InvestmentModal, TaxSmallModal, TaxLargeModal, AuctionModal, InsuranceModal, VictoryModal, JailSkipModal, TurnAnnouncementModal } from './GameModal';
+import { GameMode, financeQuizzes, sustainabilityQuizzes, incomeEvents, expenseEvents, jailMessages, Level, financeCostAnalysis, sustainabilityCostAnalysis } from '../data/gameData';
+import { IncomeModal, ExpenseModal, QuizModal, JailModal, SwitchModal, InvestmentModal, TaxSmallModal, TaxLargeModal, AuctionModal, InsuranceModal, VictoryModal, JailSkipModal, TurnAnnouncementModal, CostAnalysisModal } from './GameModal';
 import { multiplayer } from '../services/MultiplayerManager';
 import { Player } from '../types/game';
 
@@ -137,6 +137,7 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
   }
 
   const currentQuizzes = mode === 'finance' ? financeQuizzes : sustainabilityQuizzes;
+  const currentCostAnalysis = mode === 'finance' ? financeCostAnalysis : sustainabilityCostAnalysis;
 
 
   // Pick random content
@@ -144,6 +145,7 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
   // but for "no repeat within session", we can use a randomized offset generated at start.
   // For now, let's just use levelIndex but we could add a session seed.
   const quiz = currentQuizzes[levelIndex % currentQuizzes.length];
+  const costAnalysisScenario = currentCostAnalysis[levelIndex % currentCostAnalysis.length];
 
   const income = incomeEvents[levelIndex % incomeEvents.length];
   const expense = expenseEvents[levelIndex % expenseEvents.length];
@@ -215,6 +217,20 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
           language={language}
           onResult={(correct, reward, penalty) => {
             onBalanceChange(correct ? reward : -penalty);
+            onClose();
+          }}
+        />
+      );
+
+    case 'cost_analysis':
+      return (
+        <CostAnalysisModal
+          scenario={costAnalysisScenario}
+          mode={mode}
+          language={language}
+          onResult={(correct, reward, penalty) => {
+            onBalanceChange(correct ? reward : -penalty);
+            // Optionally update stats here if desired (like we do for quiz using correct/wrong but stats track it in App/Multiplayer)
             onClose();
           }}
         />

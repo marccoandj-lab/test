@@ -103,6 +103,16 @@ const getFieldMeta = (type: FieldType, _mode: GameMode): Omit<Level, 'id'> => {
         borderColor: 'border-yellow-300',
         glowColor: 'shadow-yellow-400/50',
       };
+    case 'cost_analysis':
+      return {
+        type,
+        label: _mode === 'finance' ? 'Cost Analysis' : 'Analiza troškova',
+        icon: '🧐',
+        color: 'text-white',
+        bgColor: 'bg-gradient-to-br from-indigo-500 to-purple-700',
+        borderColor: 'border-indigo-400',
+        glowColor: 'shadow-indigo-500/50',
+      };
     default:
       return {
         type,
@@ -122,6 +132,7 @@ const getRandomFieldType = (): FieldType => {
     'expense',
     'quiz', 'quiz', 'quiz', 'quiz', 'quiz', 'quiz',
     'investment', 'investment',
+    'cost_analysis', 'cost_analysis',
     'switch',
     'jail',
     'tax_small', 'tax_small',
