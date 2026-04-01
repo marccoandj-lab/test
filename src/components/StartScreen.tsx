@@ -21,7 +21,9 @@ interface StartScreenProps {
     investment_gains?: number;
     investment_losses?: number;
     jail_visits?: number;
+    jail_skips?: number;
     auction_wins?: number;
+    taxes_paid?: number;
   } | null;
   language: 'en' | 'sr';
   onOpenSettings?: () => void;
@@ -129,7 +131,9 @@ export const StartScreen: React.FC<StartScreenProps> = ({
         investment_gains: profileData?.investment_gains || 0,
         investment_losses: profileData?.investment_losses || 0,
         jail_visits: profileData?.jail_visits || 0,
-        auction_wins: profileData?.auction_wins || 0
+        jail_skips: profileData?.jail_skips || 0,
+        auction_wins: profileData?.auction_wins || 0,
+        taxes_paid: profileData?.taxes_paid || 0
       });
 
       if (error) {

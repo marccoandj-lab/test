@@ -35,7 +35,9 @@ export const App: React.FC = () => {
     investment_gains: number,
     investment_losses: number,
     jail_visits: number,
-    auction_wins: number
+    jail_skips: number,
+    auction_wins: number,
+    taxes_paid: number
   } | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
@@ -180,7 +182,7 @@ export const App: React.FC = () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, investment_gains, investment_losses, jail_visits, auction_wins')
+        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, investment_gains, investment_losses, jail_visits, jail_skips, auction_wins, taxes_paid')
         .eq('id', userId)
         .single();
 
@@ -217,7 +219,9 @@ export const App: React.FC = () => {
           investment_gains: 0,
           investment_losses: 0,
           jail_visits: 0,
+          jail_skips: 0,
           auction_wins: 0,
+          taxes_paid: 0,
           notification_settings: { enabled: false, slots: ["09:00", "18:00"] }
         };
 
@@ -247,7 +251,9 @@ export const App: React.FC = () => {
     investment_gains: number,
     investment_losses: number,
     jail_visits: number,
+    jail_skips: number,
     auction_wins: number,
+    taxes_paid: number,
     notification_settings: NotificationSettings
   }>) => {
     if (!session?.user.id) return;
@@ -265,7 +271,7 @@ export const App: React.FC = () => {
       // Refresh local profile
       const { data } = await supabase
         .from('profiles')
-        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, investment_gains, investment_losses, jail_visits, auction_wins, notification_settings')
+        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, investment_gains, investment_losses, jail_visits, jail_skips, auction_wins, taxes_paid, notification_settings')
         .eq('id', session.user.id)
         .single();
 

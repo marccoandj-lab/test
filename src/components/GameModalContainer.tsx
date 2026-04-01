@@ -14,6 +14,8 @@ interface GameModalContainerProps {
   onModeChange: (mode: GameMode) => void;
   onTaxExemption: (turns: number) => void;
   onAuctionWin?: () => void;
+  onTaxPaid?: () => void;
+  onJailSkip?: () => void;
   levels: Level[];
   players: Player[];
   isSinglePlayer: boolean;
@@ -31,6 +33,8 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
   onModeChange,
   onTaxExemption,
   onAuctionWin,
+  onTaxPaid,
+  onJailSkip,
   levels,
   players,
   isSinglePlayer,

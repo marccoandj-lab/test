@@ -84,8 +84,11 @@ export const translations = {
       investment_gains: "Investment Gains",
       investment_losses: "Investment Losses",
       jail_visits: "Jail Visits",
+      jail_skips: "Jail Skips",
       auction_wins: "Auction Wins",
+      taxes_paid: "Taxes Paid",
       personal_stats: "Personal Statistics",
+      detailed_stats: "Detailed Statistics",
     },
     socials: {
       friends: "Friends",
