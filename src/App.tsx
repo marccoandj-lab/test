@@ -881,6 +881,22 @@ export const App: React.FC = () => {
                 updateSupabaseProfile({ auction_wins: (profile.auction_wins || 0) + 1 });
               }
             }}
+            onTaxPaid={() => {
+              if (isSinglePlayer) {
+                setSinglePlayerStats(prev => ({ ...prev, taxesPaid: prev.taxesPaid + 1 }));
+              }
+              if (profile) {
+                updateSupabaseProfile({ taxes_paid: (profile.taxes_paid || 0) + 1 });
+              }
+            }}
+            onJailSkip={() => {
+              if (isSinglePlayer) {
+                setSinglePlayerStats(prev => ({ ...prev, jailSkips: prev.jailSkips + 1 }));
+              }
+              if (profile) {
+                updateSupabaseProfile({ jail_skips: (profile.jail_skips || 0) + 1 });
+              }
+            }}
             language={language}
           />
         </>

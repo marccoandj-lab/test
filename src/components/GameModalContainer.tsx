@@ -93,6 +93,7 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
         mode={mode}
         language={language}
         onSkip={() => {
+          if (onJailSkip) onJailSkip();
           multiplayer.sendAction({ type: 'ACTION_JAIL_SKIP' });
           // DO NOT call onClose() here. 
           // ACTION_JAIL_SKIP already increments the turn index,
@@ -283,6 +284,7 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
           amount={smallTaxAmount}
           onClose={() => {
             if (!myTaxExemption) {
+              if (onTaxPaid) onTaxPaid();
               if (isSinglePlayer) {
                 onBalanceChange(-smallTaxAmount);
               } else {

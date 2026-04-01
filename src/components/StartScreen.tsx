@@ -5,6 +5,8 @@ import { supabase } from '../lib/supabase';
 import { Socials } from './Socials';
 import { Leaderboard } from './Leaderboard';
 
+import { formatNumber } from '../utils/format';
+
 interface StartScreenProps {
   onStart: (name: string, avatar: string, isSingle: boolean) => void;
   initialName?: string;
@@ -312,24 +314,69 @@ export const StartScreen: React.FC<StartScreenProps> = ({
             </div>
           </div>
 
-          <div className="space-y-3 bg-white/5 p-5 rounded-2xl border border-white/5">
-            <p className="text-[10px] text-white/40 uppercase font-black tracking-widest mb-2">{language === 'en' ? 'Detailed Statistics' : 'Detaljna statistika'}</p>
-            <div className="grid grid-cols-2 gap-y-4">
-              <div>
-                <p className="text-white font-bold text-sm">{profileData?.correct_quizzes || 0}</p>
-                <p className="text-slate-500 text-[9px] font-bold uppercase tracking-tighter">{language === 'en' ? 'Correct Quizzes' : 'Tačni kvizovi'}</p>
+          <div className="space-y-4 bg-white/5 p-6 rounded-[2rem] border border-white/5 backdrop-blur-sm shadow-xl">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-[10px] text-white/40 uppercase font-black tracking-widest">{language === 'en' ? 'Detailed Statistics' : 'Detaljna statistika'}</p>
+              <div className="h-[1px] flex-1 bg-white/10 ml-4" />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-x-6 gap-y-5">
+              <div className="group/stat">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs">✅</span>
+                  <p className="text-white font-black text-base">{formatNumber(profileData?.correct_quizzes || 0)}</p>
+                </div>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-blue-400 transition-colors">{language === 'en' ? 'Quizzes Won' : 'Tačni kvizovi'}</p>
               </div>
-              <div>
-                <p className="text-white font-bold text-sm">{(profileData?.investment_gains || 0).toLocaleString()} SC</p>
-                <p className="text-slate-500 text-[9px] font-bold uppercase tracking-tighter">{language === 'en' ? 'Investment Gains' : 'Dobici od invest.'}</p>
+
+              <div className="group/stat">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs">📈</span>
+                  <p className="text-white font-black text-base">{formatNumber(profileData?.investment_gains || 0)} SC</p>
+                </div>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-emerald-400 transition-colors">{language === 'en' ? 'Invest. Gains' : 'Dobici od invest.'}</p>
               </div>
-              <div>
-                <p className="text-white font-bold text-sm">{profileData?.jail_visits || 0}</p>
-                <p className="text-slate-500 text-[9px] font-bold uppercase tracking-tighter">{language === 'en' ? 'Jail Visits' : 'Posete zatvoru'}</p>
+
+              <div className="group/stat">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs">🔒</span>
+                  <p className="text-white font-black text-base">{profileData?.jail_visits || 0}</p>
+                </div>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-rose-400 transition-colors">{language === 'en' ? 'Jail Visits' : 'Zatvori'}</p>
               </div>
-              <div>
-                <p className="text-white font-bold text-sm">{(profileData?.total_capital || 0).toLocaleString()} SC</p>
-                <p className="text-slate-500 text-[9px] font-bold uppercase tracking-tighter">{language === 'en' ? 'Lifetime Capital' : 'Ukupan kapital'}</p>
+
+              <div className="group/stat">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs">🏃</span>
+                  <p className="text-white font-black text-base">{profileData?.jail_skips || 0}</p>
+                </div>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-amber-400 transition-colors">{language === 'en' ? 'Jail Skips' : 'Preskočen zatvor'}</p>
+              </div>
+
+              <div className="group/stat">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs">🏛️</span>
+                  <p className="text-white font-black text-base">{profileData?.taxes_paid || 0}</p>
+                </div>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-indigo-400 transition-colors">{language === 'en' ? 'Taxes Paid' : 'Plaćen porez'}</p>
+              </div>
+
+              <div className="group/stat">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs">⚖️</span>
+                  <p className="text-white font-black text-base">{profileData?.auction_wins || 0}</p>
+                </div>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-yellow-400 transition-colors">{language === 'en' ? 'Auction Wins' : 'Pobede na aukciji'}</p>
+              </div>
+
+              <div className="col-span-2 pt-2">
+                <div className="bg-white/5 rounded-2xl p-4 border border-white/5 flex items-center justify-between">
+                  <div>
+                    <p className="text-[10px] text-white/40 uppercase font-black tracking-widest mb-1">{language === 'en' ? 'Lifetime Capital' : 'Ukupan kapital'}</p>
+                    <p className="text-2xl font-black text-emerald-400">{formatNumber(profileData?.total_capital || 0)} SC</p>
+                  </div>
+                  <div className="text-3xl grayscale opacity-50">💰</div>
+                </div>
               </div>
             </div>
           </div>
