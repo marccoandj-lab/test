@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { translations } from '../i18n/translations';
 import { multiplayer } from '../services/MultiplayerManager';
 import { supabase } from '../lib/supabase';
-import { AvatarType } from '../types/game';
 import { Socials } from './Socials';
 import { Leaderboard } from './Leaderboard';
 
@@ -94,8 +93,9 @@ export const StartScreen: React.FC<StartScreenProps> = ({
     return !data;
   };
 
-  const saveProfile = async (overrideName?: string) => {
+  const saveProfile = async (overrideName?: string, overrideAvatar?: string) => {
     const finalName = overrideName || name;
+    const finalAvatar = overrideAvatar || avatar;
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
       // Check uniqueness if name changed
@@ -112,13 +112,13 @@ export const StartScreen: React.FC<StartScreenProps> = ({
       const currentUsage = profileData?.character_usage || {};
       const isStartingGame = mode === 'create' || mode === 'join' || mode === 'single';
       const newUsage = isStartingGame 
-        ? { ...currentUsage, [avatar]: (currentUsage[avatar] || 0) + 1 }
+        ? { ...currentUsage, [finalAvatar]: (currentUsage[finalAvatar] || 0) + 1 }
         : currentUsage;
       
       const { error } = await supabase.from('profiles').upsert({
         id: user.id,
         username: finalName,
-        avatar_url: avatar,
+        avatar_url: finalAvatar,
         updated_at: new Date().toISOString(),
         games_played: isStartingGame ? (profileData?.games_played || 0) + 1 : (profileData?.games_played || 0),
         wins: profileData?.wins || 0,
@@ -141,10 +141,10 @@ export const StartScreen: React.FC<StartScreenProps> = ({
       }
 
       localStorage.setItem('eib_username', finalName);
-      localStorage.setItem('eib_avatar', avatar);
+      localStorage.setItem('eib_avatar', finalAvatar);
 
       if (onProfileUpdate) {
-        onProfileUpdate(finalName, avatar);
+        onProfileUpdate(finalName, finalAvatar);
       }
       setNameError(null);
       return true;
@@ -284,7 +284,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
                 {Object.entries(AVATAR_MAP).map(([id]) => (
                   <button
                     key={id}
-                    onClick={async () => { setAvatar(id); setIsChangingAvatar(false); setName(name); await saveProfile(); }}
+                    onClick={async () => { setAvatar(id); setIsChangingAvatar(false); await saveProfile(name, id); }}
                     className={`p-2 rounded-xl border transition-all flex flex-col items-center justify-center gap-1 ${avatar === id
                       ? 'bg-blue-600/20 border-blue-500 scale-105 ring-2 ring-blue-500/50'
                       : 'bg-white/5 border-white/10 hover:bg-white/10'

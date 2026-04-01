@@ -451,7 +451,8 @@ class MultiplayerManager {
       turnTimeLeft: 60,
       mode: 'finance',
       auction: { active: false, rolls: {}, turnIndex: 0 },
-      levels: []
+      levels: [],
+      globalModal: null
     };
     this.onStateUpdate({ ...this.state });
   }
