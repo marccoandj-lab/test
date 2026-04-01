@@ -107,11 +107,22 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
         toMode={mode === 'finance' ? 'sustainability' : 'finance'}
         language={language}
         onClose={() => {
-          onModeChange(mode === 'finance' ? 'sustainability' : 'finance');
+          const myId = multiplayer.getMyId();
+          const activePlayerId = players[multiplayer.state.currentTurnIndex]?.id;
+          const isMyTurn = myId === activePlayerId;
+
           if (!isSinglePlayer) {
-            multiplayer.sendAction({ type: 'ACTION_INTERACTION_END' });
+            // Only the player whose turn it was should officially "end" the interaction
+            // to avoid multiple clients incrementing the turn counter.
+            if (isMyTurn) {
+              multiplayer.sendAction({ type: 'ACTION_INTERACTION_END' });
+            }
+          } else {
+            onModeChange(mode === 'finance' ? 'sustainability' : 'finance');
+            onClose();
           }
-          // Also call the standard onClose if we landed on this field to clear activeField local state
+          
+          // Local cleanup for the landing player if they had activeField set
           if (activeField === 'switch') {
              onClose();
           }

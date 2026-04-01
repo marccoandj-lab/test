@@ -327,6 +327,7 @@ class MultiplayerManager {
       case 'ACTION_THEME_SWITCH':
         this.state.mode = msg.mode;
         this.state.globalModal = 'switch';
+        player.isInteracting = true; // Block turn timer while global modal is active
         break;
       case 'ACTION_AUCTION_START':
         this.state.auction = { active: true, rolls: {}, turnIndex: 0 };

@@ -587,9 +587,14 @@ export const App: React.FC = () => {
     }
 
     const landingField = levels[currentPos].type;
-    setActiveModal(landingField);
-    if (!isSinglePlayer) {
-      multiplayer.sendAction({ type: 'ACTION_INTERACTION_START' });
+    if (landingField === 'switch' && !isSinglePlayer) {
+      const newMode = gameMode === 'finance' ? 'sustainability' : 'finance';
+      multiplayer.sendAction({ type: 'ACTION_THEME_SWITCH', mode: newMode });
+    } else {
+      setActiveModal(landingField);
+      if (!isSinglePlayer) {
+        multiplayer.sendAction({ type: 'ACTION_INTERACTION_START' });
+      }
     }
   };
 
@@ -650,11 +655,16 @@ export const App: React.FC = () => {
       }`}>
       {/* Background Audio */}
       <audio
-        ref={audioRef}
+        ref={(el) => {
+          audioRef.current = el;
+          if (el) el.volume = volume;
+        }}
         src={MUSIC_TRACKS[trackIndex]}
         autoPlay={true}
         preload="auto"
         onEnded={handleTrackEnd}
+        onPlay={(e) => (e.currentTarget.volume = volume)}
+        onCanPlay={(e) => (e.currentTarget.volume = volume)}
       >
         <source src={MUSIC_TRACKS[trackIndex]} type="audio/mpeg" />
       </audio>
