@@ -126,19 +126,25 @@ const getFieldMeta = (type: FieldType, _mode: GameMode): Omit<Level, 'id'> => {
   }
 };
 
-const getRandomFieldType = (): FieldType => {
-  const types: FieldType[] = [
+const getRandomFieldType = (mode: GameMode, isSinglePlayer: boolean): FieldType => {
+  let types: FieldType[] = [
     'income', 'income', 'income', 
     'expense',
     'quiz', 'quiz', 'quiz', 'quiz', 'quiz', 'quiz',
     'investment', 'investment',
-    'cost_analysis', 'cost_analysis',
+    'cost_analysis', 'cost_analysis', 'cost_analysis', 'cost_analysis', // Increased frequency
     'switch',
     'jail',
     'tax_small', 'tax_small',
     'tax_large',
     'auction_insurance',
   ];
+
+  // Remove Auction in Singleplayer Finance mode, but keep Insurance in Sustainability
+  if (isSinglePlayer && mode === 'finance') {
+    types = types.filter(t => t !== 'auction_insurance');
+  }
+
   return types[Math.floor(Math.random() * types.length)];
 };
 
@@ -146,7 +152,8 @@ export const generateLevels = (
   count: number = 60, 
   mode: GameMode = 'finance', 
   startId: number = 0,
-  lastType?: FieldType
+  lastType?: FieldType,
+  isSinglePlayer: boolean = false
 ): Level[] => {
   const levels: Level[] = [];
   let prevType = lastType;
@@ -160,12 +167,12 @@ export const generateLevels = (
 
   const loopStart = startId === 0 ? 1 : 0;
   for (let i = loopStart; i < count; i++) {
-    let type = getRandomFieldType();
+    let type = getRandomFieldType(mode, isSinglePlayer);
     
     // Ensure no two identical fields are next to each other
     // Also try to avoid jail/switch being too frequent or adjacent if possible
     while (type === prevType) {
-      type = getRandomFieldType();
+      type = getRandomFieldType(mode, isSinglePlayer);
     }
     
     prevType = type;

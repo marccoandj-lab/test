@@ -132,8 +132,7 @@ class MultiplayerManager {
 
     this.state.roomId = roomId;
     this.state.status = 'waiting';
-    this.state.levels = generateLevels(250, 'finance');
-
+    this.state.levels = generateLevels(250, 'finance', 0, undefined, false);
     this.myProfile = {
       id: this.myId,
       name,
@@ -286,7 +285,7 @@ class MultiplayerManager {
         // Robust Infinite Map: If player is near current end, Host generates more
         if (player.position >= this.state.levels.length - 30) {
           const lastField = this.state.levels[this.state.levels.length - 1];
-          const newLevels = generateLevels(120, this.state.mode, lastField.id + 1);
+          const newLevels = generateLevels(120, this.state.mode, lastField.id + 1, undefined, false);
           this.state.levels = [...this.state.levels, ...newLevels];
         }
 

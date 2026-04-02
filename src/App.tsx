@@ -58,7 +58,7 @@ export const App: React.FC = () => {
   const [mpState, setMpState] = useState<MPState | null>(null);
   const [pendingInvite, setPendingInvite] = useState<{ id: string, roomCode: string, issuerName: string, issuerId: string } | null>(null);
 
-  const [levels, setLevels] = useState<Level[]>(generateLevels(300, 'finance'));
+  const [levels, setLevels] = useState<Level[]>(generateLevels(300, 'finance', 0, undefined, true));
   const [balance, setBalance] = useState(150000);
   const [currentLevelIndex, setCurrentLevelIndex] = useState(0);
   const [mode, setMode] = useState<GameMode>('finance');
@@ -576,7 +576,7 @@ export const App: React.FC = () => {
     const currentMode = isSinglePlayer ? mode : (mpState?.mode || 'finance');
 
     if (isHost && finalTargetPos >= levels.length - 40) {
-      const newLevels = generateLevels(150, currentMode, levels[levels.length - 1].id + 1);
+      const newLevels = generateLevels(150, currentMode, levels[levels.length - 1].id + 1, undefined, isSinglePlayer);
       const updatedLevels = [...levels, ...newLevels];
       setLevels(prev => [...prev, ...newLevels]);
       if (!isSinglePlayer) {
