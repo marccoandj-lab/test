@@ -2526,726 +2526,606 @@ export const switchMessages = [
 // ─────────────────────────────────────────────
 export const financeCostAnalysis: CostAnalysisScenario[] = [
   {
-    scenario: { en: "Financial Scenario 1: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 1: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Choosing between renting an apartment for $1,200/month or buying a home with a $1,500 monthly mortgage.", sr: "Izbor između iznajmljivanja stana za 1.200 evra mesečno ili kupovine kuće sa ratom kredita od 1.500 evra." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Rent (Lower monthly cost)", "Buy (Building equity)", "Rent and invest the difference"],
+      sr: ["Iznajmljivanje (Manji mesečni trošak)", "Kupovina (Sticanje kapitala)", "Iznajmljivanje i investiranje razlike"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Buying builds equity and long-term wealth, despite higher monthly costs.", sr: "Kupovina gradi kapital i dugoročno bogatstvo, uprkos većim mesečnim troškovima." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 2: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 2: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Leasing a new car for $300/month vs. buying a used car with a $4,000 one-time payment.", sr: "Lizing novog automobila za 300 evra mesečno vs kupovina polovnog automobila uz jednokratnu uplatu od 4.000 evra." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Lease (New car, no repairs)", "Buy used (No monthly payments)", "Buy new (High depreciation)"],
+      sr: ["Lizing (Nov auto, bez popravki)", "Kupovina polovnog (Bez rata)", "Kupovina novog (Veliki pad vrednosti)"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Buying used avoids high depreciation and interest costs of leasing.", sr: "Kupovina polovnog izbegava visoku amortizaciju i troškove kamata kod lizinga." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 3: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 3: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Buying groceries in bulk vs. buying small quantities as needed.", sr: "Kupovina namirnica na veliko vs kupovina malih količina po potrebi." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Bulk (Lower price per unit)", "Small quantities (Less waste)", "Convenience store buying"],
+      sr: ["Na veliko (Niža cena po jedinici)", "Male količine (Manje otpada)", "Kupovina u lokalnoj prodavnici"]
     },
-    correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    correct: 0,
+    explanation: { en: "Bulk buying significantly reduces the price per unit for non-perishable goods.", sr: "Kupovina na veliko značajno smanjuje cenu po jedinici za nekvarljivu robu." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 4: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 4: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Having $5,000 in credit card debt at 20% interest vs. a personal loan at 10% to consolidate.", sr: "Dug od 5.000 evra na kreditnoj kartici sa 20% kamate vs lični kredit od 10% za konsolidaciju." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Keep card debt", "Consolidate with loan", "Pay only minimum on card"],
+      sr: ["Zadržati dug na kartici", "Konsolidacija kreditom", "Plaćati samo minimum na kartici"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Consolidating debt at a lower interest rate saves money on interest payments.", sr: "Konsolidacija duga po nižoj kamatnoj stopi štedi novac na kamatama." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 5: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 5: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Investing $200 monthly in stocks vs. putting it in a savings account at 1% interest.", sr: "Investiranje 200 evra mesečno u akcije vs štednja u banci sa 1% kamate." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Savings account", "Stock market (Higher risk/return)", "Keep it in cash"],
+      sr: ["Štedni račun", "Tržište akcija (Veći rizik/prinos)", "Čuvanje u gotovini"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Stock investments historically outperform savings accounts over the long term.", sr: "Investicije u akcije istorijski nadmašuju štedne račune na duge staze." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 6: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 6: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Choosing between Term Life Insurance (cheap) vs. Whole Life Insurance (expensive investment component).", sr: "Izbor između životnog osiguranja na određeno (jeftino) vs celo životno (skupa investiciona komponenta)." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Term Life (Pure protection)", "Whole Life (Investment and protection)", "No insurance"],
+      sr: ["Osiguranje na određeno (Čista zaštita)", "Celo životno (Investicija i zaštita)", "Bez osiguranja"]
     },
-    correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    correct: 0,
+    explanation: { en: "Term life is much cheaper, allowing you to invest the savings elsewhere.", sr: "Osiguranje na određeno je mnogo jeftinije, što vam omogućava da razliku investirate drugde." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 7: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 7: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Paying $15/month for a premium bank account vs. a free basic account with $2 per ATM use.", sr: "Plaćanje 15 evra mesečno za premium račun vs besplatan osnovni račun uz 2 evra po korišćenju bankomata." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Premium (Many features)", "Basic (If few ATM uses)", "Basic (Even with ATM fees)"],
+      sr: ["Premium (Mnoge pogodnosti)", "Osnovni (Ako retko koristite bankomat)", "Osnovni (Čak i sa naknadama)"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "A basic account is cheaper if you don't need the extra features of a premium one.", sr: "Osnovni račun je jeftiniji ako vam nisu potrebne dodatne pogodnosti premium računa." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 8: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 8: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "DIY oil change for $30 vs. professional service for $60.", sr: "Samostalna zamena ulja za 30 evra vs profesionalni servis za 60 evra." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["DIY (Save money)", "Professional (Save time/liability)", "Skip oil change"],
+      sr: ["Samostalno (Ušteda novca)", "Profesionalno (Ušteda vremena/sigurnost)", "Preskakanje zamene"]
     },
-    correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    correct: 0,
+    explanation: { en: "DIY maintenance can save significant money over the lifetime of a vehicle.", sr: "Samostalno održavanje može uštedeti značajan novac tokom veka vozila." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 9: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 9: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Flying a budget airline for $50 (no bags) vs. full-service for $120 (includes bags).", sr: "Let niskobudžetnom avio-kompanijom za 50 evra (bez prtljaga) vs puna usluga za 120 evra (uključen prtljag)." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Budget (Travel light)", "Full-service (Heavy luggage)", "Budget (Pay for bags separately)"],
+      sr: ["Budžet (Putujte lagano)", "Puna usluga (Težak prtljag)", "Budžet (Platite prtljag posebno)"]
     },
-    correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    correct: 0,
+    explanation: { en: "Budget airlines are cost-effective if you can travel with minimal luggage.", sr: "Niskobudžetne kompanije su isplative ako možete da putujete sa minimalno prtljaga." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 10: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 10: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Buying high-quality leather shoes for $150 vs. cheap synthetic shoes for $40.", sr: "Kupovina kvalitetnih kožnih cipela za 150 evra vs jeftine sintetičke cipele za 40 evra." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Synthetic (Save now)", "Leather (Longevity)", "Synthetic (Buy multiple pairs)"],
+      sr: ["Sintetika (Ušteda odmah)", "Koža (Dugotrajnost)", "Sintetika (Kupovina više pari)"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "High-quality items often have a lower cost-per-use due to their durability.", sr: "Kvalitetni predmeti često imaju manji trošak po upotrebi zbog svoje izdržljivosti." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 11: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 11: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Annual subscription for $100 vs. monthly payment of $12.", sr: "Godišnja pretplata od 100 evra vs mesečno plaćanje od 12 evra." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Monthly (Flexibility)", "Annual (Save $44/year)", "Monthly (Lower upfront cost)"],
+      sr: ["Mesečno (Fleksibilnost)", "Godišnje (Ušteda 44 evra)", "Mesečno (Manji početni trošak)"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Annual payments usually offer a significant discount over monthly billing.", sr: "Godišnja plaćanja obično nude značajan popust u odnosu na mesečnu naplatu." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 12: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 12: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Investing in a low-fee Index Fund (0.1%) vs. a Managed Fund (1.5%).", sr: "Investiranje u indeksni fond sa niskom naknadom (0,1%) vs aktivno vođen fond (1,5%)." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Managed (Expert selection)", "Index Fund (Lower costs)", "Keep in savings"],
+      sr: ["Aktivni (Stručni izbor)", "Indeksni fond (Niži troškovi)", "Čuvanje u štednji"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Lower fees in index funds compound into significantly more wealth over time.", sr: "Niže naknade u indeksnim fondovima se akumuliraju u značajno veće bogatstvo tokom vremena." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 13: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 13: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Buying a 3-year-old car vs. a brand new model of the same car.", sr: "Kupovina automobila starog 3 godine vs potpuno novi model istog automobila." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["New (Warranty and smell)", "3-year-old (Lower price/depreciation)", "New (Latest tech)"],
+      sr: ["Novi (Garancija)", "Star 3 godine (Manja cena/amortizacija)", "Novi (Najnovija tehnologija)"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "A 3-year-old car has already taken the largest depreciation hit.", sr: "Automobil star 3 godine je već prošao kroz najveći pad vrednosti." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 14: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 14: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Using public transport ($60/month) vs. owning a car ($400/month including gas/insurance).", sr: "Korišćenje javnog prevoza (60 evra mesečno) vs posedovanje auta (400 evra uključujući gorivo/osiguranje)." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Car (Convenience)", "Public transport (Huge savings)", "Car (Faster travel)"],
+      sr: ["Auto (Pogodnost)", "Javni prevoz (Ogromna ušteda)", "Auto (Brže putovanje)"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Public transport is much cheaper when considering all car-related expenses.", sr: "Javni prevoz je mnogo jeftiniji kada se uzmu u obzir svi troškovi vezani za automobil." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 15: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 15: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "University degree for $40,000 vs. Trade school for $5,000 with high job demand.", sr: "Univerzitetska diploma za 40.000 evra vs stručna škola za 5.000 evra sa velikom potražnjom za poslom." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["University (Status/potential)", "Trade school (Low debt/fast entry)", "Skip both"],
+      sr: ["Univerzitet (Status/potencijal)", "Zanat (Mali dug/brz ulazak)", "Preskakanje oba"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Trade schools offer a high ROI and lower debt for in-demand skills.", sr: "Zanatske škole nude visok povraćaj investicije i manji dug za tražene veštine." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 16: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 16: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Eating out daily ($15) vs. meal prepping at home ($5).", sr: "Svakodnevna ishrana u restoranima (15 evra) vs priprema obroka kod kuće (5 evra)." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Eat out (Save time)", "Meal prep (Save $300/month)", "Frozen meals"],
+      sr: ["Restoran (Ušteda vremena)", "Priprema (Ušteda 300 evra mesečno)", "Smrznuta hrana"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Cooking at home is one of the easiest ways to significantly reduce monthly expenses.", sr: "Kuvanje kod kuće je jedan od najlakših načina da značajno smanjite mesečne troškove." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 17: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 17: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Buying a coffee daily for $4 vs. making it at home for $0.50.", sr: "Kupovina kafe svakog dana za 4 evra vs pravljenje kod kuće za 0,50 evra." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Buy coffee (Socialize)", "Home brew (Save $1,200/year)", "Stop drinking coffee"],
+      sr: ["Kupovina kafe (Socijalizacija)", "Kućna kafa (Ušteda 1.200 evra godišnje)", "Prestanak pijenja kafe"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Small daily habits like expensive coffee add up to thousands of dollars annually.", sr: "Male svakodnevne navike poput skupe kafe dostižu hiljade evra godišnje." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 18: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 18: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Gym membership for $50/month vs. home equipment for $300 one-time.", sr: "Članarina u teretani za 50 evra mesečno vs kućna oprema za 300 evra jednokratno." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Gym (Motivation/Equipment)", "Home equipment (Pays off in 6 months)", "Outdoor running only"],
+      sr: ["Teretana (Motivacija/Oprema)", "Kućna oprema (Isplati se za 6 meseci)", "Samo trčanje napolju"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Home equipment pays for itself quickly compared to recurring gym fees.", sr: "Kućna oprema se brzo isplati u poređenju sa ponavljajućim troškovima teretane." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 19: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 19: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Renting a designer dress for $100 vs. buying it for $800.", sr: "Iznajmljivanje dizajnerske haljine za 100 evra vs kupovina za 800 evra." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Buy (Ownership)", "Rent (One-time use efficiency)", "Buy used"],
+      sr: ["Kupovina (Vlasništvo)", "Iznajmljivanje (Efikasnost za jednu upotrebu)", "Kupovina polovne"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Renting is more cost-effective for items you only plan to wear once.", sr: "Iznajmljivanje je isplativije za stvari koje planirate da nosite samo jednom." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 20: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 20: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Buying a house with a 20% down payment vs. 5% down (with Private Mortgage Insurance).", sr: "Kupovina kuće sa 20% učešća vs 5% učešća (uz osiguranje kredita)." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["5% (Keep more cash)", "20% (Avoid PMI and lower interest)", "Rent longer to save 40%"],
+      sr: ["5% (Zadržite više gotovine)", "20% (Izbegnite osiguranje i niža kamata)", "Duže rentiranje za 40%"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "20% down payment avoids extra insurance costs and reduces total interest paid.", sr: "Učešće od 20% izbegava dodatne troškove osiguranja i smanjuje ukupnu kamatu." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 21: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 21: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Refinancing a 6% mortgage to 4% for a $2,000 closing fee.", sr: "Refinansiranje kredita sa 6% na 4% uz naknadu od 2.000 evra." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Keep old loan", "Refinance (Monthly savings pay back fee)", "Refinance only if free"],
+      sr: ["Zadržati stari kredit", "Refinansiranje (Ušteda otplaćuje naknadu)", "Refinansiranje samo ako je besplatno"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Lowering interest rates can save tens of thousands of dollars over the loan life.", sr: "Smanjenje kamatnih stopa može uštedeti desetine hiljada evra tokom trajanja kredita." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 22: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 22: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Fixed rate mortgage vs. Variable rate mortgage during low-interest periods.", sr: "Fiksna kamatna stopa vs varijabilna kamatna stopa tokom perioda niskih kamata." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Variable (Cheaper now)", "Fixed (Security against future hikes)", "Variable (Always changes)"],
+      sr: ["Varijabilna (Sada jeftinija)", "Fiksna (Sigurnost od budućih skokova)", "Varijabilna (Uvek se menja)"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Fixed rates protect you from future interest rate increases, providing stability.", sr: "Fiksne stope vas štite od budućih povećanja kamata, pružajući stabilnost." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 23: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 23: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Group buying products with friends to get a 25% bulk discount.", sr: "Grupna kupovina proizvoda sa prijateljima radi popusta od 25% na količinu." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Individual buy (Easier)", "Group buy (Lower price)", "Wait for sale"],
+      sr: ["Individualna kupovina (Lakše)", "Grupna kupovina (Niža cena)", "Čekanje rasprodaje"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Leveraging collective buying power reduces individual costs significantly.", sr: "Korišćenje kolektivne kupovne moći značajno smanjuje individualne troškove." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 24: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 24: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Buying generic medication vs. brand name with the same active ingredients.", sr: "Kupovina generičkih lekova vs brendiranih sa istim aktivnim sastojcima." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Brand name (Trusted)", "Generic (Same effect, lower price)", "Natural remedies"],
+      sr: ["Brendirani (Poverenje)", "Generički (Isti efekat, niža cena)", "Prirodni lekovi"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Generic drugs are strictly regulated to be as effective as brand names but cost much less.", sr: "Generički lekovi su strogo regulisani da budu efikasni kao i brendirani, ali koštaju manje." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 25: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 25: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Choosing a 15-year mortgage vs. a 30-year mortgage.", sr: "Izbor kredita na 15 godina vs kredit na 30 godina." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["30-year (Lower monthly payments)", "15-year (Higher payment, huge interest savings)", "Rent"],
+      sr: ["30 godina (Manje mesečne rate)", "15 godina (Veća rata, ogromna ušteda na kamati)", "Rentiranje"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Short-term mortgages have lower interest rates and save massive amounts of interest.", sr: "Kratkoročni krediti imaju niže kamate i štede ogromne iznose na kamatama." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 26: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 26: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Keeping an old car with 10L/100km vs. buying a new efficient one with 5L/100km.", sr: "Zadržavanje starog auta (10L/100km) vs kupovina novog efikasnog (5L/100km)." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Keep old (No car payment)", "Buy new (Save on gas)", "Keep old and drive less"],
+      sr: ["Zadržati stari (Bez rate)", "Kupiti novi (Ušteda na gorivu)", "Zadržati stari i voziti manje"]
     },
-    correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    correct: 0,
+    explanation: { en: "Unless you drive huge distances, the fuel savings rarely offset the cost of a new car.", sr: "Osim ako ne vozite ogromne razdaljine, ušteda goriva retko pokriva trošak novog auta." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 27: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 27: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Buying electronics during Black Friday sales vs. buying when the current device breaks.", sr: "Kupovina elektronike tokom Crnog petka vs kupovina kada se trenutni uređaj pokvari." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Wait for sale (Planning ahead)", "Buy when needed (Immediate use)", "Buy refurbished"],
+      sr: ["Čekanje rasprodaje (Planiranje)", "Kupovina po potrebi (Odmah)", "Kupovina servisiranog"]
     },
-    correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    correct: 0,
+    explanation: { en: "Planned purchases during major sales events can save 30-50% on costs.", sr: "Planirane kupovine tokom velikih rasprodaja mogu uštedeti 30-50% troškova." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 28: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 28: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Using a cashback credit card for all expenses vs. a standard debit card.", sr: "Korišćenje kartice sa povraćajem novca (cashback) vs standardna debitna kartica." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Debit (No debt risk)", "Cashback (If paid in full monthly)", "Cash only"],
+      sr: ["Debitna (Bez rizika duga)", "Cashback (Ako se plaća u celosti mesečno)", "Samo gotovina"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Cashback cards effectively provide a discount on all purchases if interest is avoided.", sr: "Cashback kartice efektivno pružaju popust na sve kupovine ako se izbegne kamata." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 29: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 29: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Buying a high-quality bike for commuting vs. driving a car for short distances.", sr: "Kupovina kvalitetnog bicikla za posao vs vožnja auta na kratkim relacijama." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Car (Comfort)", "Bike (No gas/insurance/parking fees)", "Electric scooter"],
+      sr: ["Auto (Udobnost)", "Bicikl (Bez goriva/osiguranja/parkinga)", "Električni trotinet"]
     },
     correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Biking for short commutes eliminates almost all transport-related costs.", sr: "Vožnja bicikla na kratkim relacijama eliminiše skoro sve troškove prevoza." },
+    mode: 'finance', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Financial Scenario 30: Choosing between a cheap printer with expensive toner vs. an expensive printer with cheap toner.", sr: "Finansijski scenario 30: Izbor između jeftinog štampača sa skupim tonerom i skupog štampača sa jeftinim tonerom." },
+    scenario: { en: "Paying off a loan early vs. making only the scheduled payments while investing elsewhere.", sr: "Preprevremena otplata kredita vs plaćanje po planu uz investiranje na drugom mestu." },
     options: {
-      en: ["Option A (Cheap printer)", "Option B (Expensive printer)", "Option C (Rent a printer)"],
-      sr: ["Opcija A (Jeftin štampač)", "Opcija B (Skup štampač)", "Opcija C (Iznajmljivanje štampača)"]
+      en: ["Scheduled (If investment return > loan interest)", "Early (Peace of mind)", "Scheduled (Always)"],
+      sr: ["Po planu (Ako je prinos > kamata duga)", "Prevremeno (Mirna glava)", "Po planu (Uvek)"]
     },
-    correct: 1,
-    explanation: { en: "The expensive printer with cheap toner is more cost-effective in the long run.", sr: "Skup štampač sa jeftinim tonerom je isplativiji dugoročno." },
-    mode: 'finance',
-    reward: 40000,
-    penalty: 15000
-  },
+    correct: 0,
+    explanation: { en: "If your investments earn more than the loan costs, it's mathematically better to invest.", sr: "Ako vaše investicije zarađuju više nego što kredit košta, matematički je bolje investirati." },
+    mode: 'finance', reward: 40000, penalty: 15000
+  }
 ];
 
 export const sustainabilityCostAnalysis: CostAnalysisScenario[] = [
   {
-    scenario: { en: "Eco Scenario 1: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 1: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Installing solar panels for $10,000 vs. paying $100/month for grid electricity.", sr: "Instalacija solarnih panela za 10.000 evra vs plaćanje 100 evra mesečno za struju iz mreže." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Grid (No upfront cost)", "Solar (Pays off in 8 years)", "Wind turbine"],
+      sr: ["Mreža (Bez početnog troška)", "Solarni (Isplati se za 8 godina)", "Vetrogenerator"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Solar panels provide free energy after the initial payback period and increase home value.", sr: "Solarni paneli pružaju besplatnu energiju nakon perioda povraćaja i povećavaju vrednost kuće." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 2: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 2: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Replacing all incandescent bulbs with LEDs.", sr: "Zmena svih klasičnih sijalica LED sijalicama." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Keep old (Wait until they break)", "LED (Uses 80% less energy)", "Fluorescent bulbs"],
+      sr: ["Zadržati stare (Dok ne pregore)", "LED (Troši 80% manje energije)", "Fluorescentne sijalice"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "LEDs pay for themselves in months through reduced energy bills.", sr: "LED sijalice se isplate za nekoliko meseci kroz smanjene račune za struju." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 3: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 3: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Buying an Electric Vehicle (EV) vs. a gasoline-powered car.", sr: "Kupovina električnog vozila (EV) vs automobil na benzin." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Gasoline (Lower purchase price)", "EV (Lower fuel and maintenance costs)", "Hybrid"],
+      sr: ["Benzin (Manja nabavna cena)", "EV (Manji troškovi goriva i održavanja)", "Hibrid"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "EVs have much lower operating costs and zero tailpipe emissions.", sr: "Električna vozila imaju mnogo manje operativne troškove i nultu emisiju gasova." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 4: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 4: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Composting food waste at home vs. sending it to a landfill.", sr: "Kompostiranje ostataka hrane kod kuće vs slanje na deponiju." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Landfill (Easier)", "Compost (Free fertilizer, less methane)", "Incinerate"],
+      sr: ["Deponija (Lakše)", "Kompost (Besplatno đubrivo, manje metana)", "Spaljivanje"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Composting reduces landfill waste and creates nutrient-rich soil for free.", sr: "Kompostiranje smanjuje otpad na deponijama i stvara besplatno plodno zemljište." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 5: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 5: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Using a reusable water bottle vs. buying plastic bottled water.", sr: "Korišćenje flaše za višekratnu upotrebu vs kupovina vode u plastičnim flašama." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Plastic (Convenient)", "Reusable (Save $300/year and reduce plastic)", "Glass bottled water"],
+      sr: ["Plastika (Zgodno)", "Višekratna (Ušteda 300 evra i manje plastike)", "Voda u staklu"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "A single reusable bottle replaces hundreds of plastic ones and saves significant money.", sr: "Jedna višekratna flaša zamenjuje stotine plastičnih i štedi značajan novac." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 6: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 6: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Commuting by public transport vs. a private gasoline car.", sr: "Putovanje na posao javnim prevozom vs privatnim automobilom na benzin." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Car (Privacy)", "Public transport (Lower emissions and costs)", "Carpool"],
+      sr: ["Auto (Privatnost)", "Javni prevoz (Manje emisije i troškovi)", "Zajednička vožnja"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Public transport significantly reduces per-person carbon footprint and congestion.", sr: "Javni prevoz značajno smanjuje karbonski otisak po osobi i gužve." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 7: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 7: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Investing in home insulation vs. paying higher heating bills.", sr: "Investiranje u izolaciju kuće vs plaćanje većih računa za grejanje." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Higher bills (No upfront cost)", "Insulation (Reduces energy loss by 30%)", "Electric heaters"],
+      sr: ["Veći računi (Bez troška odmah)", "Izolacija (Smanjuje gubitak energije za 30%)", "Električne grejalice"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Insulation is the most effective way to improve a home's energy efficiency.", sr: "Izolacija je najefikasniji način za poboljšanje energetske efikasnosti doma." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 8: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 8: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Using a smart thermostat vs. a manual one.", sr: "Korišćenje pametnog termostata vs ručni termostat." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Manual (Simple)", "Smart (Optimizes heating, saves 15%)", "Leave heating on"],
+      sr: ["Ručni (Jednostavno)", "Pametni (Optimizuje grejanje, štedi 15%)", "Ostaviti grejanje stalno"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Smart thermostats reduce waste by only heating the home when necessary.", sr: "Pametni termostati smanjuju gubitke grejući dom samo kada je potrebno." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 9: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 9: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Harvesting rainwater for the garden vs. using tap water.", sr: "Sakupljanje kišnice za baštu vs korišćenje vode iz vodovoda." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Tap water (Easier)", "Rainwater (Free, natural for plants)", "Borehole"],
+      sr: ["Vodovod (Lakše)", "Kišnica (Besplatna, prirodna za biljke)", "Bunar"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Rainwater harvesting saves treated drinking water for essential uses.", sr: "Sakupljanje kišnice čuva prečišćenu pijaću vodu za važnije potrebe." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 10: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 10: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Choosing bamboo flooring vs. traditional hardwood.", sr: "Izbor poda od bambusa vs tradicionalno tvrdo drvo." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Hardwood (Classic)", "Bamboo (Rapidly renewable, durable)", "Carpet"],
+      sr: ["Tvrdo drvo (Klasično)", "Bambus (Brzo se obnavlja, izdržljiv)", "Tepih"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Bamboo grows much faster than trees, making it a highly sustainable material.", sr: "Bambus raste mnogo brže od drveća, što ga čini veoma održivim materijalom." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 11: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 11: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Buying local seasonal food vs. imported food.", sr: "Kupovina lokalne sezonske hrane vs uvozna hrana." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Imported (More variety)", "Local (Lower food miles, supports community)", "Processed food"],
+      sr: ["Uvozna (Više izbora)", "Lokalna (Manje transporta, podrška zajednici)", "Prerađena hrana"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Local food reduces transport emissions and is usually fresher and more nutritious.", sr: "Lokalna hrana smanjuje emisije iz transporta i obično je svežija i hranljivija." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 12: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 12: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Repairing old clothes vs. buying new ones from fast fashion brands.", sr: "Popravka stare odeće vs kupovina nove u radnjama brze mode." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Buy new (Fashionable)", "Repair (Reduces waste and saves money)", "Donate and buy new"],
+      sr: ["Kupovina nove (Moda)", "Popravka (Smanjuje otpad i štedi novac)", "Doniranje i kupovina"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Extending clothing life by just 9 months reduces its environmental impact by 30%.", sr: "Produženje veka odeće za samo 9 meseci smanjuje njen uticaj na okolinu za 30%." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 13: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 13: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Drying clothes on a line vs. using an electric dryer.", sr: "Sušenje veša na žici vs korišćenje električne mašine za sušenje." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Dryer (Fast)", "Line dry (Free energy, clothes last longer)", "Laundromat"],
+      sr: ["Mašina (Brzo)", "Sušenje na žici (Besplatno, čuva odeću)", "Perionica"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Electric dryers are one of the most energy-intensive appliances in a home.", sr: "Mašine za sušenje veša su jedni od najvećih potrošača energije u domaćinstvu." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 14: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 14: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Installing a low-flow showerhead.", sr: "Instalacija tuša sa smanjenim protokom vode." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Standard (Strong pressure)", "Low-flow (Saves water and heating energy)", "Take baths instead"],
+      sr: ["Standardni (Jak pritisak)", "Smanjen protok (Štedi vodu i energiju)", "Kupanje u kadi"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Low-flow showerheads reduce water and energy use without sacrificing comfort.", sr: "Tuševi sa smanjenim protokom štede vodu i energiju bez gubljenja udobnosti." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 15: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 15: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Adopting a plant-based diet vs. a meat-heavy diet.", sr: "Prelazak na biljnu ishranu vs ishrana bogata mesom." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Meat-heavy (Traditional)", "Plant-based (Lower land and water usage)", "Fast food diet"],
+      sr: ["Sa mesom (Tradicionalno)", "Biljna (Manja potrošnja zemlje i vode)", "Brza hrana"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Animal agriculture is a major contributor to greenhouse gas emissions and deforestation.", sr: "Stočarstvo značajno doprinosi emisiji gasova staklene bašte i krčenju šuma." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 16: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 16: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Choosing a bank that invests in sustainable projects.", sr: "Izbor banke koja investira u održive projekte." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Any bank (Doesn't matter)", "Sustainable bank (Aligns money with values)", "Keep cash at home"],
+      sr: ["Bilo koja banka (Nije bitno)", "Održiva banka (Usklađuje novac sa vrednostima)", "Čuvanje gotovine"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Where you bank determines which industries are funded by your deposits.", sr: "Mesto gde bankarite određuje koje industrije se finansiraju vašim depozitima." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 17: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 17: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Buying second-hand furniture vs. new mass-produced items.", sr: "Kupovina polunog nameštaja vs novi industrijski proizvodi." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["New (Convenient)", "Second-hand (Unique, less waste, cheaper)", "Plastic furniture"],
+      sr: ["Novo (Zgodno)", "Polovno (Unikatno, manje otpada, jeftinije)", "Plastični nameštaj"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Second-hand furniture prevents good items from going to landfills.", sr: "Polovni nameštaj sprečava da dobre stvari završe na deponijama." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 18: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 18: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Participating in a community garden.", sr: "Učestvovanje u zajedničkoj bašti." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Supermarket (Easier)", "Community garden (Learn skills, fresh food)", "Order delivery"],
+      sr: ["Supermarket (Lakše)", "Zajednička bašta (Učenje veština, sveža hrana)", "Dostava hrane"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Community gardens promote local biodiversity and social cohesion.", sr: "Zajedničke bašte promovišu lokalni biodiverzitet i društvenu povezanost." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 19: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 19: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Living a minimalist lifestyle vs. a high-consumption lifestyle.", sr: "Minimalistički stil života vs stil visoke potrošnje." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Consumerist (Status)", "Minimalist (Less waste, more freedom)", "Buy only during sales"],
+      sr: ["Potrošački (Status)", "Minimalistički (Manje otpada, više slobode)", "Kupovina samo na rasprodaji"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Minimalism focuses on quality over quantity, reducing environmental impact.", sr: "Minimalizam se fokusira na kvalitet umesto kvantiteta, smanjujući uticaj na okolinu." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 20: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 20: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Shopping at a zero-waste store vs. a traditional supermarket.", sr: "Kupovina u 'zero-waste' prodavnici vs tradicionalni supermarket." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Supermarket (Everything in one place)", "Zero-waste (Bring your own containers)", "Online shopping"],
+      sr: ["Supermarket (Sve na jednom mestu)", "Zero-waste (Ponesite svoju ambalažu)", "Online kupovina"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Zero-waste shopping eliminates unnecessary plastic packaging.", sr: "Zero-waste kupovina eliminiše nepotrebnu plastičnu ambalažu." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 21: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 21: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Using a menstrual cup vs. disposable sanitary products.", sr: "Korišćenje menstrualne čašice vs proizvodi za jednokratnu upotrebu." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Disposable (Familiar)", "Reusable cup (Saves money and thousands of pads)", "Biodegradable disposables"],
+      sr: ["Jednokratni (Poznato)", "Čašica (Štedi novac i hiljade uložaka)", "Biorazgradivi jednokratni"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Reusable products significantly reduce bathroom waste over a lifetime.", sr: "Višekratni proizvodi značajno smanjuju otpad tokom života." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 22: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 22: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Choosing digital receipts over paper ones.", sr: "Izbor digitalnih računa umesto papirnih." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Paper (Physical proof)", "Digital (Less clutter and paper waste)", "No receipt"],
+      sr: ["Papirni (Fizički dokaz)", "Digitalni (Manje nereda i papirnog otpada)", "Bez računa"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Paper receipts are often not recyclable due to thermal coatings.", sr: "Papirni računi se često ne mogu reciklirati zbog termalnih premaza." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 23: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 23: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Using vinegar and baking soda for cleaning vs. chemical cleaners.", sr: "Korišćenje sirćeta i sode bikarbone za čišćenje vs hemijska sredstva." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Chemicals (Stronger smell)", "Natural (Non-toxic, cheaper, eco-friendly)", "Hire cleaners"],
+      sr: ["Hemikalije (Jači miris)", "Prirodna (Netoksična, jeftinija, ekološka)", "Angažovanje čistača"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Natural cleaners are safer for your health and the water supply.", sr: "Prirodna sredstva su bezbednija za vaše zdravlje i vodovodne sisteme." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 24: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 24: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Supporting a local farmers market vs. buying at a big chain.", sr: "Podrška lokalnoj pijaci vs kupovina u velikim lancima." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Big chain (Cheaper)", "Farmers market (Fresh, seasonal, supports locals)", "Convenience store"],
+      sr: ["Veliki lanac (Jeftinije)", "Pijaca (Sveže, sezonsko, podrška lokalcima)", "Lokalna prodavnica"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Farmers markets reduce food transportation and support small-scale agriculture.", sr: "Pijace smanjuju transport hrane i podržavaju male poljoprivrednike." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 25: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 25: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Upcycling an old wooden ladder into a bookshelf.", sr: "Pretvaranje starih drvenih merdevina u policu za knjige." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Throw away (Old junk)", "Upcycle (New life for old items)", "Buy new shelf"],
+      sr: ["Bacanje (Staro smeće)", "Upcycle (Novi život za staru stvar)", "Kupovina nove police"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Upcycling creatively reuses waste, preventing the need for new materials.", sr: "Upcycling kreativno koristi otpad, sprečavajući potrebu za novim materijalima." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 26: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 26: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Walking or cycling for trips under 2km.", sr: "Pešačenje ili vožnja bicikla za puteve kraće od 2km." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Drive (Lazy choice)", "Walk/Cycle (Health and zero emissions)", "Take a bus"],
+      sr: ["Auto (Lene izbor)", "Pešačenje/Bicikl (Zdravlje i nula emisija)", "Autobus"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Short car trips are the most polluting and least efficient use of fuel.", sr: "Kratke vožnje autom su najzagađujuće i najmanje efikasne." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 27: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 27: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Using rechargeable batteries vs. disposable alkaline ones.", sr: "Korišćenje punjivih baterija vs jednokratne alkalne." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Disposable (Cheap now)", "Rechargeable (Reusable hundreds of times)", "Plug-in only devices"],
+      sr: ["Jednokratne (Sada jeftino)", "Punjive (Višekratne stotine puta)", "Samo uređaji na struju"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Rechargeable batteries save money and prevent toxic waste from landfills.", sr: "Punjive baterije štede novac i sprečavaju toksični otpad na deponijama." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 28: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 28: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Reducing meat consumption to once or twice a week.", sr: "Smanjenje konzumacije mesa na jednom ili dva puta nedeljno." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Every day (Meat lover)", "Flexitarian (Significant impact on CO2)", "Vegan only"],
+      sr: ["Svaki dan (Ljubitelj mesa)", "Fleksitarijanac (Značajan uticaj na CO2)", "Samo vegan"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Even a small reduction in meat eating helps lower global agricultural emissions.", sr: "Čak i malo smanjenje konzumacije mesa pomaže u smanjenju emisija." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 29: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 29: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Choosing A+++ appliances vs. cheaper energy-hungry ones.", sr: "Izbor A+++ uređaja vs jeftiniji koji troše mnogo struje." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Cheap (Save upfront)", "A+++ (Lower bills and eco-friendly)", "Second-hand old appliances"],
+      sr: ["Jeftini (Ušteda odmah)", "A+++ (Manji računi i ekološki)", "Polovni stari uređaji"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
+    explanation: { en: "Energy-efficient appliances save more than their extra cost over their lifetime.", sr: "Energetski efikasni uređaji štede više od svoje dodatne cene tokom veka trajanja." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
   },
   {
-    scenario: { en: "Eco Scenario 30: Investing in solar panels for the office vs. continuing with coal-based grid electricity.", sr: "Eko scenario 30: Investiranje u solarne panele za kancelariju vs nastavak korišćenja struje iz mreže na bazi uglja." },
+    scenario: { en: "Joining a tool library vs. buying every tool you need for one project.", sr: "Učestvovanje u biblioteci alata vs kupovina svakog alata za jedan projekat." },
     options: {
-      en: ["Option A (Coal-based)", "Option B (Solar panels)", "Option C (Wind energy)"],
-      sr: ["Opcija A (Ugalj)", "Opcija B (Solarni paneli)", "Opcija C (Energija vetra)"]
+      en: ["Buy (Ownership)", "Tool library (Share resources, less waste)", "Borrow from neighbors"],
+      sr: ["Kupovina (Vlasništvo)", "Biblioteka alata (Deljenje resursa, manje otpada)", "Pozajmljivanje od komšija"]
     },
     correct: 1,
-    explanation: { en: "Solar panels significantly reduce long-term costs and carbon footprint.", sr: "Solarni paneli značajno smanjuju dugoročne troškove i karbonski otisak." },
-    mode: 'sustainability',
-    reward: 40000,
-    penalty: 15000
-  },
+    explanation: { en: "Sharing economy models reduce the need for mass production of seldom-used items.", sr: "Modeli ekonomije deljenja smanjuju potrebu za masovnom proizvodnjom retko korišćenih stvari." },
+    mode: 'sustainability', reward: 40000, penalty: 15000
+  }
 ];

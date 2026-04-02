@@ -20,6 +20,8 @@ interface StartScreenProps {
     character_usage: Record<string, number>;
     correct_quizzes?: number;
     wrong_quizzes?: number;
+    cost_analysis_correct?: number;
+    cost_analysis_wrong?: number;
     investment_gains?: number;
     investment_losses?: number;
     jail_visits?: number;
@@ -130,6 +132,8 @@ export const StartScreen: React.FC<StartScreenProps> = ({
         character_usage: newUsage,
         correct_quizzes: profileData?.correct_quizzes || 0,
         wrong_quizzes: profileData?.wrong_quizzes || 0,
+        cost_analysis_correct: profileData?.cost_analysis_correct || 0,
+        cost_analysis_wrong: profileData?.cost_analysis_wrong || 0,
         investment_gains: profileData?.investment_gains || 0,
         investment_losses: profileData?.investment_losses || 0,
         jail_visits: profileData?.jail_visits || 0,
@@ -367,6 +371,14 @@ export const StartScreen: React.FC<StartScreenProps> = ({
                   <p className="text-white font-black text-base">{profileData?.auction_wins || 0}</p>
                 </div>
                 <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-yellow-400 transition-colors">{language === 'en' ? 'Auction Wins' : 'Pobede na aukciji'}</p>
+              </div>
+
+              <div className="group/stat">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs">🔍</span>
+                  <p className="text-white font-black text-base">{profileData?.cost_analysis_correct || 0}</p>
+                </div>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-indigo-400 transition-colors">{language === 'en' ? 'Analysis Won' : 'Tačne analize'}</p>
               </div>
 
               <div className="col-span-2 pt-2">

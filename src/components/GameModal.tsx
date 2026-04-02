@@ -1118,6 +1118,8 @@ export function VictoryModal({ players, language }: VictoryModalProps) {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
               <StatItem label={t.stats.correct_quizzes} value={winner.stats.correctQuizzes} icon="✅" />
               <StatItem label={t.stats.wrong_quizzes} value={winner.stats.wrongQuizzes} icon="❌" />
+              <StatItem label={language === 'en' ? 'Cost Analysis (✓)' : 'Analiza troškova (✓)'} value={winner.stats.costAnalysisCorrect || 0} icon="🧐" />
+              <StatItem label={language === 'en' ? 'Cost Analysis (✗)' : 'Analiza troškova (✗)'} value={winner.stats.costAnalysisWrong || 0} icon="📊" />
               <StatItem label={t.stats.auction_wins} value={winner.stats.auctionWins} icon="⚖️" />
               <StatItem label={t.stats.investment_gains} value={`${winner.stats.investmentGains.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC`} icon="📈" />
               <StatItem label={t.stats.investment_losses} value={`${winner.stats.investmentLosses.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC`} icon="📉" />

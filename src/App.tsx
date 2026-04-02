@@ -32,6 +32,8 @@ export const App: React.FC = () => {
     character_usage: Record<string, number>,
     correct_quizzes: number,
     wrong_quizzes: number,
+    cost_analysis_correct: number,
+    cost_analysis_wrong: number,
     investment_gains: number,
     investment_losses: number,
     jail_visits: number,
@@ -150,6 +152,8 @@ export const App: React.FC = () => {
   const [singlePlayerStats, setSinglePlayerStats] = useState({
     correctQuizzes: 0,
     wrongQuizzes: 0,
+    costAnalysisCorrect: 0,
+    costAnalysisWrong: 0,
 
     investmentGains: 0,
     investmentLosses: 0,
@@ -182,7 +186,7 @@ export const App: React.FC = () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, investment_gains, investment_losses, jail_visits, jail_skips, auction_wins, taxes_paid')
+        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, cost_analysis_correct, cost_analysis_wrong, investment_gains, investment_losses, jail_visits, jail_skips, auction_wins, taxes_paid')
         .eq('id', userId)
         .single();
 
@@ -216,6 +220,8 @@ export const App: React.FC = () => {
           character_usage: {},
           correct_quizzes: 0,
           wrong_quizzes: 0,
+          cost_analysis_correct: 0,
+          cost_analysis_wrong: 0,
           investment_gains: 0,
           investment_losses: 0,
           jail_visits: 0,
@@ -248,6 +254,8 @@ export const App: React.FC = () => {
     character_usage: Record<string, number>,
     correct_quizzes: number,
     wrong_quizzes: number,
+    cost_analysis_correct: number,
+    cost_analysis_wrong: number,
     investment_gains: number,
     investment_losses: number,
     jail_visits: number,
@@ -812,7 +820,7 @@ export const App: React.FC = () => {
               }
 
               // SFX based on change and context
-              if (activeModal === 'quiz') {
+              if (activeModal === 'quiz' || activeModal === 'cost_analysis') {
                 playSFX(change > 0 ? 'correct' : 'incorrect');
               } else if (activeModal === 'investment') {
                 playSFX(change > 0 ? 'win' : change < 0 ? 'loss' : 'click');
@@ -827,6 +835,9 @@ export const App: React.FC = () => {
                 if (activeModal === 'quiz') {
                   if (change > 0) setSinglePlayerStats(prev => ({ ...prev, correctQuizzes: prev.correctQuizzes + 1 }));
                   else setSinglePlayerStats(prev => ({ ...prev, wrongQuizzes: prev.wrongQuizzes + 1 }));
+                } else if (activeModal === 'cost_analysis') {
+                  if (change > 0) setSinglePlayerStats(prev => ({ ...prev, costAnalysisCorrect: prev.costAnalysisCorrect + 1 }));
+                  else setSinglePlayerStats(prev => ({ ...prev, costAnalysisWrong: prev.costAnalysisWrong + 1 }));
                 } else if (activeModal === 'investment') {
                   if (change > 0) setSinglePlayerStats(prev => ({ ...prev, investmentGains: prev.investmentGains + change }));
                   else if (change < 0) setSinglePlayerStats(prev => ({ ...prev, investmentLosses: prev.investmentLosses + Math.abs(change) }));
@@ -839,6 +850,9 @@ export const App: React.FC = () => {
                   if (activeModal === 'quiz') {
                     if (change > 0) updateSupabaseProfile({ correct_quizzes: (profile.correct_quizzes || 0) + 1 });
                     else updateSupabaseProfile({ wrong_quizzes: (profile.wrong_quizzes || 0) + 1 });
+                  } else if (activeModal === 'cost_analysis') {
+                    if (change > 0) updateSupabaseProfile({ cost_analysis_correct: (profile.cost_analysis_correct || 0) + 1 });
+                    else updateSupabaseProfile({ cost_analysis_wrong: (profile.cost_analysis_wrong || 0) + 1 });
                   } else if (activeModal === 'investment') {
                     if (change > 0) updateSupabaseProfile({ investment_gains: (profile.investment_gains || 0) + change });
                     else if (change < 0) updateSupabaseProfile({ investment_losses: (profile.investment_losses || 0) + Math.abs(change) });

@@ -25,6 +25,8 @@ export interface Player {
   stats: {
     correctQuizzes: number;
     wrongQuizzes: number;
+    costAnalysisCorrect: number;
+    costAnalysisWrong: number;
 
     investmentGains: number;
     investmentLosses: number;
