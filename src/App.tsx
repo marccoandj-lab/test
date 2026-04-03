@@ -250,13 +250,34 @@ export const App: React.FC = () => {
     profileRef.current = profile;
   }, [profile]);
 
-  const updateSupabaseProfile = async (updates: Partial<{
-    username: string,
-    avatar_url: string,
+  const updateSupabaseProfile = async (updates: Partial<typeof profile>) => {
+    if (!session?.user.id) return;
+    try {
+      // 1. Functional update for local state ensures we always work with latest data
+      setProfile(prev => {
+        if (!prev) return null;
+        return { ...prev, ...updates };
+      });
+
+      // 2. Update Supabase with ONLY the provided fields
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          ...updates,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', session.user.id);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
+
+  const incrementStats = async (statsToIncrement: Partial<{
     wins: number,
     games_played: number,
     total_capital: number,
-    character_usage: Record<string, number>,
     correct_quizzes: number,
     wrong_quizzes: number,
     cost_analysis_correct: number,
@@ -266,34 +287,36 @@ export const App: React.FC = () => {
     jail_visits: number,
     jail_skips: number,
     auction_wins: number,
-    taxes_paid: number,
-    notification_settings: NotificationSettings
+    taxes_paid: number
   }>) => {
     if (!session?.user.id) return;
     try {
-      // Optimistically update local state if we have the current profile
-      setProfile(prev => prev ? { ...prev, ...updates } : null);
+      let finalUpdates: any = {};
+      
+      // We use functional update to get the absolute latest state for calculation
+      setProfile(prev => {
+        if (!prev) return null;
+        const updates: any = {};
+        for (const [key, amount] of Object.entries(statsToIncrement)) {
+          updates[key] = (prev[key as keyof typeof prev] as number || 0) + (amount as number);
+        }
+        finalUpdates = updates;
+        return { ...prev, ...updates };
+      });
 
-      const { data, error } = await supabase
+      // Wait a tiny bit to ensure state-derived finalUpdates is captured
+      // Or just calculate it locally if we trust our local flow
+      const { error } = await supabase
         .from('profiles')
         .update({
-          ...updates,
+          ...finalUpdates,
           updated_at: new Date().toISOString()
         })
-        .eq('id', session.user.id)
-        .select()
-        .single();
+        .eq('id', session.user.id);
 
       if (error) throw error;
-
-      if (data) {
-        setProfile(data);
-        if (data.notification_settings) {
-          setNotificationSettings(data.notification_settings);
-        }
-      }
     } catch (error) {
-      console.error('Error updating profile:', error);
+      console.error('Error incrementing stats:', error);
     }
   };
 
@@ -312,12 +335,8 @@ export const App: React.FC = () => {
     // For now, let's just focus on taxesPaid which can be triggered by others.
     if (stats.taxesPaid > (prevMpStats.current['taxesPaid'] || 0)) {
       const diff = stats.taxesPaid - (prevMpStats.current['taxesPaid'] || 0);
-      updates.taxes_paid = (profileRef.current?.taxes_paid || 0) + diff;
+      incrementStats({ taxes_paid: diff });
       prevMpStats.current['taxesPaid'] = stats.taxesPaid;
-    }
-
-    if (Object.keys(updates).length > 0) {
-      updateSupabaseProfile(updates);
     }
   }, [mpState, isSinglePlayer, profile, session?.user.id]);
 
@@ -622,8 +641,8 @@ export const App: React.FC = () => {
     const landingField = levels[currentPos].type;
     if (landingField === 'jail') {
       playSFX('jail');
-      if (profileRef.current) {
-        updateSupabaseProfile({ jail_visits: (profileRef.current.jail_visits || 0) + 1 });
+      if (profile) {
+        incrementStats({ jail_visits: 1 });
       }
       if (isSinglePlayer) {
         setSinglePlayerStats(prev => ({ ...prev, jailVisits: prev.jailVisits + 1 }));
@@ -678,10 +697,8 @@ export const App: React.FC = () => {
       }
       setGameState('victory');
       playSFX('victory');
-      if (profileRef.current) {
-        updateSupabaseProfile({
-          wins: (profileRef.current.wins || 0) + 1
-        });
+      if (profile) {
+        incrementStats({ wins: 1 });
       }
     }
   }, [currentBalance, isSinglePlayer]);
@@ -733,7 +750,7 @@ export const App: React.FC = () => {
             setUserName(newName);
             setUserAvatar(newAvatar as AvatarType);
             if (profile) {
-              setProfile({ ...profile, username: newName, avatar_url: newAvatar });
+              updateSupabaseProfile({ username: newName, avatar_url: newAvatar });
             }
           }}
           language={language}
@@ -858,27 +875,27 @@ export const App: React.FC = () => {
               }
 
               // Unified Stats Tracking (both Single and Multiplayer)
-              if (profileRef.current) {
-                const updates: any = {};
+              if (profile) {
+                const increments: any = {};
                 
                 // Accumulate lifetime capital only for gains
                 if (change > 0) {
-                  updates.total_capital = (profileRef.current.total_capital || 0) + change;
+                  increments.total_capital = change;
                 }
 
                 if (activeModal === 'quiz') {
-                  if (change > 0) updates.correct_quizzes = (profileRef.current.correct_quizzes || 0) + 1;
-                  else updates.wrong_quizzes = (profileRef.current.wrong_quizzes || 0) + 1;
+                  if (change > 0) increments.correct_quizzes = 1;
+                  else increments.wrong_quizzes = 1;
                 } else if (activeModal === 'cost_analysis') {
-                  if (change > 0) updates.cost_analysis_correct = (profileRef.current.cost_analysis_correct || 0) + 1;
-                  else updates.cost_analysis_wrong = (profileRef.current.cost_analysis_wrong || 0) + 1;
+                  if (change > 0) increments.cost_analysis_correct = 1;
+                  else increments.cost_analysis_wrong = 1;
                 } else if (activeModal === 'investment') {
-                  if (change > 0) updates.investment_gains = (profileRef.current.investment_gains || 0) + change;
-                  else if (change < 0) updates.investment_losses = (profileRef.current.investment_losses || 0) + Math.abs(change);
+                  if (change > 0) increments.investment_gains = change;
+                  else if (change < 0) increments.investment_losses = Math.abs(change);
                 }
 
-                if (Object.keys(updates).length > 0) {
-                  updateSupabaseProfile(updates);
+                if (Object.keys(increments).length > 0) {
+                  incrementStats(increments);
                 }
               }
 
@@ -926,24 +943,24 @@ export const App: React.FC = () => {
               }
             }}
             onAuctionWin={() => {
-              if (profileRef.current) {
-                updateSupabaseProfile({ auction_wins: (profileRef.current.auction_wins || 0) + 1 });
+              if (profile) {
+                incrementStats({ auction_wins: 1 });
               }
             }}
             onTaxPaid={() => {
               if (isSinglePlayer) {
                 setSinglePlayerStats(prev => ({ ...prev, taxesPaid: prev.taxesPaid + 1 }));
               }
-              if (profileRef.current) {
-                updateSupabaseProfile({ taxes_paid: (profileRef.current.taxes_paid || 0) + 1 });
+              if (profile) {
+                incrementStats({ taxes_paid: 1 });
               }
             }}
             onJailSkip={() => {
               if (isSinglePlayer) {
                 setSinglePlayerStats(prev => ({ ...prev, jailSkips: prev.jailSkips + 1 }));
               }
-              if (profileRef.current) {
-                updateSupabaseProfile({ jail_skips: (profileRef.current.jail_skips || 0) + 1 });
+              if (profile) {
+                incrementStats({ jail_skips: 1 });
               }
             }}
             language={language}

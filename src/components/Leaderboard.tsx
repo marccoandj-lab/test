@@ -51,13 +51,19 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
     try {
       const orderBy = activeTab === 'wins' ? 'wins' : activeTab === 'quizzes' ? 'correct_quizzes' : 'total_capital';
       
+      console.log(`Fetching leaderboard ordered by ${orderBy}...`);
       const { data, error } = await supabase
         .from('profiles')
         .select('id, username, avatar_url, wins, correct_quizzes, total_capital')
         .order(orderBy, { ascending: false })
         .limit(50);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase leaderboard fetch error:', error);
+        throw error;
+      }
+      
+      console.log(`Leaderboard fetched: ${data?.length || 0} players found.`);
       setPlayers(data || []);
 
       if (currentUserId) {

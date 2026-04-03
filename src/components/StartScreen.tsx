@@ -121,26 +121,19 @@ export const StartScreen: React.FC<StartScreenProps> = ({
         ? { ...currentUsage, [finalAvatar]: (currentUsage[finalAvatar] || 0) + 1 }
         : currentUsage;
       
-      const { error } = await supabase.from('profiles').upsert({
+      const updates: any = {
         id: user.id,
         username: finalName,
         avatar_url: finalAvatar,
         updated_at: new Date().toISOString(),
-        games_played: isStartingGame ? (profileData?.games_played || 0) + 1 : (profileData?.games_played || 0),
-        wins: profileData?.wins || 0,
-        total_capital: profileData?.total_capital || 0,
-        character_usage: newUsage,
-        correct_quizzes: profileData?.correct_quizzes || 0,
-        wrong_quizzes: profileData?.wrong_quizzes || 0,
-        cost_analysis_correct: profileData?.cost_analysis_correct || 0,
-        cost_analysis_wrong: profileData?.cost_analysis_wrong || 0,
-        investment_gains: profileData?.investment_gains || 0,
-        investment_losses: profileData?.investment_losses || 0,
-        jail_visits: profileData?.jail_visits || 0,
-        jail_skips: profileData?.jail_skips || 0,
-        auction_wins: profileData?.auction_wins || 0,
-        taxes_paid: profileData?.taxes_paid || 0
-      });
+        character_usage: newUsage
+      };
+
+      if (isStartingGame) {
+        updates.games_played = (profileData?.games_played || 0) + 1;
+      }
+
+      const { error } = await supabase.from('profiles').upsert(updates, { onConflict: 'id' });
 
       if (error) {
         if (error.code === '23505') {
