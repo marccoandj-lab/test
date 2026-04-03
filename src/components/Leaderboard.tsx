@@ -52,15 +52,32 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
       const orderBy = activeTab === 'wins' ? 'wins' : activeTab === 'quizzes' ? 'correct_quizzes' : 'total_capital';
       
       console.log(`Fetching leaderboard ordered by ${orderBy}...`);
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from('profiles')
         .select('id, username, avatar_url, wins, correct_quizzes, total_capital')
         .order(orderBy, { ascending: false })
         .limit(50);
 
       if (error) {
-        console.error('Supabase leaderboard fetch error:', error);
-        throw error;
+        if (error.code === '42703' || error.message?.includes('column')) {
+          console.warn("Leaderboard fetch failed due to missing columns. Retrying with basic info...");
+          const { data: fallbackData, error: fallbackError } = await supabase
+            .from('profiles')
+            .select('id, username, avatar_url')
+            .limit(50);
+          
+          if (fallbackError) throw fallbackError;
+          // Map fallback data to include 0s for missing stats to avoid UI crashes
+          data = (fallbackData || []).map(p => ({
+            ...p,
+            wins: 0,
+            correct_quizzes: 0,
+            total_capital: 0
+          })) as any;
+        } else {
+          console.error('Supabase leaderboard fetch error:', error);
+          throw error;
+        }
       }
       
       console.log(`Leaderboard fetched: ${data?.length || 0} players found.`);
@@ -73,7 +90,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
           setMyRank({ rank, stats: myPlayerTopList });
         } else {
           // Fetch my specific stats and count people above me
-          const { data: myData } = await supabase
+          const { data: myData, error: myDataError } = await supabase
             .from('profiles')
             .select('id, username, avatar_url, wins, correct_quizzes, total_capital')
             .eq('id', currentUserId)
@@ -88,6 +105,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
               .gt(orderBy, myValue);
 
             setMyRank({ rank: (count || 0) + 1, stats: myData });
+          } else if (myDataError) {
+             console.log("My profile not found or columns missing for ranking:", myDataError.message);
           }
         }
       }

@@ -1,5 +1,6 @@
 -- 1. Dodavanje nedostajucih kolona u profiles tabelu
 ALTER TABLE public.profiles 
+ADD COLUMN IF NOT EXISTS display_id text,
 ADD COLUMN IF NOT EXISTS wins bigint DEFAULT 0,
 ADD COLUMN IF NOT EXISTS games_played bigint DEFAULT 0,
 ADD COLUMN IF NOT EXISTS total_capital bigint DEFAULT 0,
@@ -7,12 +8,15 @@ ADD COLUMN IF NOT EXISTS character_usage jsonb DEFAULT '{}'::jsonb,
 ADD COLUMN IF NOT EXISTS notification_settings jsonb DEFAULT '{}'::jsonb,
 ADD COLUMN IF NOT EXISTS correct_quizzes integer DEFAULT 0,
 ADD COLUMN IF NOT EXISTS wrong_quizzes integer DEFAULT 0,
+ADD COLUMN IF NOT EXISTS cost_analysis_correct integer DEFAULT 0,
+ADD COLUMN IF NOT EXISTS cost_analysis_wrong integer DEFAULT 0,
 ADD COLUMN IF NOT EXISTS investment_gains bigint DEFAULT 0,
 ADD COLUMN IF NOT EXISTS investment_losses bigint DEFAULT 0,
 ADD COLUMN IF NOT EXISTS jail_visits integer DEFAULT 0,
 ADD COLUMN IF NOT EXISTS jail_skips integer DEFAULT 0,
 ADD COLUMN IF NOT EXISTS auction_wins integer DEFAULT 0,
-ADD COLUMN IF NOT EXISTS taxes_paid integer DEFAULT 0;
+ADD COLUMN IF NOT EXISTS taxes_paid integer DEFAULT 0,
+ADD COLUMN IF NOT EXISTS updated_at timestamptz DEFAULT now();
 
 -- 2. Omogucavanje RLS (Row Level Security) uskladu sa dobrim praksama
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;

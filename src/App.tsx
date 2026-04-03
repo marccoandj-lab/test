@@ -190,71 +190,106 @@ export const App: React.FC = () => {
   const fetchProfile = async (userId: string) => {
     console.log("Fetching profile for user:", userId);
     try {
+      // Try fetching all columns first
       const { data, error } = await supabase
         .from('profiles')
         .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, cost_analysis_correct, cost_analysis_wrong, investment_gains, investment_losses, jail_visits, jail_skips, auction_wins, taxes_paid')
         .eq('id', userId)
         .single();
 
-      if (error && error.code !== 'PGRST116') {
-        console.error("Supabase profile fetch error:", error);
-        throw error;
+      if (error) {
+        if (error.code === 'PGRST116') {
+          // No profile found, handled below
+        } else if (error.code === '42703' || error.message?.includes('column')) {
+          console.warn("Schema mismatch detected! Some statistic columns are missing in Supabase. Please run the SQL migration from database_sql_scripts/01_profiles_schema.sql");
+          // Fallback fetch with only basic columns
+          const { data: fallbackData, error: fallbackError } = await supabase
+            .from('profiles')
+            .select('username, avatar_url')
+            .eq('id', userId)
+            .single();
+          
+          if (fallbackError && fallbackError.code !== 'PGRST116') throw fallbackError;
+          if (fallbackData) {
+            setProfile(fallbackData as any);
+            handleProfileFound(fallbackData);
+            return;
+          }
+        } else {
+          throw error;
+        }
       }
 
       if (data) {
-        console.log("Profile data found:", data.username);
-        setProfile(data as any);
-        const newName = data.username || "Player";
-        const newAvatar = (data.avatar_url as AvatarType) || "1";
-        setUserName(newName);
-        setUserAvatar(newAvatar);
-        localStorage.setItem('eib_username', newName);
-        localStorage.setItem('eib_avatar', newAvatar);
-        multiplayer.setMyId(userId);
+        handleProfileFound(data);
       } else {
-        console.log("No profile found, creating new one...");
-        const { data: { user } } = await supabase.auth.getUser();
-        const shortId = userId.substring(0, 6).toUpperCase();
-        const initialName = user?.user_metadata?.full_name || `Investor_${shortId}`;
-        const newDisplayId = generateDisplayId();
-
-        const newProfile = {
-          id: userId,
-          username: initialName,
-          display_id: newDisplayId,
-          avatar_url: '1',
-          wins: 0,
-          games_played: 0,
-          total_capital: 0,
-          character_usage: {},
-          correct_quizzes: 0,
-          wrong_quizzes: 0,
-          cost_analysis_correct: 0,
-          cost_analysis_wrong: 0,
-          investment_gains: 0,
-          investment_losses: 0,
-          jail_visits: 0,
-          jail_skips: 0,
-          auction_wins: 0,
-          taxes_paid: 0,
-          notification_settings: { enabled: false, slots: ["09:00", "18:00"] }
-        };
-
-        const { error: insertError } = await supabase.from('profiles').insert([newProfile]);
-
-        if (insertError) {
-          console.error("Error creating new profile:", insertError);
-        } else {
-          console.log("New profile created successfully:", initialName);
-          setProfile(newProfile as any);
-          setUserName(initialName);
-          setUserAvatar('1');
-          multiplayer.setMyId(userId);
-        }
+        await createInitialProfile(userId);
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
     }
+  };
+
+  const handleProfileFound = (data: any) => {
+    console.log("Profile data found:", data.username);
+    setProfile(data as any);
+    const newName = data.username || "Player";
+    const newAvatar = (data.avatar_url as AvatarType) || "1";
+    setUserName(newName);
+    setUserAvatar(newAvatar);
+    localStorage.setItem('eib_username', newName);
+    localStorage.setItem('eib_avatar', newAvatar);
+    multiplayer.setMyId(data.id || session?.user.id);
+  };
+
+  const createInitialProfile = async (userId: string) => {
+    console.log("No profile found, creating new one...");
+    const { data: { user } } = await supabase.auth.getUser();
+    const shortId = userId.substring(0, 6).toUpperCase();
+    const initialName = user?.user_metadata?.full_name || `Investor_${shortId}`;
+    const newDisplayId = generateDisplayId();
+
+    const newProfile: any = {
+      id: userId,
+      username: initialName,
+      display_id: newDisplayId,
+      avatar_url: '1'
+    };
+
+    // Try to insert with full stats, but fall back if columns are missing
+    const { error: insertError } = await supabase.from('profiles').insert([{
+      ...newProfile,
+      wins: 0,
+      games_played: 0,
+      total_capital: 0,
+      character_usage: {},
+      correct_quizzes: 0,
+      wrong_quizzes: 0,
+      cost_analysis_correct: 0,
+      cost_analysis_wrong: 0,
+      investment_gains: 0,
+      investment_losses: 0,
+      jail_visits: 0,
+      jail_skips: 0,
+      auction_wins: 0,
+      taxes_paid: 0,
+      notification_settings: { enabled: false, slots: ["09:00", "18:00"] }
+    }]);
+
+    if (insertError) {
+      console.warn("Full profile creation failed, trying basic creation...", insertError.message);
+      const { error: basicError } = await supabase.from('profiles').insert([newProfile]);
+      if (basicError) {
+        console.error("Critical error: Could not create even basic profile:", basicError);
+        return;
+      }
+    }
+
+    console.log("New profile created successfully:", initialName);
+    setProfile(newProfile as any);
+    setUserName(initialName);
+    setUserAvatar('1');
+    multiplayer.setMyId(userId);
   };
 
   const profileRef = useRef(profile);
