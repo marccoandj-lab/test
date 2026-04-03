@@ -6,6 +6,7 @@ import { Socials } from './Socials';
 import { Leaderboard } from './Leaderboard';
 
 import { formatNumber } from '../utils/format';
+import { AVATAR_MAP } from '../data/avatars';
 
 interface StartScreenProps {
   onStart: (name: string, avatar: string, isSingle: boolean) => void;
@@ -32,18 +33,6 @@ interface StartScreenProps {
   language: 'en' | 'sr';
   onOpenSettings?: () => void;
 }
-
-const AVATAR_MAP: Record<string, string> = {
-  '1': 'Novak Switchovic',
-  '2': 'Leonardo Da Switchy',
-  '3': 'Switchola Jokić',
-  '4': 'Switchopatra',
-  '5': 'Wolfgang Switchodeus Mozart',
-  '6': 'Switchbert Einstein',
-  '7': 'Switchola Tesla',
-  '8': 'Frida Switchlo',
-  '9': 'Switch'
-};
 
 export const StartScreen: React.FC<StartScreenProps> = ({ 
   onStart, 
@@ -179,9 +168,12 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   };
 
   if (mode === 'profile') {
-    const mostUsedAvatarId = profileData?.character_usage 
-      ? Object.entries(profileData.character_usage).sort((a, b) => b[1] - a[1])[0]?.[0] 
-      : '1';
+    const mostUsedEntry = profileData?.character_usage
+      ? Object.entries(profileData.character_usage).sort((a, b) => b[1] - a[1])[0]
+      : ['1', 0];
+
+    const mostUsedAvatarId = mostUsedEntry?.[0] || '1';
+    const mostUsedCount = mostUsedEntry?.[1] || 0;
 
     return (
       <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 z-50 overflow-hidden">
@@ -225,7 +217,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
                     )}
                   </div>
                   {nameError && <p className="text-rose-500 text-[10px] font-bold uppercase">{nameError}</p>}
-                  
+
                   {userId && (
                     <div className="inline-flex items-center gap-1.5 bg-blue-600/10 px-2 py-0.5 rounded border border-blue-500/10 mb-2">
                       <span className="text-blue-400 font-mono text-[9px] font-black tracking-widest">#{userId.substring(0, 6).toUpperCase()}</span>
@@ -316,7 +308,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
               <p className="text-[10px] text-white/40 uppercase font-black tracking-widest">{language === 'en' ? 'Detailed Statistics' : 'Detaljna statistika'}</p>
               <div className="h-[1px] flex-1 bg-white/10 ml-4" />
             </div>
-            
+
             <div className="grid grid-cols-2 gap-x-6 gap-y-5">
               <div className="group/stat">
                 <div className="flex items-center gap-2 mb-1">
@@ -396,12 +388,14 @@ export const StartScreen: React.FC<StartScreenProps> = ({
 
           <div className="bg-amber-500/10 p-4 rounded-2xl border border-amber-500/20 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center text-2xl">🏆</div>
-            <div>
-              <p className="text-white font-bold text-sm">{AVATAR_MAP[mostUsedAvatarId] || 'Strategist'}</p>
-              <p className="text-amber-500/70 text-[9px] font-black uppercase tracking-widest">{language === 'en' ? 'Most Used Character' : 'Najčešći karakter'}</p>
+            <div className="flex-1">
+              <p className="text-white font-bold text-sm">{AVATAR_MAP[mostUsedAvatarId] || 'Economy Strategist'}</p>
+              <div className="flex items-center justify-between mt-0.5">
+                <p className="text-amber-500/70 text-[9px] font-black uppercase tracking-widest">{language === 'en' ? 'Most Used Character' : 'Najčešći karakter'}</p>
+                <p className="text-amber-500 font-black text-[10px] bg-amber-500/10 px-2 py-0.5 rounded-full">{mostUsedCount} {language === 'en' ? 'plays' : 'igara'}</p>
+              </div>
             </div>
           </div>
-
           <div className="flex gap-3 pt-4">
             <button
               onClick={onOpenSettings}
