@@ -73,7 +73,8 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
         stats: multiplayer.getMyProfile()?.stats || {
           correctQuizzes: 0,
           wrongQuizzes: 0,
-
+          costAnalysisCorrect: 0,
+          costAnalysisWrong: 0,
           investmentGains: 0,
           investmentLosses: 0,
           jailVisits: 0,

@@ -374,6 +374,14 @@ export const StartScreen: React.FC<StartScreenProps> = ({
                 <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-indigo-400 transition-colors">{language === 'en' ? 'Analysis Won' : 'Tačne analize'}</p>
               </div>
 
+              <div className="group/stat">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs">📊</span>
+                  <p className="text-white font-black text-base">{profileData?.cost_analysis_wrong || 0}</p>
+                </div>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-rose-400 transition-colors">{language === 'en' ? 'Analysis Lost' : 'Netačne analize'}</p>
+              </div>
+
               <div className="col-span-2 pt-2">
                 <div className="bg-white/5 rounded-2xl p-4 border border-white/5 flex items-center justify-between">
                   <div>

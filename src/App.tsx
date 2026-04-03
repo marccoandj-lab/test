@@ -20,27 +20,32 @@ const MUSIC_TRACKS = [
   '/assets/music/music2.mp3'
 ];
 
+export interface Profile {
+  username: string;
+  display_id?: string;
+  avatar_url: string;
+  wins: number;
+  games_played: number;
+  total_capital: number;
+  character_usage: Record<string, number>;
+  correct_quizzes: number;
+  wrong_quizzes: number;
+  cost_analysis_correct: number;
+  cost_analysis_wrong: number;
+  investment_gains: number;
+  investment_losses: number;
+  jail_visits: number;
+  jail_skips: number;
+  auction_wins: number;
+  taxes_paid: number;
+  notification_settings?: NotificationSettings;
+}
+
+type NumericProfileKeys = keyof { [K in keyof Profile as Profile[K] extends number ? K : never]: any };
+
 export const App: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
-  const [profile, setProfile] = useState<{
-    username: string,
-    display_id?: string,
-    avatar_url: string,
-    wins: number,
-    games_played: number,
-    total_capital: number,
-    character_usage: Record<string, number>,
-    correct_quizzes: number,
-    wrong_quizzes: number,
-    cost_analysis_correct: number,
-    cost_analysis_wrong: number,
-    investment_gains: number,
-    investment_losses: number,
-    jail_visits: number,
-    jail_skips: number,
-    auction_wins: number,
-    taxes_paid: number
-  } | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   // Helper to generate a unique short display ID
@@ -183,6 +188,7 @@ export const App: React.FC = () => {
   }, []);
 
   const fetchProfile = async (userId: string) => {
+    console.log("Fetching profile for user:", userId);
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -190,9 +196,13 @@ export const App: React.FC = () => {
         .eq('id', userId)
         .single();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error && error.code !== 'PGRST116') {
+        console.error("Supabase profile fetch error:", error);
+        throw error;
+      }
 
       if (data) {
+        console.log("Profile data found:", data.username);
         setProfile(data as any);
         const newName = data.username || "Player";
         const newAvatar = (data.avatar_url as AvatarType) || "1";
@@ -202,9 +212,8 @@ export const App: React.FC = () => {
         localStorage.setItem('eib_avatar', newAvatar);
         multiplayer.setMyId(userId);
       } else {
-        // Create initial profile if it doesn't exist
+        console.log("No profile found, creating new one...");
         const { data: { user } } = await supabase.auth.getUser();
-        // Use part of UUID as fallback for professional default name
         const shortId = userId.substring(0, 6).toUpperCase();
         const initialName = user?.user_metadata?.full_name || `Investor_${shortId}`;
         const newDisplayId = generateDisplayId();
@@ -233,7 +242,10 @@ export const App: React.FC = () => {
 
         const { error: insertError } = await supabase.from('profiles').insert([newProfile]);
 
-        if (!insertError) {
+        if (insertError) {
+          console.error("Error creating new profile:", insertError);
+        } else {
+          console.log("New profile created successfully:", initialName);
           setProfile(newProfile as any);
           setUserName(initialName);
           setUserAvatar('1');
@@ -250,16 +262,15 @@ export const App: React.FC = () => {
     profileRef.current = profile;
   }, [profile]);
 
-  const updateSupabaseProfile = async (updates: Partial<typeof profile>) => {
+  const updateSupabaseProfile = async (updates: Partial<Profile>) => {
     if (!session?.user.id) return;
+    console.log("Updating Supabase profile with:", updates);
     try {
-      // 1. Functional update for local state ensures we always work with latest data
       setProfile(prev => {
         if (!prev) return null;
         return { ...prev, ...updates };
       });
 
-      // 2. Update Supabase with ONLY the provided fields
       const { error } = await supabase
         .from('profiles')
         .update({
@@ -268,44 +279,37 @@ export const App: React.FC = () => {
         })
         .eq('id', session.user.id);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase update error:", error);
+        throw error;
+      }
     } catch (error) {
       console.error('Error updating profile:', error);
     }
   };
 
-  const incrementStats = async (statsToIncrement: Partial<{
-    wins: number,
-    games_played: number,
-    total_capital: number,
-    correct_quizzes: number,
-    wrong_quizzes: number,
-    cost_analysis_correct: number,
-    cost_analysis_wrong: number,
-    investment_gains: number,
-    investment_losses: number,
-    jail_visits: number,
-    jail_skips: number,
-    auction_wins: number,
-    taxes_paid: number
-  }>) => {
+  const incrementStats = async (statsToIncrement: Partial<Record<NumericProfileKeys, number>>) => {
     if (!session?.user.id) return;
+    console.log("Incrementing stats in Supabase:", statsToIncrement);
     try {
       let finalUpdates: any = {};
       
-      // We use functional update to get the absolute latest state for calculation
       setProfile(prev => {
-        if (!prev) return null;
+        const base = prev || {
+          wins: 0, games_played: 0, total_capital: 0, correct_quizzes: 0,
+          wrong_quizzes: 0, cost_analysis_correct: 0, cost_analysis_wrong: 0,
+          investment_gains: 0, investment_losses: 0, jail_visits: 0,
+          jail_skips: 0, auction_wins: 0, taxes_paid: 0
+        } as Profile;
+
         const updates: any = {};
         for (const [key, amount] of Object.entries(statsToIncrement)) {
-          updates[key] = (prev[key as keyof typeof prev] as number || 0) + (amount as number);
+          updates[key] = (base[key as keyof Profile] as number || 0) + (amount as number);
         }
         finalUpdates = updates;
-        return { ...prev, ...updates };
+        return { ...base, ...updates };
       });
 
-      // Wait a tiny bit to ensure state-derived finalUpdates is captured
-      // Or just calculate it locally if we trust our local flow
       const { error } = await supabase
         .from('profiles')
         .update({
@@ -314,7 +318,10 @@ export const App: React.FC = () => {
         })
         .eq('id', session.user.id);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase increment error:", error);
+        throw error;
+      }
     } catch (error) {
       console.error('Error incrementing stats:', error);
     }
@@ -330,7 +337,6 @@ export const App: React.FC = () => {
     if (!myInGameState) return;
 
     const stats = myInGameState.stats;
-    const updates: any = {};
     
     // For now, let's just focus on taxesPaid which can be triggered by others.
     if (stats.taxesPaid > (prevMpStats.current['taxesPaid'] || 0)) {
@@ -917,6 +923,13 @@ export const App: React.FC = () => {
                     result: metadata.multiplier || 1.0,
                     stake: metadata.stake || 0,
                     amount: change
+                  });
+                } else if (activeModal === 'cost_analysis') {
+                  multiplayer.sendAction({
+                    type: 'ACTION_COST_ANALYSIS_RESULT',
+                    reward: change > 0 ? change : 0,
+                    penalty: change < 0 ? -change : 0,
+                    success: change > 0
                   });
                 } else {
                   // Quiz or other reward/penalty
