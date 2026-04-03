@@ -239,7 +239,7 @@ export const App: React.FC = () => {
     setUserAvatar(newAvatar);
     localStorage.setItem('eib_username', newName);
     localStorage.setItem('eib_avatar', newAvatar);
-    multiplayer.setMyId(data.id || session?.user.id);
+    multiplayer.setMyId(session?.user.id || data.id);
   };
 
   const createInitialProfile = async (userId: string) => {
@@ -325,37 +325,47 @@ export const App: React.FC = () => {
 
   const incrementStats = async (statsToIncrement: Partial<Record<NumericProfileKeys, number>>) => {
     if (!session?.user.id) return;
-    console.log("Incrementing stats in Supabase:", statsToIncrement);
+    console.log("Incrementing stats atomically in Supabase:", statsToIncrement);
     try {
-      let finalUpdates: any = {};
-      
+      // 1. Update local state immediately for snappy UI
       setProfile(prev => {
-        const base = prev || {
-          wins: 0, games_played: 0, total_capital: 0, correct_quizzes: 0,
-          wrong_quizzes: 0, cost_analysis_correct: 0, cost_analysis_wrong: 0,
-          investment_gains: 0, investment_losses: 0, jail_visits: 0,
-          jail_skips: 0, auction_wins: 0, taxes_paid: 0
-        } as Profile;
-
-        const updates: any = {};
+        if (!prev) return null;
+        const newProfile = { ...prev };
         for (const [key, amount] of Object.entries(statsToIncrement)) {
-          updates[key] = (base[key as keyof Profile] as number || 0) + (amount as number);
+          const k = key as keyof Profile;
+          if (typeof newProfile[k] === 'number') {
+            (newProfile[k] as number) += (amount as number);
+          } else {
+            (newProfile[k] as any) = (amount as number);
+          }
         }
-        finalUpdates = updates;
-        return { ...base, ...updates };
+        return newProfile;
       });
 
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          ...finalUpdates,
-          updated_at: new Date().toISOString()
+      // 2. Perform atomic increments in database via RPC
+      // This is the most reliable way to prevent resets
+      const rpcPromises = Object.entries(statsToIncrement).map(([stat_name, amount]) => 
+        supabase.rpc('increment_profile_stats', {
+          user_id: session.user.id,
+          stat_name: stat_name,
+          amount: amount
         })
-        .eq('id', session.user.id);
+      );
 
-      if (error) {
-        console.error("Supabase increment error:", error);
-        throw error;
+      const results = await Promise.all(rpcPromises);
+      const errors = results.filter(r => r.error);
+      
+      if (errors.length > 0) {
+        console.warn("Some atomic increments failed via RPC, falling back to standard update...", errors[0].error);
+        // Fallback: If RPC fails (e.g. function not created), try standard update
+        // but only if we HAVE the latest profile data to avoid resets
+        if (profileRef.current) {
+           const updates: any = {};
+           for (const [key, amount] of Object.entries(statsToIncrement)) {
+             updates[key] = (profileRef.current[key as keyof Profile] as number || 0) + (amount as number);
+           }
+           await supabase.from('profiles').update(updates).eq('id', session.user.id);
+        }
       }
     } catch (error) {
       console.error('Error incrementing stats:', error);
