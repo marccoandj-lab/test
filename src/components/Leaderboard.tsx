@@ -27,7 +27,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchLeaderboard();
+    fetchLeaderboard(true); // Initial fetch with loading spinner
     
     // Subscribe to real-time updates for profiles
     const channel = supabase
@@ -35,8 +35,10 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'profiles' },
-        () => {
-          fetchLeaderboard();
+        (payload) => {
+          console.log("Real-time profile change detected:", payload.eventType);
+          // Background refresh (no loading spinner for seamless UI)
+          fetchLeaderboard(false);
         }
       )
       .subscribe();
@@ -46,8 +48,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
     };
   }, [activeTab]);
 
-  const fetchLeaderboard = async () => {
-    setLoading(true);
+  const fetchLeaderboard = async (showLoading = true) => {
+    if (showLoading) setLoading(true);
     try {
       const orderBy = activeTab === 'wins' ? 'wins' : activeTab === 'quizzes' ? 'correct_quizzes' : 'total_capital';
       
@@ -113,7 +115,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
     } catch (err) {
       console.error('Leaderboard error:', err);
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
 
