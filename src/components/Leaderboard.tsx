@@ -28,9 +28,22 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
 
   useEffect(() => {
     fetchLeaderboard();
-    // Auto-refresh every 30 seconds while leaderboard is open
-    const interval = setInterval(fetchLeaderboard, 30000);
-    return () => clearInterval(interval);
+    
+    // Subscribe to real-time updates for profiles
+    const channel = supabase
+      .channel('leaderboard_updates')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'profiles' },
+        () => {
+          fetchLeaderboard();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [activeTab]);
 
   const fetchLeaderboard = async () => {

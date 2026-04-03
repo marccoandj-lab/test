@@ -245,6 +245,11 @@ export const App: React.FC = () => {
     }
   };
 
+  const profileRef = useRef(profile);
+  useEffect(() => {
+    profileRef.current = profile;
+  }, [profile]);
+
   const updateSupabaseProfile = async (updates: Partial<{
     username: string,
     avatar_url: string,
@@ -266,22 +271,20 @@ export const App: React.FC = () => {
   }>) => {
     if (!session?.user.id) return;
     try {
-      const { error } = await supabase
+      // Optimistically update local state if we have the current profile
+      setProfile(prev => prev ? { ...prev, ...updates } : null);
+
+      const { data, error } = await supabase
         .from('profiles')
         .update({
           ...updates,
           updated_at: new Date().toISOString()
         })
-        .eq('id', session.user.id);
+        .eq('id', session.user.id)
+        .select()
+        .single();
 
       if (error) throw error;
-
-      // Refresh local profile
-      const { data } = await supabase
-        .from('profiles')
-        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, investment_gains, investment_losses, jail_visits, jail_skips, auction_wins, taxes_paid, notification_settings')
-        .eq('id', session.user.id)
-        .single();
 
       if (data) {
         setProfile(data);
@@ -293,6 +296,30 @@ export const App: React.FC = () => {
       console.error('Error updating profile:', error);
     }
   };
+
+  const prevMpStats = useRef<Record<string, number>>({});
+
+  // Sync multiplayer state stats to Supabase profile (for external triggers like tax collection)
+  useEffect(() => {
+    if (isSinglePlayer || !mpState || !profile || !session?.user.id) return;
+    
+    const myInGameState = mpState.players.find(p => p.id === session.user.id);
+    if (!myInGameState) return;
+
+    const stats = myInGameState.stats;
+    const updates: any = {};
+    
+    // For now, let's just focus on taxesPaid which can be triggered by others.
+    if (stats.taxesPaid > (prevMpStats.current['taxesPaid'] || 0)) {
+      const diff = stats.taxesPaid - (prevMpStats.current['taxesPaid'] || 0);
+      updates.taxes_paid = (profileRef.current?.taxes_paid || 0) + diff;
+      prevMpStats.current['taxesPaid'] = stats.taxesPaid;
+    }
+
+    if (Object.keys(updates).length > 0) {
+      updateSupabaseProfile(updates);
+    }
+  }, [mpState, isSinglePlayer, profile, session?.user.id]);
 
   const handleCloseTurnModal = useCallback(() => {
     setShowTurnModal(false);
@@ -592,27 +619,21 @@ export const App: React.FC = () => {
 
     setIsMoving(false);
 
-    if (!isSinglePlayer) {
-      multiplayer.sendAction({ type: 'ACTION_DICE_ROLL', steps });
-
-      // Track jail visits for multiplayer profile
-      const landingField = levels[currentPos].type;
-      if (landingField === 'jail') {
-        playSFX('jail');
-        if (profile) {
-          updateSupabaseProfile({ jail_visits: (profile.jail_visits || 0) + 1 });
-        }
+    const landingField = levels[currentPos].type;
+    if (landingField === 'jail') {
+      playSFX('jail');
+      if (profileRef.current) {
+        updateSupabaseProfile({ jail_visits: (profileRef.current.jail_visits || 0) + 1 });
       }
-    } else {
-      // Landing triggers in SP
-      const landingField = levels[currentPos].type;
-      if (landingField === 'jail') {
-        playSFX('jail');
+      if (isSinglePlayer) {
         setSinglePlayerStats(prev => ({ ...prev, jailVisits: prev.jailVisits + 1 }));
       }
     }
 
-    const landingField = levels[currentPos].type;
+    if (!isSinglePlayer) {
+      multiplayer.sendAction({ type: 'ACTION_DICE_ROLL', steps });
+    }
+
     if (landingField === 'switch' && !isSinglePlayer) {
       const newMode = gameMode === 'finance' ? 'sustainability' : 'finance';
       multiplayer.sendAction({ type: 'ACTION_THEME_SWITCH', mode: newMode });
@@ -647,16 +668,19 @@ export const App: React.FC = () => {
     }
   }, [isSinglePlayer, myProfile, singlePlayerStats]);
 
+  const hasWonThisGame = useRef(false);
+
   useEffect(() => {
-    if (currentBalance >= WINNING_BALANCE) {
+    if (currentBalance >= WINNING_BALANCE && !hasWonThisGame.current) {
+      hasWonThisGame.current = true;
       if (isSinglePlayer) {
         multiplayer.state.status = 'finished';
       }
       setGameState('victory');
       playSFX('victory');
-      if (profile) {
+      if (profileRef.current) {
         updateSupabaseProfile({
-          wins: (profile.wins || 0) + 1
+          wins: (profileRef.current.wins || 0) + 1
         });
       }
     }
@@ -698,7 +722,10 @@ export const App: React.FC = () => {
       {/* Screen Routing */}
       {gameState === 'start' ? (
         <StartScreen
-          onStart={handleStart}
+          onStart={(name, avatar, isSingle) => {
+            hasWonThisGame.current = false;
+            handleStart(name, avatar, isSingle);
+          }}
           initialName={userName}
           initialAvatar={userAvatar}
           profileData={profile}
@@ -815,10 +842,6 @@ export const App: React.FC = () => {
             players={isSinglePlayer ? [myProfile as Player] : (mpState?.players || [])}
             isSinglePlayer={isSinglePlayer}
             onBalanceChange={(change, metadata) => {
-              if (change > 0 && profile) {
-                updateSupabaseProfile({ total_capital: (profile.total_capital || 0) + change });
-              }
-
               // SFX based on change and context
               if (activeModal === 'quiz' || activeModal === 'cost_analysis') {
                 playSFX(change > 0 ? 'correct' : 'incorrect');
@@ -832,6 +855,34 @@ export const App: React.FC = () => {
 
               if (isSinglePlayer) {
                 setBalance(prev => prev + change);
+              }
+
+              // Unified Stats Tracking (both Single and Multiplayer)
+              if (profileRef.current) {
+                const updates: any = {};
+                
+                // Accumulate lifetime capital only for gains
+                if (change > 0) {
+                  updates.total_capital = (profileRef.current.total_capital || 0) + change;
+                }
+
+                if (activeModal === 'quiz') {
+                  if (change > 0) updates.correct_quizzes = (profileRef.current.correct_quizzes || 0) + 1;
+                  else updates.wrong_quizzes = (profileRef.current.wrong_quizzes || 0) + 1;
+                } else if (activeModal === 'cost_analysis') {
+                  if (change > 0) updates.cost_analysis_correct = (profileRef.current.cost_analysis_correct || 0) + 1;
+                  else updates.cost_analysis_wrong = (profileRef.current.cost_analysis_wrong || 0) + 1;
+                } else if (activeModal === 'investment') {
+                  if (change > 0) updates.investment_gains = (profileRef.current.investment_gains || 0) + change;
+                  else if (change < 0) updates.investment_losses = (profileRef.current.investment_losses || 0) + Math.abs(change);
+                }
+
+                if (Object.keys(updates).length > 0) {
+                  updateSupabaseProfile(updates);
+                }
+              }
+
+              if (isSinglePlayer) {
                 if (activeModal === 'quiz') {
                   if (change > 0) setSinglePlayerStats(prev => ({ ...prev, correctQuizzes: prev.correctQuizzes + 1 }));
                   else setSinglePlayerStats(prev => ({ ...prev, wrongQuizzes: prev.wrongQuizzes + 1 }));
@@ -841,24 +892,8 @@ export const App: React.FC = () => {
                 } else if (activeModal === 'investment') {
                   if (change > 0) setSinglePlayerStats(prev => ({ ...prev, investmentGains: prev.investmentGains + change }));
                   else if (change < 0) setSinglePlayerStats(prev => ({ ...prev, investmentLosses: prev.investmentLosses + Math.abs(change) }));
-                } else if (activeModal === 'tax_small') {
-                  setSinglePlayerStats(prev => ({ ...prev, taxesPaid: prev.taxesPaid + 1 }));
                 }
               } else {
-                // Multiplayer Stats Tracking
-                if (profile) {
-                  if (activeModal === 'quiz') {
-                    if (change > 0) updateSupabaseProfile({ correct_quizzes: (profile.correct_quizzes || 0) + 1 });
-                    else updateSupabaseProfile({ wrong_quizzes: (profile.wrong_quizzes || 0) + 1 });
-                  } else if (activeModal === 'cost_analysis') {
-                    if (change > 0) updateSupabaseProfile({ cost_analysis_correct: (profile.cost_analysis_correct || 0) + 1 });
-                    else updateSupabaseProfile({ cost_analysis_wrong: (profile.cost_analysis_wrong || 0) + 1 });
-                  } else if (activeModal === 'investment') {
-                    if (change > 0) updateSupabaseProfile({ investment_gains: (profile.investment_gains || 0) + change });
-                    else if (change < 0) updateSupabaseProfile({ investment_losses: (profile.investment_losses || 0) + Math.abs(change) });
-                  }
-                }
-
                 if (activeModal === 'investment' && metadata?.type === 'investment') {
                   multiplayer.sendAction({
                     type: 'ACTION_INVEST',
@@ -891,24 +926,24 @@ export const App: React.FC = () => {
               }
             }}
             onAuctionWin={() => {
-              if (profile) {
-                updateSupabaseProfile({ auction_wins: (profile.auction_wins || 0) + 1 });
+              if (profileRef.current) {
+                updateSupabaseProfile({ auction_wins: (profileRef.current.auction_wins || 0) + 1 });
               }
             }}
             onTaxPaid={() => {
               if (isSinglePlayer) {
                 setSinglePlayerStats(prev => ({ ...prev, taxesPaid: prev.taxesPaid + 1 }));
               }
-              if (profile) {
-                updateSupabaseProfile({ taxes_paid: (profile.taxes_paid || 0) + 1 });
+              if (profileRef.current) {
+                updateSupabaseProfile({ taxes_paid: (profileRef.current.taxes_paid || 0) + 1 });
               }
             }}
             onJailSkip={() => {
               if (isSinglePlayer) {
                 setSinglePlayerStats(prev => ({ ...prev, jailSkips: prev.jailSkips + 1 }));
               }
-              if (profile) {
-                updateSupabaseProfile({ jail_skips: (profile.jail_skips || 0) + 1 });
+              if (profileRef.current) {
+                updateSupabaseProfile({ jail_skips: (profileRef.current.jail_skips || 0) + 1 });
               }
             }}
             language={language}
