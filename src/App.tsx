@@ -175,13 +175,19 @@ export const App: React.FC = () => {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      if (session) fetchProfile(session.user.id);
+      if (session) {
+        multiplayer.setMyId(session.user.id);
+        fetchProfile(session.user.id);
+      }
       setIsAuthLoading(false);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
-      if (session) fetchProfile(session.user.id);
+      if (session) {
+        multiplayer.setMyId(session.user.id);
+        fetchProfile(session.user.id);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -818,10 +824,10 @@ export const App: React.FC = () => {
 
             <div className="space-y-3">
               <p className="text-xs font-bold text-slate-500 uppercase tracking-widest px-2">
-                Connected Friends ({mpState.players.length}/6)
+                Connected Friends ({mpState.players.filter(Boolean).length}/6)
               </p>
               <div className="space-y-2">
-                {mpState.players.map((p) => (
+                {mpState.players.filter(Boolean).map((p) => (
                   <div key={p.id} className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5 animate-fade-in">
                     <div className="flex items-center gap-4">
                       <img
@@ -834,7 +840,7 @@ export const App: React.FC = () => {
                     {p.isHost && <span className="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full font-bold uppercase tracking-tighter">Host</span>}
                   </div>
                 ))}
-                {mpState.players.length < 2 && (
+                {mpState.players.filter(Boolean).length < 2 && (
                   <div className="p-4 border border-dashed border-white/10 rounded-2xl text-center">
                     <p className="text-slate-600 text-sm italic">{t.lobby.waiting_for_players}</p>
                   </div>

@@ -407,25 +407,29 @@ class MultiplayerManager {
       case 'ACTION_INTERACTION_END':
         player.isInteracting = false;
         this.state.globalModal = null; // Clear global modal if active
-        const nextI = (this.state.currentTurnIndex + 1) % this.state.players.length;
-        const nextIP = this.state.players[nextI];
-        if (nextIP.status === 'jail' && nextIP.jailSkipped) {
-          nextIP.status = 'playing';
-          nextIP.jailSkipped = false;
+        if (this.state.players.length > 0) {
+          const nextI = (this.state.currentTurnIndex + 1) % this.state.players.length;
+          const nextIP = this.state.players[nextI];
+          if (nextIP && nextIP.status === 'jail' && nextIP.jailSkipped) {
+            nextIP.status = 'playing';
+            nextIP.jailSkipped = false;
+          }
+          this.state.currentTurnIndex = nextI;
         }
-        this.state.currentTurnIndex = nextI;
         break;
       case 'ACTION_AUCTION_END':
         this.state.auction.active = false;
         this.state.globalModal = null; // Clear global modal if active
-        this.state.players.forEach(p => p.isInteracting = false);
-        const aNex = (this.state.currentTurnIndex + 1) % this.state.players.length;
-        const aNexP = this.state.players[aNex];
-        if (aNexP.status === 'jail' && aNexP.jailSkipped) {
-          aNexP.status = 'playing';
-          aNexP.jailSkipped = false;
+        this.state.players.forEach(p => { if (p) p.isInteracting = false; });
+        if (this.state.players.length > 0) {
+          const aNex = (this.state.currentTurnIndex + 1) % this.state.players.length;
+          const aNexP = this.state.players[aNex];
+          if (aNexP && aNexP.status === 'jail' && aNexP.jailSkipped) {
+            aNexP.status = 'playing';
+            aNexP.jailSkipped = false;
+          }
+          this.state.currentTurnIndex = aNex;
         }
-        this.state.currentTurnIndex = aNex;
         break;
       case 'UPDATE_LEVELS':
         this.state.levels = msg.levels;
