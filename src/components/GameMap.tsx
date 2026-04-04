@@ -114,6 +114,7 @@ function DiceRoller({ value, isRolling, onRoll, disabled, isFinance, isJailed, l
 
 export function GameMap({ levels, currentLevel, currentPlayer, mode, balance, onRollDice, jailed, diceValue, isRolling, isMoving, animatingLevel, taxExemptionTurns, isMyTurn, players, currentTurnIndex, language }: GameMapProps) {
   const t = translations[language as keyof typeof translations];
+  if (!currentPlayer) return null;
   
   const getTranslatedLabel = (l: Level) => {
     switch (l.type) {

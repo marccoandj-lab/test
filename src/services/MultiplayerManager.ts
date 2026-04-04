@@ -345,6 +345,7 @@ class MultiplayerManager {
         break;
       case 'ACTION_AUCTION_ROLL':
         const auctionPlayerIds = this.state.players.map(p => p.id);
+        if (auctionPlayerIds.length === 0) return;
         const expectedId = auctionPlayerIds[this.state.auction.turnIndex % auctionPlayerIds.length];
         if (playerId !== expectedId) return;
         this.state.auction.rolls[playerId] = msg.roll;
@@ -370,12 +371,15 @@ class MultiplayerManager {
         player.jailSkipped = true;
         player.isInteracting = false;
         player.stats.jailSkips++;
-        const nextIdx = (this.state.currentTurnIndex + 1) % this.state.players.length;
-        this.state.currentTurnIndex = nextIdx;
-        const nextP = this.state.players[nextIdx];
-        if (nextP.status === 'jail' && nextP.jailSkipped) {
-          nextP.status = 'playing';
-          nextP.jailSkipped = false;
+        
+        if (this.state.players.length > 0) {
+          const nextIdx = (this.state.currentTurnIndex + 1) % this.state.players.length;
+          this.state.currentTurnIndex = nextIdx;
+          const nextP = this.state.players[nextIdx];
+          if (nextP && nextP.status === 'jail' && nextP.jailSkipped) {
+            nextP.status = 'playing';
+            nextP.jailSkipped = false;
+          }
         }
         break;
       case 'ACTION_JAIL_PAY':

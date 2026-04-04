@@ -35,6 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ players, currentTurnIndex, myI
 
       <div className="space-y-4">
         {players.map((player, index) => {
+          if (!player) return null;
           const isMe = player.id === myId;
           const isTurn = index === currentTurnIndex;
 

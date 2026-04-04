@@ -795,7 +795,7 @@ export function TaxLargeModal({ targets, onCollect, onClose, mode, language }: T
             <div className="bg-white/5 border border-white/10 rounded-[2rem] p-5 max-h-56 overflow-y-auto custom-scrollbar">
               <p className="text-[10px] text-white/40 uppercase font-black mb-4 tracking-[0.2em]">{language === 'en' ? 'Liable Players:' : 'Obveznici:'}</p>
               <div className="space-y-3">
-                {targets.map(p => (
+                {targets.filter(Boolean).map(p => (
                   <div key={p.id} className="flex items-center justify-between bg-white/5 p-3 rounded-2xl border border-white/5 hover:border-white/10 transition-colors">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-xl bg-white/5 p-1.5 border border-white/10 flex items-center justify-center">
@@ -897,12 +897,18 @@ export function AuctionModal({ onResult, mode, players, currentPlayerIndex, canC
             <div className="bg-white/10 backdrop-blur-md rounded-[2.5rem] p-6 border border-white/20 mb-6 text-center shadow-2xl relative overflow-hidden group">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
               <p className="text-[10px] text-white/40 uppercase font-black tracking-[0.3em] mb-3">{language === 'en' ? 'Upcoming Roller' : 'Sledeći na redu'}:</p>
-              <div className="flex items-center justify-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-white/5 p-1.5 border border-white/10 flex items-center justify-center">
-                  <img src={`/assets/${activeRoller.avatar}.png`} alt="" className="w-full h-full object-contain" />
+                <div className="flex items-center justify-center gap-4">
+                  {activeRoller ? (
+                    <>
+                      <div className="w-14 h-14 rounded-2xl bg-white/5 p-1.5 border border-white/10 flex items-center justify-center">
+                        <img src={`/assets/${activeRoller.avatar}.png`} alt="" className="w-full h-full object-contain" />
+                      </div>
+                      <span className="text-2xl font-black text-white tracking-tight">{activeRoller.name} {activeRoller.id === myId && `(${language === 'en' ? 'You' : 'Ti'})`}</span>
+                    </>
+                  ) : (
+                    <span className="text-xl font-bold text-white/40 italic">Waiting for player...</span>
+                  )}
                 </div>
-                <span className="text-2xl font-black text-white tracking-tight">{activeRoller.name} {activeRoller.id === myId && `(${language === 'en' ? 'You' : 'Ti'})`}</span>
-              </div>
             </div>
 
             <button
@@ -1097,40 +1103,44 @@ export function VictoryModal({ players, language }: VictoryModalProps) {
 
           {/* Winner Stats */}
           <div className="bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-blue-400/20 rounded-2xl sm:rounded-3xl p-4 sm:p-6 mb-4 sm:mb-8 text-left">
-            <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-blue-500/20 flex items-center justify-center border border-blue-500/30 shrink-0">
-                <img
-                  src={`/assets/${winner.avatar}.png`}
-                  alt=""
-                  className="w-10 h-10 sm:w-14 sm:h-14 object-contain"
-                />
+            {winner && (
+              <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-blue-500/20 flex items-center justify-center border border-blue-500/30 shrink-0">
+                  <img
+                    src={`/assets/${winner.avatar}.png`}
+                    alt=""
+                    className="w-10 h-10 sm:w-14 sm:h-14 object-contain"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[8px] sm:text-[10px] text-blue-400 font-bold uppercase tracking-widest">{language === 'en' ? 'Winner' : 'Pobednik'}</div>
+                  <div className="text-lg sm:text-2xl font-black text-white truncate">{winner.name}</div>
+                </div>
+                <div className="ml-auto text-right shrink-0">
+                  <div className="text-[8px] sm:text-[10px] text-white/40 uppercase font-bold tracking-widest">{t.stats.total_capital}</div>
+                  <div className="text-lg sm:text-2xl font-black text-green-400">{winner.capital.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC</div>
+                </div>
               </div>
-              <div className="min-w-0">
-                <div className="text-[8px] sm:text-[10px] text-blue-400 font-bold uppercase tracking-widest">{language === 'en' ? 'Winner' : 'Pobednik'}</div>
-                <div className="text-lg sm:text-2xl font-black text-white truncate">{winner.name}</div>
-              </div>
-              <div className="ml-auto text-right shrink-0">
-                <div className="text-[8px] sm:text-[10px] text-white/40 uppercase font-bold tracking-widest">{t.stats.total_capital}</div>
-                <div className="text-lg sm:text-2xl font-black text-green-400">{winner.capital.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC</div>
-              </div>
-            </div>
+            )}
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
-              <StatItem label={t.stats.correct_quizzes} value={winner.stats.correctQuizzes} icon="✅" />
-              <StatItem label={t.stats.wrong_quizzes} value={winner.stats.wrongQuizzes} icon="❌" />
-              <StatItem label={language === 'en' ? 'Cost Analysis (✓)' : 'Analiza troškova (✓)'} value={winner.stats.costAnalysisCorrect || 0} icon="🧐" />
-              <StatItem label={language === 'en' ? 'Cost Analysis (✗)' : 'Analiza troškova (✗)'} value={winner.stats.costAnalysisWrong || 0} icon="📊" />
-              <StatItem label={t.stats.auction_wins} value={winner.stats.auctionWins} icon="⚖️" />
-              <StatItem label={t.stats.investment_gains} value={`${winner.stats.investmentGains.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC`} icon="📈" />
-              <StatItem label={t.stats.investment_losses} value={`${winner.stats.investmentLosses.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC`} icon="📉" />
-              <StatItem label={t.stats.jail_visits} value={winner.stats.jailVisits} icon="🔒" />
-            </div>
+            {winner && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+                <StatItem label={t.stats.correct_quizzes} value={winner.stats.correctQuizzes} icon="✅" />
+                <StatItem label={t.stats.wrong_quizzes} value={winner.stats.wrongQuizzes} icon="❌" />
+                <StatItem label={language === 'en' ? 'Cost Analysis (✓)' : 'Analiza troškova (✓)'} value={winner.stats.costAnalysisCorrect || 0} icon="🧐" />
+                <StatItem label={language === 'en' ? 'Cost Analysis (✗)' : 'Analiza troškova (✗)'} value={winner.stats.costAnalysisWrong || 0} icon="📊" />
+                <StatItem label={t.stats.auction_wins} value={winner.stats.auctionWins} icon="⚖️" />
+                <StatItem label={t.stats.investment_gains} value={`${winner.stats.investmentGains.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC`} icon="📈" />
+                <StatItem label={t.stats.investment_losses} value={`${winner.stats.investmentLosses.toLocaleString(language === 'en' ? 'en-US' : 'sr-RS')} SC`} icon="📉" />
+                <StatItem label={t.stats.jail_visits} value={winner.stats.jailVisits} icon="🔒" />
+              </div>
+            )}
           </div>
 
           {/* Rankings - Hide in Singleplayer */}
           {sortedPlayers.length > 1 && (
             <div className="space-y-1.5 sm:space-y-2 max-h-32 sm:max-h-48 overflow-y-auto pr-1 custom-scrollbar">
-              {sortedPlayers.map((p, idx) => (
+              {sortedPlayers.filter(Boolean).map((p, idx) => (
                 <div key={p.id} className={`flex items-center gap-2 sm:gap-4 p-2 sm:p-3 rounded-xl sm:rounded-2xl border ${idx === 0 ? 'bg-white/10 border-white/20' : 'bg-white/5 border-white/5'}`}>
                   <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-white/5 flex items-center justify-center font-bold text-white/50 text-xs sm:text-sm">{idx + 1}.</div>
                   <img

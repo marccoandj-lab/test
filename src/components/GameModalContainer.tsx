@@ -257,7 +257,9 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
           }}
           onSkip={() => {
             if (isSinglePlayer) {
-              multiplayer.state.currentTurnIndex = (multiplayer.state.currentTurnIndex + 1) % players.length;
+              if (players.length > 0) {
+                multiplayer.state.currentTurnIndex = (multiplayer.state.currentTurnIndex + 1) % players.length;
+              }
             } else {
               multiplayer.sendAction({ type: 'ACTION_JAIL_WAIT' });
             }
