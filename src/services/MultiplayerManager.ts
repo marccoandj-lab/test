@@ -44,6 +44,13 @@ export type Message =
   | { type: 'ACTION_JAIL_PAY'; fine: number }
   | { type: 'UPDATE_LEVELS'; levels: Level[] };
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+const isLocalhost = 
+  window.location.hostname === 'localhost' || 
+  window.location.hostname === '127.0.0.1' || 
+  window.location.hostname.startsWith('192.168.') || 
+  window.location.hostname.startsWith('10.');
+
 class MultiplayerManager {
   private peer: Peer | null = null;
   private connections: Map<string, DataConnection> = new Map();
@@ -63,15 +70,29 @@ class MultiplayerManager {
     turnTimeLeft: 60,
     mode: 'finance',
     globalModal: null,
-    auction: { active: false, rolls: {}, turnIndex: 0 },
+    auction: {
+      active: false,
+      rolls: {},
+      turnIndex: 0
+    },
     levels: []
   };
 
+  // Production backend hosted on Render
+  private readonly PROD_SIGNALING_HOST = 'economyswitch.onrender.com';
+
   public myId: string = '';
   private myProfile: Player | null = null;
+  private pendingJoinRoomId: string | null = null;
 
   setMyId(id: string) {
+    if (!id || id === 'undefined' || id === '[object Object]' || id.includes('undefined')) {
+      console.warn('[Multiplayer] Invalid ID passed to setMyId, keeping current or generating fallback.');
+      if (!this.myId) this.myId = 'player_' + nanoid(6);
+      return;
+    }
     this.myId = id;
+    console.log('[Multiplayer] Local ID set to:', this.myId);
   }
 
   private createInitialStats() {
@@ -121,38 +142,41 @@ class MultiplayerManager {
        return { ...this.config }; // Uses default PeerServer cloud
     }
 
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
-    const isRender = window.location.hostname.includes('onrender.com');
-    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-
-    // Priority 1: User-defined VITE_BACKEND_URL
-    if (backendUrl && !isLocalhost) {
+    // Priority 1: User-provided VITE_BACKEND_URL
+    // We only use this if it's NOT pointing to localhost while we are in production.
+    if (backendUrl) {
       try {
         const url = new URL(backendUrl);
-        return {
-          ...this.config,
-          host: url.hostname,
-          port: parseInt(url.port) || (url.protocol === 'https:' ? 443 : 80),
-          secure: url.protocol === 'https:',
-          path: '/peerjs'
-        };
+        const isBackendLocal = url.hostname === 'localhost' || url.hostname === '127.0.0.1';
+        
+        if (!isLocalhost && isBackendLocal) {
+           console.warn('[Multiplayer] Ignoring local backend URL (localhost) in production environment.');
+        } else {
+           return {
+             ...this.config,
+             host: url.hostname,
+             port: url.port ? parseInt(url.port) : (url.protocol === 'https:' ? 443 : 80),
+             secure: url.protocol === 'https:',
+             path: '/peerjs'
+           };
+        }
       } catch (e) {
         console.error('Invalid VITE_BACKEND_URL:', e);
       }
     }
 
-    // Priority 2: Automatic same-host detection for Render/Production
-    if (isRender || !isLocalhost) {
+    // Priority 2: Dedicated Production Signaling Server (on Render)
+    if (!isLocalhost) {
       return {
         ...this.config,
-        host: window.location.hostname,
+        host: this.PROD_SIGNALING_HOST,
         port: 443,
         secure: true,
         path: '/peerjs'
       };
     }
 
-    // Priority 3: Local Development (Port 9000 as per server.js)
+    // Priority 3: Local Development Fallback (Port 9000 as per server.js)
     return {
       ...this.config,
       host: window.location.hostname, // localhost
@@ -186,6 +210,11 @@ class MultiplayerManager {
         // Short delay to ensure any transient states settle
         setTimeout(() => this.updateStatus('connected'), 500);
       }
+
+      // Client: If we have a pending room to join, do it now
+      if (this.pendingJoinRoomId) {
+        this.performJoinRoom(this.pendingJoinRoomId);
+      }
     });
 
     this.peer.on('error', (err) => {
@@ -211,6 +240,12 @@ class MultiplayerManager {
   }
 
   createRoom(name: string, avatar: AvatarType): string {
+    // ID Safety: We MUST have a valid ID before creating a room
+    if (!this.myId || this.myId.includes('undefined')) {
+      this.myId = 'player_' + nanoid(6);
+      console.warn('[Multiplayer] ID missing or invalid during createRoom. Generated fallback ID:', this.myId);
+    }
+
     const roomId = nanoid(6).toUpperCase();
     this.state.roomId = roomId;
     this.state.status = 'waiting';
@@ -237,6 +272,12 @@ class MultiplayerManager {
   }
 
   joinRoom(roomId: string, name: string, avatar: AvatarType) {
+    // ID Safety: We MUST have a valid ID before joining a room
+    if (!this.myId || this.myId.includes('undefined')) {
+      this.myId = 'player_' + nanoid(6);
+      console.warn('[Multiplayer] ID missing or invalid during joinRoom. Generated fallback ID:', this.myId);
+    }
+
     this.state.roomId = roomId;
 
     this.myProfile = {
@@ -255,38 +296,42 @@ class MultiplayerManager {
     };
 
     const clientPeerId = this.myId + '_' + nanoid(4);
+    this.pendingJoinRoomId = roomId;
     this.setupPeer(clientPeerId);
+  }
 
-    this.peer!.on('open', () => {
-      this.updateStatus('Locating Host...');
-      const conn = this.peer!.connect(roomId, {
-        metadata: { playerId: this.myId }
-      });
+  private performJoinRoom(roomId: string) {
+    if (!this.peer || this.peer.destroyed) return;
+    
+    this.updateStatus('Locating Host...');
+    const conn = this.peer.connect(roomId, {
+      metadata: { playerId: this.myId }
+    });
 
-      this.hostConnection = conn;
+    this.hostConnection = conn;
 
-      conn.on('open', () => {
-        this.updateStatus('Joining Room...');
-        this.sendMessage(conn, { type: 'JOIN_REQUEST', profile: this.myProfile! });
-      });
+    conn.on('open', () => {
+      this.pendingJoinRoomId = null; // Clear pending once join is initiated
+      this.updateStatus('Joining Room...');
+      this.sendMessage(conn, { type: 'JOIN_REQUEST', profile: this.myProfile! });
+    });
 
-      conn.on('data', (data: any) => {
-        this.handleMessage(conn, data as Message);
-      });
+    conn.on('data', (data: any) => {
+      this.handleMessage(conn, data as Message);
+    });
 
-      conn.on('close', () => {
-        console.warn('Disconnected from Host (Player:', this.myId, ')');
-        this.onError('Disconnected from Host');
-        this.updateStatus('disconnected');
-        // Give UI time to show error before reload
-        setTimeout(() => window.location.reload(), 2000);
-      });
+    conn.on('close', () => {
+      console.warn('Disconnected from Host (Player:', this.myId, ')');
+      this.onError('Disconnected from Host');
+      this.updateStatus('disconnected');
+      // Give UI time to show error before reload
+      setTimeout(() => window.location.reload(), 2000);
+    });
 
-      conn.on('error', (err) => {
-        console.error('Connection error with host:', err);
-        this.onError('Could not connect to host.');
-        this.updateStatus('error');
-      });
+    conn.on('error', (err) => {
+      console.error('Connection error with host:', err);
+      this.onError('Could not connect to host.');
+      this.updateStatus('error');
     });
   }
 
@@ -383,10 +428,11 @@ class MultiplayerManager {
         if (msg.state && msg.state.players && msg.state.players.length > 0) {
           const matchedMe = msg.state.players.some(p => {
               if (!p || !p.id) return false;
-              // If we have a special ID (e.g. for testing), we match it!
-              // Clients identify themselves by name and avatar if ID was changed for deduplication
-              if (this.myId && p.id.startsWith(this.myId)) return true;
-              return p.id === this.myId;
+              const pidStr = String(p.id);
+              const myIdStr = String(this.myId);
+              
+              if (myIdStr && pidStr.startsWith(myIdStr)) return true;
+              return pidStr === myIdStr;
           });
           
           if (!matchedMe && msg.state.status === 'playing') {

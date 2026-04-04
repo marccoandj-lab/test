@@ -32,6 +32,7 @@ interface StartScreenProps {
   } | null;
   language: 'en' | 'sr';
   onOpenSettings?: () => void;
+  initialRoomCode?: string;
 }
 
 export const StartScreen: React.FC<StartScreenProps> = ({ 
@@ -41,7 +42,8 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   initialAvatar = '1',
   profileData,
   language,
-  onOpenSettings
+  onOpenSettings,
+  initialRoomCode = ''
 }) => {
   const t = translations[language];
   const [name, setName] = useState(initialName);
@@ -68,6 +70,14 @@ export const StartScreen: React.FC<StartScreenProps> = ({
       if (user) setUserId(user.id);
     });
   }, []);
+
+  useEffect(() => {
+    if (initialRoomCode) {
+      setRoomCode(initialRoomCode);
+      setMode('join');
+      setShowMultiplayerMenu(true);
+    }
+  }, [initialRoomCode]);
 
   const copyToClipboard = (text: string) => {
     if (!text) return;

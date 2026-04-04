@@ -44,6 +44,7 @@ export interface Profile {
 type NumericProfileKeys = keyof { [K in keyof Profile as Profile[K] extends number ? K : never]: any };
 
 export const App: React.FC = () => {
+  const [urlRoomCode, setUrlRoomCode] = useState<string | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
@@ -64,6 +65,12 @@ export const App: React.FC = () => {
   const [pendingInvite, setPendingInvite] = useState<{ id: string, roomCode: string, issuerName: string, issuerId: string } | null>(null);
 
   const [levels, setLevels] = useState<Level[]>(generateLevels(300, 'finance', 0, undefined, true));
+  
+  // Sync levels for MultiplayerManager to pick up
+  useEffect(() => {
+    (window as any).levels = levels;
+  }, [levels]);
+
   const [balance, setBalance] = useState(150000);
   const [currentLevelIndex, setCurrentLevelIndex] = useState(0);
   const [mode, setMode] = useState<GameMode>('finance');
@@ -248,6 +255,28 @@ export const App: React.FC = () => {
     localStorage.setItem('eib_avatar', newAvatar);
     multiplayer.setMyId(session?.user.id || data.id);
   };
+
+  // 1. Initial URL Room Check
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const room = params.get('room');
+    if (room && room.length === 6) {
+      console.log("Found room code in URL:", room);
+      setUrlRoomCode(room.toUpperCase());
+    }
+  }, []);
+
+  // 2. Clear URL Room after successful join/start
+  useEffect(() => {
+    if (gameState !== 'start' && urlRoomCode) {
+      // Small delay to ensure logic handled it
+      setTimeout(() => {
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, '', newUrl);
+        setUrlRoomCode(null);
+      }, 2000);
+    }
+  }, [gameState, urlRoomCode]);
 
   const createInitialProfile = async (userId: string) => {
     console.log("No profile found, creating new one...");
@@ -740,7 +769,12 @@ export const App: React.FC = () => {
     isInteracting: false,
     jailSkipped: false,
     stats: singlePlayerStats
-  } : mpState?.players.find(p => p && p.id && (p.id === multiplayer.getMyId() || p.id.startsWith(multiplayer.getMyId() + '_dev_')));
+  } : mpState?.players.find(p => {
+    if (!p?.id) return false;
+    const pidStr = String(p.id);
+    const myIdStr = String(multiplayer.getMyId());
+    return pidStr === myIdStr || (myIdStr && pidStr.startsWith(myIdStr + '_dev_'));
+  });
   const currentBalance = isSinglePlayer ? balance : (myProfile?.capital || 0);
 
   // Sync singleplayer profile into multiplayer state (ONLY UI MOCK) for modals
@@ -852,6 +886,7 @@ export const App: React.FC = () => {
             hasWonThisGame.current = false;
             handleStart(name, avatar, isSingle);
           }}
+          initialRoomCode={urlRoomCode || ''}
           initialName={userName}
           initialAvatar={userAvatar}
           profileData={profile}
@@ -870,8 +905,22 @@ export const App: React.FC = () => {
           <div className="max-w-md w-full bg-white/5 p-8 rounded-[32px] border border-white/10 backdrop-blur-xl space-y-8">
             <div className="text-center space-y-2">
               <h2 className="text-3xl font-bold text-white tracking-tight">{t.lobby.waiting_for_players}</h2>
-              <p className="text-blue-400 font-mono tracking-wider text-lg">{t.lobby.room_code}: <span className="text-white font-black">{mpState.roomId}</span></p>
-              <p className="text-slate-500 text-xs">Share this code with your friends!</p>
+              <div className="flex flex-col items-center gap-2">
+                <p className="text-blue-400 font-mono tracking-wider text-lg">{t.lobby.room_code}: <span className="text-white font-black">{mpState.roomId}</span></p>
+                <button
+                  onClick={() => {
+                    const inviteUrl = `${window.location.origin}${window.location.pathname}?room=${mpState.roomId}`;
+                    navigator.clipboard.writeText(inviteUrl);
+                    playSFX('click');
+                    alert(language === 'en' ? 'Invite link copied to clipboard!' : 'Link za pozivnicu kopiran!');
+                  }}
+                  className="flex items-center gap-2 px-4 py-1.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-widest rounded-full border border-blue-500/20 transition-all active:scale-95"
+                >
+                  <span>🔗</span>
+                  {language === 'en' ? 'Copy Invite Link' : 'Kopiraj link za pozivanje'}
+                </button>
+              </div>
+              <p className="text-slate-500 text-xs mt-2">Share this code or link with your friends!</p>
             </div>
 
             <div className="space-y-3">
