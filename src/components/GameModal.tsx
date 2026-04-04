@@ -1380,12 +1380,12 @@ export interface ValueChainModalProps {
 }
 
 export function ValueChainModal({ task, mode, onResult, language }: ValueChainModalProps) {
-  const tDict = translations[language];
   const [items, setItems] = useState<{ id: string, text: string }[]>([]);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
   const [timeLeft, setTimeLeft] = useState(20);
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [correctCount, setCorrectCount] = useState(0);
+  const [finalChange, setFinalChange] = useState(0);
 
   useEffect(() => {
     // Initial shuffle
@@ -1456,13 +1456,30 @@ export function ValueChainModal({ task, mode, onResult, language }: ValueChainMo
   const checkOrder = (isTimeout = false) => {
     if (answered) return;
     setAnswered(true);
+    
     const correctOrder = task.phases.map(p => p[language]);
-    const currentOrder = items.map(i => i.text);
-    const correct = !isTimeout && JSON.stringify(correctOrder) === JSON.stringify(currentOrder);
-    setIsCorrect(correct);
+    let count = 0;
+    
+    if (!isTimeout) {
+      items.forEach((item, idx) => {
+        if (item.text === correctOrder[idx]) {
+          count++;
+        }
+      });
+    }
+
+    setCorrectCount(count);
+
+    // Calculate partial reward/penalty
+    // Each correct: +Reward/4
+    // Each wrong: -Penalty/4
+    const rewardPerPhase = task.reward / 4;
+    const penaltyPerPhase = task.penalty / 4;
+    const change = (count * rewardPerPhase) - ((4 - count) * penaltyPerPhase);
+    setFinalChange(change);
     
     setTimeout(() => {
-      onResult(correct, task.reward, task.penalty);
+      onResult(change > 0, change > 0 ? change : 0, change < 0 ? -change : 0);
     }, 2500);
   };
 
@@ -1495,36 +1512,44 @@ export function ValueChainModal({ task, mode, onResult, language }: ValueChainMo
         </p>
 
         <div className="flex flex-col gap-3 mb-8">
-          {items.map((item, idx) => (
-            <div
-              key={item.id}
-              data-index={idx}
-              draggable={!answered}
-              onDragStart={() => handleDragStart(idx)}
-              onDragOver={(e) => handleDragOver(e, idx)}
-              onDragEnd={() => setDraggedIndex(null)}
-              onTouchStart={() => handleTouchStart(idx)}
-              onTouchMove={(e) => handleTouchMove(e)}
-              onTouchEnd={() => setDraggedIndex(null)}
-              className={`
-                relative group flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-200
-                ${draggedIndex === idx ? 'opacity-50 scale-95 border-emerald-400 shadow-xl z-20' : 'bg-white/10 border-white/10 shadow-md'}
-                ${answered ? 'cursor-default' : 'cursor-grab active:cursor-grabbing'}
-                ${answered && isCorrect === true ? 'border-emerald-500/50 bg-emerald-500/20' : ''}
-                ${answered && isCorrect === false ? 'border-rose-500/50 bg-rose-500/20' : ''}
-              `}
-            >
-              <div className="w-8 h-8 flex items-center justify-center rounded-xl bg-white/10 border border-white/10 font-black text-white/40">
-                {idx + 1}
-              </div>
-              <span className="flex-1 text-white font-bold text-sm tracking-tight">{item.text}</span>
-              {!answered && (
-                <div className="text-white/20 group-hover:text-white/40 transition-colors">
-                  <span className="text-xl">☰</span>
+          {items.map((item, idx) => {
+            const isItemCorrect = answered && item.text === task.phases[idx][language];
+            return (
+              <div
+                key={item.id}
+                data-index={idx}
+                draggable={!answered}
+                onDragStart={() => handleDragStart(idx)}
+                onDragOver={(e) => handleDragOver(e, idx)}
+                onDragEnd={() => setDraggedIndex(null)}
+                onTouchStart={() => handleTouchStart(idx)}
+                onTouchMove={(e) => handleTouchMove(e)}
+                onTouchEnd={() => setDraggedIndex(null)}
+                className={`
+                  relative group flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-200
+                  ${draggedIndex === idx ? 'opacity-50 scale-95 border-emerald-400 shadow-xl z-20' : 'bg-white/10 border-white/10 shadow-md'}
+                  ${answered ? 'cursor-default' : 'cursor-grab active:cursor-grabbing'}
+                  ${answered && isItemCorrect ? 'border-emerald-500/50 bg-emerald-500/20' : ''}
+                  ${answered && !isItemCorrect ? 'border-rose-500/50 bg-rose-500/20' : ''}
+                `}
+              >
+                <div className={`w-8 h-8 flex items-center justify-center rounded-xl font-black text-xs border transition-colors ${
+                  answered ? (isItemCorrect ? 'bg-emerald-500 border-emerald-400 text-white' : 'bg-rose-500 border-rose-400 text-white') : 'bg-white/10 border-white/10 text-white/40'
+                }`}>
+                  {idx + 1}
                 </div>
-              )}
-            </div>
-          ))}
+                <span className="flex-1 text-white font-bold text-sm tracking-tight">{item.text}</span>
+                {!answered && (
+                  <div className="text-white/20 group-hover:text-white/40 transition-colors">
+                    <span className="text-xl">☰</span>
+                  </div>
+                )}
+                {answered && (
+                  <span className="text-lg">{isItemCorrect ? '✅' : '❌'}</span>
+                )}
+              </div>
+            );
+          })}
         </div>
 
         {!answered ? (
@@ -1535,21 +1560,23 @@ export function ValueChainModal({ task, mode, onResult, language }: ValueChainMo
             {language === 'en' ? 'CHECK ORDER! ✅' : 'PROVERI NIZ! ✅'}
           </button>
         ) : (
-          <div className={`rounded-3xl p-5 border-2 animate-modal-pop shadow-2xl ${isCorrect ? 'bg-emerald-500/30 border-emerald-400/30' : 'bg-rose-500/30 border-rose-400/30'}`}>
+          <div className={`rounded-3xl p-5 border-2 animate-modal-pop shadow-2xl ${finalChange >= 0 ? 'bg-emerald-500/30 border-emerald-400/30' : 'bg-rose-500/30 border-rose-400/30'}`}>
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-2xl">{isCorrect ? '🎉' : '💨'}</span>
+              <span className="text-2xl">{finalChange >= 0 ? '🎉' : '💨'}</span>
               <p className="text-white font-black text-xl">
-                {isCorrect ? tDict.modals.correct : (timeLeft === 0 ? (language === 'en' ? 'Time out!' : 'Vreme je isteklo!') : tDict.modals.wrong)}
+                {language === 'en' ? 'Result' : 'Rezultat'}: {correctCount}/4
               </p>
             </div>
             <p className="text-white/80 text-xs leading-relaxed mb-4 font-medium">
-              {isCorrect 
-                ? (language === 'en' ? "Excellent! You understand the process perfectly." : "Odlično! Savršeno razumete ovaj proces.")
-                : (language === 'en' ? "The process efficiency was low. Reorganizing costs money!" : "Efikasnost procesa je bila niska. Reorganizacija košta!")
+              {correctCount === 4 
+                ? (language === 'en' ? "Perfect! You understand the process completely." : "Savršeno! Potpuno razumete ovaj proces.")
+                : correctCount > 0 
+                  ? (language === 'en' ? `You got ${correctCount} phases right. Keep improving!` : `Pogodili ste ${correctCount} faze. Nastavite da učite!`)
+                  : (language === 'en' ? "The process was completely inefficient." : "Proces je bio potpuno neefikasan.")
               }
             </p>
-            <div className={`inline-block px-4 py-2 rounded-xl font-black text-lg shadow-lg ${isCorrect ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'}`}>
-              {isCorrect ? `+30,000 SC` : `-15,000 SC`}
+            <div className={`inline-block px-4 py-2 rounded-xl font-black text-lg shadow-lg ${finalChange >= 0 ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'}`}>
+              {finalChange >= 0 ? `+${finalChange.toLocaleString()} SC` : `-${Math.abs(finalChange).toLocaleString()} SC`}
             </div>
           </div>
         )}
