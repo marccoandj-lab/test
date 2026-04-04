@@ -1365,3 +1365,206 @@ export function CostAnalysisModal({ scenario, mode, onResult, language }: CostAn
     </Modal>
   );
 }
+
+// ── VALUE CHAIN MODAL ──
+export interface ValueChainModalProps {
+  task: {
+    title: { en: string; sr: string };
+    phases: { en: string; sr: string }[];
+    reward: number;
+    penalty: number;
+  };
+  mode: GameMode;
+  onResult: (correct: boolean, reward: number, penalty: number) => void;
+  language: 'en' | 'sr';
+}
+
+export function ValueChainModal({ task, mode, onResult, language }: ValueChainModalProps) {
+  const tDict = translations[language];
+  const [items, setItems] = useState<{ id: string, text: string }[]>([]);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [answered, setAnswered] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(20);
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    // Initial shuffle
+    const initialItems = task.phases.map((p, i) => ({ id: `p-${i}`, text: p[language] }));
+    let shuffled = [...initialItems];
+    // Simple shuffle that ensures it's NOT correct at start
+    while (JSON.stringify(shuffled.map(s => s.text)) === JSON.stringify(task.phases.map(p => p[language]))) {
+      shuffled = [...shuffled].sort(() => Math.random() - 0.5);
+    }
+    setItems(shuffled);
+  }, [task, language]);
+
+  useEffect(() => {
+    if (answered) return;
+    const timer = setInterval(() => {
+      setTimeLeft(t => {
+        if (t <= 1) {
+          clearInterval(timer);
+          checkOrder(true);
+          return 0;
+        }
+        return t - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [answered, items]);
+
+  const handleDragStart = (index: number) => {
+    if (answered) return;
+    setDraggedIndex(index);
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === index) return;
+
+    const newItems = [...items];
+    const draggedItem = newItems[draggedIndex];
+    newItems.splice(draggedIndex, 1);
+    newItems.splice(index, 0, draggedItem);
+    setDraggedIndex(index);
+    setItems(newItems);
+  };
+
+  const handleTouchStart = (index: number) => {
+    if (answered) return;
+    setDraggedIndex(index);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (draggedIndex === null || answered) return;
+    const touch = e.touches[0];
+    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    const dropZone = element?.closest('[data-index]');
+    if (dropZone) {
+      const newIndex = parseInt(dropZone.getAttribute('data-index') || '0');
+      if (newIndex !== draggedIndex) {
+        const newItems = [...items];
+        const draggedItem = newItems[draggedIndex];
+        newItems.splice(draggedIndex, 1);
+        newItems.splice(newIndex, 0, draggedItem);
+        setDraggedIndex(newIndex);
+        setItems(newItems);
+      }
+    }
+  };
+
+  const checkOrder = (isTimeout = false) => {
+    if (answered) return;
+    setAnswered(true);
+    const correctOrder = task.phases.map(p => p[language]);
+    const currentOrder = items.map(i => i.text);
+    const correct = !isTimeout && JSON.stringify(correctOrder) === JSON.stringify(currentOrder);
+    setIsCorrect(correct);
+    
+    setTimeout(() => {
+      onResult(correct, task.reward, task.penalty);
+    }, 2500);
+  };
+
+  const timerColor = timeLeft > 10 ? 'text-emerald-400' : timeLeft > 5 ? 'text-amber-400' : 'text-rose-400';
+
+  return (
+    <Modal onClose={() => { }} mode={mode} language={language}>
+      <FloatingSymbols symbols={['🔗', '⛓️', '⚙️', '🔄']} animationClass="animate-float-random" count={8} />
+      <div className="p-6 relative z-10">
+        <div className="flex items-center gap-4 mb-6">
+          <div className="relative">
+            <div className="text-4xl animate-bounce">🔗</div>
+            <div className="absolute inset-0 bg-emerald-500/20 blur-xl rounded-full -z-10" />
+          </div>
+          <div className="flex-1">
+            <p className="text-white/40 text-[10px] uppercase font-black tracking-[0.2em] mb-0.5">{language === 'en' ? 'VALUE CHAIN' : 'LANCI VREDNOSTI'}</p>
+            <p className="text-white font-black text-lg tracking-tight leading-tight">
+              {task.title[language]}
+            </p>
+          </div>
+          {!answered && (
+            <div className={`relative w-14 h-14 flex items-center justify-center rounded-2xl border-2 border-white/20 bg-white/5 ${timerColor} font-black text-xl shadow-inner animate-pulse`}>
+              {timeLeft}
+            </div>
+          )}
+        </div>
+
+        <p className="text-white/70 text-sm mb-6 font-medium leading-relaxed">
+          {language === 'en' ? 'Drag and drop cards to arrange the process in the correct logical order!' : 'Prevucite kartice da poređate proces u tačan logički niz!'}
+        </p>
+
+        <div className="flex flex-col gap-3 mb-8">
+          {items.map((item, idx) => (
+            <div
+              key={item.id}
+              data-index={idx}
+              draggable={!answered}
+              onDragStart={() => handleDragStart(idx)}
+              onDragOver={(e) => handleDragOver(e, idx)}
+              onDragEnd={() => setDraggedIndex(null)}
+              onTouchStart={() => handleTouchStart(idx)}
+              onTouchMove={(e) => handleTouchMove(e)}
+              onTouchEnd={() => setDraggedIndex(null)}
+              className={`
+                relative group flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-200
+                ${draggedIndex === idx ? 'opacity-50 scale-95 border-emerald-400 shadow-xl z-20' : 'bg-white/10 border-white/10 shadow-md'}
+                ${answered ? 'cursor-default' : 'cursor-grab active:cursor-grabbing'}
+                ${answered && isCorrect === true ? 'border-emerald-500/50 bg-emerald-500/20' : ''}
+                ${answered && isCorrect === false ? 'border-rose-500/50 bg-rose-500/20' : ''}
+              `}
+            >
+              <div className="w-8 h-8 flex items-center justify-center rounded-xl bg-white/10 border border-white/10 font-black text-white/40">
+                {idx + 1}
+              </div>
+              <span className="flex-1 text-white font-bold text-sm tracking-tight">{item.text}</span>
+              {!answered && (
+                <div className="text-white/20 group-hover:text-white/40 transition-colors">
+                  <span className="text-xl">☰</span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {!answered ? (
+          <button
+            onClick={() => checkOrder(false)}
+            className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black py-5 rounded-[1.5rem] transition-all active:scale-95 text-xl shadow-xl shadow-emerald-900/20 border-b-4 border-emerald-700 active:border-b-0"
+          >
+            {language === 'en' ? 'CHECK ORDER! ✅' : 'PROVERI NIZ! ✅'}
+          </button>
+        ) : (
+          <div className={`rounded-3xl p-5 border-2 animate-modal-pop shadow-2xl ${isCorrect ? 'bg-emerald-500/30 border-emerald-400/30' : 'bg-rose-500/30 border-rose-400/30'}`}>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-2xl">{isCorrect ? '🎉' : '💨'}</span>
+              <p className="text-white font-black text-xl">
+                {isCorrect ? tDict.modals.correct : (timeLeft === 0 ? (language === 'en' ? 'Time out!' : 'Vreme je isteklo!') : tDict.modals.wrong)}
+              </p>
+            </div>
+            <p className="text-white/80 text-xs leading-relaxed mb-4 font-medium">
+              {isCorrect 
+                ? (language === 'en' ? "Excellent! You understand the process perfectly." : "Odlično! Savršeno razumete ovaj proces.")
+                : (language === 'en' ? "The process efficiency was low. Reorganizing costs money!" : "Efikasnost procesa je bila niska. Reorganizacija košta!")
+              }
+            </p>
+            <div className={`inline-block px-4 py-2 rounded-xl font-black text-lg shadow-lg ${isCorrect ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'}`}>
+              {isCorrect ? `+30,000 SC` : `-15,000 SC`}
+            </div>
+          </div>
+        )}
+
+        <div className="flex gap-3 mt-6">
+          <div className="flex-1 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-3 flex flex-col items-center">
+            <p className="text-emerald-400/60 text-[8px] font-black uppercase tracking-widest mb-1">{language === 'en' ? 'REWARD' : 'NAGRADA'}</p>
+            <p className="text-emerald-400 font-black text-sm">+30,000 SC</p>
+          </div>
+          <div className="flex-1 bg-rose-500/10 border border-rose-500/20 rounded-2xl p-3 flex flex-col items-center">
+            <p className="text-rose-400/60 text-[8px] font-black uppercase tracking-widest mb-1">{language === 'en' ? 'PENALTY' : 'KAZNA'}</p>
+            <p className="text-rose-400 font-black text-sm">-15,000 SC</p>
+          </div>
+        </div>
+      </div>
+    </Modal>
+  );
+}

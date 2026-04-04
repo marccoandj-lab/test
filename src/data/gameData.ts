@@ -1,4 +1,4 @@
-export type FieldType = 'start' | 'income' | 'expense' | 'quiz' | 'jail' | 'switch' | 'investment' | 'tax_small' | 'tax_large' | 'auction_insurance' | 'cost_analysis';
+export type FieldType = 'start' | 'income' | 'expense' | 'quiz' | 'jail' | 'switch' | 'investment' | 'tax_small' | 'tax_large' | 'auction_insurance' | 'cost_analysis' | 'value_chain';
 export type GameMode = 'finance' | 'sustainability';
 
 export interface Level {
@@ -17,6 +17,14 @@ export interface QuizQuestion {
   options: { en: string[]; sr: string[] };
   correct: number; 
   explanation: { en: string; sr: string };
+  mode: GameMode;
+  reward: number;
+  penalty: number;
+}
+
+export interface ValueChainTask {
+  title: { en: string; sr: string };
+  phases: { en: string; sr: string }[]; // 4 strings in correct order
   mode: GameMode;
   reward: number;
   penalty: number;
@@ -3127,5 +3135,311 @@ export const sustainabilityCostAnalysis: CostAnalysisScenario[] = [
     correct: 1,
     explanation: { en: "Sharing economy models reduce the need for mass production of seldom-used items.", sr: "Modeli ekonomije deljenja smanjuju potrebu za masovnom proizvodnjom retko korišćenih stvari." },
     mode: 'sustainability', reward: 40000, penalty: 15000
+  }
+];
+
+export const financeValueChains: ValueChainTask[] = [
+  {
+    title: { en: "Production Process", sr: "Proizvodni proces" },
+    phases: [{ en: "Raw Materials", sr: "Sirovine" }, { en: "Manufacturing", sr: "Proizvodnja" }, { en: "Distribution", sr: "Distribucija" }, { en: "Sales", sr: "Prodaja" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Software Development", sr: "Razvoj softvera" },
+    phases: [{ en: "Idea", sr: "Ideja" }, { en: "Design", sr: "Dizajn" }, { en: "Testing", sr: "Testiranje" }, { en: "Launch", sr: "Lansiranje" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Supply Chain", sr: "Lanac snabdevanja" },
+    phases: [{ en: "Extraction", sr: "Ekstrakcija" }, { en: "Processing", sr: "Obrada" }, { en: "Packaging", sr: "Pakovanje" }, { en: "Transport", sr: "Transport" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Real Estate Development", sr: "Razvoj nekretnina" },
+    phases: [{ en: "Planning", sr: "Planiranje" }, { en: "Procurement", sr: "Nabavka" }, { en: "Construction", sr: "Izgradnja" }, { en: "Sale", sr: "Prodaja" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Agriculture Business", sr: "Poljoprivredni biznis" },
+    phases: [{ en: "Sowing", sr: "Setva" }, { en: "Harvest", sr: "Žetva" }, { en: "Processing", sr: "Prerada" }, { en: "Store", sr: "Prodavnica" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Financial Investment", sr: "Finansijska investicija" },
+    phases: [{ en: "Borrowing", sr: "Zaduživanje" }, { en: "Investing", sr: "Investiranje" }, { en: "Profit", sr: "Profit" }, { en: "Debt Repayment", sr: "Otplata duga" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Market Research", sr: "Istraživanje tržišta" },
+    phases: [{ en: "Surveying", sr: "Anketiranje" }, { en: "Analysis", sr: "Analiza" }, { en: "Report", sr: "Izveštaj" }, { en: "Strategy", sr: "Strategija" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Logistics", sr: "Logistika" },
+    phases: [{ en: "Receiving", sr: "Prijem robe" }, { en: "Storage", sr: "Skladištenje" }, { en: "Picking", sr: "Komisioniranje" }, { en: "Dispatch", sr: "Otprema" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Metallurgy", sr: "Metalurgija" },
+    phases: [{ en: "Mining", sr: "Rudarstvo" }, { en: "Smelting", sr: "Topljenje" }, { en: "Rolling", sr: "Valjanje" }, { en: "Final Product", sr: "Finalni proizvod" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Furniture Industry", sr: "Industrija nameštaja" },
+    phases: [{ en: "Wood", sr: "Drvo" }, { en: "Sawn Timber", sr: "Rezana građa" }, { en: "Furniture", sr: "Nameštaj" }, { en: "Showroom", sr: "Salon" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Textile Industry", sr: "Tekstilna industrija" },
+    phases: [{ en: "Cotton", sr: "Pamuk" }, { en: "Yarn", sr: "Predivo" }, { en: "Weaving", sr: "Tkanje" }, { en: "Clothing", sr: "Odeća" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Petrochemicals", sr: "Petrohemija" },
+    phases: [{ en: "Oil", sr: "Nafta" }, { en: "Refinery", sr: "Rafinerija" }, { en: "Plastic", sr: "Plastika" }, { en: "Packaging", sr: "Ambalaža" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Product Innovation", sr: "Inovacija proizvoda" },
+    phases: [{ en: "Concept", sr: "Koncept" }, { en: "Prototype", sr: "Prototip" }, { en: "Mass Production", sr: "Serijska proizvodnja" }, { en: "Marketing", sr: "Marketing" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "B2B Sales", sr: "B2B prodaja" },
+    phases: [{ en: "Inquiry", sr: "Upit" }, { en: "Offer", sr: "Ponuda" }, { en: "Invoice", sr: "Faktura" }, { en: "Payment", sr: "Plaćanje" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "HR Management", sr: "HR menadžment" },
+    phases: [{ en: "Recruitment", sr: "Regrutacija" }, { en: "Training", sr: "Obuka" }, { en: "Work", sr: "Rad" }, { en: "Retirement", sr: "Penzionisanje" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Bakery Process", sr: "Pekarski proces" },
+    phases: [{ en: "Wheat", sr: "Pšenica" }, { en: "Mill", sr: "Mlin" }, { en: "Bakery", sr: "Pekara" }, { en: "Bread", sr: "Hleb" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Juice Production", sr: "Proizvodnja soka" },
+    phases: [{ en: "Fruit", sr: "Voće" }, { en: "Squeezing", sr: "Ceđenje" }, { en: "Pasteurization", sr: "Pasterizacija" }, { en: "Juice", sr: "Sok" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Footwear Industry", sr: "Industrija obuće" },
+    phases: [{ en: "Leather", sr: "Koža" }, { en: "Tanning", sr: "Štavljenje" }, { en: "Cutting", sr: "Krojenje" }, { en: "Footwear", sr: "Obuća" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Construction", sr: "Građevinarstvo" },
+    phases: [{ en: "Iron", sr: "Gvožđe" }, { en: "Steel", sr: "Čelik" }, { en: "Construction", sr: "Konstrukcija" }, { en: "Bridge", sr: "Most" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Dairy Process", sr: "Mlečni proces" },
+    phases: [{ en: "Milk", sr: "Mleko" }, { en: "Pasteurization", sr: "Pasterizacija" }, { en: "Fermentation", sr: "Fermentacija" }, { en: "Yogurt", sr: "Jogurt" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Glass Production", sr: "Proizvodnja stakla" },
+    phases: [{ en: "Sand", sr: "Pesak" }, { en: "Glass", sr: "Staklo" }, { en: "Bottle", sr: "Boca" }, { en: "Drink", sr: "Piće" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Energy Sector", sr: "Energetski sektor" },
+    phases: [{ en: "Coal", sr: "Ugalj" }, { en: "Combustion", sr: "Sagorevanje" }, { en: "Electricity", sr: "Struja" }, { en: "Consumer", sr: "Potrošač" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Brick Making", sr: "Pravljenje cigle" },
+    phases: [{ en: "Clay", sr: "Glina" }, { en: "Baking", sr: "Pečenje" }, { en: "Brick", sr: "Cigla" }, { en: "Wall", sr: "Zid" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Wool Industry", sr: "Industrija vune" },
+    phases: [{ en: "Wool", sr: "Vuna" }, { en: "Cleaning", sr: "Čišćenje" }, { en: "Spinning", sr: "Predenje" }, { en: "Sweater", sr: "Džemper" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Sugar Production", sr: "Proizvodnja šećera" },
+    phases: [{ en: "Sugar Beet", sr: "Šećerna repa" }, { en: "Diffusion", sr: "Difuzija" }, { en: "Crystallization", sr: "Kristalizacija" }, { en: "Sugar", sr: "Šećer" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Chocolate Making", sr: "Pravljenje čokolade" },
+    phases: [{ en: "Cocoa", sr: "Kakao" }, { en: "Roasting", sr: "Prženje" }, { en: "Grinding", sr: "Mlevenje" }, { en: "Chocolate", sr: "Čokolada" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Tobacco Process", sr: "Duvanski proces" },
+    phases: [{ en: "Tobacco", sr: "Duvan" }, { en: "Drying", sr: "Sušenje" }, { en: "Cutting", sr: "Seckanje" }, { en: "Cigarette", sr: "Cigareta" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Rubber Industry", sr: "Industrija gume" },
+    phases: [{ en: "Rubber", sr: "Kaučuk" }, { en: "Vulcanization", sr: "Vulkanizacija" }, { en: "Tire", sr: "Guma" }, { en: "Car", sr: "Automobil" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Aluminium Production", sr: "Proizvodnja aluminijuma" },
+    phases: [{ en: "Aluminium", sr: "Aluminijum" }, { en: "Electrolysis", sr: "Elektroliza" }, { en: "Sheet", sr: "Lim" }, { en: "Can", sr: "Konzerva" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Electronics", sr: "Elektronika" },
+    phases: [{ en: "Silicon", sr: "Silicijum" }, { en: "Wafer", sr: "Wafer" }, { en: "Chip", sr: "Čip" }, { en: "Computer", sr: "Računar" }],
+    mode: 'finance', reward: 30000, penalty: 15000
+  }
+];
+
+export const sustainabilityValueChains: ValueChainTask[] = [
+  {
+    title: { en: "Circular Lifecycle", sr: "Cirkularni životni ciklus" },
+    phases: [{ en: "Design", sr: "Dizajn" }, { en: "Production", sr: "Proizvodnja" }, { en: "Repair", sr: "Popravka" }, { en: "Recycling", sr: "Reciklaža" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Organic Waste", sr: "Organski otpad" },
+    phases: [{ en: "Food Waste", sr: "Ostatak hrane" }, { en: "Composting", sr: "Kompostiranje" }, { en: "Fertilizer", sr: "Đubrivo" }, { en: "New Crop", sr: "Novi usev" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Biofuel Cycle", sr: "Ciklus biogoriva" },
+    phases: [{ en: "Used Oil", sr: "Korišćeno ulje" }, { en: "Collection", sr: "Kolekcija" }, { en: "Biodiesel", sr: "Biodizel" }, { en: "Fuel", sr: "Gorivo" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Textile Recycling", sr: "Reciklaža tekstila" },
+    phases: [{ en: "Old Clothes", sr: "Stara odeća" }, { en: "Sorting", sr: "Sortiranje" }, { en: "Fiber Processing", sr: "Prerada vlakana" }, { en: "New Fabric", sr: "Nova tkanina" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Battery Lifecycle", sr: "Životni ciklus baterije" },
+    phases: [{ en: "Battery", sr: "Baterija" }, { en: "Collection", sr: "Prikupljanje" }, { en: "Metal Extraction", sr: "Ekstrakcija metala" }, { en: "New Battery", sr: "Nova baterija" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Water Recovery", sr: "Povraćaj vode" },
+    phases: [{ en: "Wastewater", sr: "Otpadna voda" }, { en: "Filtration", sr: "Filtracija" }, { en: "Purification", sr: "Prečišćavanje" }, { en: "Irrigation", sr: "Navodnjavanje" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Wood Waste", sr: "Drvni otpad" },
+    phases: [{ en: "Wood Waste", sr: "Drveni otpad" }, { en: "Grinding", sr: "Mlevenje" }, { en: "Pellet", sr: "Pelet" }, { en: "Energy", sr: "Energija" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Glass Circularity", sr: "Cirkularnost stakla" },
+    phases: [{ en: "Glass Bottle", sr: "Staklena boca" }, { en: "Washing", sr: "Pranje" }, { en: "Sterilization", sr: "Sterilizacija" }, { en: "Refilling", sr: "Ponovno punjenje" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "E-Waste", sr: "Elektronski otpad" },
+    phases: [{ en: "E-Waste", sr: "Elektronski otpad" }, { en: "Dismantling", sr: "Demontaža" }, { en: "Spare Parts", sr: "Rezervni delovi" }, { en: "Service", sr: "Servis" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Paper Cycle", sr: "Ciklus papira" },
+    phases: [{ en: "Paper", sr: "Papir" }, { en: "Pulping", sr: "Pulpiranje" }, { en: "De-inking", sr: "Deinkovanje" }, { en: "New Paper", sr: "Novi papir" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Plastic Recycling", sr: "Reciklaža plastike" },
+    phases: [{ en: "Plastic", sr: "Plastika" }, { en: "Shredding", sr: "Usitnjavanje" }, { en: "Granulation", sr: "Granulacija" }, { en: "New Product", sr: "Novi proizvod" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Auto Remanufacturing", sr: "Auto remanufaktura" },
+    phases: [{ en: "Car", sr: "Automobil" }, { en: "Disassembly", sr: "Rastavljanje" }, { en: "Remanufacture", sr: "Remanufaktura" }, { en: "Parts", sr: "Delovi" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Bio-Energy", sr: "Bio-energija" },
+    phases: [{ en: "Bio-waste", sr: "Bio-otpad" }, { en: "Biogas Plant", sr: "Biogasara" }, { en: "Methane", sr: "Metan" }, { en: "Electricity", sr: "Struja" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Fungi Economy", sr: "Ekonomija gljiva" },
+    phases: [{ en: "Coffee", sr: "Kafa" }, { en: "Grounds", sr: "Talog" }, { en: "Substrate", sr: "Supstrat za gljive" }, { en: "Mushrooms", sr: "Pečurke" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Tire Pyrolysis", sr: "Piroliza guma" },
+    phases: [{ en: "Tire", sr: "Guma" }, { en: "Pyrolysis", sr: "Piroliza" }, { en: "Oil/Black", sr: "Ulje/Čađ" }, { en: "Industry", sr: "Industrija" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Furniture Reuse", sr: "Ponovna upotreba nameštaja" },
+    phases: [{ en: "Furniture", sr: "Nameštaj" }, { en: "Restoration", sr: "Restauracija" }, { en: "Redesign", sr: "Redizajn" }, { en: "Second Hand", sr: "Second hand" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Textile Insulation", sr: "Tekstilna izolacija" },
+    phases: [{ en: "Textile Waste", sr: "Tekstilni otpaci" }, { en: "Insulation", sr: "Izolacija" }, { en: "Construction", sr: "Građevina" }, { en: "Efficiency", sr: "Energetska efikasnost" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Rainwater Harvesting", sr: "Sakupljanje kišnice" },
+    phases: [{ en: "Rainwater", sr: "Kišnica" }, { en: "Collection", sr: "Sakupljanje" }, { en: "Filtration", sr: "Filtracija" }, { en: "Technical Water", sr: "Tehnička voda" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Metal Recycling", sr: "Reciklaža metala" },
+    phases: [{ en: "Metal Scrap", sr: "Metalni strugot" }, { en: "Smelting", sr: "Topljenje" }, { en: "Alloy", sr: "Legura" }, { en: "Tool", sr: "Alat" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Bread Circularity", sr: "Cirkularnost hleba" },
+    phases: [{ en: "Old Bread", sr: "Stari hleb" }, { en: "Drying", sr: "Sušenje" }, { en: "Breadcrumbs", sr: "Prezle" }, { en: "Food", sr: "Hrana" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Food Surplus", sr: "Višak hrane" },
+    phases: [{ en: "Surplus Food", sr: "Surplus hrane" }, { en: "Donation", sr: "Donacija" }, { en: "Food Bank", sr: "Banka hrane" }, { en: "Consumers", sr: "Potrošači" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Panel Reuse", sr: "Ponovna upotreba panela" },
+    phases: [{ en: "Used Panels", sr: "Polovni paneli" }, { en: "Testing", sr: "Testiranje" }, { en: "Storage", sr: "Skladištenje energije" }, { en: "Rural Grid", sr: "Ruralna mreža" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Cardboard Cycle", sr: "Ciklus kartona" },
+    phases: [{ en: "Cardboard", sr: "Karton" }, { en: "Shredding", sr: "Seckanje" }, { en: "Protective Packaging", sr: "Zaštitna ambalaža" }, { en: "Transport", sr: "Transport" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Seaweed Bioplastic", sr: "Bioplastika od morske trave" },
+    phases: [{ en: "Seaweed", sr: "Morska trava" }, { en: "Processing", sr: "Prerada" }, { en: "Bioplastic", sr: "Bioplastika" }, { en: "Bio-Cup", sr: "Biorazgradiva čaša" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Bark Mulching", sr: "Malčiranje kore" },
+    phases: [{ en: "Bark", sr: "Kora drveta" }, { en: "Mulching", sr: "Malčiranje" }, { en: "Garden", sr: "Bašta" }, { en: "Moisture", sr: "Očuvanje vlage" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Mattress Recycling", sr: "Reciklaža dušeka" },
+    phases: [{ en: "Old Mattresses", sr: "Stari dušeci" }, { en: "Disassembly", sr: "Rastavljanje" }, { en: "Foam", sr: "Pena" }, { en: "Mats", sr: "Sportske strunjače" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Net to Nylon", sr: "Od mreže do najlona" },
+    phases: [{ en: "Fishing Nets", sr: "Ribarske mreže" }, { en: "Processing", sr: "Prerada" }, { en: "Nylon", sr: "Najlon" }, { en: "Swimwear", sr: "Kupaći kostimi" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Construction Waste", sr: "Građevinski otpad" },
+    phases: [{ en: "Demolition Waste", sr: "Građevinski šut" }, { en: "Crushing", sr: "Drobljenje" }, { en: "Aggregate", sr: "Agregat" }, { en: "New Road", sr: "Novi put" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Leather Scraps", sr: "Ostaci kože" },
+    phases: [{ en: "Leather Scraps", sr: "Ostaci kože" }, { en: "Patchwork", sr: "Pačvork" }, { en: "Accessories", sr: "Aksesoari" }, { en: "Sale", sr: "Prodaja" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
+  },
+  {
+    title: { en: "Deposit System", sr: "Depozitni sistem" },
+    phases: [{ en: "Packaging", sr: "Ambalaža" }, { en: "Deposit System", sr: "Depozitni sistem" }, { en: "Return", sr: "Povraćaj" }, { en: "Reuse", sr: "Ponovna upotreba" }],
+    mode: 'sustainability', reward: 30000, penalty: 15000
   }
 ];

@@ -27,6 +27,7 @@ export type Message =
   | { type: 'ACTION_DICE_ROLL'; steps: number }
   | { type: 'ACTION_QUIZ_RESULT'; reward: number; penalty: number; success: boolean }
   | { type: 'ACTION_COST_ANALYSIS_RESULT'; reward: number; penalty: number; success: boolean }
+  | { type: 'ACTION_VALUE_CHAIN_RESULT'; reward: number; penalty: number; success: boolean }
   | { type: 'ACTION_TAX_PAY'; amount: number }
   | { type: 'ACTION_TAX_COLLECT' }
   | { type: 'ACTION_INVEST'; result: number; amount: number; stake: number }
@@ -101,6 +102,8 @@ class MultiplayerManager {
       wrongQuizzes: 0,
       costAnalysisCorrect: 0,
       costAnalysisWrong: 0,
+      valueChainCorrect: 0,
+      valueChainWrong: 0,
       investmentGains: 0,
       investmentLosses: 0,
       jailVisits: 0,
@@ -506,6 +509,15 @@ class MultiplayerManager {
         } else {
           player.capital -= msg.penalty;
           player.stats.costAnalysisWrong++;
+        }
+        break;
+      case 'ACTION_VALUE_CHAIN_RESULT':
+        if (msg.success) {
+          player.capital += msg.reward;
+          player.stats.valueChainCorrect++;
+        } else {
+          player.capital -= msg.penalty;
+          player.stats.valueChainWrong++;
         }
         break;
       case 'ACTION_TAX_PAY':

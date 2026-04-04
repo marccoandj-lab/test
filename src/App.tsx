@@ -32,6 +32,8 @@ export interface Profile {
   wrong_quizzes: number;
   cost_analysis_correct: number;
   cost_analysis_wrong: number;
+  value_chain_correct: number;
+  value_chain_wrong: number;
   investment_gains: number;
   investment_losses: number;
   jail_visits: number;
@@ -167,6 +169,8 @@ export const App: React.FC = () => {
     wrongQuizzes: 0,
     costAnalysisCorrect: 0,
     costAnalysisWrong: 0,
+    valueChainCorrect: 0,
+    valueChainWrong: 0,
 
     investmentGains: 0,
     investmentLosses: 0,
@@ -1047,6 +1051,9 @@ export const App: React.FC = () => {
                 } else if (activeModal === 'cost_analysis') {
                   if (change > 0) increments.cost_analysis_correct = 1;
                   else increments.cost_analysis_wrong = 1;
+                } else if (activeModal === 'value_chain') {
+                  if (change > 0) increments.value_chain_correct = 1;
+                  else increments.value_chain_wrong = 1;
                 } else if (activeModal === 'investment') {
                   if (change > 0) increments.investment_gains = change;
                   else if (change < 0) increments.investment_losses = Math.abs(change);
@@ -1064,6 +1071,9 @@ export const App: React.FC = () => {
                 } else if (activeModal === 'cost_analysis') {
                   if (change > 0) setSinglePlayerStats(prev => ({ ...prev, costAnalysisCorrect: prev.costAnalysisCorrect + 1 }));
                   else setSinglePlayerStats(prev => ({ ...prev, costAnalysisWrong: prev.costAnalysisWrong + 1 }));
+                } else if (activeModal === 'value_chain') {
+                  if (change > 0) setSinglePlayerStats(prev => ({ ...prev, valueChainCorrect: prev.valueChainCorrect + 1 }));
+                  else setSinglePlayerStats(prev => ({ ...prev, valueChainWrong: prev.valueChainWrong + 1 }));
                 } else if (activeModal === 'investment') {
                   if (change > 0) setSinglePlayerStats(prev => ({ ...prev, investmentGains: prev.investmentGains + change }));
                   else if (change < 0) setSinglePlayerStats(prev => ({ ...prev, investmentLosses: prev.investmentLosses + Math.abs(change) }));
@@ -1079,6 +1089,13 @@ export const App: React.FC = () => {
                 } else if (activeModal === 'cost_analysis') {
                   multiplayer.sendAction({
                     type: 'ACTION_COST_ANALYSIS_RESULT',
+                    reward: change > 0 ? change : 0,
+                    penalty: change < 0 ? -change : 0,
+                    success: change > 0
+                  });
+                } else if (activeModal === 'value_chain') {
+                  multiplayer.sendAction({
+                    type: 'ACTION_VALUE_CHAIN_RESULT',
                     reward: change > 0 ? change : 0,
                     penalty: change < 0 ? -change : 0,
                     success: change > 0

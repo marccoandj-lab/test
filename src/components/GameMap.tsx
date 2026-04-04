@@ -129,6 +129,7 @@ export function GameMap({ levels, currentLevel, currentPlayer, mode, balance, on
       case 'tax_large': return t.ui.field_tax_collect;
       case 'auction_insurance': return mode === 'finance' ? t.ui.field_auction : t.ui.field_insurance;
       case 'cost_analysis': return t.ui.field_cost_analysis;
+      case 'value_chain': return t.ui.field_value_chain;
       default: return t.ui.field_generic;
     }
   };

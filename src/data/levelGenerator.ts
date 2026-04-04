@@ -113,6 +113,16 @@ const getFieldMeta = (type: FieldType, _mode: GameMode): Omit<Level, 'id'> => {
         borderColor: 'border-indigo-400',
         glowColor: 'shadow-indigo-500/50',
       };
+    case 'value_chain':
+      return {
+        type,
+        label: _mode === 'finance' ? 'Value Chain' : 'Lanac vrednosti',
+        icon: '🔗',
+        color: 'text-white',
+        bgColor: 'bg-gradient-to-br from-emerald-800 to-emerald-950',
+        borderColor: 'border-emerald-600',
+        glowColor: 'shadow-emerald-700/50',
+      };
     default:
       return {
         type,
@@ -132,7 +142,8 @@ const getRandomFieldType = (mode: GameMode, isSinglePlayer: boolean): FieldType 
     'expense',
     'quiz', 'quiz', 'quiz', 'quiz', 'quiz', 'quiz',
     'investment', 'investment',
-    'cost_analysis', 'cost_analysis', 'cost_analysis', 'cost_analysis', // Increased frequency
+    'cost_analysis', 'cost_analysis', 'cost_analysis', 'cost_analysis',
+    'value_chain', 'value_chain', 'value_chain', 'value_chain',
     'switch',
     'jail',
     'tax_small', 'tax_small',

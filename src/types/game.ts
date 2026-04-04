@@ -27,6 +27,8 @@ export interface Player {
     wrongQuizzes: number;
     costAnalysisCorrect: number;
     costAnalysisWrong: number;
+    valueChainCorrect: number;
+    valueChainWrong: number;
 
     investmentGains: number;
     investmentLosses: number;

@@ -1,5 +1,5 @@
-import { GameMode, financeQuizzes, sustainabilityQuizzes, incomeEvents, expenseEvents, jailMessages, Level, financeCostAnalysis, sustainabilityCostAnalysis } from '../data/gameData';
-import { IncomeModal, ExpenseModal, QuizModal, JailModal, SwitchModal, InvestmentModal, TaxSmallModal, TaxLargeModal, AuctionModal, InsuranceModal, VictoryModal, JailSkipModal, TurnAnnouncementModal, CostAnalysisModal } from './GameModal';
+import { GameMode, financeQuizzes, sustainabilityQuizzes, incomeEvents, expenseEvents, jailMessages, Level, financeCostAnalysis, sustainabilityCostAnalysis, financeValueChains, sustainabilityValueChains } from '../data/gameData';
+import { IncomeModal, ExpenseModal, QuizModal, JailModal, SwitchModal, InvestmentModal, TaxSmallModal, TaxLargeModal, AuctionModal, InsuranceModal, VictoryModal, JailSkipModal, TurnAnnouncementModal, CostAnalysisModal, ValueChainModal } from './GameModal';
 import { multiplayer } from '../services/MultiplayerManager';
 import { Player } from '../types/game';
 
@@ -75,6 +75,8 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
           wrongQuizzes: 0,
           costAnalysisCorrect: 0,
           costAnalysisWrong: 0,
+          valueChainCorrect: 0,
+          valueChainWrong: 0,
           investmentGains: 0,
           investmentLosses: 0,
           jailVisits: 0,
@@ -139,6 +141,7 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
 
   const currentQuizzes = mode === 'finance' ? financeQuizzes : sustainabilityQuizzes;
   const currentCostAnalysis = mode === 'finance' ? financeCostAnalysis : sustainabilityCostAnalysis;
+  const currentValueChains = mode === 'finance' ? financeValueChains : sustainabilityValueChains;
 
 
   // Pick random content
@@ -147,6 +150,7 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
   // For now, let's just use levelIndex but we could add a session seed.
   const quiz = currentQuizzes[levelIndex % currentQuizzes.length];
   const costAnalysisScenario = currentCostAnalysis[levelIndex % currentCostAnalysis.length];
+  const valueChainTask = currentValueChains[levelIndex % currentValueChains.length];
 
   const income = incomeEvents[levelIndex % incomeEvents.length];
   const expense = expenseEvents[levelIndex % expenseEvents.length];
@@ -232,6 +236,18 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
           onResult={(correct, reward, penalty) => {
             onBalanceChange(correct ? reward : -penalty);
             // Optionally update stats here if desired (like we do for quiz using correct/wrong but stats track it in App/Multiplayer)
+            onClose();
+          }}
+        />
+      );
+    case 'value_chain':
+      return (
+        <ValueChainModal
+          task={valueChainTask}
+          mode={mode}
+          language={language}
+          onResult={(correct, reward, penalty) => {
+            onBalanceChange(correct ? reward : -penalty);
             onClose();
           }}
         />
