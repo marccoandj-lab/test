@@ -53,6 +53,8 @@ export const translations = {
       notifications_disabled: "Reminders Inactive",
       notification_slots: "Reminder Times",
       notification_info: "Get creative reminders to build your economic empire!",
+      connecting: "Connecting",
+      syncing_assets: "Syncing Game Assets",
     },
     lobby: {
       profile: "My Profile",
@@ -208,6 +210,8 @@ export const translations = {
       notifications_disabled: "Podsetnici Neaktivni",
       notification_slots: "Vreme podsetnika",
       notification_info: "Dobijajte kreativne podsetnike da gradite svoje ekonomsko carstvo!",
+      connecting: "Povezivanje",
+      syncing_assets: "Sinhronizacija imovine igre",
     },
     lobby: {
       profile: "Moj Profil",

@@ -47,6 +47,7 @@ export type Message =
 class MultiplayerManager {
   private peer: Peer | null = null;
   private connections: Map<string, DataConnection> = new Map();
+  private peerIdToPlayerId: Map<string, string> = new Map();
   private hostConnection: DataConnection | null = null;
   private onStateUpdate: (state: GameState) => void = () => { };
   private onError: (error: string) => void = () => { };
@@ -125,7 +126,7 @@ class MultiplayerManager {
     this.peer = new Peer(roomId, this.getPeerConfig());
     
     this.peer.on('error', (err) => {
-      console.error('Peer error:', err.type);
+      console.error('Peer error (Status:', this.state.status, '):', err.type, err.message);
       if (err.type === 'unavailable-id') {
         this.onError('Room ID already exists. Try again.');
       } else {
@@ -220,6 +221,7 @@ class MultiplayerManager {
       });
 
       conn.on('close', () => {
+        console.warn('Disconnected from Host (Player:', this.myId, ')');
         alert('Disconnected from Host');
         window.location.reload();
       });
@@ -228,33 +230,64 @@ class MultiplayerManager {
 
   private handleMessage(conn: DataConnection, msg: Message) {
     if (this.myProfile?.isHost) {
-      const senderId = conn.metadata?.playerId;
+      const senderPeerId = conn.peer;
+      
       switch (msg.type) {
         case 'JOIN_REQUEST':
+          console.log(`[Host] Received JOIN_REQUEST from peer: ${senderPeerId} (Profile: ${msg.profile.id})`);
           if (this.state.players.length < 6) {
-            // Already connected?
-            if (this.state.players.find(p => p.id === msg.profile.id)) return;
+            // Already connected on THIS specific peer? 
+            const existingConn = this.connections.get(senderPeerId);
+            if (existingConn && existingConn.open) {
+                console.warn(`[Host] Peer ${senderPeerId} already connected. Skipping JOIN_REQUEST.`);
+                return;
+            }
+
+            let profileToStore = { ...msg.profile };
+            const isDuplicateAccount = this.state.players.some(p => p.id === profileToStore.id);
             
-            this.connections.set(msg.profile.id, conn);
-            this.state.players.push(msg.profile);
+            if (isDuplicateAccount) {
+              console.log(`[Host] Duplicate account detected for ${profileToStore.name}. Appending dev suffix.`);
+              profileToStore.id = `${profileToStore.id}_dev_${nanoid(4)}`;
+            }
             
-            // Give the connection a fraction of a second to be fully ready before large state sync
+            this.connections.set(senderPeerId, conn);
+            this.peerIdToPlayerId.set(senderPeerId, profileToStore.id);
+            this.state.players.push(profileToStore);
+            
+            console.log(`[Host] Added player ${profileToStore.name} (${profileToStore.id}). Total players: ${this.state.players.length}`);
+            
             setTimeout(() => {
               this.broadcastState();
-              console.log("Player joined and state broadcasted:", msg.profile.name);
+              console.log("[Host] Broadcasted initial state to all peers.");
             }, 300);
           }
           break;
         default:
-          this.handleAction(senderId || this.myId, msg);
+          const senderId = this.peerIdToPlayerId.get(senderPeerId) || this.myId;
+          this.handleAction(senderId, msg);
           break;
       }
     } else {
       if (msg.type === 'STATE_UPDATE') {
+        console.log(`[Client] Received STATE_UPDATE from Host. Players: ${msg.state.players.length}`);
         // Only accept state if it's reasonably populated
         if (msg.state && msg.state.players && msg.state.players.length > 0) {
+          const matchedMe = msg.state.players.some(p => {
+              // If we have a special ID (e.g. for testing), we match it!
+              // Clients identify themselves by name and avatar if ID was changed for deduplication
+              if (p.id.startsWith(this.myId)) return true;
+              return p.id === this.myId;
+          });
+          
+          if (!matchedMe && msg.state.status === 'playing') {
+              console.warn("[Client] Received state but I am not in the player list. This should only happen during initialization.");
+          }
+
           this.state = { ...this.state, ...msg.state };
           this.onStateUpdate(this.state);
+        } else {
+            console.warn("[Client] Received malformed or empty state. Ignoring.");
         }
       }
     }

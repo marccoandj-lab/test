@@ -169,7 +169,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
 
   if (mode === 'profile') {
     const mostUsedEntry = profileData?.character_usage
-      ? Object.entries(profileData.character_usage).sort((a, b) => b[1] - a[1])[0]
+      ? Object.entries(profileData.character_usage).sort((a: any, b: any) => b[1] - a[1])[0]
       : ['1', 0];
 
     const mostUsedAvatarId = mostUsedEntry?.[0] || '1';

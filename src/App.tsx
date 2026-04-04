@@ -734,7 +734,7 @@ export const App: React.FC = () => {
     isInteracting: false,
     jailSkipped: false,
     stats: singlePlayerStats
-  } : mpState?.players.find(p => p.id === multiplayer.getMyId());
+  } : mpState?.players.find(p => p.id === multiplayer.getMyId() || p.id.startsWith(multiplayer.getMyId() + '_dev_'));
   const currentBalance = isSinglePlayer ? balance : (myProfile?.capital || 0);
 
   // Sync singleplayer profile into multiplayer state (ONLY UI MOCK) for modals
@@ -792,6 +792,22 @@ export const App: React.FC = () => {
       >
         <source src={MUSIC_TRACKS[trackIndex]} type="audio/mpeg" />
       </audio>
+
+      {/* Syncing state - When in MP but no profile data yet */}
+      {!isSinglePlayer && (gameState === 'lobby' || gameState === 'playing') && !myProfile && (
+        <div className="fixed inset-0 bg-slate-900/95 backdrop-blur-3xl flex flex-col items-center justify-center z-[100] animate-fade-in">
+          <div className="text-center space-y-6">
+            <div className="relative">
+              <div className="w-24 h-24 border-4 border-blue-500/20 rounded-full animate-ping absolute inset-0" />
+              <div className="w-24 h-24 border-4 border-t-blue-500 border-transparent rounded-full animate-spin" />
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-white font-black text-2xl tracking-tighter uppercase italic">{t.ui.connecting}...</h3>
+              <p className="text-blue-400 font-mono text-[10px] uppercase tracking-widest">{t.ui.syncing_assets}</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Screen Routing */}
       {gameState === 'start' ? (
