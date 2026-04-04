@@ -458,17 +458,20 @@ export const StartScreen: React.FC<StartScreenProps> = ({
 
         <div className="w-full animate-modal-pop" style={{ animationDelay: '0.2s' }}>
           {/* Always show Quick Profile for easy access */}
-          <div className="bg-black/30 p-4 rounded-2xl border border-white/10 mb-4 backdrop-blur-md">
-            <p className="text-[10px] text-white/40 uppercase font-black tracking-widest mb-3 text-center">{language === 'en' ? 'Game Profile' : 'Profil za igru'}</p>
+          <div 
+            onClick={() => setMode('profile')}
+            className="bg-black/30 p-4 rounded-2xl border border-white/10 mb-4 backdrop-blur-md cursor-pointer hover:bg-black/40 hover:border-blue-500/30 transition-all active:scale-[0.98] group/profile"
+          >
+            <p className="text-[10px] text-white/40 uppercase font-black tracking-widest mb-3 text-center group-hover/profile:text-blue-400 transition-colors">{language === 'en' ? 'Game Profile' : 'Profil za igru'}</p>
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
+              <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center border border-blue-500/30 group-hover/profile:scale-110 transition-transform">
                 <img src={`/assets/${avatar}.png`} alt="" className="w-9 h-9 object-contain" />
               </div>
               <div className="flex-1">
-                <p className="text-white font-black text-sm">{name}</p>
+                <p className="text-white font-black text-sm group-hover/profile:text-blue-400 transition-colors">{name}</p>
                 {userId && <p className="text-blue-400 font-mono text-[9px] font-black tracking-widest">#{userId.substring(0, 6).toUpperCase()}</p>}
               </div>
-              <button onClick={() => setMode('profile')} className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors text-xs border border-white/5">✏️</button>
+              <div className="p-2 bg-white/5 group-hover/profile:bg-blue-600/20 rounded-lg transition-colors text-xs border border-white/5 group-hover/profile:border-blue-500/30">✏️</div>
             </div>
           </div>
 
