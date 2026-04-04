@@ -51,6 +51,9 @@ class MultiplayerManager {
   private hostConnection: DataConnection | null = null;
   private onStateUpdate: (state: GameState) => void = () => { };
   private onError: (error: string) => void = () => { };
+  private onStatus: (status: string) => void = () => { };
+
+  public connectionStatus: string = 'idle';
 
   public state: GameState = {
     roomId: '',
@@ -86,11 +89,17 @@ class MultiplayerManager {
     };
   }
 
-  init(onUpdate: (state: GameState) => void, onError: (err: string) => void) {
+  init(onUpdate: (state: GameState) => void, onError: (err: string) => void, onStatus?: (status: string) => void) {
     this.onStateUpdate = onUpdate;
     this.onError = onError;
+    if (onStatus) this.onStatus = onStatus;
     // Notify immediate state on init to sync UI
     onUpdate({ ...this.state });
+  }
+
+  updateStatus(status: string) {
+    this.connectionStatus = status;
+    this.onStatus(status);
   }
 
   // Common ICE servers for better NAT traversal on phones/mobiles
@@ -106,37 +115,107 @@ class MultiplayerManager {
     }
   };
 
-  private getPeerConfig() {
-    const isRender = window.location.hostname.includes('onrender.com');
-    const RENDER_HOST = 'economyswitchwebapp.onrender.com';
+  private getPeerConfig(usePublicCloud = false) {
+    if (usePublicCloud) {
+       console.log('Falling back to PeerJS Public Cloud...');
+       return { ...this.config }; // Uses default PeerServer cloud
+    }
 
-    // ALWAYS use the Render server in production OR if we want to test cross-device from localhost
-    // This ensures phone and PC are on the same signaling plane
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+    const isRender = window.location.hostname.includes('onrender.com');
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+    // Priority 1: User-defined VITE_BACKEND_URL
+    if (backendUrl && !isLocalhost) {
+      try {
+        const url = new URL(backendUrl);
+        return {
+          ...this.config,
+          host: url.hostname,
+          port: parseInt(url.port) || (url.protocol === 'https:' ? 443 : 80),
+          secure: url.protocol === 'https:',
+          path: '/peerjs'
+        };
+      } catch (e) {
+        console.error('Invalid VITE_BACKEND_URL:', e);
+      }
+    }
+
+    // Priority 2: Automatic same-host detection for Render/Production
+    if (isRender || !isLocalhost) {
+      return {
+        ...this.config,
+        host: window.location.hostname,
+        port: 443,
+        secure: true,
+        path: '/peerjs'
+      };
+    }
+
+    // Priority 3: Local Development (Port 9000 as per server.js)
     return {
       ...this.config,
-      host: isRender ? window.location.hostname : RENDER_HOST,
-      port: 443,
-      secure: true,
+      host: window.location.hostname, // localhost
+      port: 9000,
+      secure: false,
       path: '/peerjs'
     };
   }
 
-  createRoom(name: string, avatar: AvatarType): string {
-    const roomId = nanoid(6).toUpperCase();
-    this.peer = new Peer(roomId, this.getPeerConfig());
+  private setupPeer(id: string, isRetry = false) {
+    this.updateStatus(isRetry ? 'Retrying (Cloud Fallback)...' : 'Connecting to signaling server...');
     
-    this.peer.on('error', (err) => {
-      console.error('Peer error (Status:', this.state.status, '):', err.type, err.message);
-      if (err.type === 'unavailable-id') {
-        this.onError('Room ID already exists. Try again.');
-      } else {
-        this.onError('Connection error: ' + err.type);
+    if (this.peer) {
+      this.peer.destroy();
+    }
+
+    try {
+      this.peer = new Peer(id, this.getPeerConfig(isRetry));
+    } catch (e) {
+      console.error('Peer creation failed immediately:', e);
+      if (!isRetry) this.setupPeer(id, true);
+      return;
+    }
+
+    this.peer.on('open', (peerId) => {
+      console.log('Connected to signaling server with ID:', peerId);
+      this.updateStatus('Signaling Established');
+      
+      // Host is "connected" as soon as signaling is up
+      if (this.myProfile?.isHost) {
+        // Short delay to ensure any transient states settle
+        setTimeout(() => this.updateStatus('connected'), 500);
       }
     });
 
+    this.peer.on('error', (err) => {
+      console.error('Peer error:', err.type, err.message);
+      
+      // If we failed to reach our custom server, try the public cloud
+      if (!isRetry && (err.type === 'network' || err.type === 'server-error')) {
+        this.setupPeer(id, true);
+        return;
+      }
+
+      if (err.type === 'unavailable-id') {
+        this.onError('Room ID already exists or Session is busy. Try again.');
+      } else {
+        this.onError('Connection error: ' + err.type);
+      }
+      this.updateStatus('error');
+    });
+
+    this.peer.on('connection', (conn) => {
+      this.handleConnection(conn);
+    });
+  }
+
+  createRoom(name: string, avatar: AvatarType): string {
+    const roomId = nanoid(6).toUpperCase();
     this.state.roomId = roomId;
     this.state.status = 'waiting';
     this.state.levels = generateLevels(250, 'finance', 0, undefined, false);
+    
     this.myProfile = {
       id: this.myId,
       name,
@@ -153,41 +232,11 @@ class MultiplayerManager {
     };
 
     this.state.players = [this.myProfile];
-
-    this.peer.on('open', () => {
-      this.onStateUpdate({ ...this.state });
-    });
-
-    this.peer.on('connection', (conn) => {
-      conn.on('data', (data: any) => {
-        this.handleMessage(conn, data as Message);
-      });
-
-      conn.on('close', () => {
-        const pid = Array.from(this.connections.entries()).find(([_, c]) => c === conn)?.[0];
-        if (pid) {
-          this.state.players = this.state.players.filter(p => p.id !== pid);
-          this.connections.delete(pid);
-          this.broadcastState();
-        }
-      });
-    });
-
+    this.setupPeer(roomId);
     return roomId;
   }
 
   joinRoom(roomId: string, name: string, avatar: AvatarType) {
-    this.peer = new Peer(this.getPeerConfig());
-
-    this.peer.on('error', (err) => {
-      console.error('Join error:', err.type);
-      if (err.type === 'peer-unavailable') {
-        this.onError('Room does not exist! Please check the code.');
-      } else {
-        this.onError('Connection failed: ' + err.type);
-      }
-    });
-
     this.state.roomId = roomId;
 
     this.myProfile = {
@@ -205,7 +254,11 @@ class MultiplayerManager {
       stats: this.createInitialStats()
     };
 
-    this.peer.on('open', () => {
+    const clientPeerId = this.myId + '_' + nanoid(4);
+    this.setupPeer(clientPeerId);
+
+    this.peer!.on('open', () => {
+      this.updateStatus('Locating Host...');
       const conn = this.peer!.connect(roomId, {
         metadata: { playerId: this.myId }
       });
@@ -213,6 +266,7 @@ class MultiplayerManager {
       this.hostConnection = conn;
 
       conn.on('open', () => {
+        this.updateStatus('Joining Room...');
         this.sendMessage(conn, { type: 'JOIN_REQUEST', profile: this.myProfile! });
       });
 
@@ -222,10 +276,64 @@ class MultiplayerManager {
 
       conn.on('close', () => {
         console.warn('Disconnected from Host (Player:', this.myId, ')');
-        alert('Disconnected from Host');
-        window.location.reload();
+        this.onError('Disconnected from Host');
+        this.updateStatus('disconnected');
+        // Give UI time to show error before reload
+        setTimeout(() => window.location.reload(), 2000);
+      });
+
+      conn.on('error', (err) => {
+        console.error('Connection error with host:', err);
+        this.onError('Could not connect to host.');
+        this.updateStatus('error');
       });
     });
+  }
+
+  private handleConnection(conn: DataConnection) {
+    console.log('[Host] New peer connection established:', conn.peer);
+    
+    conn.on('data', (data: any) => {
+      this.handleMessage(conn, data as Message);
+    });
+
+    conn.on('close', () => {
+      const pid = this.peerIdToPlayerId.get(conn.peer);
+      if (pid) {
+        console.log(`[Host] Player ${pid} disconnected.`);
+        this.state.players = this.state.players.filter(p => p.id !== pid);
+        this.connections.delete(conn.peer);
+        this.peerIdToPlayerId.delete(conn.peer);
+        this.broadcastState();
+      }
+    });
+
+    conn.on('error', (err) => {
+      console.error('[Host] Connection error with peer:', conn.peer, err);
+    });
+  }
+
+  disconnect() {
+    console.log('Disconnecting from multiplayer...');
+    if (this.peer) {
+      this.peer.destroy();
+      this.peer = null;
+    }
+    this.connections.clear();
+    this.peerIdToPlayerId.clear();
+    this.hostConnection = null;
+    this.state = {
+      roomId: '',
+      players: [],
+      currentTurnIndex: 0,
+      status: 'waiting',
+      turnTimeLeft: 60,
+      mode: 'finance',
+      globalModal: null,
+      auction: { active: false, rolls: {}, turnIndex: 0 },
+      levels: []
+    };
+    this.updateStatus('idle');
   }
 
   private handleMessage(conn: DataConnection, msg: Message) {
@@ -287,6 +395,11 @@ class MultiplayerManager {
 
           this.state = { ...this.state, ...msg.state };
           this.onStateUpdate(this.state);
+
+          // Once client sees themselves in the list, they are truly connected
+          if (matchedMe && this.connectionStatus !== 'connected') {
+            this.updateStatus('connected');
+          }
         } else {
             console.warn("[Client] Received malformed or empty state. Ignoring.");
         }

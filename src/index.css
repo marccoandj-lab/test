@@ -143,6 +143,13 @@ html {
   100% { transform: scale(1) translateY(0); opacity: 1; }
 }
 
+@keyframes progressIndefinite {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-progress-indefinite { animation: progressIndefinite 1.5s linear infinite; }
+
 @keyframes backdropFade {
   from { opacity: 0; backdrop-filter: blur(0); }
   to { opacity: 1; backdrop-filter: blur(4px); }

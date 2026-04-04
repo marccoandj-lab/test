@@ -138,7 +138,8 @@ export const App: React.FC = () => {
     }
   };
 
-  // Audio state
+  // Connection & Multiplayer state
+  const [connectionStatus, setConnectionStatus] = useState<string>('idle');
   const [volume, setVolume] = useState(() => {
     const saved = localStorage.getItem('eib_volume');
     return saved !== null ? parseFloat(saved) : 0.1;
@@ -424,6 +425,7 @@ export const App: React.FC = () => {
 
   const handleLeaveRoom = () => {
     multiplayer.leaveRoom();
+    setConnectionStatus('idle');
     setGameState('start');
     setMpState(null);
   };
@@ -432,6 +434,7 @@ export const App: React.FC = () => {
     if (!isSinglePlayer) {
       multiplayer.leaveRoom();
     }
+    setConnectionStatus('idle');
     setGameState('start');
     setMpState(null);
     setCurrentLevelIndex(0);
@@ -615,10 +618,13 @@ export const App: React.FC = () => {
       }
     }, (error) => {
       alert(error);
+      setConnectionStatus('idle');
       // If we are in lobby or playing and host is gone, we might need to reset
       if (gameState !== 'start') {
         setGameState('start');
       }
+    }, (status) => {
+      setConnectionStatus(status);
     });
   }, [gameState, isSinglePlayer]);
 
@@ -793,18 +799,48 @@ export const App: React.FC = () => {
         <source src={MUSIC_TRACKS[trackIndex]} type="audio/mpeg" />
       </audio>
 
-      {/* Syncing state - When in MP but no profile data yet */}
-      {!isSinglePlayer && (gameState === 'lobby' || gameState === 'playing') && !myProfile && (
+      {/* Syncing/Connecting state Overlay */}
+      {((!isSinglePlayer && (gameState === 'lobby' || gameState === 'playing') && !myProfile) || 
+        (connectionStatus !== 'idle' && connectionStatus !== 'connected')) && (
         <div className="fixed inset-0 bg-slate-900/95 backdrop-blur-3xl flex flex-col items-center justify-center z-[100] animate-fade-in">
-          <div className="text-center space-y-6">
-            <div className="relative">
+          <div className="text-center space-y-8 max-w-sm w-full px-6">
+            <div className="relative mx-auto w-24 h-24">
               <div className="w-24 h-24 border-4 border-blue-500/20 rounded-full animate-ping absolute inset-0" />
               <div className="w-24 h-24 border-4 border-t-blue-500 border-transparent rounded-full animate-spin" />
+              <div className="absolute inset-0 flex items-center justify-center text-2xl">🌐</div>
             </div>
-            <div className="space-y-2">
-              <h3 className="text-white font-black text-2xl tracking-tighter uppercase italic">{t.ui.connecting}...</h3>
-              <p className="text-blue-400 font-mono text-[10px] uppercase tracking-widest">{t.ui.syncing_assets}</p>
+            
+            <div className="space-y-3">
+              <h3 className="text-white font-black text-2xl tracking-tighter uppercase italic">
+                {connectionStatus === 'connecting' ? t.ui.connecting : 
+                 connectionStatus === 'signaling' ? 'Signaling...' :
+                 connectionStatus === 'locating' ? 'Locating Host...' :
+                 connectionStatus === 'retrying' ? 'Retrying (Cloud)...' :
+                 t.ui.connecting}...
+              </h3>
+              <div className="flex flex-col gap-2">
+                <p className="text-blue-400 font-mono text-[10px] uppercase tracking-widest animate-pulse">
+                  {connectionStatus === 'signaling' ? 'Establishing P2P Tunnel' : 
+                   connectionStatus === 'locating' ? 'Searching for game instance' :
+                   connectionStatus === 'retrying' ? 'Signaling server mismatch - falling back' :
+                   t.ui.syncing_assets}
+                </p>
+                <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                   <div className="h-full bg-blue-500 animate-progress-indefinite rounded-full" />
+                </div>
+              </div>
             </div>
+
+            <button
+              onClick={() => {
+                multiplayer.disconnect();
+                setConnectionStatus('idle');
+                setGameState('start');
+              }}
+              className="mt-4 px-8 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-slate-400 hover:text-white font-black text-[10px] uppercase tracking-widest transition-all active:scale-95"
+            >
+              {t.ui.cancel}
+            </button>
           </div>
         </div>
       )}
