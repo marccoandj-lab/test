@@ -274,9 +274,10 @@ class MultiplayerManager {
         // Only accept state if it's reasonably populated
         if (msg.state && msg.state.players && msg.state.players.length > 0) {
           const matchedMe = msg.state.players.some(p => {
+              if (!p || !p.id) return false;
               // If we have a special ID (e.g. for testing), we match it!
               // Clients identify themselves by name and avatar if ID was changed for deduplication
-              if (p.id.startsWith(this.myId)) return true;
+              if (this.myId && p.id.startsWith(this.myId)) return true;
               return p.id === this.myId;
           });
           

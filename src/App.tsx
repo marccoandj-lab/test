@@ -734,7 +734,7 @@ export const App: React.FC = () => {
     isInteracting: false,
     jailSkipped: false,
     stats: singlePlayerStats
-  } : mpState?.players.find(p => p.id === multiplayer.getMyId() || p.id.startsWith(multiplayer.getMyId() + '_dev_'));
+  } : mpState?.players.find(p => p && p.id && (p.id === multiplayer.getMyId() || p.id.startsWith(multiplayer.getMyId() + '_dev_')));
   const currentBalance = isSinglePlayer ? balance : (myProfile?.capital || 0);
 
   // Sync singleplayer profile into multiplayer state (ONLY UI MOCK) for modals
