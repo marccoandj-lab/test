@@ -61,6 +61,7 @@ export const translations = {
       socials: "Socials",
       leaderboard: "Leaderboard",
       multiplayer: "Multiplayer",
+      learn_more: "Learn more 🎓",
       create_game: "Create Game",
       join_game: "Join Game",
       single_player: "Single Player",
@@ -154,6 +155,20 @@ export const translations = {
       message: "Hey! You've been invited to join a multiplayer match. Ready to build your empire?",
       join: "Join Session 🎮",
       skip: "Skip",
+    },
+    education: {
+      title: "Educational Center",
+      subtitle: "Master the skills of the future",
+      ai_assistant: "Official AI Assistant",
+      ai_desc: "Ask our advanced AI anything about the game, finance, or sustainability.",
+      ask_ai: "Ask AI 🤖",
+      finance_title: "Financial Literacy",
+      finance_desc: "Learn how to manage, invest, and grow your capital responsibly.",
+      circular_title: "Circular Economy",
+      circular_desc: "Discover how to minimize waste and maximize resource efficiency.",
+      sustainability_title: "Sustainable Development",
+      sustainability_desc: "Understand the balance between economic growth and environmental protection.",
+      open_resource: "Open Resource ↗"
     }
   },
   sr: {
@@ -218,6 +233,7 @@ export const translations = {
       socials: "Društvene mreže",
       leaderboard: "Rang lista",
       multiplayer: "Multiplayer",
+      learn_more: "Saznaj više 🎓",
       create_game: "Kreiraj igru",
       join_game: "Pridruži se igri",
       single_player: "Samostalna igra",
@@ -308,6 +324,20 @@ export const translations = {
       message: "Hej! Pozvani ste da se pridružite partiji. Da li ste spremni da izgradite svoje carstvo?",
       join: "Pridruži se 🎮",
       skip: "Preskoči",
+    },
+    education: {
+      title: "Edukativni Centar",
+      subtitle: "Ovladajte veštinama budućnosti",
+      ai_assistant: "Zvanični AI Asistent",
+      ai_desc: "Pitajte naš napredni AI bilo šta o igri, finansijama ili održivosti.",
+      ask_ai: "Pitaj AI 🤖",
+      finance_title: "Finansijska Pismenost",
+      finance_desc: "Naučite kako da odgovorno upravljate, investirate i uvećavate svoj kapital.",
+      circular_title: "Cirkularna Ekonomija",
+      circular_desc: "Otkrijte kako da smanjite otpad i maksimalno povećate efikasnost resursa.",
+      sustainability_title: "Održivi Razvoj",
+      sustainability_desc: "Razumite balans između ekonomskog rasta i zaštite životne sredine.",
+      open_resource: "Otvori Resurs ↗"
     }
   }
 };

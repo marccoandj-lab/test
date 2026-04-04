@@ -4,6 +4,7 @@ import { multiplayer } from '../services/MultiplayerManager';
 import { supabase } from '../lib/supabase';
 import { Socials } from './Socials';
 import { Leaderboard } from './Leaderboard';
+import { EducationScreen } from './EducationScreen';
 
 import { formatNumber } from '../utils/format';
 import { AVATAR_MAP } from '../data/avatars';
@@ -48,7 +49,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   const t = translations[language];
   const [name, setName] = useState(initialName);
   const [avatar, setAvatar] = useState<string>(initialAvatar);
-  const [mode, setMode] = useState<'initial' | 'create' | 'join' | 'single' | 'profile' | 'socials' | 'leaderboard'>('initial');
+  const [mode, setMode] = useState<'initial' | 'create' | 'join' | 'single' | 'profile' | 'socials' | 'leaderboard' | 'education'>('initial');
   const [roomCode, setRoomCode] = useState('');
   const [userId, setUserId] = useState<string | null>(null);
   const [isEditingName, setIsEditingName] = useState(false);
@@ -433,6 +434,10 @@ export const StartScreen: React.FC<StartScreenProps> = ({
     return <Leaderboard onBack={() => setMode('initial')} currentUserId={userId || ''} language={language} />;
   }
 
+  if (mode === 'education') {
+    return <EducationScreen onBack={() => setMode('initial')} language={language} />;
+  }
+
   return (
     <div className="fixed inset-0 bg-slate-900 flex flex-col items-center p-6 z-50 overflow-y-auto custom-scrollbar">
       <div className="absolute inset-0 opacity-30 pointer-events-none overflow-hidden fixed">
@@ -493,6 +498,19 @@ export const StartScreen: React.FC<StartScreenProps> = ({
                     <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Compete with the world</p>
                   </div>
                   <span className="text-4xl group-hover:rotate-12 transition-transform">👥</span>
+                </div>
+              </button>
+
+              <button
+                onClick={() => setMode('education')}
+                className="group relative w-full bg-indigo-600/10 border border-indigo-500/30 p-4 rounded-3xl shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative flex items-center justify-center gap-3">
+                  <span className="text-2xl group-hover:scale-110 transition-transform">🎓</span>
+                  <span className="text-sm font-black text-indigo-400 uppercase tracking-widest group-hover:text-white transition-colors">
+                    {t.lobby.learn_more}
+                  </span>
                 </div>
               </button>
 
