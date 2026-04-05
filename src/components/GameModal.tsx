@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { GameMode, QuizQuestion, getInvestmentResult, CostAnalysisScenario } from '../data/gameData';
 import { Player } from '../types/game';
 import { multiplayer } from '../services/MultiplayerManager';
@@ -1379,8 +1380,15 @@ export interface ValueChainModalProps {
   language: 'en' | 'sr';
 }
 
+const VALUE_CHAIN_ITEM_COLORS = [
+  { border: 'border-blue-400/30', bg: 'bg-blue-500/10', hoverBg: 'hover:bg-blue-500/20', text: 'text-blue-100', numberBg: 'bg-blue-500/30', iconColor: 'text-blue-400/40' },
+  { border: 'border-purple-400/30', bg: 'bg-purple-500/10', hoverBg: 'hover:bg-purple-500/20', text: 'text-purple-100', numberBg: 'bg-purple-500/30', iconColor: 'text-purple-400/40' },
+  { border: 'border-amber-400/30', bg: 'bg-amber-500/10', hoverBg: 'hover:bg-amber-500/20', text: 'text-amber-100', numberBg: 'bg-amber-500/30', iconColor: 'text-amber-400/40' },
+  { border: 'border-teal-400/30', bg: 'bg-teal-500/10', hoverBg: 'hover:bg-teal-500/20', text: 'text-teal-100', numberBg: 'bg-teal-500/30', iconColor: 'text-teal-400/40' },
+];
+
 export function ValueChainModal({ task, mode, onResult, language }: ValueChainModalProps) {
-  const [items, setItems] = useState<{ id: string, text: string }[]>([]);
+  const [items, setItems] = useState<{ id: string, text: string, originalIndex: number }[]>([]);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
   const [timeLeft, setTimeLeft] = useState(20);
@@ -1389,7 +1397,7 @@ export function ValueChainModal({ task, mode, onResult, language }: ValueChainMo
 
   useEffect(() => {
     // Initial shuffle
-    const initialItems = task.phases.map((p, i) => ({ id: `p-${i}`, text: p[language] }));
+    const initialItems = task.phases.map((p, i) => ({ id: `p-${i}`, text: p[language], originalIndex: i }));
     let shuffled = [...initialItems];
     // Simple shuffle that ensures it's NOT correct at start
     while (JSON.stringify(shuffled.map(s => s.text)) === JSON.stringify(task.phases.map(p => p[language]))) {
@@ -1512,44 +1520,55 @@ export function ValueChainModal({ task, mode, onResult, language }: ValueChainMo
         </p>
 
         <div className="flex flex-col gap-3 mb-8">
-          {items.map((item, idx) => {
-            const isItemCorrect = answered && item.text === task.phases[idx][language];
-            return (
-              <div
-                key={item.id}
-                data-index={idx}
-                draggable={!answered}
-                onDragStart={() => handleDragStart(idx)}
-                onDragOver={(e) => handleDragOver(e, idx)}
-                onDragEnd={() => setDraggedIndex(null)}
-                onTouchStart={() => handleTouchStart(idx)}
-                onTouchMove={(e) => handleTouchMove(e)}
-                onTouchEnd={() => setDraggedIndex(null)}
-                className={`
-                  relative group flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-200
-                  ${draggedIndex === idx ? 'opacity-50 scale-95 border-emerald-400 shadow-xl z-20' : 'bg-white/10 border-white/10 shadow-md'}
-                  ${answered ? 'cursor-default' : 'cursor-grab active:cursor-grabbing'}
-                  ${answered && isItemCorrect ? 'border-emerald-500/50 bg-emerald-500/20' : ''}
-                  ${answered && !isItemCorrect ? 'border-rose-500/50 bg-rose-500/20' : ''}
-                `}
-              >
-                <div className={`w-8 h-8 flex items-center justify-center rounded-xl font-black text-xs border transition-colors ${
-                  answered ? (isItemCorrect ? 'bg-emerald-500 border-emerald-400 text-white' : 'bg-rose-500 border-rose-400 text-white') : 'bg-white/10 border-white/10 text-white/40'
-                }`}>
-                  {idx + 1}
-                </div>
-                <span className="flex-1 text-white font-bold text-sm tracking-tight">{item.text}</span>
-                {!answered && (
-                  <div className="text-white/20 group-hover:text-white/40 transition-colors">
-                    <span className="text-xl">☰</span>
+          <AnimatePresence mode="popLayout">
+            {items.map((item, idx) => {
+              const isItemCorrect = answered && item.text === task.phases[idx][language];
+              const color = VALUE_CHAIN_ITEM_COLORS[item.originalIndex % VALUE_CHAIN_ITEM_COLORS.length];
+              
+              return (
+                <motion.div
+                  key={item.id}
+                  layout
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 30, mass: 1 }}
+                  data-index={idx}
+                  draggable={!answered}
+                  onDragStart={() => handleDragStart(idx)}
+                  onDragOver={(e) => handleDragOver(e, idx)}
+                  onDragEnd={() => setDraggedIndex(null)}
+                  onTouchStart={() => handleTouchStart(idx)}
+                  onTouchMove={(e) => handleTouchMove(e)}
+                  onTouchEnd={() => setDraggedIndex(null)}
+                  className={`
+                    relative group flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-300
+                    ${draggedIndex === idx ? 'opacity-50 scale-95 border-white shadow-2xl z-20' : `${color.bg} ${color.border} shadow-md ${color.hoverBg}`}
+                    ${answered ? 'cursor-default' : 'cursor-grab active:cursor-grabbing'}
+                    ${answered && isItemCorrect ? 'border-emerald-500/50 bg-emerald-500/20' : ''}
+                    ${answered && !isItemCorrect ? 'border-rose-500/50 bg-rose-500/20' : ''}
+                  `}
+                >
+                  <div className={`w-8 h-8 flex items-center justify-center rounded-xl font-black text-xs border transition-colors ${
+                    answered 
+                      ? (isItemCorrect ? 'bg-emerald-500 border-emerald-400 text-white' : 'bg-rose-500 border-rose-400 text-white') 
+                      : `${color.numberBg} border-white/10 ${color.text}`
+                  }`}>
+                    {idx + 1}
                   </div>
-                )}
-                {answered && (
-                  <span className="text-lg">{isItemCorrect ? '✅' : '❌'}</span>
-                )}
-              </div>
-            );
-          })}
+                  <span className={`flex-1 font-bold text-sm tracking-tight transition-colors ${answered ? 'text-white' : color.text}`}>{item.text}</span>
+                  {!answered && (
+                    <div className={`transition-colors ${color.iconColor} group-hover:text-white/40`}>
+                      <span className="text-xl">☰</span>
+                    </div>
+                  )}
+                  {answered && (
+                    <span className="text-lg">{isItemCorrect ? '✅' : '❌'}</span>
+                  )}
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
         </div>
 
         {!answered ? (
