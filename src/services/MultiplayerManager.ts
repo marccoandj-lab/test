@@ -2,7 +2,17 @@ import { Peer, DataConnection } from 'peerjs';
 import { nanoid } from 'nanoid';
 import { Player, AvatarType } from '../types/game';
 import { generateLevels } from '../data/levelGenerator';
-import { Level } from '../data/gameData';
+import { 
+  Level, 
+  financeQuizzes, sustainabilityQuizzes, 
+  financeCostAnalysis, sustainabilityCostAnalysis, 
+  financeValueChains, sustainabilityValueChains 
+} from '../data/gameData';
+
+export type Deck = {
+  indices: number[];
+  pointer: number;
+};
 
 export type GameState = {
   roomId: string;
@@ -18,6 +28,18 @@ export type GameState = {
     turnIndex: number;
   };
   levels: Level[];
+  decks: {
+    finance: {
+      quiz: Deck;
+      costAnalysis: Deck;
+      valueChain: Deck;
+    };
+    sustainability: {
+      quiz: Deck;
+      costAnalysis: Deck;
+      valueChain: Deck;
+    };
+  };
 };
 
 export type Message =
@@ -63,6 +85,38 @@ class MultiplayerManager {
 
   public connectionStatus: string = 'idle';
 
+  private shuffle(array: number[]) {
+    const newArr = [...array];
+    for (let i = newArr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+    }
+    return newArr;
+  }
+
+  private createDeck(length: number): Deck {
+    const indices = Array.from({ length }, (_, i) => i);
+    return {
+      indices: this.shuffle(indices),
+      pointer: 0
+    };
+  }
+
+  private initAllDecks() {
+    return {
+      finance: {
+        quiz: this.createDeck(financeQuizzes.length),
+        costAnalysis: this.createDeck(financeCostAnalysis.length),
+        valueChain: this.createDeck(financeValueChains.length)
+      },
+      sustainability: {
+        quiz: this.createDeck(sustainabilityQuizzes.length),
+        costAnalysis: this.createDeck(sustainabilityCostAnalysis.length),
+        valueChain: this.createDeck(sustainabilityValueChains.length)
+      }
+    };
+  }
+
   public state: GameState = {
     roomId: '',
     players: [],
@@ -76,8 +130,28 @@ class MultiplayerManager {
       rolls: {},
       turnIndex: 0
     },
-    levels: []
+    levels: [],
+    decks: this.initAllDecks()
   };
+
+  private drawFromDeck(type: 'quiz' | 'costAnalysis' | 'valueChain', mode: 'finance' | 'sustainability'): number {
+    let deck = this.state.decks[mode][type];
+    
+    if (deck.pointer >= deck.indices.length) {
+      // Reshuffle if exhausted
+      const length = type === 'quiz' ? (mode === 'finance' ? financeQuizzes.length : sustainabilityQuizzes.length) :
+                     type === 'costAnalysis' ? (mode === 'finance' ? financeCostAnalysis.length : sustainabilityCostAnalysis.length) :
+                     (mode === 'finance' ? financeValueChains.length : sustainabilityValueChains.length);
+      
+      const indices = Array.from({ length }, (_, i) => i);
+      deck.indices = this.shuffle(indices);
+      deck.pointer = 0;
+    }
+
+    const index = deck.indices[deck.pointer];
+    deck.pointer++;
+    return index;
+  }
 
   // Production backend hosted on Render
   private readonly PROD_SIGNALING_HOST = 'economyswitch.onrender.com';
@@ -379,7 +453,8 @@ class MultiplayerManager {
       mode: 'finance',
       globalModal: null,
       auction: { active: false, rolls: {}, turnIndex: 0 },
-      levels: []
+      levels: [],
+      decks: this.initAllDecks()
     };
     this.updateStatus('idle');
   }
@@ -491,6 +566,15 @@ class MultiplayerManager {
         const boardField = this.state.levels[player.position]?.type;
         if (boardField === 'auction_insurance' && this.state.mode === 'finance') {
           this.state.auction = { active: true, rolls: {}, turnIndex: 0 };
+        }
+
+        // Draw unique item index if landing on special fields
+        if (boardField === 'quiz') {
+          player.activeItemIndex = this.drawFromDeck('quiz', this.state.mode);
+        } else if (boardField === 'cost_analysis') {
+          player.activeItemIndex = this.drawFromDeck('costAnalysis', this.state.mode);
+        } else if (boardField === 'value_chain') {
+          player.activeItemIndex = this.drawFromDeck('valueChain', this.state.mode);
         }
         break;
       case 'ACTION_QUIZ_RESULT':
@@ -676,7 +760,8 @@ class MultiplayerManager {
       mode: 'finance',
       auction: { active: false, rolls: {}, turnIndex: 0 },
       levels: [],
-      globalModal: null
+      globalModal: null,
+      decks: this.initAllDecks()
     };
     this.onStateUpdate({ ...this.state });
   }
