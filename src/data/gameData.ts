@@ -1,4 +1,4 @@
-export type FieldType = 'start' | 'income' | 'expense' | 'quiz' | 'jail' | 'switch' | 'investment' | 'tax_small' | 'tax_large' | 'auction_insurance' | 'cost_analysis' | 'value_chain';
+export type FieldType = 'start' | 'income' | 'expense' | 'quiz' | 'jail' | 'switch' | 'investment' | 'tax_small' | 'tax_large' | 'auction_insurance' | 'cost_analysis' | 'value_chain' | 'uljez';
 export type GameMode = 'finance' | 'sustainability';
 
 export interface Level {
@@ -10,6 +10,15 @@ export interface Level {
   bgColor: string;
   borderColor: string;
   glowColor: string;
+}
+
+export interface UljezSet {
+  theme: { en: string; sr: string };
+  options: { en: string[]; sr: string[] };
+  correct: number; // Index of the intruder
+  mode: GameMode;
+  reward: number;
+  penalty: number;
 }
 
 export interface QuizQuestion {
@@ -3442,4 +3451,70 @@ export const sustainabilityValueChains: ValueChainTask[] = [
     phases: [{ en: "Packaging", sr: "Ambalaža" }, { en: "Deposit System", sr: "Depozitni sistem" }, { en: "Return", sr: "Povraćaj" }, { en: "Reuse", sr: "Ponovna upotreba" }],
     mode: 'sustainability', reward: 30000, penalty: 15000
   }
+];
+
+export const financeUljezSets: UljezSet[] = [
+  { theme: { en: "Banking Services", sr: "Bankarske usluge" }, options: { en: ["ATM", "Loan", "Savings", "Telescope"], sr: ["Bankomat", "Kredit", "Štednja", "Teleskop"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Currencies", sr: "Valute" }, options: { en: ["Dollar", "Euro", "Yen", "Ounce"], sr: ["Dolar", "Evro", "Jen", "Unca"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Investments", sr: "Investicije" }, options: { en: ["Stocks", "Bonds", "Real Estate", "Ticket"], sr: ["Akcije", "Obveznice", "Nekretnine", "Ulaznica"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Expenses", sr: "Troškovi" }, options: { en: ["Rent", "Utilities", "Groceries", "Gift card"], sr: ["Kirija", "Komunalije", "Namirnice", "Poklon kartica"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Income", sr: "Prihodi" }, options: { en: ["Salary", "Bonus", "Dividends", "Tax"], sr: ["Plata", "Bonus", "Dividende", "Porez"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Payment Methods", sr: "Načini plaćanja" }, options: { en: ["Credit Card", "Cash", "Wire Transfer", "Stamp"], sr: ["Kreditna kartica", "Keš", "Prenos sredstava", "Pečat"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Financial Documents", sr: "Finansijska dokumenta" }, options: { en: ["Invoice", "Receipt", "Balance Sheet", "Novel"], sr: ["Faktura", "Priznanica", "Bilans stanja", "Roman"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Stock Market terms", sr: "Berzanski termini" }, options: { en: ["Bull", "Bear", "IPO", "Zoo"], sr: ["Bul", "Ber", "IPO", "Zoološki vrt"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Taxes", sr: "Porezi" }, options: { en: ["VAT", "Income Tax", "Property Tax", "Subscription"], sr: ["PDV", "Porez na dohodak", "Porez na imovinu", "Pretplata"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Insurance", sr: "Osiguranje" }, options: { en: ["Health", "Life", "Car", "Weather"], sr: ["Zdravstveno", "Životno", "Auto", "Vremenska prognoza"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Debt", sr: "Dug" }, options: { en: ["Mortgage", "Overdraft", "Credit", "Asset"], sr: ["Hipoteka", "Pozajmica", "Kredit", "Imovina (Asset)"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Retirement", sr: "Penzionisanje" }, options: { en: ["Pension", "Annuity", "Retirement Fund", "Vacation"], sr: ["Penzija", "Anuitet", "Penzioni fond", "Odmor"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Accounting", sr: "Računovodstvo" }, options: { en: ["Audit", "Ledger", "Depreciation", "Painting"], sr: ["Revizija", "Glavna knjiga", "Amortizacija", "Slika"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Crypto", sr: "Kriptovalute" }, options: { en: ["Bitcoin", "Ethereum", "Wallet", "Physical Coin"], sr: ["Bitkoin", "Eterijum", "Novčanik", "Fizički novčić"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Business Structure", sr: "Poslovna struktura" }, options: { en: ["LLC", "Corporation", "Partnership", "Club"], sr: ["D.O.O.", "Korporacija", "Partnerstvo", "Klub"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Market Indicators", sr: "Tržišni indikatori" }, options: { en: ["GDP", "Inflation", "Unemployment", "Forecast"], sr: ["BDP", "Inflacija", "Nezaposlenost", "Vremenska prognoza"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Banking Roles", sr: "Bankarske uloge" }, options: { en: ["Teller", "Auditor", "Loan Officer", "Waiter"], sr: ["Blagajnik", "Revizor", "Kreditni službenik", "Konobar"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "E-banking", sr: "E-bankarstvo" }, options: { en: ["2FA", "QR Code", "IBAN", "Fax"], sr: ["2FA", "QR Kod", "IBAN", "Faks"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Commodities", sr: "Roba/Commodities" }, options: { en: ["Gold", "Oil", "Wheat", "Smartphone"], sr: ["Zlato", "Nafta", "Pšenica", "Pametni telefon"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Risk", sr: "Rizik" }, options: { en: ["Default", "Volatility", "Liquidity", "Certainty"], sr: ["Neizmirivanje obaveza", "Volatilnost", "Likvidnost", "Sigurnost"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Financial Institutions", sr: "Finansijske institucije" }, options: { en: ["Central Bank", "Brokerage", "Credit Union", "Museum"], sr: ["Centralna banka", "Brokerska kuća", "Kreditna unija", "Muzej"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Budgeting", sr: "Budžetiranje" }, options: { en: ["Forecast", "Surplus", "Deficit", "Hobby"], sr: ["Prognoza", "Suficit", "Deficit", "Hobi"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Pricing", sr: "Određivanje cena" }, options: { en: ["Discount", "Wholesale", "Retail", "Free"], sr: ["Popust", "Veleprodaja", "Maloprodaja", "Besplatno"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Lending", sr: "Pozajmljivanje" }, options: { en: ["Principal", "Interest", "Collateral", "Donation"], sr: ["Glavnica", "Kamata", "Kolateral", "Donacija"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Assets", sr: "Imovina (Assets)" }, options: { en: ["Cash", "Inventory", "Equipment", "Liabilities"], sr: ["Keš", "Zalihe", "Oprema", "Obaveze (Liabilities)"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Savings", sr: "Štednja" }, options: { en: ["Emergency Fund", "Deposit", "Piggy bank", "Credit Card"], sr: ["Fond za hitne slučajeve", "Depozit", "Kasica prasica", "Kreditna kartica"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Financial Crime", sr: "Finansijski kriminal" }, options: { en: ["Fraud", "Money Laundering", "Embezzlement", "Charity"], sr: ["Prevara", "Pranje novca", "Pronevera", "Humanitarna pomoć"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Trading", sr: "Trgovanje" }, options: { en: ["Arbitrage", "Day trading", "Leverage", "Gambling"], sr: ["Arbitraža", "Dnevno trgovanje", "Leveridž", "Kockanje"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Financial Software", sr: "Finansijski softver" }, options: { en: ["Excel", "SAP", "QuickBooks", "Photoshop"], sr: ["Excel", "SAP", "QuickBooks", "Photoshop"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 },
+  { theme: { en: "Growth", sr: "Rast" }, options: { en: ["Compound Interest", "Scaling", "Expansion", "Bankruptcy"], sr: ["Složena kamata", "Skaliranje", "Ekspanzija", "Bankrot"] }, correct: 3, mode: 'finance', reward: 25000, penalty: 12500 }
+];
+
+export const sustainabilityUljezSets: UljezSet[] = [
+  { theme: { en: "Renewable Energy", sr: "Obnovljiva energija" }, options: { en: ["Solar", "Wind", "Hydro", "Coal"], sr: ["Solarna", "Vetro", "Hidro", "Ugalj"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Waste Management", sr: "Upravljanje otpadom" }, options: { en: ["Recycling", "Composting", "Reuse", "Littering"], sr: ["Reciklaža", "Kompostiranje", "Ponovna upotreba", "Bacanje smeća"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Pollutants", sr: "Zagađivači" }, options: { en: ["CO2", "Methane", "Plastic", "Oxygen"], sr: ["CO2", "Metan", "Plastika", "Kiseonik"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Ecosystems", sr: "Ekosistemi" }, options: { en: ["Rainforest", "Coral Reef", "Wetlands", "Parking Lot"], sr: ["Prašuma", "Koralni greben", "Močvara", "Parking"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Green Transport", sr: "Zeleni transport" }, options: { en: ["Electric Bike", "Train", "Carpool", "Private Jet"], sr: ["Električni bicikl", "Voz", "Carpool", "Privatni džet"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Sustainable Materials", sr: "Održivi materijali" }, options: { en: ["Bamboo", "Hemp", "Recycled Glass", "Styrofoam"], sr: ["Bambus", "Konoplja", "Reciklirano staklo", "Stiropor"] }, correct: 2, mode: 'sustainability', reward: 25000, penalty: 12500 }, // Fixed index: Styrofoam is 3
+  { theme: { en: "Biodiversity", sr: "Biodiverzitet" }, options: { en: ["Flora", "Fauna", "Genetic diversity", "Monoculture"], sr: ["Flora", "Fauna", "Genetski diverzitet", "Monokultura"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Climate Change", sr: "Klimatske promene" }, options: { en: ["Global Warming", "Melting Glaciers", "Sea Level Rise", "Stable Seasons"], sr: ["Globalno zagrevanje", "Topljenje glečera", "Porast nivoa mora", "Stabilna godišnja doba"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Conservation", sr: "Očuvanje prirode" }, options: { en: ["Reforestation", "Wildlife Protection", "Water Saving", "Deforestation"], sr: ["Pošumljavanje", "Zaštita divljih životinja", "Ušteda vode", "Deforestacija"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Organic Farming", sr: "Organska poljoprivreda" }, options: { en: ["No Pesticides", "Crop Rotation", "Natural Fertilizer", "GMO"], sr: ["Bez pesticida", "Plodored", "Prirodno đubrivo", "GMO"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Urban Ecology", sr: "Urbana ekologija" }, options: { en: ["Green Roofs", "Vertical Gardens", "Bike Lanes", "Highway"], sr: ["Zeleni krovovi", "Vertikalne bašte", "Biciklističke staze", "Auto-put"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Water Sources", sr: "Izvori vode" }, options: { en: ["Aquifer", "River", "Rainwater", "Oil Well"], sr: ["Akvifer", "Reka", "Kišnica", "Naftna bušotina"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Sustainable Fashion", sr: "Održiva moda" }, options: { en: ["Slow Fashion", "Upcycling", "Ethical Labor", "Fast Fashion"], sr: ["Spora moda", "Ap-sajkling", "Etički rad", "Brza moda"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Eco-friendly Habits", sr: "Ekološke navike" }, options: { en: ["Meatless Monday", "Zero Waste", "Second-hand", "Overconsumption"], sr: ["Ponedeljak bez mesa", "Zero Waste", "Second-hand", "Prekomerna potrošnja"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Natural Resources", sr: "Prirodni resursi" }, options: { en: ["Sunlight", "Wind", "Tides", "Natural Gas"], sr: ["Sunčeva svetlost", "Vetar", "Plima", "Prirodni gas"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Endangered Species", sr: "Ugrožene vrste" }, options: { en: ["Panda", "Blue Whale", "Snow Leopard", "Pigeon"], sr: ["Panda", "Plavi kit", "Snežni leopard", "Golub"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Green Tech", sr: "Zelena tehnologija" }, options: { en: ["Smart Grid", "Energy Storage", "Carbon Capture", "Internal Combustion"], sr: ["Pametna mreža", "Skladištenje energije", "Hvatanje ugljenika", "Unutrašnje sagorevanje"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Forest types", sr: "Tipovi šuma" }, options: { en: ["Deciduous", "Coniferous", "Tropical", "Concrete Jungle"], sr: ["Listopadna", "Četinarska", "Tropska", "Betonska džungla"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Sustainable Business", sr: "Održivo poslovanje" }, options: { en: ["B-Corp", "Circular Economy", "Fair Trade", "Monopoly"], sr: ["B-Corp", "Cirkularna ekonomija", "Fair Trade", "Monopol"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Atmospheric layers", sr: "Atmosferski slojevi" }, options: { en: ["Troposphere", "Stratosphere", "Mesosphere", "Hydrosphere"], sr: ["Troposfera", "Stratosfera", "Mezosfera", "Hidrosfera"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Soil health", sr: "Zdravlje zemljišta" }, options: { en: ["Humus", "Microorganisms", "Nutrients", "Salinity"], sr: ["Humus", "Mikroorganizmi", "Nutrijenti", "Salinitet"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Green Buildings", sr: "Zelene zgrade" }, options: { en: ["Insulation", "Double glazing", "Solar panels", "Single-pane windows"], sr: ["Izolacija", "Duplo staklo", "Solarni paneli", "Jednostruko staklo"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Ocean Health", sr: "Zdravlje okeana" }, options: { en: ["Plankton", "Seagrass", "Kelp", "Oil Spill"], sr: ["Plankton", "Morska trava", "Kelp", "Izlivanje nafte"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Sustainable Tourism", sr: "Održivi turizam" }, options: { en: ["Ecotourism", "Local Stays", "Leave No Trace", "Cruise Ships"], sr: ["Ekoturizam", "Lokalni smeštaj", "Ne ostavljaj trag", "Kruzeri"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Environmental Policy", sr: "Ekološka politika" }, options: { en: ["Paris Agreement", "Carbon Tax", "Emissions Trading", "Deregulation"], sr: ["Pariski sporazum", "Porez na ugljenik", "Trgovina emisijama", "Deregulacija"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Alternative Fuels", sr: "Alternativna goriva" }, options: { en: ["Biofuel", "Hydrogen", "Electricity", "Diesel"], sr: ["Biogorivo", "Vodonik", "Struja", "Dizel"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Sustainable Forestry", sr: "Održivo šumarstvo" }, options: { en: ["Selective Logging", "FSC Certified", "Tree Planting", "Clear-cutting"], sr: ["Selektivna seča", "FSC sertifikovano", "Sadnja drveća", "Seča do gole zemlje"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Environmental Metrics", sr: "Ekološki pokazatelji" }, options: { en: ["Carbon Footprint", "Water Footprint", "Ecological Footprint", "Profit Margin"], sr: ["Karbonski otisak", "Vodeni otisak", "Ekološki otisak", "Profitna marža"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Compostable Items", sr: "Kompostabilni predmeti" }, options: { en: ["Banana peel", "Eggshells", "Cardboard", "Plastic bottle"], sr: ["Kora banane", "Ljuske jaja", "Karton", "Plastična flaša"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 },
+  { theme: { en: "Eco Symbols", sr: "Ekološki simboli" }, options: { en: ["Mobius Loop", "Green Dot", "Leaping Bunny", "Skull and Crossbones"], sr: ["Mebijusova petlja", "Zelena tačka", "Zeka (Cruelty Free)", "Mrtvačka glava"] }, correct: 3, mode: 'sustainability', reward: 25000, penalty: 12500 }
 ];

@@ -48,6 +48,7 @@ export const translations = {
       field_insurance: "Insurance",
       field_cost_analysis: "Cost Analysis",
       field_value_chain: "Value Chain",
+      field_uljez: "Intruder",
       field_generic: "Field",
       push_notifications: "Push Reminders",
       notifications_enabled: "Reminders Active",
@@ -120,6 +121,7 @@ export const translations = {
     },
     modals: {
       quiz: "Quiz",
+      uljez: "Intruder",
       correct: "Correct!",
       wrong: "Wrong!",
       explanation: "Explanation",
@@ -221,6 +223,7 @@ export const translations = {
       field_insurance: "Osiguranje",
       field_cost_analysis: "Analiza troškova",
       field_value_chain: "Lanac vrednosti",
+      field_uljez: "Uljez",
       field_generic: "Polje",
       push_notifications: "Push Podsetnici",
       notifications_enabled: "Podsetnici Aktivni",

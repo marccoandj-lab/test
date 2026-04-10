@@ -30,6 +30,8 @@ export interface Player {
     costAnalysisWrong: number;
     valueChainCorrect: number;
     valueChainWrong: number;
+    uljezCorrect: number;
+    uljezWrong: number;
 
     investmentGains: number;
     investmentLosses: number;

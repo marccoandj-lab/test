@@ -6,7 +6,8 @@ import {
   Level, 
   financeQuizzes, sustainabilityQuizzes, 
   financeCostAnalysis, sustainabilityCostAnalysis, 
-  financeValueChains, sustainabilityValueChains 
+  financeValueChains, sustainabilityValueChains,
+  financeUljezSets, sustainabilityUljezSets
 } from '../data/gameData';
 
 export type Deck = {
@@ -33,11 +34,13 @@ export type GameState = {
       quiz: Deck;
       costAnalysis: Deck;
       valueChain: Deck;
+      uljez: Deck;
     };
     sustainability: {
       quiz: Deck;
       costAnalysis: Deck;
       valueChain: Deck;
+      uljez: Deck;
     };
   };
 };
@@ -50,6 +53,7 @@ export type Message =
   | { type: 'ACTION_QUIZ_RESULT'; reward: number; penalty: number; success: boolean }
   | { type: 'ACTION_COST_ANALYSIS_RESULT'; reward: number; penalty: number; success: boolean }
   | { type: 'ACTION_VALUE_CHAIN_RESULT'; reward: number; penalty: number; success: boolean }
+  | { type: 'ACTION_ULJEZ_RESULT'; reward: number; penalty: number; success: boolean }
   | { type: 'ACTION_TAX_PAY'; amount: number }
   | { type: 'ACTION_TAX_COLLECT' }
   | { type: 'ACTION_INVEST'; result: number; amount: number; stake: number }
@@ -107,12 +111,14 @@ class MultiplayerManager {
       finance: {
         quiz: this.createDeck(financeQuizzes.length),
         costAnalysis: this.createDeck(financeCostAnalysis.length),
-        valueChain: this.createDeck(financeValueChains.length)
+        valueChain: this.createDeck(financeValueChains.length),
+        uljez: this.createDeck(financeUljezSets.length)
       },
       sustainability: {
         quiz: this.createDeck(sustainabilityQuizzes.length),
         costAnalysis: this.createDeck(sustainabilityCostAnalysis.length),
-        valueChain: this.createDeck(sustainabilityValueChains.length)
+        valueChain: this.createDeck(sustainabilityValueChains.length),
+        uljez: this.createDeck(sustainabilityUljezSets.length)
       }
     };
   }
@@ -134,14 +140,15 @@ class MultiplayerManager {
     decks: this.initAllDecks()
   };
 
-  private drawFromDeck(type: 'quiz' | 'costAnalysis' | 'valueChain', mode: 'finance' | 'sustainability'): number {
+  private drawFromDeck(type: 'quiz' | 'costAnalysis' | 'valueChain' | 'uljez', mode: 'finance' | 'sustainability'): number {
     let deck = this.state.decks[mode][type];
     
     if (deck.pointer >= deck.indices.length) {
       // Reshuffle if exhausted
       const length = type === 'quiz' ? (mode === 'finance' ? financeQuizzes.length : sustainabilityQuizzes.length) :
                      type === 'costAnalysis' ? (mode === 'finance' ? financeCostAnalysis.length : sustainabilityCostAnalysis.length) :
-                     (mode === 'finance' ? financeValueChains.length : sustainabilityValueChains.length);
+                     type === 'valueChain' ? (mode === 'finance' ? financeValueChains.length : sustainabilityValueChains.length) :
+                     (mode === 'finance' ? financeUljezSets.length : sustainabilityUljezSets.length);
       
       const indices = Array.from({ length }, (_, i) => i);
       deck.indices = this.shuffle(indices);
@@ -178,6 +185,8 @@ class MultiplayerManager {
       costAnalysisWrong: 0,
       valueChainCorrect: 0,
       valueChainWrong: 0,
+      uljezCorrect: 0,
+      uljezWrong: 0,
       investmentGains: 0,
       investmentLosses: 0,
       jailVisits: 0,
@@ -343,7 +352,9 @@ class MultiplayerManager {
       stats: this.createInitialStats()
     };
 
-    this.state.players = [this.myProfile];
+    if (this.myProfile) {
+      this.state.players = [this.myProfile];
+    }
     this.setupPeer(roomId);
     return roomId;
   }
@@ -575,6 +586,8 @@ class MultiplayerManager {
           player.activeItemIndex = this.drawFromDeck('costAnalysis', this.state.mode);
         } else if (boardField === 'value_chain') {
           player.activeItemIndex = this.drawFromDeck('valueChain', this.state.mode);
+        } else if (boardField === 'uljez') {
+          player.activeItemIndex = this.drawFromDeck('uljez', this.state.mode);
         }
         break;
       case 'ACTION_QUIZ_RESULT':
@@ -602,6 +615,15 @@ class MultiplayerManager {
         } else {
           player.capital -= msg.penalty;
           player.stats.valueChainWrong++;
+        }
+        break;
+      case 'ACTION_ULJEZ_RESULT':
+        if (msg.success) {
+          player.capital += msg.reward;
+          player.stats.uljezCorrect++;
+        } else {
+          player.capital -= msg.penalty;
+          player.stats.uljezWrong++;
         }
         break;
       case 'ACTION_TAX_PAY':

@@ -123,6 +123,16 @@ const getFieldMeta = (type: FieldType, _mode: GameMode): Omit<Level, 'id'> => {
         borderColor: 'border-emerald-600',
         glowColor: 'shadow-emerald-700/50',
       };
+    case 'uljez':
+      return {
+        type,
+        label: _mode === 'finance' ? 'Intruder' : 'Uljez',
+        icon: '🕵️',
+        color: 'text-white',
+        bgColor: 'bg-gradient-to-br from-orange-400 to-orange-600',
+        borderColor: 'border-orange-300',
+        glowColor: 'shadow-orange-400/50',
+      };
     default:
       return {
         type,
@@ -144,6 +154,7 @@ const getRandomFieldType = (mode: GameMode, isSinglePlayer: boolean): FieldType 
     'investment', 'investment',
     'cost_analysis', 'cost_analysis', 'cost_analysis', 'cost_analysis',
     'value_chain', 'value_chain', 'value_chain', 'value_chain',
+    'uljez', 'uljez', 'uljez', 'uljez',
     'switch',
     'jail',
     'tax_small', 'tax_small',

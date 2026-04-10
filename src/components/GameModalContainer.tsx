@@ -1,5 +1,5 @@
-import { GameMode, financeQuizzes, sustainabilityQuizzes, incomeEvents, expenseEvents, jailMessages, Level, financeCostAnalysis, sustainabilityCostAnalysis, financeValueChains, sustainabilityValueChains } from '../data/gameData';
-import { IncomeModal, ExpenseModal, QuizModal, JailModal, SwitchModal, InvestmentModal, TaxSmallModal, TaxLargeModal, AuctionModal, InsuranceModal, VictoryModal, JailSkipModal, TurnAnnouncementModal, CostAnalysisModal, ValueChainModal } from './GameModal';
+import { GameMode, financeQuizzes, sustainabilityQuizzes, incomeEvents, expenseEvents, jailMessages, Level, financeCostAnalysis, sustainabilityCostAnalysis, financeValueChains, sustainabilityValueChains, financeUljezSets, sustainabilityUljezSets } from '../data/gameData';
+import { IncomeModal, ExpenseModal, QuizModal, JailModal, SwitchModal, InvestmentModal, TaxSmallModal, TaxLargeModal, AuctionModal, InsuranceModal, VictoryModal, JailSkipModal, TurnAnnouncementModal, CostAnalysisModal, ValueChainModal, UljezModal } from './GameModal';
 import { multiplayer } from '../services/MultiplayerManager';
 import { Player } from '../types/game';
 
@@ -77,13 +77,16 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
           costAnalysisWrong: 0,
           valueChainCorrect: 0,
           valueChainWrong: 0,
+          uljezCorrect: 0,
+          uljezWrong: 0,
           investmentGains: 0,
           investmentLosses: 0,
           jailVisits: 0,
           jailSkips: 0,
           auctionWins: 0,
-          taxesPaid: 0
+          taxesPaid: 0,
         }
+
       }];
     }
     return <VictoryModal players={displayPlayers} language={language} />;
@@ -142,6 +145,7 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
   const currentQuizzes = mode === 'finance' ? financeQuizzes : sustainabilityQuizzes;
   const currentCostAnalysis = mode === 'finance' ? financeCostAnalysis : sustainabilityCostAnalysis;
   const currentValueChains = mode === 'finance' ? financeValueChains : sustainabilityValueChains;
+  const currentUljezSets = mode === 'finance' ? financeUljezSets : sustainabilityUljezSets;
 
 
   // Pick unique content based on assigned index in player profile
@@ -151,6 +155,7 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
   const quiz = currentQuizzes[itemIdx % currentQuizzes.length];
   const costAnalysisScenario = currentCostAnalysis[itemIdx % currentCostAnalysis.length];
   const valueChainTask = currentValueChains[itemIdx % currentValueChains.length];
+  const uljezSet = currentUljezSets[itemIdx % currentUljezSets.length];
 
   const income = incomeEvents[levelIndex % incomeEvents.length];
   const expense = expenseEvents[levelIndex % expenseEvents.length];
@@ -248,6 +253,18 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
           language={language}
           onResult={(correct, reward, penalty) => {
             onBalanceChange(correct ? reward : -penalty);
+            onClose();
+          }}
+        />
+      );
+    case 'uljez':
+      return (
+        <UljezModal
+          uljezSet={uljezSet}
+          mode={mode}
+          language={language}
+          onComplete={(success) => {
+            onBalanceChange(success ? uljezSet.reward : -uljezSet.penalty);
             onClose();
           }}
         />

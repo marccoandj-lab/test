@@ -34,6 +34,8 @@ export interface Profile {
   cost_analysis_wrong: number;
   value_chain_correct: number;
   value_chain_wrong: number;
+  uljez_correct: number;
+  uljez_wrong: number;
   investment_gains: number;
   investment_losses: number;
   jail_visits: number;
@@ -171,6 +173,8 @@ export const App: React.FC = () => {
     costAnalysisWrong: 0,
     valueChainCorrect: 0,
     valueChainWrong: 0,
+    uljezCorrect: 0,
+    uljezWrong: 0,
 
     investmentGains: 0,
     investmentLosses: 0,
@@ -211,7 +215,7 @@ export const App: React.FC = () => {
       // Try fetching all columns first
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, cost_analysis_correct, cost_analysis_wrong, investment_gains, investment_losses, jail_visits, jail_skips, auction_wins, taxes_paid')
+        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, cost_analysis_correct, cost_analysis_wrong, value_chain_correct, value_chain_wrong, uljez_correct, uljez_wrong, investment_gains, investment_losses, jail_visits, jail_skips, auction_wins, taxes_paid')
         .eq('id', userId)
         .single();
 
@@ -307,6 +311,10 @@ export const App: React.FC = () => {
       wrong_quizzes: 0,
       cost_analysis_correct: 0,
       cost_analysis_wrong: 0,
+      value_chain_correct: 0,
+      value_chain_wrong: 0,
+      uljez_correct: 0,
+      uljez_wrong: 0,
       investment_gains: 0,
       investment_losses: 0,
       jail_visits: 0,
@@ -1054,6 +1062,9 @@ export const App: React.FC = () => {
                 } else if (activeModal === 'value_chain') {
                   if (change > 0) increments.value_chain_correct = 1;
                   else increments.value_chain_wrong = 1;
+                } else if (activeModal === 'uljez') {
+                  if (change > 0) increments.uljez_correct = 1;
+                  else increments.uljez_wrong = 1;
                 } else if (activeModal === 'investment') {
                   if (change > 0) increments.investment_gains = change;
                   else if (change < 0) increments.investment_losses = Math.abs(change);
@@ -1074,6 +1085,9 @@ export const App: React.FC = () => {
                 } else if (activeModal === 'value_chain') {
                   if (change > 0) setSinglePlayerStats(prev => ({ ...prev, valueChainCorrect: prev.valueChainCorrect + 1 }));
                   else setSinglePlayerStats(prev => ({ ...prev, valueChainWrong: prev.valueChainWrong + 1 }));
+                } else if (activeModal === 'uljez') {
+                  if (change > 0) setSinglePlayerStats(prev => ({ ...prev, uljezCorrect: prev.uljezCorrect + 1 }));
+                  else setSinglePlayerStats(prev => ({ ...prev, uljezWrong: prev.uljezWrong + 1 }));
                 } else if (activeModal === 'investment') {
                   if (change > 0) setSinglePlayerStats(prev => ({ ...prev, investmentGains: prev.investmentGains + change }));
                   else if (change < 0) setSinglePlayerStats(prev => ({ ...prev, investmentLosses: prev.investmentLosses + Math.abs(change) }));
@@ -1096,6 +1110,13 @@ export const App: React.FC = () => {
                 } else if (activeModal === 'value_chain') {
                   multiplayer.sendAction({
                     type: 'ACTION_VALUE_CHAIN_RESULT',
+                    reward: change > 0 ? change : 0,
+                    penalty: change < 0 ? -change : 0,
+                    success: change > 0
+                  });
+                } else if (activeModal === 'uljez') {
+                  multiplayer.sendAction({
+                    type: 'ACTION_ULJEZ_RESULT',
                     reward: change > 0 ? change : 0,
                     penalty: change < 0 ? -change : 0,
                     success: change > 0

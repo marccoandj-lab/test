@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { GameMode, QuizQuestion, getInvestmentResult, CostAnalysisScenario } from '../data/gameData';
+import { GameMode, QuizQuestion, getInvestmentResult, CostAnalysisScenario, UljezSet } from '../data/gameData';
 import { Player } from '../types/game';
 import { multiplayer } from '../services/MultiplayerManager';
 import { translations } from '../i18n/translations';
@@ -1610,6 +1610,104 @@ export function ValueChainModal({ task, mode, onResult, language }: ValueChainMo
             <p className="text-rose-400 font-black text-sm">-15,000 SC</p>
           </div>
         </div>
+      </div>
+    </Modal>
+  );
+}
+
+export function UljezModal({ 
+  uljezSet, 
+  onComplete, 
+  mode,
+  language 
+}: { 
+  uljezSet: UljezSet; 
+  onComplete: (success: boolean) => void; 
+  mode: GameMode;
+  language: 'en' | 'sr';
+}) {
+  const [timeLeft, setTimeLeft] = useState(30);
+  const [selected, setSelected] = useState<number | null>(null);
+  const [isFinished, setIsFinished] = useState(false);
+
+  useEffect(() => {
+    if (isFinished) return;
+    if (timeLeft <= 0) {
+      handleComplete(null);
+      return;
+    }
+    const timer = setInterval(() => setTimeLeft(prev => prev - 1), 1000);
+    return () => clearInterval(timer);
+  }, [timeLeft, isFinished]);
+
+  const handleComplete = (index: number | null) => {
+    if (isFinished) return;
+    setSelected(index);
+    setIsFinished(true);
+    setTimeout(() => onComplete(index === uljezSet.correct), 1500);
+  };
+
+  const isCorrect = selected === uljezSet.correct;
+
+  return (
+    <Modal onClose={() => {}} mode={mode} language={language}>
+      <div className="space-y-6">
+        <h2 className="text-xl font-black text-white tracking-tight uppercase">
+          {language === 'en' ? 'INTRUDER' : 'ULJEZ'}
+        </h2>
+        <div className="relative h-2 bg-white/10 rounded-full overflow-hidden">
+          <motion.div 
+            initial={{ width: '100%' }}
+            animate={{ width: `${(timeLeft / 30) * 100}%` }}
+            transition={{ duration: 1, ease: "linear" }}
+            className={`absolute inset-0 ${timeLeft < 10 ? 'bg-rose-500' : 'bg-orange-500'}`}
+          />
+        </div>
+
+        <div className="text-center space-y-2">
+          <p className="text-orange-400 font-black text-[10px] uppercase tracking-[0.2em]">
+            {language === 'en' ? 'THEME' : 'TEMA'}
+          </p>
+          <h3 className="text-white text-2xl font-black tracking-tight uppercase italic">
+            {uljezSet.theme[language]}
+          </h3>
+          <p className="text-slate-400 text-sm font-medium">
+            {language === 'en' ? 'Identify the one that doesn\'t belong:' : 'Pronađi pojam koji ne pripada grupi:'}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          {uljezSet.options[language].map((opt, i) => (
+            <button
+              key={i}
+              disabled={isFinished}
+              onClick={() => handleComplete(i)}
+              className={`p-6 rounded-2xl border-2 transition-all text-sm font-black uppercase tracking-tight text-center ${
+                selected === i 
+                  ? (i === uljezSet.correct ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400' : 'bg-rose-500/20 border-rose-500 text-rose-400')
+                  : (isFinished && i === uljezSet.correct ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400' : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10')
+              }`}
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
+
+        <AnimatePresence>
+          {isFinished && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`p-4 rounded-xl text-center font-black uppercase tracking-widest text-xs ${
+                isCorrect ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'
+              }`}
+            >
+              {isCorrect 
+                ? (language === 'en' ? `SUCCESS! +${uljezSet.reward.toLocaleString()} SC` : `TAČNO! +${uljezSet.reward.toLocaleString()} SC`)
+                : (language === 'en' ? `WRONG! -${uljezSet.penalty.toLocaleString()} SC` : `NETAČNO! -${uljezSet.penalty.toLocaleString()} SC`)}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </Modal>
   );
