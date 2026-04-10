@@ -14,6 +14,26 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ players, currentTurnIndex, myId, levels, showOnMobile, language }) => {
   const t = translations[language];
+
+  const getTranslatedLabel = (l: Level) => {
+    switch (l.type) {
+      case 'start': return t.ui.field_start;
+      case 'income': return t.ui.field_income;
+      case 'expense': return t.ui.field_expense;
+      case 'quiz': return t.ui.field_quiz;
+      case 'jail': return t.ui.field_jail;
+      case 'switch': return t.ui.field_switch;
+      case 'investment': return t.ui.field_investment;
+      case 'tax_small': return t.ui.field_tax;
+      case 'tax_large': return t.ui.field_tax_collect;
+      case 'auction_insurance': return t.ui.field_auction; // Generic auction/insurance translation logic could be more complex but this follows main UI
+      case 'cost_analysis': return t.ui.field_cost_analysis;
+      case 'value_chain': return t.ui.field_value_chain;
+      case 'uljez': return t.ui.field_uljez;
+      default: return t.ui.field_generic;
+    }
+  };
+
   return (
     <div className={`fixed right-0 top-0 h-screen w-64 bg-slate-900/95 backdrop-blur-xl border-l border-white/10 p-4 z-40 transition-transform duration-300 ${
         showOnMobile ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'
@@ -83,8 +103,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ players, currentTurnIndex, myI
                 <div className="flex items-center gap-1">
                   <span>{t.ui.lvl} {Math.floor(player.position / 5) + 1}</span>
                   {levels[player.position % levels.length] && (
-                    <span className="opacity-80">
-                      • {levels[player.position % levels.length].icon} {levels[player.position % levels.length].label}
+                    <span className="opacity-80 truncate max-w-[100px]">
+                      • {levels[player.position % levels.length].icon} {getTranslatedLabel(levels[player.position % levels.length])}
                     </span>
                   )}
                 </div>

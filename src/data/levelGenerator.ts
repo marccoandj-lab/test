@@ -136,7 +136,7 @@ const getFieldMeta = (type: FieldType, _mode: GameMode): Omit<Level, 'id'> => {
     default:
       return {
         type,
-        label: 'Field',
+        label: 'Special Event',
         icon: '⭐',
         color: 'text-white',
         bgColor: 'bg-gray-500',
