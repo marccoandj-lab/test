@@ -31,11 +31,28 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
   const [friends, setFriends] = useState<FriendRelation[]>([]);
+  const [onlineUserIds, setOnlineUserIds] = useState<string[]>([]);
+  const [isOnlineCollapsed, setIsOnlineCollapsed] = useState(false);
+  const [isOfflineCollapsed, setIsOfflineCollapsed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'friends' | 'search' | 'requests'>('friends');
 
   useEffect(() => {
     fetchFriends();
+
+    // Subscribe to global presence to see who is online
+    const channel = supabase.channel('global-presence-sync');
+    
+    channel
+      .on('presence', { event: 'sync' }, () => {
+        const state = channel.presenceState();
+        setOnlineUserIds(Object.keys(state));
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const fetchFriends = async () => {
@@ -179,6 +196,10 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
   const pendingRequests = friends.filter(f => f.status === 'pending' && f.friend_id === currentUserId);
   const acceptedFriends = friends.filter(f => f.status === 'accepted');
 
+  // Categorize friends by online status
+  const onlineFriends = acceptedFriends.filter(f => f.profiles && onlineUserIds.includes(f.profiles.id));
+  const offlineFriends = acceptedFriends.filter(f => f.profiles && !onlineUserIds.includes(f.profiles.id));
+
   return (
     <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 z-50 overflow-hidden">
       <div className="max-w-md w-full space-y-6 bg-white/5 p-8 rounded-[32px] border border-white/10 backdrop-blur-xl h-[90vh] flex flex-col shadow-2xl">
@@ -262,37 +283,103 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
           )}
 
           {activeTab === 'friends' && (
-            <div className="space-y-3">
-              {acceptedFriends.map(f => (
-                <div key={f.id} className="bg-white/5 p-4 rounded-2xl border border-white/5 flex items-center justify-between group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 relative">
-                      <img src={`/assets/${f.profiles?.avatar_url || '1'}.png`} alt="" className="w-9 h-9 object-contain" />
-                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-slate-900 shadow-sm" />
-                    </div>
-                    <div>
-                      <h4 className="text-white font-black text-sm tracking-tight">{f.profiles?.username}</h4>
-                      {f.profiles?.id && <p className="text-blue-400/60 font-mono text-[9px] font-black tracking-widest mb-1">#{f.profiles.id.substring(0, 6).toUpperCase()}</p>}
-                      <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">{language === 'en' ? 'Friend' : 'Prijatelj'}</p>
-                    </div>
-                  </div>
+            <div className="space-y-6">
+              {/* Online Friends */}
+              <div className="space-y-3">
+                <button 
+                  onClick={() => setIsOnlineCollapsed(!isOnlineCollapsed)}
+                  className="w-full flex items-center justify-between px-2 py-1 hover:bg-white/5 rounded-lg transition-colors group"
+                >
                   <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => f.profiles && inviteToPlay(f.profiles.id)}
-                      className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] shadow-lg shadow-blue-900/40 transition-all active:scale-95"
-                    >
-                      {language === 'en' ? 'Invite' : 'Pozovi'} 🎮
-                    </button>
-                    <button
-                      onClick={() => removeFriend(f.id)}
-                      className="p-2 text-slate-500 hover:text-rose-500 transition-colors"
-                      title={ts.remove}
-                    >
-                      🗑️
-                    </button>
+                    <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-hover:text-white transition-colors">
+                      {language === 'en' ? 'Online' : 'Na mreži'} ({onlineFriends.length})
+                    </span>
                   </div>
-                </div>
-              ))}
+                  <span className={`text-[10px] text-slate-600 transition-transform duration-300 ${isOnlineCollapsed ? '-rotate-90' : ''}`}>▼</span>
+                </button>
+                
+                {!isOnlineCollapsed && (
+                  <div className="space-y-3 animate-fade-in">
+                    {onlineFriends.map(f => (
+                      <div key={f.id} className="bg-white/5 p-4 rounded-2xl border border-white/5 flex items-center justify-between group hover:bg-white/10 transition-all">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20 relative">
+                            <img src={`/assets/${f.profiles?.avatar_url || '1'}.png`} alt="" className="w-9 h-9 object-contain" />
+                            <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-slate-900 shadow-sm shadow-green-900/40" />
+                          </div>
+                          <div>
+                            <h4 className="text-white font-black text-sm tracking-tight">{f.profiles?.username}</h4>
+                            {f.profiles?.id && <p className="text-blue-400/60 font-mono text-[9px] font-black tracking-widest mb-1">#{f.profiles.id.substring(0, 6).toUpperCase()}</p>}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => f.profiles && inviteToPlay(f.profiles.id)}
+                            className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] shadow-lg shadow-blue-900/40 transition-all active:scale-95"
+                          >
+                            {language === 'en' ? 'Invite' : 'Pozovi'} 🎮
+                          </button>
+                          <button
+                            onClick={() => removeFriend(f.id)}
+                            className="p-2 text-slate-500 hover:text-rose-500 transition-colors"
+                            title={ts.remove}
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                    {onlineFriends.length === 0 && (
+                      <p className="text-center text-slate-600 text-[10px] italic py-2">{language === 'en' ? 'No friends online.' : 'Nema prijatelja na mreži.'}</p>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Offline Friends */}
+              <div className="space-y-3">
+                <button 
+                  onClick={() => setIsOfflineCollapsed(!isOfflineCollapsed)}
+                  className="w-full flex items-center justify-between px-2 py-1 hover:bg-white/5 rounded-lg transition-colors group"
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-slate-700" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 group-hover:text-white transition-colors">
+                      {language === 'en' ? 'Offline' : 'Van mreže'} ({offlineFriends.length})
+                    </span>
+                  </div>
+                  <span className={`text-[10px] text-slate-600 transition-transform duration-300 ${isOfflineCollapsed ? '-rotate-90' : ''}`}>▼</span>
+                </button>
+
+                {!isOfflineCollapsed && (
+                  <div className="space-y-3 animate-fade-in opacity-60 grayscale-[0.5]">
+                    {offlineFriends.map(f => (
+                      <div key={f.id} className="bg-white/5 p-4 rounded-2xl border border-white/5 flex items-center justify-between group hover:bg-white/10 transition-all">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 relative">
+                            <img src={`/assets/${f.profiles?.avatar_url || '1'}.png`} alt="" className="w-9 h-9 object-contain opacity-50" />
+                          </div>
+                          <div>
+                            <h4 className="text-slate-400 font-bold text-sm tracking-tight">{f.profiles?.username}</h4>
+                            {f.profiles?.id && <p className="text-slate-600 font-mono text-[9px] font-black tracking-widest mb-1">#{f.profiles.id.substring(0, 6).toUpperCase()}</p>}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => removeFriend(f.id)}
+                            className="p-2 text-slate-500 hover:text-rose-500 transition-colors"
+                            title={ts.remove}
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {acceptedFriends.length === 0 && (
                 <div className="text-center py-12 space-y-4">
                   <div className="text-4xl text-slate-800 opacity-50">👥</div>

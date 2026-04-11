@@ -593,6 +593,32 @@ export const App: React.FC = () => {
     };
   }, [session, playSFX]);
 
+  // Global Presence Tracker
+  useEffect(() => {
+    if (!session?.user.id) return;
+
+    const channel = supabase.channel('global-presence', {
+      config: {
+        presence: {
+          key: session.user.id,
+        },
+      },
+    });
+
+    channel
+      .subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          await channel.track({
+            online_at: new Date().toISOString(),
+          });
+        }
+      });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [session]);
+
   const handleTrackEnd = useCallback(() => {
     setTrackIndex(prev => (prev + 1) % MUSIC_TRACKS.length);
   }, []);
