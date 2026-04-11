@@ -34,6 +34,7 @@ interface StartScreenProps {
   language: 'en' | 'sr';
   onOpenSettings?: () => void;
   initialRoomCode?: string;
+  onlineUserIds: string[];
 }
 
 export const StartScreen: React.FC<StartScreenProps> = ({ 
@@ -44,7 +45,8 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   profileData,
   language,
   onOpenSettings,
-  initialRoomCode = ''
+  initialRoomCode = '',
+  onlineUserIds
 }) => {
   const t = translations[language];
   const [name, setName] = useState(initialName);
@@ -427,7 +429,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   }
 
   if (mode === 'socials') {
-    return <Socials onBack={() => setMode('initial')} onInviteSent={(code) => { setRoomCode(code); onStart(name, avatar, false); }} currentUserId={userId || ''} language={language} />;
+    return <Socials onBack={() => setMode('initial')} onInviteSent={(code) => { setRoomCode(code); onStart(name, avatar, false); }} currentUserId={userId || ''} language={language} onlineUserIds={onlineUserIds} />;
   }
 
   if (mode === 'leaderboard') {

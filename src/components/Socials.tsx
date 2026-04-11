@@ -8,6 +8,7 @@ interface SocialsProps {
   onInviteSent: (roomCode: string) => void;
   currentUserId: string;
   language: 'en' | 'sr';
+  onlineUserIds: string[];
 }
 
 interface UserProfile {
@@ -25,13 +26,12 @@ interface FriendRelation {
   profiles?: UserProfile;
 }
 
-export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentUserId, language }) => {
+export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentUserId, language, onlineUserIds }) => {
   const t = translations[language];
   const ts = t.socials as any;
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<UserProfile[]>([]);
   const [friends, setFriends] = useState<FriendRelation[]>([]);
-  const [onlineUserIds, setOnlineUserIds] = useState<string[]>([]);
   const [isOnlineCollapsed, setIsOnlineCollapsed] = useState(false);
   const [isOfflineCollapsed, setIsOfflineCollapsed] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -39,20 +39,6 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
 
   useEffect(() => {
     fetchFriends();
-
-    // Subscribe to global presence to see who is online
-    const channel = supabase.channel('global-presence');
-    
-    channel
-      .on('presence', { event: 'sync' }, () => {
-        const state = channel.presenceState();
-        setOnlineUserIds(Object.keys(state));
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
   }, []);
 
   const fetchFriends = async () => {

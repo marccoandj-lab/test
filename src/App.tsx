@@ -52,6 +52,7 @@ export const App: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [onlineUserIds, setOnlineUserIds] = useState<string[]>([]);
 
   // Helper to generate a unique short display ID
   const generateDisplayId = () => {
@@ -606,6 +607,10 @@ export const App: React.FC = () => {
     });
 
     channel
+      .on('presence', { event: 'sync' }, () => {
+        const state = channel.presenceState();
+        setOnlineUserIds(Object.keys(state));
+      })
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {
           await channel.track({
@@ -928,6 +933,7 @@ export const App: React.FC = () => {
           initialName={userName}
           initialAvatar={userAvatar}
           profileData={profile}
+          onlineUserIds={onlineUserIds}
           onProfileUpdate={(newName, newAvatar) => {
             setUserName(newName);
             setUserAvatar(newAvatar as AvatarType);
