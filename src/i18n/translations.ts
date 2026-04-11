@@ -178,6 +178,44 @@ export const translations = {
       sustainability_title: "Sustainable Development",
       sustainability_desc: "Understand the balance between economic growth and environmental protection.",
       open_resource: "Open Resource ↗"
+    },
+    legal: {
+      title: "Legal Information",
+      terms: "Terms of Service",
+      privacy: "Privacy Policy",
+      refund: "Refund Policy",
+      last_updated: "Last Updated: April 2026",
+      contact_support: "Contact support at: support@economyswitch.com",
+      need_help: "Need Help?",
+      sections: {
+        terms: {
+          intro: "Welcome to EconomySwitch. By using our platform, you agree to these terms. Please read them carefully.",
+          h1: "1. Subscriptions & Payments",
+          subscription: "Pro features are provided on a subscription basis. Payments are processed via Paddle, our Merchant of Record. By subscribing, you authorize Paddle to charge your chosen payment method.",
+          h2: "2. Acceptable Use",
+          usage: "EconomySwitch is an educational simulation. While it uses real-world concepts, it is not financial advice. Users must be at least 13 years old.",
+          h3: "3. Connectivity",
+          multiplayer: "Multiplayer features use Peer-to-Peer (P2P) technology. You are responsible for your own internet connection and data usage."
+        },
+        privacy: {
+          h1: "1. Information We Collect",
+          data_collection: "We collect your username, chosen avatar, and game statistics to provide the leaderboard and profile features. This data is stored securely in Supabase.",
+          h2: "2. Payment Processing",
+          payment_data: "Payment information is handled exclusively by Paddle. We do not store your credit card or billing details on our servers.",
+          h3: "3. Notification Services",
+          notifications: "Push notification tokens are stored to send you game reminders. You can disable these at any time in settings.",
+          h4: "4. Data Sharing",
+          sharing: "We do not sell your data. We only share necessary information with our service providers (Supabase, Paddle, Render) to operate the service."
+        },
+        refund: {
+          h1: "1. Refund Eligibility",
+          policy: "We offer a 14-day cooling-off period for Pro subscriptions. If you change your mind within 14 days of purchase, you are eligible for a full refund.",
+          h2: "2. Exceptions",
+          exceptions: "Refunds are not available if you have already activated or utilized Pro-exclusive features (e.g., specific Pro avatars or advanced educational modules).",
+          h3: "3. Request Process",
+          process: "To request a refund, please contact Paddle support directly or reach out to our team at support@economyswitch.com."
+        }
+      }
     }
   },
   sr: {
@@ -357,9 +395,48 @@ export const translations = {
       sustainability_title: "Održivi Razvoj",
       sustainability_desc: "Razumite balans između ekonomskog rasta i zaštite životne sredine.",
       open_resource: "Otvori Resurs ↗"
+    },
+    legal: {
+      title: "Pravne Informacije",
+      terms: "Uslovi korišćenja",
+      privacy: "Politika privatnosti",
+      refund: "Politika refundacije",
+      last_updated: "Poslednja izmena: April 2026.",
+      contact_support: "Kontaktirajte podršku na: support@economyswitch.com",
+      need_help: "Potrebna vam je pomoć?",
+      sections: {
+        terms: {
+          intro: "Dobrodošli u EconomySwitch. Korišćenjem naše platforme, slažete se sa ovim uslovima. Molimo vas da ih pažljivo pročitate.",
+          h1: "1. Pretplate i plaćanja",
+          subscription: "Pro funkcije se pružaju na bazi pretplate. Plaćanja se obrađuju preko Paddle-a, našeg zvaničnog prodavca (Merchant of Record).",
+          h2: "2. Prihvatljivo korišćenje",
+          usage: "EconomySwitch je edukativna simulacija. Iako koristi koncepte iz stvarnog sveta, nije finansijski savet. Korisnici moraju imati najmanje 13 godina.",
+          h3: "3. Povezivanje",
+          multiplayer: "Multiplayer funkcije koriste Peer-to-Peer (P2P) tehnologiju. Odgovorni ste za sopstvenu internet vezu i potrošnju podataka."
+        },
+        privacy: {
+          h1: "1. Podaci koje prikupljamo",
+          data_collection: "Prikupljamo vaše korisničko ime, izabrani avatar i statistiku igre kako bismo omogućili rang listu i funkcije profila. Ovi podaci se čuvaju u Supabase bazi.",
+          h2: "2. Obrada plaćanja",
+          payment_data: "Informacije o plaćanju obrađuje isključivo Paddle. Mi ne čuvamo podatke o vašim karticama ili računima na našim serverima.",
+          h3: "3. Servisi obaveštenja",
+          notifications: "Tokeni za push obaveštenja se čuvaju kako bismo vam slali podsetnike. Možete ih isključiti u bilo kom trenutku u podešavanjima.",
+          h4: "4. Deljenje podataka",
+          sharing: "Vaše podatke ne prodajemo. Delimo ih samo sa neophodnim servisima (Supabase, Paddle, Render) radi funkcionisanja aplikacije."
+        },
+        refund: {
+          h1: "1. Pravo na refundaciju",
+          policy: "Nudimo period od 14 dana za odustajanje od Pro pretplate. Ako se predomislite u roku od 14 dana od kupovine, imate pravo na pun povraćaj novca.",
+          h2: "2. Izuzeci",
+          exceptions: "Povraćaj nije moguć ako ste već aktivirali ili koristili Pro funkcije (npr. specijalni avatari ili napredni edukativni moduli).",
+          h3: "3. Proces zahteva",
+          process: "Da biste zatražili refundaciju, kontaktirajte direktno Paddle podršku ili naš tim na support@economyswitch.com."
+        }
+      }
     }
   }
 };
+
 
 export type Language = 'en' | 'sr';
 export type TranslationKey = typeof translations.en;

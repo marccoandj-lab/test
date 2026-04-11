@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase';
 import { Socials } from './Socials';
 import { Leaderboard } from './Leaderboard';
 import { EducationScreen } from './EducationScreen';
+import { LegalScreen } from './LegalScreen';
 
 import { formatNumber } from '../utils/format';
 import { AVATAR_MAP } from '../data/avatars';
@@ -51,7 +52,8 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   const t = translations[language];
   const [name, setName] = useState(initialName);
   const [avatar, setAvatar] = useState<string>(initialAvatar);
-  const [mode, setMode] = useState<'initial' | 'create' | 'join' | 'single' | 'profile' | 'socials' | 'leaderboard' | 'education'>('initial');
+  const [mode, setMode] = useState<'initial' | 'create' | 'join' | 'single' | 'profile' | 'socials' | 'leaderboard' | 'education' | 'legal'>('initial');
+  const [legalSection, setLegalSection] = useState<'terms' | 'privacy' | 'refund'>('terms');
   const [roomCode, setRoomCode] = useState('');
   const [userId, setUserId] = useState<string | null>(null);
   const [isEditingName, setIsEditingName] = useState(false);
@@ -440,6 +442,10 @@ export const StartScreen: React.FC<StartScreenProps> = ({
     return <EducationScreen onBack={() => setMode('initial')} language={language} />;
   }
 
+  if (mode === 'legal') {
+    return <LegalScreen onBack={() => setMode('initial')} language={language} initialSection={legalSection} />;
+  }
+
   return (
     <div className="fixed inset-0 bg-slate-900 flex flex-col items-center p-6 z-50 overflow-y-auto custom-scrollbar">
       <div className="absolute inset-0 opacity-30 pointer-events-none overflow-hidden fixed">
@@ -588,12 +594,37 @@ export const StartScreen: React.FC<StartScreenProps> = ({
           )}
         </div>
 
-        <div className="mt-4 flex flex-col items-center gap-2 opacity-40">
-          <p className="text-[9px] text-slate-500 font-black uppercase tracking-[0.3em]">Version 2.0.4 - Strategic Edition</p>
-          <div className="flex gap-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" style={{ animationDelay: '0.5s' }} />
-            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="mt-4 flex flex-col items-center gap-4 animate-modal-pop" style={{ animationDelay: '0.4s' }}>
+          <div className="flex flex-col items-center gap-2 opacity-40">
+            <p className="text-[9px] text-slate-500 font-black uppercase tracking-[0.3em]">Version 2.0.4 - Strategic Edition</p>
+            <div className="flex gap-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" style={{ animationDelay: '0.5s' }} />
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" style={{ animationDelay: '1s' }} />
+            </div>
+          </div>
+
+          <div className="flex gap-4 px-6 py-2 bg-white/5 border border-white/5 rounded-full backdrop-blur-sm">
+            <button
+              onClick={() => { setLegalSection('terms'); setMode('legal'); }}
+              className="text-[9px] font-black uppercase tracking-[0.1em] text-slate-500 hover:text-blue-400 transition-colors"
+            >
+              {t.legal.terms}
+            </button>
+            <span className="w-[1px] h-3 bg-white/10" />
+            <button
+              onClick={() => { setLegalSection('privacy'); setMode('legal'); }}
+              className="text-[9px] font-black uppercase tracking-[0.1em] text-slate-500 hover:text-emerald-400 transition-colors"
+            >
+              {t.legal.privacy}
+            </button>
+            <span className="w-[1px] h-3 bg-white/10" />
+            <button
+              onClick={() => { setLegalSection('refund'); setMode('legal'); }}
+              className="text-[9px] font-black uppercase tracking-[0.1em] text-slate-500 hover:text-amber-400 transition-colors"
+            >
+              {t.legal.refund}
+            </button>
           </div>
         </div>
       </div>
