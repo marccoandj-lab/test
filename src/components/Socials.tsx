@@ -41,7 +41,7 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
     fetchFriends();
 
     // Subscribe to global presence to see who is online
-    const channel = supabase.channel('global-presence-sync');
+    const channel = supabase.channel('global-presence');
     
     channel
       .on('presence', { event: 'sync' }, () => {
