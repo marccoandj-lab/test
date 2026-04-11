@@ -1626,6 +1626,7 @@ export function UljezModal({
   mode: GameMode;
   language: 'en' | 'sr';
 }) {
+  const tDict = translations[language];
   const [timeLeft, setTimeLeft] = useState(30);
   const [selected, setSelected] = useState<number | null>(null);
   const [isFinished, setIsFinished] = useState(false);
@@ -1644,67 +1645,103 @@ export function UljezModal({
     if (isFinished) return;
     setSelected(index);
     setIsFinished(true);
-    setTimeout(() => onComplete(index === uljezSet.correct), 1500);
+    setTimeout(() => onComplete(index === uljezSet.correct), 2500);
   };
 
   const isCorrect = selected === uljezSet.correct;
+  const timerColor = timeLeft > 10 ? 'text-emerald-400' : timeLeft > 5 ? 'text-amber-400' : 'text-rose-400';
+
+  const getOptionClass = (idx: number) => {
+    const c = OPTION_COLORS[idx % OPTION_COLORS.length];
+    if (!isFinished) return `${c.base} cursor-pointer hover:translate-x-1 shadow-md hover:shadow-lg transition-all duration-300`;
+    if (idx === uljezSet.correct) return `${c.correct} cursor-default scale-[1.02] shadow-emerald-500/20 shadow-xl border-emerald-400 z-10`;
+    if (idx === selected && idx !== uljezSet.correct) return `${c.wrong} cursor-default grayscale-[0.5] opacity-80`;
+    return `bg-white/5 border-white/10 text-white/30 cursor-default opacity-40 scale-[0.98]`;
+  };
 
   return (
     <Modal onClose={() => {}} mode={mode} language={language}>
-      <div className="space-y-6">
-        <h2 className="text-xl font-black text-white tracking-tight uppercase">
-          {language === 'en' ? 'INTRUDER' : 'ULJEZ'}
-        </h2>
-        <div className="relative h-2 bg-white/10 rounded-full overflow-hidden">
-          <motion.div 
-            initial={{ width: '100%' }}
-            animate={{ width: `${(timeLeft / 30) * 100}%` }}
-            transition={{ duration: 1, ease: "linear" }}
-            className={`absolute inset-0 ${timeLeft < 10 ? 'bg-rose-500' : 'bg-orange-500'}`}
-          />
+      <FloatingSymbols symbols={['🔍', '🔎', '❌', '👽']} animationClass="animate-float-random" count={8} />
+      
+      <div className="p-6 relative z-10">
+        <div className="flex items-center gap-4 mb-6">
+          <div className="relative">
+            <div className="text-4xl animate-bounce">🕵️‍♂️</div>
+            <div className="absolute inset-0 bg-white/20 blur-xl rounded-full -z-10" />
+          </div>
+          <div className="flex-1">
+            <p className="text-white/40 text-[10px] uppercase font-black tracking-[0.2em] mb-0.5">
+              {language === 'en' ? 'INTRUDER' : 'ULJEZ'}
+            </p>
+            <p className="text-white font-black text-lg tracking-tight leading-tight uppercase italic">
+              {uljezSet.theme[language]}
+            </p>
+          </div>
+          {!isFinished && (
+            <div className={`relative w-14 h-14 flex items-center justify-center rounded-2xl border-2 border-white/20 bg-white/5 ${timerColor} font-black text-xl shadow-inner animate-pulse`}>
+              {timeLeft}
+            </div>
+          )}
         </div>
 
-        <div className="text-center space-y-2">
-          <p className="text-orange-400 font-black text-[10px] uppercase tracking-[0.2em]">
+        <div className="bg-white/10 backdrop-blur-md rounded-3xl p-5 mb-6 border border-white/20 shadow-2xl relative group">
+          <div className="absolute -top-3 left-6 px-3 py-1 bg-white text-slate-900 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
             {language === 'en' ? 'THEME' : 'TEMA'}
-          </p>
-          <h3 className="text-white text-2xl font-black tracking-tight uppercase italic">
-            {uljezSet.theme[language]}
-          </h3>
-          <p className="text-slate-400 text-sm font-medium">
+          </div>
+          <p className="text-white text-base font-bold leading-relaxed tracking-tight">
             {language === 'en' ? 'Identify the one that doesn\'t belong:' : 'Pronađi pojam koji ne pripada grupi:'}
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 mb-6">
           {uljezSet.options[language].map((opt, i) => (
             <button
               key={i}
               disabled={isFinished}
               onClick={() => handleComplete(i)}
-              className={`p-6 rounded-2xl border-2 transition-all text-sm font-black uppercase tracking-tight text-center ${
-                selected === i 
-                  ? (i === uljezSet.correct ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400' : 'bg-rose-500/20 border-rose-500 text-rose-400')
-                  : (isFinished && i === uljezSet.correct ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400' : 'bg-white/5 border-white/10 text-slate-300 hover:bg-white/10')
-              }`}
+              className={`
+                p-5 rounded-2xl border-2 transition-all text-sm font-black uppercase tracking-tight text-center active:scale-[0.97]
+                ${getOptionClass(i)}
+              `}
             >
-              {opt}
+              <div className="flex flex-col items-center gap-2">
+                <span className="flex-1">{opt}</span>
+                {isFinished && i === uljezSet.correct && <span className="text-xl animate-bounce">✨</span>}
+              </div>
             </button>
           ))}
+        </div>
+
+        <div className="flex gap-3 mt-auto">
+          <div className="flex-1 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-3 flex flex-col items-center">
+            <p className="text-emerald-400/60 text-[8px] font-black uppercase tracking-widest mb-1">{language === 'en' ? 'REWARD' : 'NAGRADA'}</p>
+            <p className="text-emerald-400 font-black text-sm">+{uljezSet.reward.toLocaleString()} SC</p>
+          </div>
+          <div className="flex-1 bg-rose-500/10 border border-rose-500/20 rounded-2xl p-3 flex flex-col items-center">
+            <p className="text-rose-400/60 text-[8px] font-black uppercase tracking-widest mb-1">{language === 'en' ? 'PENALTY' : 'KAZNA'}</p>
+            <p className="text-rose-400 font-black text-sm">-{uljezSet.penalty.toLocaleString()} SC</p>
+          </div>
         </div>
 
         <AnimatePresence>
           {isFinished && (
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`p-4 rounded-xl text-center font-black uppercase tracking-widest text-xs ${
-                isCorrect ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'
-              }`}
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              className={`mt-6 rounded-3xl p-5 border-2 animate-modal-pop shadow-2xl ${isCorrect ? 'bg-emerald-500/30 border-emerald-400/30' : 'bg-rose-500/30 border-rose-400/30'}`}
             >
-              {isCorrect 
-                ? (language === 'en' ? `SUCCESS! +${uljezSet.reward.toLocaleString()} SC` : `TAČNO! +${uljezSet.reward.toLocaleString()} SC`)
-                : (language === 'en' ? `WRONG! -${uljezSet.penalty.toLocaleString()} SC` : `NETAČNO! -${uljezSet.penalty.toLocaleString()} SC`)}
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-2xl">{isCorrect ? '🎉' : '💨'}</span>
+                <p className="text-white font-black text-xl">
+                  {isCorrect ? tDict.modals.correct : tDict.modals.wrong}
+                </p>
+              </div>
+              <p className="text-white/80 text-xs leading-relaxed mb-4 font-medium">{uljezSet.explanation[language]}</p>
+              <div className={`inline-block px-4 py-2 rounded-xl font-black text-lg shadow-lg ${isCorrect ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'}`}>
+                {isCorrect 
+                  ? `+${uljezSet.reward.toLocaleString()} SC` 
+                  : `-${uljezSet.penalty.toLocaleString()} SC`}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

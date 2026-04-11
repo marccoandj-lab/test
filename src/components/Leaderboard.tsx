@@ -15,9 +15,11 @@ interface PlayerStats {
   wins: number;
   correct_quizzes: number;
   total_capital: number;
+  value_chain_correct: number;
+  uljez_correct: number;
 }
 
-type TabCategory = 'wins' | 'quizzes' | 'capital';
+type TabCategory = 'wins' | 'quizzes' | 'capital' | 'chains' | 'intruders';
 
 export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId, language }) => {
   const t = translations[language];
@@ -51,12 +53,16 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
   const fetchLeaderboard = async (showLoading = true) => {
     if (showLoading) setLoading(true);
     try {
-      const orderBy = activeTab === 'wins' ? 'wins' : activeTab === 'quizzes' ? 'correct_quizzes' : 'total_capital';
+      const orderBy = 
+        activeTab === 'wins' ? 'wins' : 
+        activeTab === 'quizzes' ? 'correct_quizzes' : 
+        activeTab === 'capital' ? 'total_capital' :
+        activeTab === 'chains' ? 'value_chain_correct' : 'uljez_correct';
       
       console.log(`Fetching leaderboard ordered by ${orderBy}...`);
       let { data, error } = await supabase
         .from('profiles')
-        .select('id, username, avatar_url, wins, correct_quizzes, total_capital')
+        .select('id, username, avatar_url, wins, correct_quizzes, total_capital, value_chain_correct, uljez_correct')
         .order(orderBy, { ascending: false })
         .limit(50);
 
@@ -74,7 +80,9 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
             ...p,
             wins: 0,
             correct_quizzes: 0,
-            total_capital: 0
+            total_capital: 0,
+            value_chain_correct: 0,
+            uljez_correct: 0
           })) as any;
         } else {
           console.error('Supabase leaderboard fetch error:', error);
@@ -94,12 +102,16 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
           // Fetch my specific stats and count people above me
           const { data: myData, error: myDataError } = await supabase
             .from('profiles')
-            .select('id, username, avatar_url, wins, correct_quizzes, total_capital')
+            .select('id, username, avatar_url, wins, correct_quizzes, total_capital, value_chain_correct, uljez_correct')
             .eq('id', currentUserId)
             .single();
 
           if (myData) {
-            const myValue = activeTab === 'wins' ? myData.wins : activeTab === 'quizzes' ? myData.correct_quizzes : myData.total_capital;
+            const myValue = 
+              activeTab === 'wins' ? myData.wins : 
+              activeTab === 'quizzes' ? myData.correct_quizzes : 
+              activeTab === 'capital' ? myData.total_capital :
+              activeTab === 'chains' ? myData.value_chain_correct : myData.uljez_correct;
             
             const { count } = await supabase
               .from('profiles')
@@ -124,6 +136,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
       case 'wins': return t.leaderboard.wins;
       case 'quizzes': return t.leaderboard.quizzes;
       case 'capital': return t.leaderboard.capital;
+      case 'chains': return t.leaderboard.value_chains;
+      case 'intruders': return t.leaderboard.intruders;
     }
   };
 
@@ -132,6 +146,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
       case 'wins': return player.wins;
       case 'quizzes': return player.correct_quizzes;
       case 'capital': return `$${player.total_capital.toLocaleString()}`;
+      case 'chains': return player.value_chain_correct;
+      case 'intruders': return player.uljez_correct;
     }
   };
 
@@ -170,18 +186,18 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex gap-2 p-1 bg-black/40 rounded-3xl border border-white/5 mb-8">
-          {(['wins', 'quizzes', 'capital'] as const).map(tab => (
+        <div className="flex gap-1.5 p-1 bg-black/40 rounded-3xl border border-white/5 mb-8">
+          {(['wins', 'quizzes', 'capital', 'chains', 'intruders'] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`flex-1 py-3 rounded-2xl text-[10px] font-black uppercase tracking-wider transition-all ${
+              className={`flex-1 py-3 rounded-2xl text-[9px] font-black uppercase tracking-wider transition-all ${
                 activeTab === tab 
                 ? 'bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-lg' 
                 : 'text-slate-500 hover:text-slate-300'
               }`}
             >
-              {tab === 'wins' ? t.leaderboard.wins : tab === 'quizzes' ? t.leaderboard.quizzes : t.leaderboard.capital}
+              {getCategoryLabel(tab)}
             </button>
           ))}
         </div>
