@@ -724,6 +724,26 @@ export const App: React.FC = () => {
     } else {
       setGameState('lobby');
     }
+
+    // Increment games_played and character_usage atomically
+    if (session?.user.id && profile) {
+      incrementStats({ games_played: 1 });
+      
+      // Update local state for immediate UI feedback
+      setProfile(prev => {
+        if (!prev) return null;
+        const newUsage = { ...(prev.character_usage || {}) };
+        newUsage[avatar] = (newUsage[avatar] || 0) + 1;
+        return { ...prev, character_usage: newUsage };
+      });
+
+      supabase.rpc('increment_character_usage', { 
+        user_id: session.user.id, 
+        avatar_id: avatar 
+      }).then(({ error }) => {
+        if (error) console.error("Error incrementing character usage:", error);
+      });
+    }
   };
 
   const handleRollDice = () => {

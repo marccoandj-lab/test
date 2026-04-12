@@ -31,6 +31,10 @@ interface StartScreenProps {
     jail_skips?: number;
     auction_wins?: number;
     taxes_paid?: number;
+    value_chain_correct?: number;
+    value_chain_wrong?: number;
+    uljez_correct?: number;
+    uljez_wrong?: number;
   } | null;
   language: 'en' | 'sr';
   onOpenSettings?: () => void;
@@ -119,23 +123,12 @@ export const StartScreen: React.FC<StartScreenProps> = ({
         }
       }
 
-      const currentUsage = profileData?.character_usage || {};
-      const isStartingGame = mode === 'create' || mode === 'join' || mode === 'single';
-      const newUsage = isStartingGame 
-        ? { ...currentUsage, [finalAvatar]: (currentUsage[finalAvatar] || 0) + 1 }
-        : currentUsage;
-      
       const updates: any = {
         id: user.id,
         username: finalName,
         avatar_url: finalAvatar,
-        updated_at: new Date().toISOString(),
-        character_usage: newUsage
+        updated_at: new Date().toISOString()
       };
-
-      if (isStartingGame) {
-        updates.games_played = (profileData?.games_played || 0) + 1;
-      }
 
       const { error } = await supabase.from('profiles').upsert(updates, { onConflict: 'id' });
 
@@ -335,10 +328,26 @@ export const StartScreen: React.FC<StartScreenProps> = ({
 
               <div className="group/stat">
                 <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs">❌</span>
+                  <p className="text-white font-black text-base">{formatNumber(profileData?.wrong_quizzes || 0)}</p>
+                </div>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-rose-400 transition-colors">{t.stats.wrong_quizzes}</p>
+              </div>
+
+              <div className="group/stat">
+                <div className="flex items-center gap-2 mb-1">
                   <span className="text-xs">📈</span>
                   <p className="text-white font-black text-base">{formatNumber(profileData?.investment_gains || 0)} SC</p>
                 </div>
                 <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-emerald-400 transition-colors">{language === 'en' ? 'Invest. Gains' : 'Dobici od invest.'}</p>
+              </div>
+
+              <div className="group/stat">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs">📉</span>
+                  <p className="text-white font-black text-base">{formatNumber(profileData?.investment_losses || 0)} SC</p>
+                </div>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-rose-400 transition-colors">{t.stats.investment_losses}</p>
               </div>
 
               <div className="group/stat">
@@ -371,6 +380,38 @@ export const StartScreen: React.FC<StartScreenProps> = ({
                   <p className="text-white font-black text-base">{profileData?.auction_wins || 0}</p>
                 </div>
                 <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-yellow-400 transition-colors">{language === 'en' ? 'Auction Wins' : 'Pobede na aukciji'}</p>
+              </div>
+
+              <div className="group/stat">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs">🔗</span>
+                  <p className="text-white font-black text-base">{profileData?.value_chain_correct || 0}</p>
+                </div>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-emerald-400 transition-colors">{t.stats.correct_value_chains}</p>
+              </div>
+
+              <div className="group/stat">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs">⛓️</span>
+                  <p className="text-white font-black text-base">{profileData?.value_chain_wrong || 0}</p>
+                </div>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-rose-400 transition-colors">{t.stats.wrong_value_chains}</p>
+              </div>
+
+              <div className="group/stat">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs">🕵️</span>
+                  <p className="text-white font-black text-base">{profileData?.uljez_correct || 0}</p>
+                </div>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-amber-400 transition-colors">{t.stats.correct_uljez}</p>
+              </div>
+
+              <div className="group/stat">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs">👺</span>
+                  <p className="text-white font-black text-base">{profileData?.uljez_wrong || 0}</p>
+                </div>
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-rose-400 transition-colors">{t.stats.wrong_uljez}</p>
               </div>
 
               <div className="group/stat">
