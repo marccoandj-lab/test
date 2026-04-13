@@ -24,21 +24,30 @@ EconomySwitch je edukativna "board game" aplikacija koja simulira finansijsko tr
 - `src/components/`:
   - `GameMap.tsx`: Vizuelni prikaz table, animacija kretanja i dice roll.
   - `GameModalContainer.tsx`: Centralna logika za polja (Kvizovi, Investicije, Porezi, Jail).
+  - `GameModal.tsx`: UI komponenta za prikaz sadržaja polja.
+  - `StartScreen.tsx`: Lobby interfejs sa profilima i statistikama.
   - `Leaderboard.tsx`: Globalni rang igrača iz baze.
   - `Socials.tsx`: Sistem prijatelja, pretraga korisnika i slanje pozivnica za igru.
-  - `EducationScreen.tsx`: Edukativni resursi i link ka eksternom AI asistentu.
-  - `StartScreen.tsx`: Lobby interfejs sa profilima i statistikama.
+  - `EducationScreen.tsx`: Edukativni resursi.
+  - `Auth.tsx`: Login i registracija korisnika preko Supabase.
+  - `Sidebar.tsx`: Navigacija i brzi pristup profilu.
+  - `SettingsModal.tsx`: Podešavanja jezika i notifikacija.
+  - `LegalScreen.tsx`: TOS i Privacy Policy.
 - `src/data/`:
   - `gameData.ts`: Centralni repozitorijum kvizova, investicija i lanca vrednosti.
   - `levelGenerator.ts`: Generator "beskonačne" mape.
-- `src/i18n/`: Prevodi za sve UI elemente.
-- `database_sql_scripts/`: SQL migracije za Supabase (profiles, friends, invites, push).
+  - `avatars.ts`: Definisanje dostupnih avatara.
+- `src/i18n/`: `translations.ts` (prevodi za sve UI elemente).
+- `src/lib/`: `supabase.ts` (inicijalizacija Supabase klijenta).
+- `src/utils/`: `cn.ts` (Tailwind class merging), `format.ts` (formatiranje valuta).
+- `src/types/`: `game.ts` (TypeScript interfejsi).
+- `database_sql_scripts/`: SQL migracije za Supabase (01-07).
 
 ## 4. Ključne Mehanike i Logika
 ### Multiplayer & Infinite Map
 - **P2P Model**: PeerJS povezuje igrače direktno. Host upravlja globalnim state-om.
 - **Infinite Generation**: Mapa se dinamički proširuje kada bilo koji igrač priđe kraju trenutne dužine.
-- **Deck Management**: Quizzes i Cost Analysis se izvlače iz mešanih špilova (decks) kako bi se osigurala jedinstvenost pitanja.
+- **Deck Management**: Quizzes, Cost Analysis, Value Chain i Uljez se izvlače iz mešanih špilova (decks) kako bi se osigurala jedinstvenost pitanja.
 - **Timers**: `turnTimer` (60s) i `interactionTimer` (35s) za održavanje tempa.
 
 ### Supabase Integracija & Stats
@@ -54,9 +63,20 @@ EconomySwitch je edukativna "board game" aplikacija koja simulira finansijsko tr
 - `sustainability`: Zelena tema (Emerald-950), fokus na cirkularnoj ekonomiji.
 
 ## 5. Tabela `profiles` (Schema)
-- `id` (uuid), `username` (text), `avatar_url` (text)
-- `wins`, `games_played`, `total_capital` (int8)
-- `stats`: `correct_quizzes`, `wrong_quizzes`, `cost_analysis_correct`, `cost_analysis_wrong`, `value_chain_correct`, `value_chain_wrong`, `investment_gains`, `investment_losses`, `jail_visits`, `jail_skips`, `auction_wins`, `taxes_paid`.
+- `id` (uuid, primary key)
+- `display_id` (text, unique 6-char ID)
+- `username` (text), `avatar_url` (text)
+- `wins`, `games_played`, `total_capital` (bigint)
+- `character_usage` (jsonb) - mapa korišćenja karaktera
+- `notification_settings` (jsonb) - enabled, slots
+- **Statistike (integer/bigint):**
+  - `correct_quizzes`, `wrong_quizzes`
+  - `cost_analysis_correct`, `cost_analysis_wrong`
+  - `value_chain_correct`, `value_chain_wrong`
+  - `uljez_correct`, `uljez_wrong`
+  - `investment_gains`, `investment_losses`
+  - `jail_visits`, `jail_skips`, `auction_wins`, `taxes_paid`
+- `updated_at` (timestamptz)
 
 ## 6. Pravila za Razvoj (Pravilo 0)
 1. **Tipovi**: Uvek koristi definisane interfejse iz `src/types/game.ts`.
@@ -64,10 +84,12 @@ EconomySwitch je edukativna "board game" aplikacija koja simulira finansijsko tr
 3. **Putanja**: Asseti su u `/public/assets/`, ali se u kodu referenciraju kao `/assets/`.
 4. **Responzivnost**: Mobile-first pristup sa Tailwind klasama.
 5. **Multiplayer State**: Svaka akcija koja menja kapital ili poziciju mora ići kroz `multiplayer.sendAction`.
+6. **Statistike**: Koristi RPC `increment_profile_stats` za ažuriranje statistika u bazi.
 
 ## 7. Uputstva za AI Asistenta
 - **Estetika**: Glassmorphism, vibrantni gradijenti i visoki kontrast su standard.
 - **Environment**: Proveri `.env` za `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_VAPID_PUBLIC_KEY` i `VAPID_PRIVATE_KEY`.
+- **Consistency**: Održavaj konzistentnost između koda i SQL skripti u `database_sql_scripts/`.
 
 ---
-*Poslednja izmena: 2026-04-10*
+*Poslednja izmena: 2026-04-13*
