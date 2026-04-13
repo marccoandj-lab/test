@@ -746,42 +746,17 @@ export const App: React.FC = () => {
   }, []);
 
   const handleStart = (name: string, avatar: string, isSingle: boolean) => {
-    setIsSinglePlayer(isSingle);
-    setUserName(name);
-    setUserAvatar(avatar as AvatarType);
+    // ... rest of handleStart
+  };
 
-    // Start music ONLY if it's supposed to be playing (checked from localStorage/state)
-    const musicEnabled = localStorage.getItem('eib_music_enabled') !== 'false';
-    if (musicEnabled && isMusicPlaying) {
-      startMusic();
-    }
-
-    if (isSingle) {
-      // Use existing already generated levels instead of resetting to 0/100
-      setBalance(150000); // Reset balance for new game
-      setGameState('playing');
-    } else {
-      setGameState('lobby');
-    }
-
-    // Increment games_played and character_usage atomically
-    if (session?.user.id && profile) {
-      incrementStats({ games_played: 1 });
-      
-      // Update local state for immediate UI feedback
-      setProfile(prev => {
-        if (!prev) return null;
-        const newUsage = { ...(prev.character_usage || {}) };
-        newUsage[avatar] = (newUsage[avatar] || 0) + 1;
-        return { ...prev, character_usage: newUsage };
-      });
-
-      supabase.rpc('increment_character_usage', { 
-        user_id: session.user.id, 
-        avatar_id: avatar 
-      }).then(({ error }) => {
-        if (error) console.error("Error incrementing character usage:", error);
-      });
+  const handleClaimChallenge = async (idx: number) => {
+    if (!session?.user.id || !profile?.daily_challenges) return;
+    
+    const updatedChallenges = await ChallengeService.claimReward(session.user.id, profile.daily_challenges, idx);
+    if (updatedChallenges) {
+      setProfile(prev => prev ? { ...prev, daily_challenges: updatedChallenges } : null);
+      // Fetch latest profile to update SRP and Rank
+      fetchProfile(session.user.id);
     }
   };
 
@@ -1002,6 +977,7 @@ export const App: React.FC = () => {
           }}
           language={language}
           onOpenSettings={() => setIsSettingsOpen(true)}
+          onClaimChallenge={handleClaimChallenge}
         />
       ) : gameState === 'lobby' && mpState ? (
         <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 z-50">
