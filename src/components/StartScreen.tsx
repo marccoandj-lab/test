@@ -21,6 +21,7 @@ interface StartScreenProps {
   profileData?: any;
   language: 'en' | 'sr';
   onOpenSettings?: () => void;
+  onClaimChallenge?: (idx: number) => void;
   initialRoomCode?: string;
   onlineUserIds: string[];
 }
@@ -33,6 +34,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   profileData,
   language,
   onOpenSettings,
+  onClaimChallenge,
   initialRoomCode = '',
   onlineUserIds
 }) => {
@@ -162,14 +164,8 @@ export const StartScreen: React.FC<StartScreenProps> = ({
     if (!userId || !profileData?.daily_challenges) return;
     
     (window as any).playSFX?.('correct');
-    const updatedChallenges = await ChallengeService.claimReward(userId, profileData.daily_challenges, idx);
-    
-    if (updatedChallenges) {
-      // Local update via parent or internal state if we had it
-      // Since profileData comes from props (App.tsx), we rely on App.tsx to update it.
-      // But we can trigger a manual re-fetch in App.tsx if we provide a callback.
-      // For now, let's assume App.tsx will handle it via some mechanism or we just update local if possible.
-      // Actually, let's add a refresh callback to StartScreenProps.
+    if (onClaimChallenge) {
+      onClaimChallenge(idx);
     }
   };
 
