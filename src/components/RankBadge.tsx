@@ -49,9 +49,9 @@ export const RankBadge: React.FC<RankBadgeProps> = ({ rank, language, size = 'md
   const colorClass = RANK_COLORS[rank] || RANK_COLORS['Novice'];
 
   const sizeClasses = {
-    sm: 'w-6 h-6',
-    md: 'w-10 h-10',
-    lg: 'w-16 h-16',
+    sm: 'w-8 h-8',
+    md: 'w-14 h-14',
+    lg: 'w-24 h-24',
   };
 
   return (
@@ -65,7 +65,7 @@ export const RankBadge: React.FC<RankBadgeProps> = ({ rank, language, size = 'md
         <img 
           src={RANK_ICONS[rank] || RANK_ICONS['Novice']}
           alt={rank}
-          className="w-full h-full object-contain p-1 transition-transform group-hover:scale-110"
+          className="w-full h-full object-contain transition-transform group-hover:scale-110"
         />
         
         {/* Glossy overlay */}
