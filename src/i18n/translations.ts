@@ -176,10 +176,31 @@ export const translations = {
       circular_title: "Circular Economy",
       circular_desc: "Discover how to minimize waste and maximize resource efficiency.",
       sustainability_title: "Sustainable Development",
-      sustainability_desc: "Understand the balance between economic growth and environmental protection.",
+      education_desc: "Understand the balance between economic growth and environmental protection.",
       open_resource: "Open Resource ↗"
-    },
-    legal: {
+      },
+      ranked: {
+      title: "Ranked System",
+      srp: "SRP",
+      rank: "Rank",
+      ranks: {
+        novice: "Novice",
+        apprentice: "Apprentice",
+        professional: "Professional",
+        expert: "Expert",
+        strategist: "Strategist",
+        visionary: "Visionary",
+        legend: "Economy Legend"
+      },
+      challenges: "Daily Challenges",
+      claim: "Claim",
+      claimed: "Claimed",
+      reset_at: "Reset at 10:00 AM",
+      progress: "Progress",
+      reward: "Reward",
+      daily_title: "Today's Challenges"
+      },
+      legal: {
       title: "Legal Information",
       terms: "Terms of Service",
       privacy: "Privacy Policy",
@@ -393,10 +414,31 @@ export const translations = {
       circular_title: "Cirkularna Ekonomija",
       circular_desc: "Otkrijte kako da smanjite otpad i maksimalno povećate efikasnost resursa.",
       sustainability_title: "Održivi Razvoj",
-      sustainability_desc: "Razumite balans između ekonomskog rasta i zaštite životne sredine.",
+      education_desc: "Razumite balans između ekonomskog rasta i zaštite životne sredine.",
       open_resource: "Otvori Resurs ↗"
-    },
-    legal: {
+      },
+      ranked: {
+      title: "Rangirani sistem",
+      srp: "SRP",
+      rank: "Rang",
+      ranks: {
+        novice: "Početnik",
+        apprentice: "Učenik",
+        professional: "Profesionalac",
+        expert: "Ekspert",
+        strategist: "Strateški analitičar",
+        visionary: "Vizionar",
+        legend: "Ekonomska legenda"
+      },
+      challenges: "Dnevni izazovi",
+      claim: "Preuzmi",
+      claimed: "Preuzeto",
+      reset_at: "Resetuje se u 10:00",
+      progress: "Napredak",
+      reward: "Nagrada",
+      daily_title: "Današnji izazovi"
+      },
+      legal: {
       title: "Pravne Informacije",
       terms: "Uslovi korišćenja",
       privacy: "Politika privatnosti",

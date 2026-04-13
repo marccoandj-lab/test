@@ -10,6 +10,18 @@ export interface NotificationSettings {
   slots: string[];
 }
 
+export type ChallengeType = 'QUIZ_MASTER' | 'CAPITAL_COLLECTOR' | 'AUCTION_WINNER' | 'JAIL_ESCAPIST' | 'INVESTMENT_GENIUS' | 'VALUE_CHAIN_EXPERT' | 'INTRUDER_FINDER';
+
+export interface DailyChallenge {
+  id: string;
+  type: ChallengeType;
+  label: string;
+  target: number;
+  current: number;
+  reward: number;
+  claimed: boolean;
+}
+
 export interface Player {
   id: string;
   name: string;

@@ -42,6 +42,10 @@ export interface Profile {
   jail_skips: number;
   auction_wins: number;
   taxes_paid: number;
+  srp: number;
+  rank: string;
+  daily_challenges: any[];
+  last_challenge_reset: string;
   notification_settings?: NotificationSettings;
 }
 
