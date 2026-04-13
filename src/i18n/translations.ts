@@ -204,7 +204,49 @@ export const translations = {
       current_rank: "Current Rank",
       next_rank_req: "Required for next rank",
       unlocked: "Unlocked",
-      locked: "Locked"
+      locked: "Locked",
+      modes: {
+        both: "All Modes",
+        multiplayer: "Multiplayer Only",
+        singleplayer: "Singleplayer Only"
+      },
+      challenge_details: {
+        QUIZ_MASTER: {
+          label: "Answer quizzes correctly",
+          field: "Quiz Field",
+          mode: "both"
+        },
+        CAPITAL_COLLECTOR: {
+          label: "Collect capital",
+          field: "Any Field",
+          mode: "both"
+        },
+        AUCTION_WINNER: {
+          label: "Win auctions",
+          field: "Auction Field",
+          mode: "multiplayer"
+        },
+        JAIL_ESCAPIST: {
+          label: "Skip jail",
+          field: "Jail Field",
+          mode: "multiplayer"
+        },
+        INVESTMENT_GENIUS: {
+          label: "Gain capital from investments",
+          field: "Investment Field",
+          mode: "both"
+        },
+        VALUE_CHAIN_EXPERT: {
+          label: "Solve value chains",
+          field: "Value Chain Field",
+          mode: "both"
+        },
+        INTRUDER_FINDER: {
+          label: "Find intruders",
+          field: "Intruder Field",
+          mode: "both"
+        }
+      }
       },
       legal: {
       title: "Legal Information",
@@ -448,7 +490,49 @@ export const translations = {
       current_rank: "Trenutni rang",
       next_rank_req: "Potrebno za sledeći rang",
       unlocked: "Otključano",
-      locked: "Zaključano"
+      locked: "Zaključano",
+      modes: {
+        both: "Svi modovi",
+        multiplayer: "Samo Multiplayer",
+        singleplayer: "Samo Samostalna igra"
+      },
+      challenge_details: {
+        QUIZ_MASTER: {
+          label: "Tačno odgovori na kviz pitanja",
+          field: "Polje: Kviz",
+          mode: "both"
+        },
+        CAPITAL_COLLECTOR: {
+          label: "Sakupi kapital",
+          field: "Bilo koje polje",
+          mode: "both"
+        },
+        AUCTION_WINNER: {
+          label: "Pobedi na aukcijama",
+          field: "Polje: Aukcija",
+          mode: "multiplayer"
+        },
+        JAIL_ESCAPIST: {
+          label: "Preskoči zatvor",
+          field: "Polje: Zatvor",
+          mode: "multiplayer"
+        },
+        INVESTMENT_GENIUS: {
+          label: "Ostvari profit od investicija",
+          field: "Polje: Investicija",
+          mode: "both"
+        },
+        VALUE_CHAIN_EXPERT: {
+          label: "Reši lance vrednosti",
+          field: "Polje: Lanac vrednosti",
+          mode: "both"
+        },
+        INTRUDER_FINDER: {
+          label: "Pronađi uljeze",
+          field: "Polje: Uljez",
+          mode: "both"
+        }
+      }
       },
       legal: {
       title: "Pravne Informacije",

@@ -44,8 +44,22 @@ export const DailyChallenges: React.FC<DailyChallengesProps> = ({ challenges, on
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex flex-col">
-                  <span className="text-white font-black text-xs tracking-tight">{challenge.label}</span>
-                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+                  <span className="text-white font-black text-xs tracking-tight">
+                    {t.ranked.challenge_details[challenge.type]?.label || challenge.label}
+                  </span>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className="text-[9px] text-emerald-500/80 font-bold uppercase tracking-wider">
+                      {t.ranked.challenge_details[challenge.type]?.field}
+                    </span>
+                    <span className="text-[9px] text-slate-600 font-bold">•</span>
+                    <span className={cn(
+                      "text-[9px] font-bold uppercase tracking-wider",
+                      t.ranked.challenge_details[challenge.type]?.mode === 'multiplayer' ? "text-indigo-400/80" : "text-emerald-500/80"
+                    )}>
+                      {t.ranked.modes[t.ranked.challenge_details[challenge.type]?.mode as keyof typeof t.ranked.modes]}
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">
                     {formatNumber(challenge.current)} / {formatNumber(challenge.target)}
                   </span>
                 </div>
