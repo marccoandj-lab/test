@@ -65,7 +65,7 @@ export const RankBadge: React.FC<RankBadgeProps> = ({ rank, language, size = 'md
         <img 
           src={RANK_ICONS[rank] || RANK_ICONS['Novice']}
           alt={rank}
-          className="w-full h-full object-contain transition-transform group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform group-hover:scale-110"
         />
         
         {/* Glossy overlay */}
