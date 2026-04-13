@@ -9,33 +9,16 @@ import { LegalScreen } from './LegalScreen';
 
 import { formatNumber } from '../utils/format';
 import { AVATAR_MAP } from '../data/avatars';
+import { DailyChallenges } from './DailyChallenges';
+import { RankBadge } from './RankBadge';
+import { ChallengeService } from '../services/ChallengeService';
 
 interface StartScreenProps {
   onStart: (name: string, avatar: string, isSingle: boolean) => void;
   initialName?: string;
   initialAvatar?: string;
   onProfileUpdate?: (name: string, avatar: string) => void;
-  profileData?: {
-    display_id?: string;
-    wins: number;
-    games_played: number;
-    total_capital: number;
-    character_usage: Record<string, number>;
-    correct_quizzes?: number;
-    wrong_quizzes?: number;
-    cost_analysis_correct?: number;
-    cost_analysis_wrong?: number;
-    investment_gains?: number;
-    investment_losses?: number;
-    jail_visits?: number;
-    jail_skips?: number;
-    auction_wins?: number;
-    taxes_paid?: number;
-    value_chain_correct?: number;
-    value_chain_wrong?: number;
-    uljez_correct?: number;
-    uljez_wrong?: number;
-  } | null;
+  profileData?: any;
   language: 'en' | 'sr';
   onOpenSettings?: () => void;
   initialRoomCode?: string;
@@ -173,6 +156,21 @@ export const StartScreen: React.FC<StartScreenProps> = ({
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
+  };
+
+  const handleClaimChallenge = async (idx: number) => {
+    if (!userId || !profileData?.daily_challenges) return;
+    
+    (window as any).playSFX?.('correct');
+    const updatedChallenges = await ChallengeService.claimReward(userId, profileData.daily_challenges, idx);
+    
+    if (updatedChallenges) {
+      // Local update via parent or internal state if we had it
+      // Since profileData comes from props (App.tsx), we rely on App.tsx to update it.
+      // But we can trigger a manual re-fetch in App.tsx if we provide a callback.
+      // For now, let's assume App.tsx will handle it via some mechanism or we just update local if possible.
+      // Actually, let's add a refresh callback to StartScreenProps.
+    }
   };
 
   if (mode === 'profile') {

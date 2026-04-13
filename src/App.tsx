@@ -13,12 +13,23 @@ import { supabase } from './lib/supabase';
 import { Auth } from './components/Auth';
 import { Session } from '@supabase/supabase-js';
 import { translations, Language } from './i18n/translations';
+import { ChallengeService } from './services/ChallengeService';
 
 const WINNING_BALANCE = 1000000;
 const MUSIC_TRACKS = [
   '/assets/music/music1.mp3',
   '/assets/music/music2.mp3'
 ];
+
+const STAT_TO_CHALLENGE_MAP: Record<string, ChallengeType> = {
+  'correct_quizzes': 'QUIZ_MASTER',
+  'total_capital': 'CAPITAL_COLLECTOR',
+  'auction_wins': 'AUCTION_WINNER',
+  'jail_skips': 'JAIL_ESCAPIST',
+  'investment_gains': 'INVESTMENT_GENIUS',
+  'value_chain_correct': 'VALUE_CHAIN_EXPERT',
+  'uljez_correct': 'INTRUDER_FINDER'
+};
 
 export interface Profile {
   username: string;
@@ -217,10 +228,10 @@ export const App: React.FC = () => {
   const fetchProfile = async (userId: string) => {
     console.log("Fetching profile for user:", userId);
     try {
-      // Try fetching all columns first
+      // Try fetching all columns including new ranked columns
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, cost_analysis_correct, cost_analysis_wrong, value_chain_correct, value_chain_wrong, uljez_correct, uljez_wrong, investment_gains, investment_losses, jail_visits, jail_skips, auction_wins, taxes_paid')
+        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, cost_analysis_correct, cost_analysis_wrong, value_chain_correct, value_chain_wrong, uljez_correct, uljez_wrong, investment_gains, investment_losses, jail_visits, jail_skips, auction_wins, taxes_paid, srp, rank, daily_challenges, last_challenge_reset')
         .eq('id', userId)
         .single();
 
@@ -228,8 +239,8 @@ export const App: React.FC = () => {
         if (error.code === 'PGRST116') {
           // No profile found, handled below
         } else if (error.code === '42703' || error.message?.includes('column')) {
-          console.warn("Schema mismatch detected! Some statistic columns are missing in Supabase. Please run the SQL migration from database_sql_scripts/01_profiles_schema.sql");
-          // Fallback fetch with only basic columns
+          console.warn("Schema mismatch detected! Some columns are missing. Please run the SQL migration.");
+          // Fallback fetch
           const { data: fallbackData, error: fallbackError } = await supabase
             .from('profiles')
             .select('username, avatar_url')
@@ -248,7 +259,13 @@ export const App: React.FC = () => {
       }
 
       if (data) {
-        handleProfileFound(data);
+        // Handle Challenge Reset logic
+        const resetData = await ChallengeService.checkAndResetChallenges(userId, data.daily_challenges, data.last_challenge_reset);
+        if (resetData) {
+          handleProfileFound({ ...data, ...resetData });
+        } else {
+          handleProfileFound(data);
+        }
       } else {
         await createInitialProfile(userId);
       }
@@ -418,6 +435,24 @@ export const App: React.FC = () => {
              updates[key] = (profileRef.current[key as keyof Profile] as number || 0) + (amount as number);
            }
            await supabase.from('profiles').update(updates).eq('id', session.user.id);
+        }
+      }
+
+      // 3. Update Daily Challenges progress
+      if (profileRef.current && profileRef.current.daily_challenges) {
+        for (const [stat_name, amount] of Object.entries(statsToIncrement)) {
+          const challengeType = STAT_TO_CHALLENGE_MAP[stat_name];
+          if (challengeType) {
+            const updatedChallenges = await ChallengeService.updateProgress(
+              session.user.id, 
+              profileRef.current.daily_challenges, 
+              challengeType, 
+              amount
+            );
+            if (updatedChallenges) {
+              setProfile(prev => prev ? { ...prev, daily_challenges: updatedChallenges } : null);
+            }
+          }
         }
       }
     } catch (error) {
