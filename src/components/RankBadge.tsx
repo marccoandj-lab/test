@@ -57,7 +57,7 @@ export const RankBadge: React.FC<RankBadgeProps> = ({ rank, language, size = 'md
   return (
     <div className="flex items-center gap-3">
       <div className={cn(
-        "relative rounded-xl flex items-center justify-center shadow-lg border border-white/20 overflow-hidden group",
+        "relative rounded-xl overflow-hidden shadow-lg border border-white/20 group",
         sizeClasses[size],
         "bg-gradient-to-br",
         colorClass
@@ -65,7 +65,7 @@ export const RankBadge: React.FC<RankBadgeProps> = ({ rank, language, size = 'md
         <img 
           src={RANK_ICONS[rank] || RANK_ICONS['Novice']}
           alt={rank}
-          className="w-full h-full object-cover transition-transform group-hover:scale-110"
+          className="absolute inset-0 w-full h-full object-cover transition-transform group-hover:scale-110"
         />
         
         {/* Glossy overlay */}
