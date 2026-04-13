@@ -9,6 +9,16 @@ interface RankBadgeProps {
   showName?: boolean;
 }
 
+const RANK_ICONS: Record<string, string> = {
+  'Novice': '/assets/rank_icons/a1.png',
+  'Apprentice': '/assets/rank_icons/22.png',
+  'Professional': '/assets/rank_icons/33.png',
+  'Expert': '/assets/rank_icons/44.png',
+  'Strategist': '/assets/rank_icons/55-removebg-preview.png',
+  'Visionary': '/assets/rank_icons/66.png',
+  'Economy Legend': '/assets/rank_icons/final.png',
+};
+
 const RANK_COLORS: Record<string, string> = {
   'Novice': 'from-slate-400 to-slate-600',
   'Apprentice': 'from-emerald-400 to-teal-600',
@@ -39,9 +49,9 @@ export const RankBadge: React.FC<RankBadgeProps> = ({ rank, language, size = 'md
   const colorClass = RANK_COLORS[rank] || RANK_COLORS['Novice'];
 
   const sizeClasses = {
-    sm: 'w-6 h-6 text-[10px]',
-    md: 'w-10 h-10 text-xs',
-    lg: 'w-16 h-16 text-xl',
+    sm: 'w-6 h-6',
+    md: 'w-10 h-10',
+    lg: 'w-16 h-16',
   };
 
   return (
@@ -52,26 +62,16 @@ export const RankBadge: React.FC<RankBadgeProps> = ({ rank, language, size = 'md
         "bg-gradient-to-br",
         colorClass
       )}>
-        {/* Golden Switch Icon logic (SVG) */}
-        <svg 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          className={cn(
-            "w-2/3 h-2/3 drop-shadow-md transition-transform group-hover:scale-110",
-            rank === 'Economy Legend' ? 'text-white' : 'text-white/90'
-          )}
-          stroke="currentColor" 
-          strokeWidth="3" 
-          strokeLinecap="round" 
-          strokeLinejoin="round"
-        >
-          <rect x="1" y="5" width="22" height="14" rx="7" ry="7" />
-          <circle cx={rank === 'Novice' ? '8' : '16'} cy="12" r="3" fill="currentColor" />
-        </svg>
+        <img 
+          src={RANK_ICONS[rank] || RANK_ICONS['Novice']}
+          alt={rank}
+          className="w-full h-full object-contain p-1 transition-transform group-hover:scale-110"
+        />
         
         {/* Glossy overlay */}
         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent pointer-events-none" />
       </div>
+
       
       {showName && (
         <div className="flex flex-col">
