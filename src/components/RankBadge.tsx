@@ -82,7 +82,7 @@ export const RankBadge: React.FC<RankBadgeProps> = ({ rank, language, size = 'md
             "font-black italic tracking-tight",
             size === 'sm' ? 'text-xs' : size === 'md' ? 'text-sm' : 'text-xl'
           )}>
-            {(t.ranked.ranks as any)[rankKey]}
+            {t.ranked.ranks[rankKey as keyof typeof t.ranked.ranks]}
           </span>
         </div>
       )}

@@ -6,7 +6,7 @@ import { Sidebar } from './components/Sidebar';
 import { generateLevels } from './data/levelGenerator';
 import { Level, GameMode } from './data/gameData';
 import { multiplayer, GameState as MPState } from './services/MultiplayerManager';
-import { AvatarType, Player, NotificationSettings } from './types/game';
+import { AvatarType, Player, NotificationSettings, Profile, ChallengeType } from './types/game';
 
 import { SettingsModal } from './components/SettingsModal';
 import { supabase } from './lib/supabase';
@@ -30,35 +30,6 @@ const STAT_TO_CHALLENGE_MAP: Record<string, ChallengeType> = {
   'value_chain_correct': 'VALUE_CHAIN_EXPERT',
   'uljez_correct': 'INTRUDER_FINDER'
 };
-
-export interface Profile {
-  username: string;
-  display_id?: string;
-  avatar_url: string;
-  wins: number;
-  games_played: number;
-  total_capital: number;
-  character_usage: Record<string, number>;
-  correct_quizzes: number;
-  wrong_quizzes: number;
-  cost_analysis_correct: number;
-  cost_analysis_wrong: number;
-  value_chain_correct: number;
-  value_chain_wrong: number;
-  uljez_correct: number;
-  uljez_wrong: number;
-  investment_gains: number;
-  investment_losses: number;
-  jail_visits: number;
-  jail_skips: number;
-  auction_wins: number;
-  taxes_paid: number;
-  srp: number;
-  rank: string;
-  daily_challenges: any[];
-  last_challenge_reset: string;
-  notification_settings?: NotificationSettings;
-}
 
 type NumericProfileKeys = keyof { [K in keyof Profile as Profile[K] extends number ? K : never]: any };
 
@@ -555,16 +526,6 @@ export const App: React.FC = () => {
     }
   }, [trackIndex, isMusicPlaying]);
 
-  const startMusic = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.play().then(() => {
-        setIsMusicPlaying(true);
-      }).catch(err => {
-        console.log("Audio play blocked, waiting for user interaction:", err);
-      });
-    }
-  }, []);
-
   const toggleMusic = useCallback(() => {
     if (!audioRef.current) return;
     if (isMusicPlaying) {
@@ -745,8 +706,9 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('toggle-mobile-sidebar', handler);
   }, []);
 
-  const handleStart = (name: string, avatar: string, isSingle: boolean) => {
-    // ... rest of handleStart
+  const handleStart = () => {
+    // Logic for starting the game
+    setGameState('playing');
   };
 
   const handleClaimChallenge = async (idx: number) => {
@@ -959,9 +921,9 @@ export const App: React.FC = () => {
       {/* Screen Routing */}
       {gameState === 'start' ? (
         <StartScreen
-          onStart={(name, avatar, isSingle) => {
+          onStart={() => {
             hasWonThisGame.current = false;
-            handleStart(name, avatar, isSingle);
+            handleStart();
           }}
           initialRoomCode={urlRoomCode || ''}
           initialName={userName}

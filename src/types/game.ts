@@ -22,6 +22,36 @@ export interface DailyChallenge {
   claimed: boolean;
 }
 
+export interface Profile {
+  id: string;
+  username: string;
+  display_id?: string;
+  avatar_url: string;
+  wins: number;
+  games_played: number;
+  total_capital: number;
+  character_usage: Record<string, number>;
+  correct_quizzes: number;
+  wrong_quizzes: number;
+  cost_analysis_correct: number;
+  cost_analysis_wrong: number;
+  value_chain_correct: number;
+  value_chain_wrong: number;
+  uljez_correct: number;
+  uljez_wrong: number;
+  investment_gains: number;
+  investment_losses: number;
+  jail_visits: number;
+  jail_skips: number;
+  auction_wins: number;
+  taxes_paid: number;
+  srp: number;
+  rank: string;
+  daily_challenges: DailyChallenge[];
+  last_challenge_reset: string;
+  notification_settings?: NotificationSettings;
+}
+
 export interface Player {
   id: string;
   name: string;
@@ -35,6 +65,8 @@ export interface Player {
   isInteracting: boolean;
   jailSkipped: boolean;
   activeItemIndex?: number;
+  rank?: string;
+  srp?: number;
   stats: {
     correctQuizzes: number;
     wrongQuizzes: number;

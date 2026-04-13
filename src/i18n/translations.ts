@@ -198,7 +198,13 @@ export const translations = {
       reset_at: "Reset at 10:00 AM",
       progress: "Progress",
       reward: "Reward",
-      daily_title: "Today's Challenges"
+      daily_title: "Today's Challenges",
+      roadmap_title: "Ranked Road Map",
+      roadmap_desc: "Track your journey from a Novice to an Economy Legend. Each rank unlocks new prestige and shows your mastery over the market.",
+      current_rank: "Current Rank",
+      next_rank_req: "Required for next rank",
+      unlocked: "Unlocked",
+      locked: "Locked"
       },
       legal: {
       title: "Legal Information",
@@ -436,7 +442,13 @@ export const translations = {
       reset_at: "Resetuje se u 10:00",
       progress: "Napredak",
       reward: "Nagrada",
-      daily_title: "Današnji izazovi"
+      daily_title: "Današnji izazovi",
+      roadmap_title: "Rangirana putanja",
+      roadmap_desc: "Pratite svoj put od Početnika do Ekonomske legende. Svaki rang otključava novi prestiž i pokazuje vaše majstorstvo nad tržištem.",
+      current_rank: "Trenutni rang",
+      next_rank_req: "Potrebno za sledeći rang",
+      unlocked: "Otključano",
+      locked: "Zaključano"
       },
       legal: {
       title: "Pravne Informacije",

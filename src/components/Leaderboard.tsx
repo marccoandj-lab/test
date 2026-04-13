@@ -81,48 +81,55 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
           if (fallbackError) throw fallbackError;
           // Map fallback data to include 0s for missing stats to avoid UI crashes
           data = (fallbackData || []).map(p => ({
-            ...p,
+            id: p.id,
+            username: p.username,
+            avatar_url: p.avatar_url,
             wins: 0,
             correct_quizzes: 0,
             total_capital: 0,
             value_chain_correct: 0,
-            uljez_correct: 0
-          })) as any;
+            uljez_correct: 0,
+            srp: 0,
+            rank: 'Novice'
+          }));
         } else {
           console.error('Supabase leaderboard fetch error:', error);
           throw error;
         }
       }
       
-      console.log(`Leaderboard fetched: ${data?.length || 0} players found.`);
-      setPlayers(data || []);
+      const statsData = (data || []) as PlayerStats[];
+      console.log(`Leaderboard fetched: ${statsData.length} players found.`);
+      setPlayers(statsData);
 
       if (currentUserId) {
-        const myPlayerTopList = (data || []).find(p => p.id === currentUserId);
+        const myPlayerTopList = statsData.find(p => p.id === currentUserId);
         if (myPlayerTopList) {
-          const rank = (data || []).findIndex(p => p.id === currentUserId) + 1;
+          const rank = statsData.findIndex(p => p.id === currentUserId) + 1;
           setMyRank({ rank, stats: myPlayerTopList });
         } else {
           // Fetch my specific stats and count people above me
           const { data: myData, error: myDataError } = await supabase
             .from('profiles')
-            .select('id, username, avatar_url, wins, correct_quizzes, total_capital, value_chain_correct, uljez_correct')
+            .select('id, username, avatar_url, wins, correct_quizzes, total_capital, value_chain_correct, uljez_correct, srp, rank')
             .eq('id', currentUserId)
             .single();
 
           if (myData) {
+            const typedMyData = myData as PlayerStats;
             const myValue = 
-              activeTab === 'wins' ? myData.wins : 
-              activeTab === 'quizzes' ? myData.correct_quizzes : 
-              activeTab === 'capital' ? myData.total_capital :
-              activeTab === 'chains' ? myData.value_chain_correct : myData.uljez_correct;
+              activeTab === 'wins' ? typedMyData.wins : 
+              activeTab === 'quizzes' ? typedMyData.correct_quizzes : 
+              activeTab === 'capital' ? typedMyData.total_capital :
+              activeTab === 'chains' ? typedMyData.value_chain_correct : 
+              activeTab === 'intruders' ? typedMyData.uljez_correct : typedMyData.srp;
             
             const { count } = await supabase
               .from('profiles')
               .select('*', { count: 'exact', head: true })
               .gt(orderBy, myValue);
 
-            setMyRank({ rank: (count || 0) + 1, stats: myData });
+            setMyRank({ rank: (count || 0) + 1, stats: typedMyData });
           } else if (myDataError) {
              console.log("My profile not found or columns missing for ranking:", myDataError.message);
           }

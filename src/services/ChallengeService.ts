@@ -1,4 +1,4 @@
-import { ChallengeType, DailyChallenge } from '../types/game';
+import { ChallengeType, DailyChallenge, Profile } from '../types/game';
 import { supabase } from '../lib/supabase';
 
 export const RANK_THRESHOLDS = [
@@ -58,7 +58,7 @@ export class ChallengeService {
     });
   }
 
-  static async checkAndResetChallenges(userId: string, currentChallenges: any[], lastReset: string) {
+  static async checkAndResetChallenges(userId: string, currentChallenges: DailyChallenge[], lastReset: string): Promise<Partial<Profile> | null> {
     const now = new Date();
     const lastResetDate = new Date(lastReset);
     
@@ -98,7 +98,7 @@ export class ChallengeService {
         console.error("Error resetting challenges:", error);
         return null;
       }
-      return data;
+      return data as Profile;
     }
     return null;
   }

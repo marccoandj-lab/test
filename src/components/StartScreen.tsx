@@ -11,14 +11,16 @@ import { formatNumber } from '../utils/format';
 import { AVATAR_MAP } from '../data/avatars';
 import { DailyChallenges } from './DailyChallenges';
 import { RankBadge } from './RankBadge';
+import { RankedRoadMap } from './RankedRoadMap';
 import { ChallengeService } from '../services/ChallengeService';
+import { Profile, AvatarType } from '../types/game';
 
 interface StartScreenProps {
   onStart: (name: string, avatar: string, isSingle: boolean) => void;
   initialName?: string;
   initialAvatar?: string;
   onProfileUpdate?: (name: string, avatar: string) => void;
-  profileData?: any;
+  profileData?: Profile | null;
   language: 'en' | 'sr';
   onOpenSettings?: () => void;
   onClaimChallenge?: (idx: number) => void;
@@ -41,7 +43,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   const t = translations[language];
   const [name, setName] = useState(initialName);
   const [avatar, setAvatar] = useState<string>(initialAvatar);
-  const [mode, setMode] = useState<'initial' | 'create' | 'join' | 'single' | 'profile' | 'socials' | 'leaderboard' | 'education' | 'legal'>('initial');
+  const [mode, setMode] = useState<'initial' | 'create' | 'join' | 'single' | 'profile' | 'socials' | 'leaderboard' | 'education' | 'legal' | 'roadmap'>('initial');
   const [legalSection, setLegalSection] = useState<'terms' | 'privacy' | 'refund'>('terms');
   const [roomCode, setRoomCode] = useState('');
   const [userId, setUserId] = useState<string | null>(null);
@@ -169,9 +171,20 @@ export const StartScreen: React.FC<StartScreenProps> = ({
     }
   };
 
+  if (mode === 'roadmap') {
+    return (
+      <RankedRoadMap 
+        onBack={() => setMode('profile')} 
+        currentSrp={profileData?.srp || 0} 
+        currentRank={profileData?.rank || 'Novice'} 
+        language={language} 
+      />
+    );
+  }
+
   if (mode === 'profile') {
     const mostUsedEntry = profileData?.character_usage
-      ? Object.entries(profileData.character_usage).sort((a: any, b: any) => b[1] - a[1])[0]
+      ? Object.entries(profileData.character_usage).sort((a, b) => b[1] - a[1])[0]
       : ['1', 0];
 
     const mostUsedAvatarId = mostUsedEntry?.[0] || '1';
@@ -254,7 +267,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
                   {profileData?.display_id && (
                     <div className="flex items-center gap-2 mt-1">
                       <div 
-                        onClick={() => copyToClipboard(profileData.display_id)}
+                        onClick={() => copyToClipboard(profileData.display_id || '')}
                         className="bg-blue-600/20 border border-blue-500/30 px-2 py-0.5 rounded flex items-center gap-1.5 cursor-pointer hover:bg-blue-600/30 transition-all group/id"
                       >
                         <span className="text-blue-400 font-mono text-[10px] font-black tracking-widest">#{profileData.display_id}</span>
@@ -264,16 +277,21 @@ export const StartScreen: React.FC<StartScreenProps> = ({
                   )}
                 </div>
               )}
-              <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">{AVATAR_MAP[avatar] || 'Economy Strategist'}</p>
+              <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">{AVATAR_MAP[avatar as AvatarType] || 'Economy Strategist'}</p>
             </div>
           </div>
 
-          {/* New Ranked Section */}
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-4 shadow-inner">
+          {/* New Ranked Section with Road Map Access */}
+          <div 
+            onClick={() => setMode('roadmap')}
+            className="group/rank bg-white/5 border border-white/10 rounded-2xl p-4 space-y-4 shadow-inner cursor-pointer hover:bg-white/10 hover:border-blue-500/30 transition-all active:scale-[0.98]"
+          >
             <div className="flex items-center justify-between">
               <RankBadge rank={profileData?.rank || 'Novice'} language={language} size="md" />
               <div className="text-right">
-                <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest">{t.ranked.srp}</p>
+                <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest flex items-center justify-end gap-1">
+                  {t.ranked.srp} <span className="text-blue-400 group-hover/rank:translate-x-1 transition-transform">➔</span>
+                </p>
                 <p className="text-xl font-black text-amber-400 italic drop-shadow-[0_0_8px_rgba(251,191,36,0.3)]">✨ {formatNumber(profileData?.srp || 0)}</p>
               </div>
             </div>
@@ -281,7 +299,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
             {ChallengeService.getNextRank(profileData?.srp || 0) && (
               <div className="space-y-1.5">
                 <div className="flex justify-between text-[9px] font-black uppercase tracking-[0.15em]">
-                  <span className="text-slate-500">Next Rank Progress</span>
+                  <span className="text-slate-500">{language === 'en' ? 'Next Rank Progress' : 'Napredak ka sledećem rangu'}</span>
                   <span className="text-slate-300">
                     {formatNumber(profileData?.srp || 0)} / {formatNumber(ChallengeService.getNextRank(profileData?.srp || 0)?.minSrp || 0)}
                   </span>

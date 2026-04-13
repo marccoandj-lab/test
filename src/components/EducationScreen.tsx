@@ -29,9 +29,9 @@ export const EducationScreen: React.FC<EducationScreenProps> = ({ onBack, langua
     },
     {
       title: edu.sustainability_title,
-      desc: edu.sustainability_desc,
-      icon: '🌍',
-      link: 'https://sdgs.un.org/goals',
+      desc: edu.education_desc,
+      icon: "🌍",
+      link: "https://sdgs.un.org/goals",
       color: 'from-green-500/20 to-emerald-500/20'
     }
   ];

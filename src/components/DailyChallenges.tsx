@@ -7,7 +7,7 @@ import { cn } from '../utils/cn';
 
 interface DailyChallengesProps {
   challenges: DailyChallenge[];
-  onClaim: (index: number) => void;
+  onClaim?: (index: number) => void;
   language: Language;
 }
 
@@ -70,7 +70,7 @@ export const DailyChallenges: React.FC<DailyChallengesProps> = ({ challenges, on
 
               {isComplete && !challenge.claimed && (
                 <button
-                  onClick={() => onClaim(idx)}
+                  onClick={() => onClaim && onClaim(idx)}
                   className="mt-3 w-full bg-emerald-500 hover:bg-emerald-400 text-white font-black text-[10px] uppercase tracking-[0.2em] py-2 rounded-xl transition-all shadow-lg active:scale-95 animate-pulse"
                 >
                   {t.ranked.claim}
