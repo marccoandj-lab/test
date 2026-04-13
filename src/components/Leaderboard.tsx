@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { translations } from '../i18n/translations';
+import { RankBadge } from './RankBadge';
 
 interface LeaderboardProps {
   onBack: () => void;
@@ -17,9 +18,11 @@ interface PlayerStats {
   total_capital: number;
   value_chain_correct: number;
   uljez_correct: number;
+  srp: number;
+  rank: string;
 }
 
-type TabCategory = 'wins' | 'quizzes' | 'capital' | 'chains' | 'intruders';
+type TabCategory = 'wins' | 'quizzes' | 'capital' | 'chains' | 'intruders' | 'srp';
 
 export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId, language }) => {
   const t = translations[language];
@@ -57,12 +60,13 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
         activeTab === 'wins' ? 'wins' : 
         activeTab === 'quizzes' ? 'correct_quizzes' : 
         activeTab === 'capital' ? 'total_capital' :
-        activeTab === 'chains' ? 'value_chain_correct' : 'uljez_correct';
+        activeTab === 'chains' ? 'value_chain_correct' : 
+        activeTab === 'intruders' ? 'uljez_correct' : 'srp';
       
       console.log(`Fetching leaderboard ordered by ${orderBy}...`);
       let { data, error } = await supabase
         .from('profiles')
-        .select('id, username, avatar_url, wins, correct_quizzes, total_capital, value_chain_correct, uljez_correct')
+        .select('id, username, avatar_url, wins, correct_quizzes, total_capital, value_chain_correct, uljez_correct, srp, rank')
         .order(orderBy, { ascending: false })
         .limit(50);
 
@@ -148,6 +152,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
       case 'capital': return `$${player.total_capital.toLocaleString()}`;
       case 'chains': return player.value_chain_correct;
       case 'intruders': return player.uljez_correct;
+      case 'srp': return `${player.srp} SRP`;
     }
   };
 
@@ -186,18 +191,18 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex gap-1.5 p-1 bg-black/40 rounded-3xl border border-white/5 mb-8">
-          {(['wins', 'quizzes', 'capital', 'chains', 'intruders'] as const).map(tab => (
+        <div className="flex flex-wrap gap-1.5 p-1.5 bg-black/40 rounded-3xl border border-white/5 mb-8">
+          {(['wins', 'quizzes', 'capital', 'chains', 'intruders', 'srp'] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`flex-1 py-3 rounded-2xl text-[9px] font-black uppercase tracking-wider transition-all ${
+              className={`flex-1 min-w-[60px] py-3 rounded-2xl text-[9px] font-black uppercase tracking-wider transition-all ${
                 activeTab === tab 
                 ? 'bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-lg' 
                 : 'text-slate-500 hover:text-slate-300'
               }`}
             >
-              {getCategoryLabel(tab)}
+              {tab === 'srp' ? 'Ranked' : tab.toUpperCase()}
             </button>
           ))}
         </div>
