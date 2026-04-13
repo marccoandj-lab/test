@@ -292,9 +292,11 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
                         <h4 className="text-white font-bold text-xs">{player.username}</h4>
                         {player.id && <span className="text-blue-400 font-mono text-[8px] font-black uppercase tracking-widest">#{player.id.substring(0, 6).toUpperCase()}</span>}
                       </div>
-                      {player.id === currentUserId && <span className="text-indigo-400 text-[8px] font-black uppercase tracking-widest italic">{language === 'en' ? "That's You" : "To si ti"}</span>}
-                    </div>
-                  </div>
+                      <div className="flex items-center gap-2">
+                        {activeTab === 'srp' && <RankBadge rank={player.rank || 'Novice'} language={language} size="sm" showName={false} />}
+                        {player.id === currentUserId && <span className="text-indigo-400 text-[8px] font-black uppercase tracking-widest italic">{language === 'en' ? "That's You" : "To si ti"}</span>}
+                      </div>
+                    </div>                  </div>
                   <div className="text-right">
                     <p className="text-white font-black text-xs">{getCategoryValue(player, activeTab)}</p>
                     <p className="text-slate-500 text-[8px] font-bold uppercase tracking-tight">{tabToMetric(activeTab, language)}</p>
@@ -343,5 +345,8 @@ const tabToMetric = (tab: TabCategory, language: 'en' | 'sr') => {
     case 'wins': return language === 'en' ? 'Wins' : 'Pobede';
     case 'quizzes': return language === 'en' ? 'Correct' : 'Tačno';
     case 'capital': return 'USD';
+    case 'chains': return language === 'en' ? 'Chains' : 'Lanci';
+    case 'intruders': return language === 'en' ? 'Found' : 'Pronađeno';
+    case 'srp': return 'SRP';
   }
 };
