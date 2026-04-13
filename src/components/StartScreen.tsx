@@ -224,12 +224,6 @@ export const StartScreen: React.FC<StartScreenProps> = ({
                   </div>
                   {nameError && <p className="text-rose-500 text-[10px] font-bold uppercase">{nameError}</p>}
 
-                  {userId && (
-                    <div className="inline-flex items-center gap-1.5 bg-blue-600/10 px-2 py-0.5 rounded border border-blue-500/10 mb-2">
-                      <span className="text-blue-400 font-mono text-[9px] font-black tracking-widest">#{userId.substring(0, 6).toUpperCase()}</span>
-                    </div>
-                  )}
-
                   <div className="flex gap-2">
                     <button 
                       onClick={async () => { 
@@ -261,13 +255,13 @@ export const StartScreen: React.FC<StartScreenProps> = ({
                       ✏️
                     </button>
                   </div>
-                  {userId && (
+                  {profileData?.display_id && (
                     <div className="flex items-center gap-2 mt-1">
                       <div 
-                        onClick={() => copyToClipboard(userId.substring(0, 6).toUpperCase())}
+                        onClick={() => copyToClipboard(profileData.display_id)}
                         className="bg-blue-600/20 border border-blue-500/30 px-2 py-0.5 rounded flex items-center gap-1.5 cursor-pointer hover:bg-blue-600/30 transition-all group/id"
                       >
-                        <span className="text-blue-400 font-mono text-[10px] font-black tracking-widest">#{userId.substring(0, 6).toUpperCase()}</span>
+                        <span className="text-blue-400 font-mono text-[10px] font-black tracking-widest">#{profileData.display_id}</span>
                         <span className="text-[8px] opacity-40 group-hover/id:opacity-100 transition-opacity">📋</span>
                       </div>
                     </div>
@@ -277,6 +271,41 @@ export const StartScreen: React.FC<StartScreenProps> = ({
               <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">{AVATAR_MAP[avatar] || 'Economy Strategist'}</p>
             </div>
           </div>
+
+          {/* New Ranked Section */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-4 shadow-inner">
+            <div className="flex items-center justify-between">
+              <RankBadge rank={profileData?.rank || 'Novice'} language={language} size="md" />
+              <div className="text-right">
+                <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest">{t.ranked.srp}</p>
+                <p className="text-xl font-black text-amber-400 italic drop-shadow-[0_0_8px_rgba(251,191,36,0.3)]">✨ {formatNumber(profileData?.srp || 0)}</p>
+              </div>
+            </div>
+            
+            {ChallengeService.getNextRank(profileData?.srp || 0) && (
+              <div className="space-y-1.5">
+                <div className="flex justify-between text-[9px] font-black uppercase tracking-[0.15em]">
+                  <span className="text-slate-500">Next Rank Progress</span>
+                  <span className="text-slate-300">
+                    {formatNumber(profileData?.srp || 0)} / {formatNumber(ChallengeService.getNextRank(profileData?.srp || 0)?.minSrp || 0)}
+                  </span>
+                </div>
+                <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                  <div 
+                    className="h-full bg-gradient-to-r from-amber-500 to-yellow-300 transition-all duration-1000 shadow-[0_0_10px_rgba(245,158,11,0.3)]"
+                    style={{ width: `${Math.min(100, ((profileData?.srp || 0) / (ChallengeService.getNextRank(profileData?.srp || 0)?.minSrp || 1)) * 100)}%` }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Daily Challenges */}
+          <DailyChallenges 
+            challenges={profileData?.daily_challenges || []} 
+            onClaim={handleClaimChallenge} 
+            language={language} 
+          />
 
           {isChangingAvatar && (
             <div className="bg-black/30 p-4 rounded-2xl border border-white/10 animate-fade-in">
