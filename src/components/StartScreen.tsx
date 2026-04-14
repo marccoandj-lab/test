@@ -12,7 +12,7 @@ import { AVATAR_MAP } from '../data/avatars';
 import { DailyChallenges } from './DailyChallenges';
 import { RankBadge } from './RankBadge';
 import { RankedRoadMap } from './RankedRoadMap';
-import { RankedLeaderboard } from './RankedLeaderboard';
+import { ChallengeService } from '../services/ChallengeService';
 import { Profile, AvatarType } from '../types/game';
 
 interface StartScreenProps {
@@ -43,7 +43,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   const t = translations[language];
   const [name, setName] = useState(initialName);
   const [avatar, setAvatar] = useState<string>(initialAvatar);
-  const [mode, setMode] = useState<'initial' | 'create' | 'join' | 'single' | 'profile' | 'socials' | 'leaderboard' | 'education' | 'legal' | 'roadmap' | 'daily_challenges' | 'ranked_leaderboard'>('initial');
+  const [mode, setMode] = useState<'initial' | 'create' | 'join' | 'single' | 'profile' | 'socials' | 'leaderboard' | 'education' | 'legal' | 'roadmap'>('initial');
   const [legalSection, setLegalSection] = useState<'terms' | 'privacy' | 'refund'>('terms');
   const [roomCode, setRoomCode] = useState('');
   const [userId, setUserId] = useState<string | null>(null);
@@ -174,57 +174,11 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   if (mode === 'roadmap') {
     return (
       <RankedRoadMap 
-        onBack={() => setMode('ranked_leaderboard')} 
+        onBack={() => setMode('profile')} 
         currentSrp={profileData?.srp || 0} 
         currentRank={profileData?.rank || 'Novice'} 
         language={language} 
       />
-    );
-  }
-
-  if (mode === 'ranked_leaderboard') {
-    return (
-      <div className="fixed inset-0 z-50 flex flex-col items-center">
-        <RankedLeaderboard 
-          onBack={() => setMode('initial')} 
-          currentUserId={userId || undefined} 
-          language={language} 
-        />
-        {/* Float Action Button for Road Map */}
-        <button 
-          onClick={() => setMode('roadmap')}
-          className="fixed bottom-6 right-6 bg-amber-500 text-white w-14 h-14 rounded-full shadow-[0_10px_30px_rgba(245,158,11,0.4)] flex items-center justify-center text-xl transition-all hover:scale-110 active:scale-90 z-[60] border-2 border-slate-900"
-          title={t.ranked.roadmap_title}
-        >
-          🗺️
-        </button>
-      </div>
-    );
-  }
-
-  if (mode === 'daily_challenges') {
-    return (
-      <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 z-50">
-        <div className="max-w-md w-full bg-white/5 p-8 rounded-[40px] border border-white/10 backdrop-blur-2xl shadow-2xl flex flex-col h-[85vh]">
-          <div className="flex items-center justify-between mb-8">
-            <button
-              onClick={() => setMode('initial')}
-              className="text-slate-500 hover:text-white transition-colors text-sm flex items-center gap-2"
-            >
-              ← {t.ui.back_to_menu}
-            </button>
-            <span className="text-[10px] text-emerald-400 font-black uppercase tracking-widest">{t.ranked.daily_title}</span>
-          </div>
-          
-          <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
-            <DailyChallenges 
-              challenges={profileData?.daily_challenges || []} 
-              onClaim={handleClaimChallenge} 
-              language={language} 
-            />
-          </div>
-        </div>
-      </div>
     );
   }
 
@@ -326,6 +280,46 @@ export const StartScreen: React.FC<StartScreenProps> = ({
               <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">{AVATAR_MAP[avatar as AvatarType] || 'Economy Strategist'}</p>
             </div>
           </div>
+
+          {/* New Ranked Section with Road Map Access */}
+          <div 
+            onClick={() => setMode('roadmap')}
+            className="group/rank bg-white/5 border border-white/10 rounded-2xl p-4 space-y-4 shadow-inner cursor-pointer hover:bg-white/10 hover:border-blue-500/30 transition-all active:scale-[0.98]"
+          >
+            <div className="flex items-center justify-between">
+              <RankBadge rank={profileData?.rank || 'Novice'} language={language} size="md" />
+              <div className="text-right">
+                <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest flex items-center justify-end gap-1">
+                  {t.ranked.srp} <span className="text-blue-400 group-hover/rank:translate-x-1 transition-transform">➔</span>
+                </p>
+                <p className="text-xl font-black text-amber-400 italic drop-shadow-[0_0_8px_rgba(251,191,36,0.3)]">✨ {formatNumber(profileData?.srp || 0)}</p>
+              </div>
+            </div>
+            
+            {ChallengeService.getNextRank(profileData?.srp || 0) && (
+              <div className="space-y-1.5">
+                <div className="flex justify-between text-[9px] font-black uppercase tracking-[0.15em]">
+                  <span className="text-slate-500">{language === 'en' ? 'Next Rank Progress' : 'Napredak ka sledećem rangu'}</span>
+                  <span className="text-slate-300">
+                    {formatNumber(profileData?.srp || 0)} / {formatNumber(ChallengeService.getNextRank(profileData?.srp || 0)?.minSrp || 0)}
+                  </span>
+                </div>
+                <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                  <div 
+                    className="h-full bg-gradient-to-r from-amber-500 to-yellow-300 transition-all duration-1000 shadow-[0_0_10px_rgba(245,158,11,0.3)]"
+                    style={{ width: `${Math.min(100, ((profileData?.srp || 0) / (ChallengeService.getNextRank(profileData?.srp || 0)?.minSrp || 1)) * 100)}%` }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Daily Challenges */}
+          <DailyChallenges 
+            challenges={profileData?.daily_challenges || []} 
+            onClaim={handleClaimChallenge} 
+            language={language} 
+          />
 
           {isChangingAvatar && (
             <div className="bg-black/30 p-4 rounded-2xl border border-white/10 animate-fade-in">
@@ -464,7 +458,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
               <div className="group/stat">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-xs">🔍</span>
-                  <p className="text-white font-black text-base">{formatNumber(profileData?.cost_analysis_correct || 0)}</p>
+                  <p className="text-white font-black text-base">{profileData?.cost_analysis_correct || 0}</p>
                 </div>
                 <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-indigo-400 transition-colors">{language === 'en' ? 'Analysis Won' : 'Tačne analize'}</p>
               </div>
@@ -472,7 +466,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
               <div className="group/stat">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-xs">📊</span>
-                  <p className="text-white font-black text-base">{formatNumber(profileData?.cost_analysis_wrong || 0)}</p>
+                  <p className="text-white font-black text-base">{profileData?.cost_analysis_wrong || 0}</p>
                 </div>
                 <p className="text-slate-500 text-[10px] font-black uppercase tracking-tight group-hover/stat:text-rose-400 transition-colors">{language === 'en' ? 'Analysis Lost' : 'Netačne analize'}</p>
               </div>
@@ -573,33 +567,6 @@ export const StartScreen: React.FC<StartScreenProps> = ({
 
           {!showMultiplayerMenu ? (
             <div className="flex flex-col gap-4">
-              {/* Daily Challenges High-Impact Button */}
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  onClick={() => setMode('daily_challenges')}
-                  className="group relative bg-gradient-to-br from-emerald-600/20 to-emerald-900/40 p-4 rounded-3xl border border-emerald-500/30 hover:border-emerald-400/50 shadow-lg shadow-emerald-900/20 transition-all hover:scale-[1.02] active:scale-[0.98] overflow-hidden flex flex-col items-center justify-center gap-2"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <span className="text-3xl filter drop-shadow-md group-hover:scale-110 transition-transform">📅</span>
-                  <div className="text-center">
-                    <p className="text-emerald-400 font-black text-xs uppercase tracking-widest leading-none mb-1">{t.ranked.challenges}</p>
-                    <p className="text-white font-bold text-[10px] opacity-60 uppercase">{language === 'en' ? 'Available Now' : 'Dostupno sad'}</p>
-                  </div>
-                </button>
-
-                <button
-                  onClick={() => setMode('ranked_leaderboard')}
-                  className="group relative bg-gradient-to-br from-amber-600/20 to-amber-900/40 p-4 rounded-3xl border border-amber-500/30 hover:border-amber-400/50 shadow-lg shadow-amber-900/20 transition-all hover:scale-[1.02] active:scale-[0.98] overflow-hidden flex flex-col items-center justify-center gap-2"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <RankBadge rank={profileData?.rank || 'Novice'} language={language} size="sm" showName={false} />
-                  <div className="text-center">
-                    <p className="text-amber-400 font-black text-xs uppercase tracking-widest leading-none mb-1">Ranked</p>
-                    <p className="text-white font-bold text-[10px] opacity-60 uppercase">{formatNumber(profileData?.srp || 0)} SRP</p>
-                  </div>
-                </button>
-              </div>
-
               <button
                 onClick={() => { onStart(name, avatar, true); }}
                 className="group relative w-full bg-gradient-to-br from-white to-slate-200 p-6 rounded-[2rem] shadow-2xl transition-all hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
