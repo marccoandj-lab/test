@@ -85,13 +85,18 @@ export const RankedLeaderboard: React.FC<RankedLeaderboardProps> = ({
     }
   };
 
-  const renderRankGroup = (rank: string) => {
+  const renderRankIcon = (rank: string) => {
     const icon = RANK_ICONS[rank] || RANK_ICONS['Novice'];
     return (
-      <div className="flex gap-1 ml-4 opacity-80 decoration-slate-400">
-        {[...Array(5)].map((_, i) => (
-          <img key={i} src={icon} alt="" className="w-3.5 h-3.5 object-contain grayscale-[0.2]" />
-        ))}
+      <div className="relative group/badge">
+        <div className="w-10 h-10 rounded-xl bg-slate-950/40 p-1.5 border border-white/10 flex items-center justify-center shadow-lg transition-all group-hover/badge:scale-110 group-hover/badge:border-blue-500/50">
+          <img src={icon} alt={rank} className="w-full h-full object-contain" />
+        </div>
+        
+        {/* Glow effect for high ranks */}
+        {['Strategist', 'Visionary', 'Economy Legend'].includes(rank) && (
+          <div className="absolute inset-0 bg-blue-500/20 blur-md rounded-full -z-10 animate-pulse" />
+        )}
       </div>
     );
   };
@@ -173,19 +178,24 @@ export const RankedLeaderboard: React.FC<RankedLeaderboardProps> = ({
                   }`}>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <h4 className="text-white font-black text-sm uppercase tracking-tight truncate max-w-[120px]">{p.username}</h4>
-                        {p.id === currentUserId && <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />}
+                        <h4 className="text-white font-black text-sm uppercase tracking-tight truncate max-w-[140px] italic">{p.username}</h4>
+                        {p.id === currentUserId && (
+                          <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-widest rounded-full border border-emerald-500/20 animate-pulse">
+                            YOU
+                          </span>
+                        )}
                       </div>
-                      
-                      {/* 5 Rank Icons Row */}
-                      {renderRankGroup(p.rank)}
                     </div>
 
-                    <div className="text-right">
-                      <p className={`text-lg font-black italic italic tracking-tighter ${p.id === currentUserId ? 'text-white' : 'text-blue-400 group-hover:text-blue-300'}`}>
-                        {formatNumber(p.srp)}
-                      </p>
-                      <p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">{p.rank}</p>
+                    <div className="flex items-center gap-4">
+                      {renderRankIcon(p.rank)}
+                      
+                      <div className="text-right min-w-[70px]">
+                        <p className={`text-xl font-black italic tracking-tighter leading-none ${p.id === currentUserId ? 'text-white' : 'text-blue-400 group-hover:text-blue-300'}`}>
+                          {formatNumber(p.srp)}
+                        </p>
+                        <p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mt-1 opacity-60">{p.rank}</p>
+                      </div>
                     </div>
 
                     {/* Glossy sheen effect on hover */}
@@ -208,13 +218,17 @@ export const RankedLeaderboard: React.FC<RankedLeaderboardProps> = ({
                  </div>
                </div>
                <div className="flex-1 -ml-6 pl-10 pr-6 py-3 bg-blue-600/40 rounded-r-2xl border-y border-r border-blue-400/30 flex items-center justify-between">
-                  <div>
-                    <h4 className="text-white font-black text-xs uppercase">{myRank.stats.username}</h4>
-                    {renderRankGroup(myRank.stats.rank)}
+                  <div className="flex-1">
+                    <h4 className="text-white font-black text-xs uppercase italic">{myRank.stats.username}</h4>
+                    <p className="text-blue-300 text-[8px] font-black uppercase tracking-widest opacity-60">#{myRank.rank} {language === 'en' ? 'Global Rank' : 'Globalni rang'}</p>
                   </div>
-                  <div className="text-right">
-                    <p className="text-white font-black text-base">{formatNumber(myRank.stats.srp)}</p>
-                    <p className="text-blue-300 text-[8px] font-black uppercase">{myRank.stats.rank}</p>
+                  
+                  <div className="flex items-center gap-4">
+                    {renderRankIcon(myRank.stats.rank)}
+                    <div className="text-right min-w-[70px]">
+                      <p className="text-white font-black text-xl italic tracking-tighter leading-none">{formatNumber(myRank.stats.srp)}</p>
+                      <p className="text-blue-300 text-[8px] font-black uppercase mt-1 opacity-80">{myRank.stats.rank}</p>
+                    </div>
                   </div>
                </div>
             </div>
