@@ -13,6 +13,34 @@ interface DailyChallengesProps {
 
 export const DailyChallenges: React.FC<DailyChallengesProps> = ({ challenges, onClaim, language }) => {
   const t = translations[language];
+  const [timeLeft, setTimeLeft] = React.useState<string>('');
+
+  React.useEffect(() => {
+    const calculateTimeLeft = () => {
+      const now = new Date();
+      const resetTime = new Date();
+      resetTime.setHours(10, 0, 0, 0);
+
+      // If it's already past 10 AM, target tomorrow's 10 AM
+      if (now >= resetTime) {
+        resetTime.setDate(resetTime.getDate() + 1);
+      }
+
+      const diff = resetTime.getTime() - now.getTime();
+      const h = Math.floor(diff / (1000 * 60 * 60));
+      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+      return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    };
+
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    setTimeLeft(calculateTimeLeft());
+    return () => clearInterval(timer);
+  }, []);
 
   if (!challenges || challenges.length === 0) return null;
 
@@ -22,7 +50,10 @@ export const DailyChallenges: React.FC<DailyChallengesProps> = ({ challenges, on
         <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white/60 flex items-center gap-2">
           📅 {t.ranked.daily_title}
         </h3>
-        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t.ranked.reset_at}</span>
+        <div className="flex flex-col items-end">
+          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t.ranked.reset_at}</span>
+          <span className="text-[10px] font-black text-amber-500 tabular-nums">-{timeLeft}</span>
+        </div>
       </div>
 
       <div className="grid gap-3">

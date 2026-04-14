@@ -140,9 +140,10 @@ export const RankedLeaderboard: React.FC<RankedLeaderboardProps> = ({
             </button>
             <button
                onClick={onOpenRoadmap}
-               className="text-amber-500 text-[10px] font-black uppercase tracking-widest hover:text-amber-400 transition-colors"
+               className="px-4 py-2 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-500 text-[10px] font-black uppercase tracking-widest hover:bg-amber-500/20 hover:scale-105 active:scale-95 transition-all shadow-[0_0_15px_rgba(245,158,11,0.1)] flex items-center gap-2 group"
             >
-              Roadmap 🗺️
+              <span>Roadmap</span>
+              <span className="group-hover:rotate-12 transition-transform">🗺️</span>
             </button>
           </div>
 
