@@ -89,8 +89,8 @@ export const RankedLeaderboard: React.FC<RankedLeaderboardProps> = ({
     const icon = RANK_ICONS[rank] || RANK_ICONS['Novice'];
     return (
       <div className="relative group/badge">
-        <div className="w-10 h-10 rounded-xl bg-slate-950/40 p-1.5 border border-white/10 flex items-center justify-center shadow-lg transition-all group-hover/badge:scale-110 group-hover/badge:border-blue-500/50">
-          <img src={icon} alt={rank} className="w-full h-full object-contain" />
+        <div className="w-14 h-14 rounded-2xl bg-slate-950/40 p-2 border border-blue-500/20 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.1)] transition-all group-hover/badge:scale-110 group-hover/badge:border-blue-500/50">
+          <img src={icon} alt={rank} className="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]" />
         </div>
         
         {/* Glow effect for high ranks */}
@@ -199,8 +199,6 @@ export const RankedLeaderboard: React.FC<RankedLeaderboardProps> = ({
                       </div>
                     </div>
 
-                    {/* Glossy sheen effect on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none" />
                   </div>
                 </div>
               ))
