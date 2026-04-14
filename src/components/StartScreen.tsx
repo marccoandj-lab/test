@@ -611,30 +611,30 @@ export const StartScreen: React.FC<StartScreenProps> = ({
               <div className="grid grid-cols-2 gap-4">
                 <button
                   onClick={() => setMode('daily_challenges')}
-                  className="group relative flex flex-col items-center justify-center gap-3 p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-blue-500/30 rounded-[2.5rem] hover:scale-[1.05] active:scale-95 transition-all overflow-hidden"
+                  className="group relative flex flex-col items-center justify-center gap-2 p-4 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-blue-500/30 rounded-3xl hover:scale-[1.05] active:scale-95 transition-all overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-blue-500/5 group-hover:bg-blue-500/10 transition-colors" />
                   <div className="relative">
-                    <span className="text-4xl group-hover:drop-shadow-[0_0_10px_rgba(59,130,246,0.5)] transition-all">📅</span>
+                    <span className="text-3xl group-hover:drop-shadow-[0_0_10px_rgba(59,130,246,0.5)] transition-all">📅</span>
                     {/* Pulsing notification dot if challenges are available */}
                     {profileData?.daily_challenges?.some(c => !c.claimed && c.current >= c.target) && (
-                      <span className="absolute -top-1 -right-1 w-3 h-3 bg-rose-500 rounded-full animate-ping" />
+                      <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full animate-ping" />
                     )}
                   </div>
-                  <span className="text-[11px] font-black text-blue-400 uppercase tracking-widest">{language === 'en' ? 'Challenges' : 'Izazovi'}</span>
+                  <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest">{language === 'en' ? 'Challenges' : 'Izazovi'}</span>
                 </button>
 
                 <button
                   onClick={() => setMode('ranked_leaderboard')}
-                  className="group relative flex flex-col items-center justify-center gap-3 p-6 bg-gradient-to-br from-amber-600/20 to-orange-600/20 border border-amber-500/30 rounded-[2.5rem] hover:scale-[1.05] active:scale-95 transition-all overflow-hidden"
+                  className="group relative flex flex-col items-center justify-center gap-2 p-4 bg-gradient-to-br from-amber-600/20 to-orange-600/20 border border-amber-500/30 rounded-3xl hover:scale-[1.05] active:scale-95 transition-all overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-amber-500/5 group-hover:bg-amber-500/10 transition-colors" />
                   <div className="relative">
-                    <span className="text-4xl group-hover:drop-shadow-[0_0_15px_rgba(251,191,36,0.5)] transition-all">🏅</span>
+                    <span className="text-3xl group-hover:drop-shadow-[0_0_15px_rgba(251,191,36,0.5)] transition-all">🏅</span>
                   </div>
                   <div className="text-center">
-                     <span className="text-[11px] font-black text-amber-500 uppercase tracking-widest block">{language === 'en' ? 'Ranked' : 'Rangirano'}</span>
-                     <span className="text-[9px] font-black text-amber-500/60 uppercase tracking-tighter">{profileData?.srp || 0} SRP</span>
+                     <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest block">{language === 'en' ? 'Ranked' : 'Rangirano'}</span>
+                     <span className="text-[8px] font-black text-amber-500/60 uppercase tracking-tighter">{profileData?.srp || 0} SRP</span>
                   </div>
                 </button>
               </div>

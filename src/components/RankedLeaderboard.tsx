@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { translations } from '../i18n/translations';
-import { RankBadge } from './RankBadge';
 import { formatNumber } from '../utils/format';
 
 interface RankedLeaderboardProps {
@@ -19,6 +18,16 @@ interface PlayerRankStats {
   rank: string;
 }
 
+const RANK_ICONS: Record<string, string> = {
+  'Novice': '/assets/rank_icons/a1.png',
+  'Apprentice': '/assets/rank_icons/22.png',
+  'Professional': '/assets/rank_icons/33.png',
+  'Expert': '/assets/rank_icons/44.png',
+  'Strategist': '/assets/rank_icons/55-removebg-preview.png',
+  'Visionary': '/assets/rank_icons/66.png',
+  'Economy Legend': '/assets/rank_icons/final.png',
+};
+
 export const RankedLeaderboard: React.FC<RankedLeaderboardProps> = ({ 
   onBack, 
   onOpenRoadmap,
@@ -34,7 +43,7 @@ export const RankedLeaderboard: React.FC<RankedLeaderboardProps> = ({
     fetchRankings();
 
     const channel = supabase
-      .channel('ranked_updates')
+      .channel('ranked_updates_v2')
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'profiles' },
@@ -53,7 +62,7 @@ export const RankedLeaderboard: React.FC<RankedLeaderboardProps> = ({
         .from('profiles')
         .select('id, username, avatar_url, srp, rank')
         .order('srp', { ascending: false })
-        .limit(100);
+        .limit(50);
 
       if (error) throw error;
 
@@ -67,215 +76,150 @@ export const RankedLeaderboard: React.FC<RankedLeaderboardProps> = ({
             rank: rankedData.findIndex(p => p.id === currentUserId) + 1,
             stats: found
           });
-        } else {
-          // Fetch specific user if not in top 100
-          const { data: myData } = await supabase
-            .from('profiles')
-            .select('id, username, avatar_url, srp, rank')
-            .eq('id', currentUserId)
-            .single();
-          
-          if (myData) {
-            const { count } = await supabase
-              .from('profiles')
-              .select('*', { count: 'exact', head: true })
-              .gt('srp', myData.srp);
-            
-            setMyRank({
-              rank: (count || 0) + 1,
-              stats: myData as PlayerRankStats
-            });
-          }
         }
       }
     } catch (err) {
-      console.error('Error fetching ranked leaderboard:', err);
+      console.error('Error fetching rankings:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  const top3 = players.slice(0, 3);
-  const others = players.slice(3);
+  const renderRankGroup = (rank: string) => {
+    const icon = RANK_ICONS[rank] || RANK_ICONS['Novice'];
+    return (
+      <div className="flex gap-1 ml-4 opacity-80 decoration-slate-400">
+        {[...Array(5)].map((_, i) => (
+          <img key={i} src={icon} alt="" className="w-3.5 h-3.5 object-contain grayscale-[0.2]" />
+        ))}
+      </div>
+    );
+  };
+
+  const getRankBadge = (rankPos: number) => {
+    if (rankPos === 1) return <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-amber-600 flex items-center justify-center border-2 border-amber-300 shadow-[0_0_15px_rgba(251,191,36,0.5)]"><span className="text-white font-black text-lg">1</span></div>;
+    if (rankPos === 2) return <div className="w-9 h-9 rounded-full bg-gradient-to-br from-slate-300 to-slate-500 flex items-center justify-center border-2 border-slate-200 shadow-lg"><span className="text-white font-black">2</span></div>;
+    if (rankPos === 3) return <div className="w-9 h-9 rounded-full bg-gradient-to-br from-orange-600 to-orange-800 flex items-center justify-center border-2 border-orange-500 shadow-lg"><span className="text-white font-black">3</span></div>;
+    return <span className="text-slate-500 font-black text-sm w-10 text-center">{rankPos}</span>;
+  };
 
   return (
-    <div className="fixed inset-0 bg-slate-900/95 flex flex-col items-center justify-center p-6 z-50 overflow-hidden">
-      {/* Premium Background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-0 left-0 w-[50%] h-[50%] bg-amber-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute inset-0 bg-[url('/assets/eco-pattern.png')] opacity-5" />
-      </div>
+    <div className="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center p-6 z-50 overflow-hidden">
+      {/* Background with Circular Pattern */}
+      <div className="absolute inset-0 pointer-events-none opacity-20" 
+        style={{ 
+          backgroundImage: 'radial-gradient(circle at 2px 2px, #475569 1px, transparent 0)',
+          backgroundSize: '24px 24px' 
+        }} 
+      />
+      
+      {/* Glossy Glows */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-96 bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
 
-      <div className="relative z-10 max-w-lg w-full h-[90vh] bg-slate-900/40 p-8 rounded-[40px] border border-white/10 backdrop-blur-3xl shadow-[0_0_50px_-12px_rgba(251,191,36,0.2)] flex flex-col">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <button
-            onClick={onBack}
-            className="text-slate-500 hover:text-white transition-colors text-sm flex items-center gap-2 group"
-          >
-            <span className="group-hover:-translate-x-1 transition-transform">←</span> {t.ui.back_to_menu}
-          </button>
-          <button
-            onClick={onOpenRoadmap}
-            className="bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 border border-amber-500/30 px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95"
-          >
-            🗺️ {language === 'en' ? 'Rank Roadmap' : 'Mapa rangova'}
-          </button>
+      <div className="relative z-10 max-w-lg w-full h-[90vh] flex flex-col pt-12 pb-8">
+        
+        {/* Floating Header Badge */}
+        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-10 py-3 bg-blue-600 border-2 border-blue-400 rounded-2xl shadow-[0_8px_30px_-5px_rgba(37,99,235,0.6)] z-20">
+          <h1 className="text-white font-black uppercase tracking-[0.2em] italic text-lg drop-shadow-lg">LEADERBOARD</h1>
         </div>
 
-        <div className="text-center space-y-2 mb-10">
-          <div className="inline-flex items-center gap-3 px-4 py-1.5 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-full mb-2">
-            <span className="animate-pulse">✨</span>
-            <span className="text-[10px] text-amber-500 font-black uppercase tracking-widest">{language === 'en' ? 'Elite Season' : 'Elitna Sezona'}</span>
-            <span className="animate-pulse">✨</span>
+        <div className="flex-1 bg-slate-900/60 border border-white/10 rounded-[40px] backdrop-blur-3xl shadow-2xl flex flex-col overflow-hidden">
+          
+          {/* Top Actions */}
+          <div className="flex items-center justify-between px-8 py-6 border-b border-white/5">
+            <button
+              onClick={onBack}
+              className="text-slate-500 hover:text-white transition-colors text-xs font-bold flex items-center gap-2 group"
+            >
+              <span className="group-hover:-translate-x-1 transition-transform">←</span> {t.ui.back_to_menu}
+            </button>
+            <button
+               onClick={onOpenRoadmap}
+               className="text-amber-500 text-[10px] font-black uppercase tracking-widest hover:text-amber-400 transition-colors"
+            >
+              Roadmap 🗺️
+            </button>
           </div>
-          <h1 className="text-4xl font-black text-white italic tracking-tighter uppercase drop-shadow-[0_0_15px_rgba(251,191,36,0.4)]">
-            {language === 'en' ? 'Ranked' : 'Rangirana'} <span className="text-amber-500">Hall of Fame</span>
-          </h1>
-          <p className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.4em]">Strategic Reputation Points (SRP)</p>
-        </div>
 
-        {loading ? (
-          <div className="flex-1 flex flex-col items-center justify-center space-y-4">
-            <div className="w-16 h-16 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin" />
-            <p className="text-slate-600 text-[10px] font-black uppercase tracking-widest animate-pulse">Calculating Ranks...</p>
-          </div>
-        ) : (
-          <div className="flex-1 overflow-y-auto custom-scrollbar pr-1 space-y-8">
-            {/* Podium Section */}
-            {players.length > 0 && (
-              <div className="flex items-end justify-center gap-2 px-2 pt-12 pb-4">
-                {/* 2nd Place */}
-                {top3[1] && (
-                  <div className="flex flex-col items-center gap-3 w-1/3">
-                    <div className="relative group">
-                      <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center border-2 border-slate-400 p-2 shadow-2xl transition-transform group-hover:scale-110">
-                        <img src={`/assets/${top3[1].avatar_url || '1'}.png`} className="w-12 h-12 object-contain" />
-                      </div>
-                      <div className="absolute -top-3 -left-3 w-8 h-8 bg-slate-400 rounded-full border-2 border-slate-900 flex items-center justify-center text-slate-900 font-black text-xs shadow-lg">2</div>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-white font-black text-[10px] truncate max-w-[80px]">{top3[1].username}</p>
-                      <RankBadge rank={top3[1].rank} language={language} size="sm" showName={false} />
-                      <p className="text-slate-400 text-[10px] font-black mt-1">{formatNumber(top3[1].srp)} SRP</p>
-                    </div>
-                    <div className="h-16 w-full bg-gradient-to-b from-slate-400/20 to-transparent rounded-t-xl border-x border-t border-slate-400/10" />
-                  </div>
-                )}
-
-                {/* 1st Place */}
-                {top3[0] && (
-                  <div className="flex flex-col items-center gap-3 w-1/3 -mt-10">
-                    <div className="relative group">
-                      <div className="w-24 h-24 rounded-[32px] bg-gradient-to-br from-amber-400 via-orange-500 to-amber-600 p-1 shadow-[0_20px_60px_-10px_rgba(245,158,11,0.6)] animate-float">
-                        <div className="w-full h-full rounded-[28px] bg-slate-900 flex items-center justify-center p-2">
-                          <img src={`/assets/${top3[0].avatar_url || '1'}.png`} className="w-16 h-16 object-contain" />
-                        </div>
-                      </div>
-                      <div className="absolute -top-4 -left-4 w-12 h-12 bg-amber-500 rounded-full border-2 border-slate-900 flex items-center justify-center text-slate-900 font-black text-lg ring-8 ring-amber-500/10 shadow-lg animate-bounce">1</div>
-                      <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                        <RankBadge rank={top3[0].rank} language={language} size="md" showName={false} />
-                      </div>
-                    </div>
-                    <div className="text-center pt-2">
-                      <p className="text-amber-500 font-black text-sm truncate max-w-[120px] uppercase italic">{top3[0].username}</p>
-                      <p className="text-amber-200/50 text-[11px] font-black tracking-widest">{formatNumber(top3[0].srp)} SRP</p>
-                    </div>
-                    <div className="h-24 w-full bg-gradient-to-b from-amber-500/40 via-amber-500/10 to-transparent rounded-t-3xl border-x border-t border-amber-500/20" />
-                  </div>
-                )}
-
-                {/* 3rd Place */}
-                {top3[2] && (
-                  <div className="flex flex-col items-center gap-3 w-1/3">
-                    <div className="relative group">
-                      <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border-2 border-orange-800 p-2 shadow-2xl transition-transform group-hover:scale-110">
-                        <img src={`/assets/${top3[2].avatar_url || '1'}.png`} className="w-10 h-10 object-contain" />
-                      </div>
-                      <div className="absolute -top-2 -left-2 w-7 h-7 bg-orange-800 rounded-full border-2 border-slate-900 flex items-center justify-center text-orange-200 font-black text-[10px] shadow-lg">3</div>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-white font-black text-[10px] truncate max-w-[70px]">{top3[2].username}</p>
-                      <RankBadge rank={top3[2].rank} language={language} size="sm" showName={false} />
-                      <p className="text-slate-400 text-[10px] font-black mt-1">{formatNumber(top3[2].srp)} SRP</p>
-                    </div>
-                    <div className="h-12 w-full bg-gradient-to-b from-orange-800/20 to-transparent rounded-t-xl border-x border-t border-orange-800/10" />
-                  </div>
-                )}
+          <div className="flex-1 overflow-y-auto px-6 py-4 custom-scrollbar space-y-3">
+            {loading ? (
+              <div className="h-full flex flex-col items-center justify-center gap-4">
+                <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
+                <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest animate-pulse">Synchronizing rankings...</p>
               </div>
-            )}
-
-            {/* List Section */}
-            <div className="space-y-3 mt-4">
-              {others.map((player, idx) => (
+            ) : (
+              players.map((p, idx) => (
                 <div 
-                  key={player.id} 
-                  className={`relative overflow-hidden bg-white/5 p-4 rounded-3xl border border-white/5 flex items-center justify-between group hover:bg-white/10 transition-all ${player.id === currentUserId ? 'ring-2 ring-amber-500/50 bg-amber-500/5' : ''}`}
+                  key={p.id}
+                  className={`relative flex items-center group transition-all duration-300 ${p.id === currentUserId ? 'scale-[1.02]' : ''}`}
                 >
-                  <div className="flex items-center gap-4 z-10">
-                    <span className="text-slate-600 font-black text-xs w-6 text-center">{idx + 4}</span>
-                    <div className="relative">
-                      <div className="w-11 h-11 rounded-xl bg-slate-900 flex items-center justify-center border border-white/10 group-hover:scale-110 transition-transform">
-                        <img src={`/assets/${player.avatar_url || '1'}.png`} className="w-8 h-8 object-contain" />
-                      </div>
-                      <div className="absolute -bottom-1 -right-1">
-                        <RankBadge rank={player.rank} language={language} size="sm" showName={false} />
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h4 className="text-white font-black text-xs uppercase tracking-tight">{player.username}</h4>
-                        {player.id === currentUserId && <span className="text-amber-500 text-[8px] font-black uppercase tracking-widest italic">{language === 'en' ? "Your Rank" : "Tvoj rang"}</span>}
-                      </div>
-                      <p className="text-slate-500 text-[9px] font-bold uppercase tracking-widest">{player.rank}</p>
-                    </div>
+                  {/* Rank Indicator */}
+                  <div className="flex-shrink-0 w-12 flex justify-center">
+                    {getRankBadge(idx + 1)}
                   </div>
-                  <div className="text-right z-10">
-                    <p className="text-amber-500 font-black text-sm italic">{formatNumber(player.srp)} SRP</p>
-                    <div className="h-1 w-20 bg-black/40 rounded-full mt-1 overflow-hidden">
-                      <div 
-                        className="h-full bg-amber-500 group-hover:translate-x-full transition-transform duration-1000" 
-                        style={{ width: '100%', transform: 'translateX(-50%)' }}
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* Hover Decoration */}
-                  <div className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
-        {/* My Current Standings (Fixed Bottom if not in list) */}
-        {myRank && !players.slice(0, 100).some(p => p.id === currentUserId) && (
-          <div className="mt-6 p-5 bg-amber-600/20 border border-amber-500/30 rounded-[32px] flex items-center justify-between animate-modal-pop ring-2 ring-amber-500/20 shadow-2xl backdrop-blur-3xl">
-            <div className="flex items-center gap-4">
-              <span className="text-amber-500 font-black text-sm w-8 text-center">#{myRank.rank}</span>
-              <div className="relative">
-                <div className="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center border-2 border-amber-500/30">
-                  <img src={`/assets/${myRank.stats.avatar_url || '1'}.png`} className="w-9 h-9 object-contain" />
+                  {/* Avatar Container */}
+                  <div className="relative z-10 -ml-2">
+                    <div className={`w-20 h-20 rounded-full bg-slate-800 p-1.5 border-4 ${idx < 3 ? 'border-amber-500/30' : 'border-white/5'} shadow-2xl transition-transform group-hover:scale-105 overflow-hidden`}>
+                      <img src={`/assets/${p.avatar_url || '1'}.png`} className="w-full h-full object-contain drop-shadow-xl" alt="" />
+                    </div>
+                  </div>
+
+                  {/* Player Info Strip */}
+                  <div className={`flex-1 -ml-6 pl-10 pr-6 py-3 rounded-r-2xl border-y border-r transition-all duration-500 flex items-center justify-between ${
+                    p.id === currentUserId 
+                    ? 'bg-blue-600/30 border-blue-400 shadow-[0_0_20px_rgba(37,99,235,0.2)]' 
+                    : 'bg-gradient-to-r from-blue-900/40 to-blue-800/20 border-white/10 group-hover:bg-blue-900/60'
+                  }`}>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-white font-black text-sm uppercase tracking-tight truncate max-w-[120px]">{p.username}</h4>
+                        {p.id === currentUserId && <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />}
+                      </div>
+                      
+                      {/* 5 Rank Icons Row */}
+                      {renderRankGroup(p.rank)}
+                    </div>
+
+                    <div className="text-right">
+                      <p className={`text-lg font-black italic italic tracking-tighter ${p.id === currentUserId ? 'text-white' : 'text-blue-400 group-hover:text-blue-300'}`}>
+                        {formatNumber(p.srp)}
+                      </p>
+                      <p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">{p.rank}</p>
+                    </div>
+
+                    {/* Glossy sheen effect on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none" />
+                  </div>
                 </div>
-                <div className="absolute -bottom-1 -right-1">
-                  <RankBadge rank={myRank.stats.rank} language={language} size="sm" showName={false} />
-                </div>
-              </div>
-              <div>
-                <h4 className="text-white font-black text-sm uppercase tracking-tight">{myRank.stats.username}</h4>
-                <div className="flex items-center gap-2">
-                  <p className="text-amber-500 text-[9px] font-black uppercase tracking-widest italic">{language === 'en' ? "Currently at" : "Trenutno na"}</p>
-                  <span className="text-slate-400 font-bold text-[9px] uppercase">{myRank.stats.rank}</span>
-                </div>
-              </div>
-            </div>
-            <div className="text-right">
-              <p className="text-amber-400 font-black text-lg italic tracking-tighter">{formatNumber(myRank.stats.srp)} SRP</p>
-              <p className="text-slate-500 text-[8px] font-black uppercase tracking-wider">{language === 'en' ? 'Keep Playing!' : 'Samo nastavi!'}</p>
-            </div>
+              ))
+            )}
           </div>
-        )}
+
+          {/* User Ranking Footer (If not in top 50) */}
+          {myRank && !players.some(p => p.id === currentUserId) && (
+            <div className="p-6 bg-blue-600/20 border-t border-white/10 backdrop-blur-xl flex items-center animate-modal-pop">
+               <div className="flex-shrink-0 w-12 flex justify-center">
+                  <span className="text-blue-400 font-black text-sm">#{myRank.rank}</span>
+               </div>
+               <div className="relative z-10 -ml-2">
+                 <div className="w-16 h-16 rounded-full bg-blue-900/40 p-1 border-4 border-blue-500/30 overflow-hidden">
+                    <img src={`/assets/${myRank.stats.avatar_url}.png`} className="w-full h-full object-contain" alt="" />
+                 </div>
+               </div>
+               <div className="flex-1 -ml-6 pl-10 pr-6 py-3 bg-blue-600/40 rounded-r-2xl border-y border-r border-blue-400/30 flex items-center justify-between">
+                  <div>
+                    <h4 className="text-white font-black text-xs uppercase">{myRank.stats.username}</h4>
+                    {renderRankGroup(myRank.stats.rank)}
+                  </div>
+                  <div className="text-right">
+                    <p className="text-white font-black text-base">{formatNumber(myRank.stats.srp)}</p>
+                    <p className="text-blue-300 text-[8px] font-black uppercase">{myRank.stats.rank}</p>
+                  </div>
+               </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
