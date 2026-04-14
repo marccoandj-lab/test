@@ -7,6 +7,7 @@ interface RankBadgeProps {
   language: Language;
   size?: 'sm' | 'md' | 'lg';
   showName?: boolean;
+  className?: string;
 }
 
 const RANK_ICONS: Record<string, string> = {
@@ -29,7 +30,7 @@ const RANK_COLORS: Record<string, string> = {
   'Economy Legend': 'from-yellow-300 via-amber-500 to-yellow-600 animate-pulse',
 };
 
-export const RankBadge: React.FC<RankBadgeProps> = ({ rank, language, size = 'md', showName = true }) => {
+export const RankBadge: React.FC<RankBadgeProps> = ({ rank, language, size = 'md', showName = true, className }) => {
   const t = translations[language];
   
   const getRankKey = (r: string) => {
@@ -55,7 +56,7 @@ export const RankBadge: React.FC<RankBadgeProps> = ({ rank, language, size = 'md
   };
 
   return (
-    <div className="flex items-center gap-3">
+    <div className={cn("flex items-center gap-3", className)}>
       <div className={cn(
         "relative rounded-xl overflow-hidden shadow-lg border border-white/20 group",
         sizeClasses[size],

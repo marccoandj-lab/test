@@ -183,8 +183,8 @@ export const StartScreen: React.FC<StartScreenProps> = ({
 
   if (mode === 'daily_challenges') {
     return (
-      <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 z-50 overflow-hidden">
-        <div className="max-w-md w-full flex flex-col bg-white/5 p-8 rounded-[40px] border border-white/10 backdrop-blur-3xl shadow-2xl max-h-[90vh]">
+      <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-3 md:p-6 z-50 overflow-hidden">
+        <div className="max-w-md w-full flex flex-col bg-white/5 p-5 md:p-8 rounded-[40px] border border-white/10 backdrop-blur-3xl shadow-2xl h-[95dvh]">
           <button
             onClick={() => setMode('initial')}
             className="text-slate-500 hover:text-white transition-colors text-sm flex items-center gap-2 mb-8 group"
@@ -530,7 +530,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   }
 
   return (
-    <div className="fixed inset-0 bg-slate-900 flex flex-col items-center p-6 z-50 overflow-y-auto custom-scrollbar">
+    <div className="fixed inset-0 bg-slate-900 flex flex-col items-center p-3 md:p-6 z-50 overflow-y-auto custom-scrollbar">
       <div className="absolute inset-0 opacity-30 pointer-events-none overflow-hidden fixed">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600 rounded-full blur-[120px] animate-pulse" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-green-600 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />

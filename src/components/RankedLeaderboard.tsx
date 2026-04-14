@@ -109,7 +109,7 @@ export const RankedLeaderboard: React.FC<RankedLeaderboardProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center p-6 z-50 overflow-hidden">
+    <div className="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center p-3 md:p-6 z-50 overflow-hidden">
       {/* Background with Circular Pattern */}
       <div className="absolute inset-0 pointer-events-none opacity-20" 
         style={{ 
@@ -121,33 +121,34 @@ export const RankedLeaderboard: React.FC<RankedLeaderboardProps> = ({
       {/* Glossy Glows */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-96 bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
 
-      <div className="relative z-10 max-w-lg w-full h-[90vh] flex flex-col pt-12 pb-8">
+      <div className="relative z-10 max-w-lg w-full h-[95dvh] flex flex-col pt-10 md:pt-12 pb-6 md:pb-8">
         
         {/* Floating Header Badge */}
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-10 py-3 bg-blue-600 border-2 border-blue-400 rounded-2xl shadow-[0_8px_30px_-5px_rgba(37,99,235,0.6)] z-20">
-          <h1 className="text-white font-black uppercase tracking-[0.2em] italic text-lg drop-shadow-lg">LEADERBOARD</h1>
+        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-6 md:px-10 py-2 md:py-3 bg-blue-600 border-2 border-blue-400 rounded-2xl shadow-[0_8px_30px_-5px_rgba(37,99,235,0.6)] z-20">
+          <h1 className="text-white font-black uppercase tracking-[0.2em] italic text-sm md:text-lg drop-shadow-lg">LEADERBOARD</h1>
         </div>
 
         <div className="flex-1 bg-slate-900/60 border border-white/10 rounded-[40px] backdrop-blur-3xl shadow-2xl flex flex-col overflow-hidden">
           
           {/* Top Actions */}
-          <div className="flex items-center justify-between px-8 py-6 border-b border-white/5">
+          <div className="flex items-center justify-between px-4 md:px-8 py-4 md:py-6 border-b border-white/5">
             <button
               onClick={onBack}
-              className="text-slate-500 hover:text-white transition-colors text-xs font-bold flex items-center gap-2 group"
+              className="text-slate-500 hover:text-white transition-colors text-[10px] md:text-xs font-bold flex items-center gap-1 md:gap-2 group"
             >
               <span className="group-hover:-translate-x-1 transition-transform">←</span> {t.ui.back_to_menu}
             </button>
             <button
                onClick={onOpenRoadmap}
-               className="px-4 py-2 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-500 text-[10px] font-black uppercase tracking-widest hover:bg-amber-500/20 hover:scale-105 active:scale-95 transition-all shadow-[0_0_15px_rgba(245,158,11,0.1)] flex items-center gap-2 group"
+               className="px-3 md:px-4 py-1.5 md:py-2 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-500 text-[9px] md:text-[10px] font-black uppercase tracking-widest hover:bg-amber-500/20 hover:scale-105 active:scale-95 transition-all shadow-[0_0_15px_rgba(245,158,11,0.1)] flex items-center gap-1.5 md:gap-2 group"
             >
-              <span>Roadmap</span>
+              <span className="hidden sm:inline">Roadmap</span>
+              <span className="sm:hidden">Map</span>
               <span className="group-hover:rotate-12 transition-transform">🗺️</span>
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto px-6 py-4 custom-scrollbar space-y-3">
+          <div className="flex-1 overflow-y-auto px-4 md:px-6 py-4 custom-scrollbar space-y-3">
             {loading ? (
               <div className="h-full flex flex-col items-center justify-center gap-4">
                 <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
@@ -160,42 +161,44 @@ export const RankedLeaderboard: React.FC<RankedLeaderboardProps> = ({
                   className={`relative flex items-center group transition-all duration-300 ${p.id === currentUserId ? 'scale-[1.02]' : ''}`}
                 >
                   {/* Rank Indicator */}
-                  <div className="flex-shrink-0 w-12 flex justify-center">
+                  <div className="flex-shrink-0 w-8 md:w-12 flex justify-center">
                     {getRankBadge(idx + 1)}
                   </div>
 
                   {/* Avatar Container */}
-                  <div className="relative z-10 -ml-2">
-                    <div className={`w-20 h-20 rounded-full bg-slate-800 p-1.5 border-4 ${idx < 3 ? 'border-amber-500/30' : 'border-white/5'} shadow-2xl transition-transform group-hover:scale-105 overflow-hidden`}>
+                  <div className="relative z-10 -ml-1 md:-ml-2">
+                    <div className={`w-14 h-14 md:w-20 md:h-20 rounded-full bg-slate-800 p-1 md:p-1.5 border-2 md:border-4 ${idx < 3 ? 'border-amber-500/30' : 'border-white/5'} shadow-2xl transition-transform group-hover:scale-105 overflow-hidden`}>
                       <img src={`/assets/${p.avatar_url || '1'}.png`} className="w-full h-full object-contain drop-shadow-xl" alt="" />
                     </div>
                   </div>
 
                   {/* Player Info Strip */}
-                  <div className={`flex-1 -ml-6 pl-10 pr-6 py-3 rounded-r-2xl border-y border-r transition-all duration-500 flex items-center justify-between ${
+                  <div className={`flex-1 -ml-4 md:-ml-6 pl-6 md:pl-10 pr-3 md:pr-6 py-2 md:py-3 rounded-r-2xl border-y border-r transition-all duration-500 flex items-center justify-between min-w-0 ${
                     p.id === currentUserId 
                     ? 'bg-blue-600/30 border-blue-400 shadow-[0_0_20px_rgba(37,99,235,0.2)]' 
                     : 'bg-gradient-to-r from-blue-900/40 to-blue-800/20 border-white/10 group-hover:bg-blue-900/60'
                   }`}>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <h4 className="text-white font-black text-sm uppercase tracking-tight truncate max-w-[140px] italic">{p.username}</h4>
+                    <div className="flex-1 min-w-0 pr-2">
+                      <div className="flex items-center gap-1.5 md:gap-2">
+                        <h4 className="text-white font-black text-xs md:text-sm uppercase tracking-tight truncate max-w-[100px] md:max-w-[140px] italic">{p.username}</h4>
                         {p.id === currentUserId && (
-                          <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-widest rounded-full border border-emerald-500/20 animate-pulse">
+                          <span className="px-1.5 md:px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[6px] md:text-[8px] font-black uppercase tracking-widest rounded-full border border-emerald-500/20 animate-pulse">
                             YOU
                           </span>
                         )}
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                      {renderRankIcon(p.rank)}
+                    <div className="flex items-center gap-2 md:gap-4 shrink-0">
+                      <div className="scale-75 md:scale-100 origin-right flex-shrink-0">
+                        {renderRankIcon(p.rank)}
+                      </div>
                       
-                      <div className="text-right min-w-[70px]">
-                        <p className={`text-xl font-black italic tracking-tighter leading-none ${p.id === currentUserId ? 'text-white' : 'text-blue-400 group-hover:text-blue-300'}`}>
+                      <div className="text-right min-w-[50px] md:min-w-[70px]">
+                        <p className={`text-base md:text-xl font-black italic tracking-tighter leading-none ${p.id === currentUserId ? 'text-white' : 'text-blue-400 group-hover:text-blue-300'}`}>
                           {formatNumber(p.srp)}
                         </p>
-                        <p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mt-1 opacity-60">{p.rank}</p>
+                        <p className="text-slate-500 text-[6px] md:text-[8px] font-black uppercase tracking-widest mt-0.5 md:mt-1 opacity-60 truncate max-w-[40px] md:max-w-none">{p.rank}</p>
                       </div>
                     </div>
 
@@ -207,26 +210,28 @@ export const RankedLeaderboard: React.FC<RankedLeaderboardProps> = ({
 
           {/* User Ranking Footer (If not in top 50) */}
           {myRank && !players.some(p => p.id === currentUserId) && (
-            <div className="p-6 bg-blue-600/20 border-t border-white/10 backdrop-blur-xl flex items-center animate-modal-pop">
-               <div className="flex-shrink-0 w-12 flex justify-center">
-                  <span className="text-blue-400 font-black text-sm">#{myRank.rank}</span>
+            <div className="p-4 md:p-6 bg-blue-600/20 border-t border-white/10 backdrop-blur-xl flex items-center animate-modal-pop">
+               <div className="flex-shrink-0 w-8 md:w-12 flex justify-center">
+                  <span className="text-blue-400 font-black text-xs md:text-sm">#{myRank.rank}</span>
                </div>
-               <div className="relative z-10 -ml-2">
-                 <div className="w-16 h-16 rounded-full bg-blue-900/40 p-1 border-4 border-blue-500/30 overflow-hidden">
+               <div className="relative z-10 -ml-1 md:-ml-2">
+                 <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-blue-900/40 p-1 border-2 md:border-4 border-blue-500/30 overflow-hidden">
                     <img src={`/assets/${myRank.stats.avatar_url}.png`} className="w-full h-full object-contain" alt="" />
                  </div>
                </div>
-               <div className="flex-1 -ml-6 pl-10 pr-6 py-3 bg-blue-600/40 rounded-r-2xl border-y border-r border-blue-400/30 flex items-center justify-between">
-                  <div className="flex-1">
-                    <h4 className="text-white font-black text-xs uppercase italic">{myRank.stats.username}</h4>
-                    <p className="text-blue-300 text-[8px] font-black uppercase tracking-widest opacity-60">#{myRank.rank} {language === 'en' ? 'Global Rank' : 'Globalni rang'}</p>
+               <div className="flex-1 -ml-4 md:-ml-6 pl-6 md:pl-10 pr-4 md:pr-6 py-2 md:py-3 bg-blue-600/40 rounded-r-2xl border-y border-r border-blue-400/30 flex items-center justify-between min-w-0">
+                  <div className="flex-1 min-w-0 pr-2">
+                    <h4 className="text-white font-black text-xs md:text-sm uppercase italic truncate">{myRank.stats.username}</h4>
+                    <p className="text-blue-300 text-[6px] md:text-[8px] font-black uppercase tracking-widest opacity-60 truncate">#{myRank.rank} {language === 'en' ? 'Global Rank' : 'Globalni rang'}</p>
                   </div>
                   
-                  <div className="flex items-center gap-4">
-                    {renderRankIcon(myRank.stats.rank)}
-                    <div className="text-right min-w-[70px]">
-                      <p className="text-white font-black text-xl italic tracking-tighter leading-none">{formatNumber(myRank.stats.srp)}</p>
-                      <p className="text-blue-300 text-[8px] font-black uppercase mt-1 opacity-80">{myRank.stats.rank}</p>
+                  <div className="flex items-center gap-2 md:gap-4 shrink-0">
+                    <div className="scale-75 md:scale-100 origin-right">
+                      {renderRankIcon(myRank.stats.rank)}
+                    </div>
+                    <div className="text-right min-w-[50px] md:min-w-[70px]">
+                      <p className="text-white font-black text-base md:text-xl italic tracking-tighter leading-none">{formatNumber(myRank.stats.srp)}</p>
+                      <p className="text-blue-300 text-[6px] md:text-[8px] font-black uppercase mt-0.5 md:mt-1 opacity-80 truncate max-w-[40px] md:max-w-none">{myRank.stats.rank}</p>
                     </div>
                   </div>
                </div>

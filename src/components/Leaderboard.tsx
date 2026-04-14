@@ -163,18 +163,18 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
   const others = players.slice(3);
 
   return (
-    <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 z-50 overflow-hidden">
+    <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-3 md:p-6 z-50 overflow-hidden">
       {/* Background decorations */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500 rounded-full blur-[160px]" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-amber-500 rounded-full blur-[160px]" />
       </div>
 
-      <div className="relative z-10 max-w-lg w-full h-[90vh] bg-white/5 p-8 rounded-[40px] border border-white/10 backdrop-blur-2xl shadow-2xl flex flex-col">
-        <div className="flex items-center justify-between mb-8">
+      <div className="relative z-10 max-w-lg w-full h-[95dvh] bg-white/5 p-4 md:p-8 rounded-[40px] border border-white/10 backdrop-blur-2xl shadow-2xl flex flex-col">
+        <div className="flex items-center justify-between mb-4 md:mb-8 px-2">
           <button
             onClick={onBack}
-            className="text-slate-500 hover:text-white transition-colors text-sm flex items-center gap-2 group"
+            className="text-slate-500 hover:text-white transition-colors text-xs md:text-sm flex items-center gap-1.5 md:gap-2 group"
           >
             <span className="group-hover:-translate-x-1 transition-transform">←</span> {t.ui.back_to_menu}
           </button>
@@ -184,8 +184,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
           </div>
         </div>
 
-        <div className="text-center space-y-2 mb-8">
-          <h1 className="text-3xl font-black text-white italic tracking-tight drop-shadow-xl">
+        <div className="text-center space-y-1 md:space-y-2 mb-4 md:mb-8 px-2">
+          <h1 className="text-2xl md:text-3xl font-black text-white italic tracking-tight drop-shadow-xl">
             <span className="text-amber-500">{language === 'en' ? 'Global' : 'Globalna'}</span> {t.lobby.leaderboard}
           </h1>
           <p className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.3em]">
@@ -194,18 +194,18 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex flex-wrap gap-1.5 p-1.5 bg-black/40 rounded-3xl border border-white/5 mb-8">
+        <div className="grid grid-cols-3 sm:flex sm:flex-wrap gap-1 md:gap-1.5 p-1 md:p-1.5 bg-black/40 rounded-2xl md:rounded-3xl border border-white/5 mb-4 md:mb-8">
           {(['wins', 'quizzes', 'capital', 'chains', 'intruders'] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`flex-1 min-w-[60px] py-3 rounded-2xl text-[9px] font-black uppercase tracking-wider transition-all ${
+              className={`py-2 md:py-3 rounded-xl md:rounded-2xl text-[8px] md:text-[9px] font-black uppercase tracking-wider transition-all ${
                 activeTab === tab 
                 ? 'bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-lg' 
                 : 'text-slate-500 hover:text-slate-300'
               }`}
             >
-              {tab.toUpperCase()}
+              {tab === 'intruders' && language === 'sr' ? 'ULJEZI' : tab.toUpperCase()}
             </button>
           ))}
         </div>
@@ -222,57 +222,57 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
               <div className="flex items-end justify-center gap-2 px-2 pt-12 pb-4">
                 {/* 2nd Place */}
                 {top3[1] && (
-                  <div className="flex flex-col items-center gap-3 w-1/3">
+                  <div className="flex flex-col items-center gap-2 md:gap-3 w-1/3">
                     <div className="relative">
-                      <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center border-2 border-slate-400 p-2 shadow-2xl">
-                        <img src={`/assets/${top3[1].avatar_url || '1'}.png`} className="w-10 h-10 object-contain" />
+                      <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-white/5 flex items-center justify-center border-2 border-slate-400 p-1.5 md:p-2 shadow-2xl">
+                        <img src={`/assets/${top3[1].avatar_url || '1'}.png`} className="w-8 h-8 md:w-10 md:h-10 object-contain" />
                       </div>
-                      <div className="absolute -top-3 -left-3 w-8 h-8 bg-slate-400 rounded-full border-2 border-slate-900 flex items-center justify-center text-slate-900 font-bold text-xs ring-4 ring-slate-400/20 shadow-lg">2</div>
+                      <div className="absolute -top-2 md:-top-3 -left-2 md:-left-3 w-6 h-6 md:w-8 md:h-8 bg-slate-400 rounded-full border-2 border-slate-900 flex items-center justify-center text-slate-900 font-bold text-[10px] md:text-xs ring-2 md:ring-4 ring-slate-400/20 shadow-lg">2</div>
                     </div>
-                    <div className="text-center">
-                      <p className="text-white font-black text-xs truncate max-w-[80px]">{top3[1].username}</p>
-                      {top3[1].id && <p className="text-blue-400 font-mono text-[8px] font-black uppercase tracking-widest -mt-0.5">#{top3[1].id.substring(0, 6).toUpperCase()}</p>}
-                      <p className="text-slate-500 text-[10px] whitespace-nowrap mt-1">{getCategoryValue(top3[1], activeTab)}</p>
+                    <div className="text-center min-w-0 w-full px-1">
+                      <p className="text-white font-black text-[10px] md:text-xs truncate">{top3[1].username}</p>
+                      {top3[1].id && <p className="text-blue-400 font-mono text-[6px] md:text-[8px] font-black uppercase tracking-widest -mt-0.5">#{top3[1].id.substring(0, 6).toUpperCase()}</p>}
+                      <p className="text-slate-500 text-[8px] md:text-[10px] whitespace-nowrap mt-0.5 md:mt-1">{getCategoryValue(top3[1], activeTab)}</p>
                     </div>
-                    <div className="h-16 w-full bg-gradient-to-b from-slate-400/20 to-transparent rounded-t-xl border-x border-t border-slate-400/10" />
+                    <div className="h-10 md:h-16 w-full bg-gradient-to-b from-slate-400/20 to-transparent rounded-t-xl border-x border-t border-slate-400/10" />
                   </div>
                 )}
 
                 {/* 1st Place */}
                 {top3[0] && (
-                  <div className="flex flex-col items-center gap-3 w-1/3 -mt-8">
+                  <div className="flex flex-col items-center gap-2 md:gap-3 w-1/3 -mt-4 md:-mt-8">
                     <div className="relative">
-                      <div className="w-20 h-20 rounded-[24px] bg-gradient-to-br from-amber-400 to-orange-500 p-0.5 shadow-[0_20px_50px_-10px_rgba(245,158,11,0.5)]">
-                        <div className="w-full h-full rounded-[22px] bg-slate-900 flex items-center justify-center p-2">
-                          <img src={`/assets/${top3[0].avatar_url || '1'}.png`} className="w-12 h-12 object-contain" />
+                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-[24px] bg-gradient-to-br from-amber-400 to-orange-500 p-0.5 shadow-[0_20px_50px_-10px_rgba(245,158,11,0.5)]">
+                        <div className="w-full h-full rounded-[22px] bg-slate-900 flex items-center justify-center p-1.5 md:p-2">
+                          <img src={`/assets/${top3[0].avatar_url || '1'}.png`} className="w-10 h-10 md:w-12 md:h-12 object-contain" />
                         </div>
                       </div>
-                      <div className="absolute -top-4 -left-4 w-10 h-10 bg-amber-500 rounded-full border-2 border-slate-900 flex items-center justify-center text-slate-900 font-black text-sm ring-8 ring-amber-500/10 shadow-lg animate-bounce">1</div>
+                      <div className="absolute -top-3 md:-top-4 -left-3 md:-left-4 w-8 h-8 md:w-10 md:h-10 bg-amber-500 rounded-full border-2 border-slate-900 flex items-center justify-center text-slate-900 font-black text-xs md:text-sm ring-4 md:ring-8 ring-amber-500/10 shadow-lg animate-bounce">1</div>
                     </div>
-                    <div className="text-center">
-                      <p className="text-amber-500 font-black text-sm truncate max-w-[100px]">{top3[0].username}</p>
-                      {top3[0].id && <p className="text-blue-400/60 font-mono text-[8px] font-black uppercase tracking-widest -mt-0.5">#{top3[0].id.substring(0, 6).toUpperCase()}</p>}
-                      <p className="text-amber-200/50 text-[10px] whitespace-nowrap mt-1">{getCategoryValue(top3[0], activeTab)}</p>
+                    <div className="text-center min-w-0 w-full px-1">
+                      <p className="text-amber-500 font-black text-xs md:text-sm truncate">{top3[0].username}</p>
+                      {top3[0].id && <p className="text-blue-400/60 font-mono text-[6px] md:text-[8px] font-black uppercase tracking-widest -mt-0.5">#{top3[0].id.substring(0, 6).toUpperCase()}</p>}
+                      <p className="text-amber-200/50 text-[8px] md:text-[10px] whitespace-nowrap mt-0.5 md:mt-1">{getCategoryValue(top3[0], activeTab)}</p>
                     </div>
-                    <div className="h-24 w-full bg-gradient-to-b from-amber-500/30 to-transparent rounded-t-2xl border-x border-t border-amber-500/20" />
+                    <div className="h-16 md:h-24 w-full bg-gradient-to-b from-amber-500/30 to-transparent rounded-t-2xl border-x border-t border-amber-500/20" />
                   </div>
                 )}
 
                 {/* 3rd Place */}
                 {top3[2] && (
-                  <div className="flex flex-col items-center gap-3 w-1/3">
+                  <div className="flex flex-col items-center gap-2 md:gap-3 w-1/3">
                     <div className="relative">
-                      <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border-2 border-orange-700 p-2 shadow-2xl">
-                        <img src={`/assets/${top3[2].avatar_url || '1'}.png`} className="w-8 h-8 object-contain" />
+                      <div className="w-10 h-10 md:w-14 md:h-14 rounded-2xl bg-white/5 flex items-center justify-center border-2 border-orange-700 p-1.5 md:p-2 shadow-2xl">
+                        <img src={`/assets/${top3[2].avatar_url || '1'}.png`} className="w-6 h-6 md:w-8 md:h-8 object-contain" />
                       </div>
-                      <div className="absolute -top-2 -left-2 w-7 h-7 bg-orange-700 rounded-full border-2 border-slate-900 flex items-center justify-center text-orange-200 font-bold text-[10px] ring-4 ring-orange-700/20 shadow-lg">3</div>
+                      <div className="absolute -top-1.5 md:-top-2 -left-1.5 md:-left-2 w-5 h-5 md:w-7 md:h-7 bg-orange-700 rounded-full border-2 border-slate-900 flex items-center justify-center text-orange-200 font-bold text-[8px] md:text-[10px] ring-2 md:ring-4 ring-orange-700/20 shadow-lg">3</div>
                     </div>
-                    <div className="text-center">
-                      <p className="text-white font-black text-xs truncate max-w-[70px]">{top3[2].username}</p>
-                      {top3[2].id && <p className="text-blue-400/60 font-mono text-[8px] font-black uppercase tracking-widest -mt-0.5">#{top3[2].id.substring(0, 6).toUpperCase()}</p>}
-                      <p className="text-slate-500 text-[10px] whitespace-nowrap mt-1">{getCategoryValue(top3[2], activeTab)}</p>
+                    <div className="text-center min-w-0 w-full px-1">
+                      <p className="text-white font-black text-[10px] md:text-xs truncate">{top3[2].username}</p>
+                      {top3[2].id && <p className="text-blue-400/60 font-mono text-[6px] md:text-[8px] font-black uppercase tracking-widest -mt-0.5">#{top3[2].id.substring(0, 6).toUpperCase()}</p>}
+                      <p className="text-slate-500 text-[8px] md:text-[10px] whitespace-nowrap mt-0.5 md:mt-1">{getCategoryValue(top3[2], activeTab)}</p>
                     </div>
-                    <div className="h-12 w-full bg-gradient-to-b from-orange-700/20 to-transparent rounded-t-xl border-x border-t border-orange-700/10" />
+                    <div className="h-8 md:h-12 w-full bg-gradient-to-b from-orange-700/20 to-transparent rounded-t-xl border-x border-t border-orange-700/10" />
                   </div>
                 )}
               </div>
@@ -285,23 +285,23 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
                   key={player.id} 
                   className={`bg-white/5 p-4 rounded-2xl border border-white/5 flex items-center justify-between group hover:bg-white/10 transition-all ${player.id === currentUserId ? 'ring-2 ring-indigo-500/50 bg-indigo-500/5' : ''}`}
                 >
-                  <div className="flex items-center gap-4">
-                    <span className="text-slate-600 font-black text-xs w-6 text-center">{idx + 4}</span>
-                    <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/5">
-                      <img src={`/assets/${player.avatar_url || '1'}.png`} className="w-7 h-7 object-contain" />
+                  <div className="flex items-center gap-2 md:gap-4 min-w-0">
+                    <span className="text-slate-600 font-black text-[10px] md:text-xs w-4 md:w-6 text-center">{idx + 4}</span>
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/5 shrink-0">
+                      <img src={`/assets/${player.avatar_url || '1'}.png`} className="w-6 h-6 md:w-7 md:h-7 object-contain" />
                     </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h4 className="text-white font-bold text-xs">{player.username}</h4>
-                        {player.id && <span className="text-blue-400 font-mono text-[8px] font-black uppercase tracking-widest">#{player.id.substring(0, 6).toUpperCase()}</span>}
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5 md:gap-2">
+                        <h4 className="text-white font-bold text-[10px] md:text-xs truncate">{player.username}</h4>
+                        {player.id && <span className="text-blue-400 font-mono text-[6px] md:text-[8px] font-black uppercase tracking-widest hidden xs:inline">#{player.id.substring(0, 6).toUpperCase()}</span>}
                       </div>
                       <div className="flex items-center gap-2">
-                        {player.id === currentUserId && <span className="text-indigo-400 text-[8px] font-black uppercase tracking-widest italic">{language === 'en' ? "That's You" : "To si ti"}</span>}
+                        {player.id === currentUserId && <span className="text-indigo-400 text-[6px] md:text-[8px] font-black uppercase tracking-widest italic">{language === 'en' ? "That's You" : "To si ti"}</span>}
                       </div>
                     </div>                  </div>
-                  <div className="text-right">
-                    <p className="text-white font-black text-xs">{getCategoryValue(player, activeTab)}</p>
-                    <p className="text-slate-500 text-[8px] font-bold uppercase tracking-tight">{tabToMetric(activeTab, language)}</p>
+                  <div className="text-right shrink-0 ml-2">
+                    <p className="text-white font-black text-[10px] md:text-xs">{getCategoryValue(player, activeTab)}</p>
+                    <p className="text-slate-500 text-[6px] md:text-[8px] font-bold uppercase tracking-tight">{tabToMetric(activeTab, language)}</p>
                   </div>
                 </div>
               ))}
@@ -311,23 +311,23 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
 
         {/* My Rank Indicator */}
         {myRank && !players.slice(0, 50).some(p => p.id === currentUserId) && (
-          <div className="mt-4 p-4 bg-indigo-600/20 border border-indigo-500/30 rounded-2xl flex items-center justify-between animate-fade-in ring-2 ring-indigo-500/20">
-            <div className="flex items-center gap-4">
-              <span className="text-indigo-400 font-black text-xs w-6 text-center">#{myRank.rank}</span>
-              <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/5">
-                <img src={`/assets/${myRank.stats.avatar_url || '1'}.png`} className="w-7 h-7 object-contain" />
+          <div className="mt-4 p-3 md:p-4 bg-indigo-600/20 border border-indigo-500/30 rounded-2xl flex items-center justify-between animate-fade-in ring-2 ring-indigo-500/20">
+            <div className="flex items-center gap-2 md:gap-4 min-w-0">
+              <span className="text-indigo-400 font-black text-[10px] md:text-xs w-4 md:w-6 text-center">#{myRank.rank}</span>
+              <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/5 shrink-0">
+                <img src={`/assets/${myRank.stats.avatar_url || '1'}.png`} className="w-6 h-6 md:w-7 md:h-7 object-contain" />
               </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h4 className="text-white font-bold text-xs">{myRank.stats.username}</h4>
-                  {myRank.stats.id && <span className="text-blue-400 font-mono text-[8px] font-black uppercase tracking-widest">#{myRank.stats.id.substring(0, 6).toUpperCase()}</span>}
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5 md:gap-2">
+                  <h4 className="text-white font-bold text-[10px] md:text-xs truncate">{myRank.stats.username}</h4>
+                  {myRank.stats.id && <span className="text-blue-400 font-mono text-[6px] md:text-[8px] font-black uppercase tracking-widest hidden xs:inline">#{myRank.stats.id.substring(0, 6).toUpperCase()}</span>}
                 </div>
-                <span className="text-indigo-400 text-[8px] font-black uppercase tracking-widest italic">{language === 'en' ? "That's You" : "To si ti"}</span>
+                <span className="text-indigo-400 text-[6px] md:text-[8px] font-black uppercase tracking-widest italic">{language === 'en' ? "That's You" : "To si ti"}</span>
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-white font-black text-xs">{getCategoryValue(myRank.stats, activeTab)}</p>
-              <p className="text-slate-500 text-[8px] font-bold uppercase tracking-tight">{tabToMetric(activeTab, language)}</p>
+            <div className="text-right shrink-0 ml-2">
+              <p className="text-white font-black text-[10px] md:text-xs">{getCategoryValue(myRank.stats, activeTab)}</p>
+              <p className="text-slate-500 text-[6px] md:text-[8px] font-bold uppercase tracking-tight">{tabToMetric(activeTab, language)}</p>
             </div>
           </div>
         )}

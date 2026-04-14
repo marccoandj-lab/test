@@ -1,0 +1,64 @@
+# Implementation Plan: Strategic Switch (Ranked Solo Mod)
+
+Implement a high-stakes, competitive solo mode called "Strategic Switch". Players transition from Linear to Circular economy through 16 questions and a SWOT analysis bridge.
+
+## User Review Required
+
+> [!IMPORTANT]
+> The mode involves a daily limit of **4 attempts**. I will implement a live countdown timer that shows when the next attempt is available (resetting at 00:00 server time or calculated locally if preferred).
+> [!NOTE]
+> Questions will be hardcoded in `src/data/rankedQuestions.ts` (similar to `gameData.ts`) to maintain performance and consistency with the existing data structure, while user stats will remain in Supabase.
+
+## Proposed Changes
+
+### [Database & Backend]
+
+#### [NEW] [09_strategic_switch_stats.sql](file:///c:/Users/Marko/Desktop/EIB%20WEBAPP%20-%20Copy/database_sql_scripts/09_strategic_switch_stats.sql)
+- Create `user_ranked_stats` table to track:
+    - `daily_attempts_left` (default 4).
+    - `last_attempt_timestamp` (to calculate the reset timer).
+    - `current_rp` (Ranked Points).
+- Add RPC function `decrement_ranked_attempt` to atomically handle attempt logic and time tracking.
+
+---
+
+### [Data & Content Mapping]
+
+#### [NEW] [rankedQuestions.ts](file:///c:/Users/Marko/Desktop/EIB%20WEBAPP%20-%20Copy/src/data/rankedQuestions.ts)
+- Define `rankedLinearQuizzes` (80 questions: 40 Easy, 30 Medium, 10 Hard).
+- Define `rankedCircularQuizzes` (80 questions: 40 Easy, 30 Medium, 10 Hard).
+- Define `swotScenarios` (40 scenarios: 10 each for S, W, O, T).
+- All content provided in English and Serbian.
+
+---
+
+### [UI Components]
+
+#### [MODIFY] [StartScreen.tsx](file:///c:/Users/Marko/Desktop/EIB%20WEBAPP%20-%20Copy/src/components/StartScreen.tsx)
+- Add "Strategic Switch" button below Singleplayer and Multiplayer.
+- Display "Attempts Left: X/4" or a live timer if 0.
+
+#### [NEW] [StrategicSwitchGame.tsx](file:///c:/Users/Marko/Desktop/EIB%20WEBAPP%20-%20Copy/src/components/StrategicSwitchGame.tsx)
+- Implement the 3-phase flow:
+    1. **Phase 1**: 8 questions from start table (3 Easy, 3 Medium, 2 Hard).
+    2. **Bridge (SWOT)**: Require 3 correct categorizations in a row.
+    3. **Phase 2**: Switch to opposite table + 8 questions.
+- Result Screen: Calculate SRP (Ranked Points) based on final capital (Ciljeva: 500k€).
+
+---
+
+### [Application Logic]
+
+#### [MODIFY] [App.tsx](file:///c:/Users/Marko/Desktop/EIB%20WEBAPP%20-%20Copy/src/App.tsx)
+- Add `ranked_game` to the application state engine.
+- Handle state transitions for starting and ending the ranked session.
+
+## Verification Plan
+
+### Automated Tests
+- Browser test: Starting a ranked game and verifying attempt decrement.
+- Browser test: Completion of 16 questions and SRP update.
+
+### Manual Verification
+- Verify the live timer logic (changing system clock to test 00:00 reset).
+- Check responsiveness of the new ranked button on mobile.

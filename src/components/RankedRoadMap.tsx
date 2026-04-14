@@ -32,18 +32,18 @@ export const RankedRoadMap: React.FC<RankedRoadMapProps> = ({ onBack, currentSrp
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 z-50 overflow-hidden">
+    <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-3 md:p-6 z-50 overflow-hidden">
       {/* Background decorations */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500 rounded-full blur-[160px]" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500 rounded-full blur-[160px]" />
       </div>
 
-      <div className="relative z-10 max-w-lg w-full h-[90vh] bg-white/5 p-8 rounded-[40px] border border-white/10 backdrop-blur-2xl shadow-2xl flex flex-col">
-        <div className="flex items-center justify-between mb-8">
+      <div className="relative z-10 max-w-lg w-full h-[95dvh] bg-white/5 p-4 md:p-8 rounded-[40px] border border-white/10 backdrop-blur-2xl shadow-2xl flex flex-col">
+        <div className="flex items-center justify-between mb-4 md:mb-8 px-2">
           <button
             onClick={onBack}
-            className="text-slate-500 hover:text-white transition-colors text-sm flex items-center gap-2 group"
+            className="text-slate-500 hover:text-white transition-colors text-xs md:text-sm flex items-center gap-1.5 md:gap-2 group"
           >
             <span className="group-hover:-translate-x-1 transition-transform">←</span> {t.ui.back_to_menu}
           </button>
@@ -55,18 +55,18 @@ export const RankedRoadMap: React.FC<RankedRoadMapProps> = ({ onBack, currentSrp
           </div>
         </div>
 
-        <div className="text-center space-y-2 mb-10">
-          <h1 className="text-3xl font-black text-white italic tracking-tight drop-shadow-xl">
+        <div className="text-center space-y-1 md:space-y-2 mb-6 md:mb-10">
+          <h1 className="text-2xl md:text-3xl font-black text-white italic tracking-tight drop-shadow-xl">
             {t.ranked.roadmap_title}
           </h1>
-          <p className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.2em] max-w-[280px] mx-auto leading-relaxed">
+          <p className="text-slate-500 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.2em] max-w-[280px] mx-auto leading-relaxed">
             {t.ranked.roadmap_desc}
           </p>
         </div>
 
         <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 relative">
           {/* Vertical Path Line */}
-          <div className="absolute left-[31px] top-4 bottom-4 w-1 bg-white/5 rounded-full overflow-hidden">
+          <div className="absolute left-[23px] md:left-[31px] top-4 bottom-4 w-1 bg-white/5 rounded-full overflow-hidden">
             <motion.div 
               initial={{ height: 0 }}
               animate={{ height: '100%' }}
@@ -98,15 +98,17 @@ export const RankedRoadMap: React.FC<RankedRoadMapProps> = ({ onBack, currentSrp
                   {/* Rank Node */}
                   <div className="relative z-10 flex-shrink-0">
                     <div className={cn(
-                      "w-16 h-16 rounded-2xl flex items-center justify-center border transition-all duration-500",
+                      "w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center border transition-all duration-500",
                       isUnlocked ? "bg-white/10 border-white/20 shadow-lg" : "bg-black/40 border-white/5 opacity-40 grayscale"
                     )}>
-                      <RankBadge rank={rank.name} language={language} size="sm" showName={false} />
+                      <div className="scale-75 md:scale-100">
+                        <RankBadge rank={rank.name} language={language} size="sm" showName={false} />
+                      </div>
                     </div>
                     {isCurrent && (
                       <motion.div 
                         layoutId="active-glow"
-                        className="absolute -inset-2 bg-blue-500/20 rounded-[24px] blur-xl -z-10"
+                        className="absolute -inset-1 md:-inset-2 bg-blue-500/20 rounded-[24px] blur-xl -z-10"
                         animate={{ opacity: [0.3, 0.6, 0.3] }}
                         transition={{ duration: 2, repeat: Infinity }}
                       />
@@ -115,35 +117,37 @@ export const RankedRoadMap: React.FC<RankedRoadMapProps> = ({ onBack, currentSrp
 
                   {/* Rank Content */}
                   <div className={cn(
-                    "flex-1 p-5 rounded-3xl border transition-all duration-500",
+                    "flex-1 p-3 md:p-5 rounded-3xl border transition-all duration-500 min-w-0",
                     isCurrent 
                       ? "bg-white/10 border-blue-500/30 shadow-[0_0_30px_rgba(59,130,246,0.1)]" 
                       : isUnlocked 
                         ? "bg-white/5 border-white/10" 
                         : "bg-black/20 border-white/5 opacity-40"
                   )}>
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
+                    <div className="flex flex-col sm:flex-row justify-between items-start gap-1 mb-2">
+                      <div className="min-w-0">
                         <h3 className={cn(
-                          "font-black italic tracking-tight text-lg uppercase",
+                          "font-black italic tracking-tight text-sm md:text-lg uppercase truncate",
                           isUnlocked ? "text-white" : "text-slate-500"
                         )}>
                           {(t.ranked.ranks as any)[rank.name.toLowerCase().replace(' ', '') === 'economylegend' ? 'legend' : rank.name.toLowerCase()]}
                         </h3>
-                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                        <p className="text-[8px] md:text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                           {isUnlocked ? `✨ ${formatNumber(rank.minSrp)} SRP` : `🔒 ${formatNumber(rank.minSrp)} SRP`}
                         </p>
                       </div>
-                      {isUnlocked && !isCurrent && (
-                        <span className="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-black uppercase tracking-tighter border border-emerald-500/20">
-                          {t.ranked.unlocked}
-                        </span>
-                      )}
-                      {isCurrent && (
-                        <span className="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full font-black uppercase tracking-tighter border border-blue-500/20 animate-pulse">
-                          {t.ranked.current_rank}
-                        </span>
-                      )}
+                      <div className="flex gap-1 shrink-0">
+                        {isUnlocked && !isCurrent && (
+                          <span className="text-[7px] md:text-[10px] bg-emerald-500/20 text-emerald-400 px-1.5 md:px-2 py-0.5 rounded-full font-black uppercase tracking-tighter border border-emerald-500/20">
+                            {t.ranked.unlocked}
+                          </span>
+                        )}
+                        {isCurrent && (
+                          <span className="text-[7px] md:text-[10px] bg-blue-500/20 text-blue-400 px-1.5 md:px-2 py-0.5 rounded-full font-black uppercase tracking-tighter border border-blue-500/20 animate-pulse">
+                            {t.ranked.current_rank}
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     {isCurrent && nextRank && (
