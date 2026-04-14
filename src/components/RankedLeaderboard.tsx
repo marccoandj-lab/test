@@ -2,19 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { translations } from '../i18n/translations';
 import { RankBadge } from './RankBadge';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { formatNumber } from '../utils/format';
 
 interface RankedLeaderboardProps {
   onBack: () => void;
   onEnterRoadmap: () => void;
-  currentUserId?: string;
+  currentUserId: string;
   language: 'en' | 'sr';
   userSrp: number;
   userRank: string;
 }
 
-interface RankedPlayer {
+interface RankedEntry {
   id: string;
   username: string;
   avatar_url: string;
@@ -25,145 +25,162 @@ interface RankedPlayer {
 export const RankedLeaderboard: React.FC<RankedLeaderboardProps> = ({ 
   onBack, 
   onEnterRoadmap,
-  currentUserId, 
+  currentUserId,
   language,
   userSrp,
   userRank
 }) => {
-  const t = translations[language];
-  const [players, setPlayers] = useState<RankedPlayer[]>([]);
+  const [entries, setEntries] = useState<RankedEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const t = translations[language];
 
   useEffect(() => {
-    fetchRankings();
+    fetchRankedData();
   }, []);
 
-  const fetchRankings = async () => {
-    setLoading(true);
+  const fetchRankedData = async () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
         .select('id, username, avatar_url, srp, rank')
         .order('srp', { ascending: false })
-        .limit(50);
+        .limit(20);
 
       if (error) throw error;
-      setPlayers((data || []) as RankedPlayer[]);
+      setEntries(data || []);
     } catch (err) {
-      console.error('Error fetching ranked leaderboard:', err);
+      console.error('Error fetching ranked data:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="fixed inset-0 bg-[#f0f0f0] flex flex-col items-center justify-center p-4 z-50 overflow-hidden text-slate-900 border-[12px] border-slate-900">
-      {/* Background brutalist accents */}
-      <div className="absolute top-20 right-[-50px] w-64 h-64 bg-amber-400 border-[4px] border-slate-900 rotate-12 -z-10 shadow-[8px_8px_0px_#000]" />
-      <div className="absolute bottom-20 left-[-50px] w-48 h-48 bg-blue-500 border-[4px] border-slate-900 -rotate-12 -z-10 shadow-[8px_8px_0px_#000]" />
+  const getRankColor = (index: number) => {
+    switch (index) {
+      case 0: return 'bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 text-slate-900 border-amber-200';
+      case 1: return 'bg-gradient-to-r from-cyan-300 via-cyan-400 to-cyan-500 text-slate-900 border-cyan-200';
+      case 2: return 'bg-gradient-to-r from-rose-400 via-rose-500 to-rose-600 text-white border-rose-300';
+      default: return 'bg-white/5 text-white/90 border-white/10 hover:bg-white/10';
+    }
+  };
 
-      <div className="relative z-10 max-w-lg w-full h-[92vh] flex flex-col gap-6">
-        {/* Header Block */}
-        <div className="bg-white border-[4px] border-slate-900 p-6 shadow-[8px_8px_0px_#000] relative">
+  const getRankNumberIcon = (index: number) => {
+    switch (index) {
+      case 0: return '🥇';
+      case 1: return '🥈';
+      case 2: return '🥉';
+      default: return `${index + 1}`;
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-[#0f172a] flex flex-col items-center justify-center p-4 z-50 overflow-hidden font-sans">
+      {/* Background Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-lg bg-blue-500/10 blur-[120px] rounded-full pointer-events-none" />
+
+      {/* Main Container */}
+      <motion.div 
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="relative w-full max-w-md h-[85vh] bg-slate-900/90 rounded-[3rem] border-4 border-amber-500/30 flex flex-col shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)] backdrop-blur-2xl"
+      >
+        {/* Ribbon Header */}
+        <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-20 w-80 flex flex-col items-center">
+          <div className="relative w-full text-center">
+            {/* Ribbon Wings */}
+            <div className="absolute top-4 left-0 w-8 h-10 bg-rose-700 rounded-lg skew-y-6 -z-10" />
+            <div className="absolute top-4 right-0 w-8 h-10 bg-rose-700 rounded-lg -skew-y-6 -z-10" />
+            
+            {/* Ribbon Body */}
+            <div className="mx-6 py-4 bg-gradient-to-b from-rose-400 to-rose-600 rounded-2xl shadow-[0_8px_0px_#9f1239] border-t border-white/30">
+              <h2 className="text-2xl font-black text-white tracking-widest italic uppercase drop-shadow-md">
+                {t.lobby.leaderboard}
+              </h2>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons Header */}
+        <div className="pt-16 pb-4 px-8 flex justify-between items-center bg-white/5 rounded-t-[3rem]">
           <button
             onClick={onBack}
-            className="absolute -top-4 -left-4 bg-rose-500 text-white border-[4px] border-slate-900 px-4 py-1 font-black uppercase text-xs shadow-[4px_4px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:scale-95"
+            className="w-10 h-10 rounded-full bg-slate-800 border border-white/10 flex items-center justify-center text-white hover:bg-slate-700 transition-colors shadow-lg"
           >
-            ← {t.ui.back_to_menu}
+            ✕
           </button>
-          
-          <div className="space-y-1 mt-2">
-            <h1 className="text-4xl font-black italic tracking-tighter uppercase leading-none">
-              <span className="bg-amber-400 px-2 border-[2px] border-slate-900 shadow-[4px_4px_0px_#000] inline-block mr-2 transform -rotate-1">RANKED</span> 
-              <span className="block mt-1">HALL OF FAME</span>
-            </h1>
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Only the best strategists survive the market.</p>
+          <div className="text-center">
+            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{t.ranked.srp}</p>
+            <p className="text-xl font-black text-amber-400">✨ {formatNumber(userSrp)}</p>
           </div>
+          <button
+            onClick={onEnterRoadmap}
+            className="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 hover:bg-amber-500/30 transition-colors shadow-lg"
+          >
+            🗺️
+          </button>
         </div>
 
-        {/* User Stats Block */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-blue-500 border-[4px] border-slate-900 p-4 shadow-[8px_8px_0px_#000] flex items-center justify-between">
-            <div>
-              <p className="text-[10px] font-black uppercase text-white/80">Your Rank</p>
-              <p className="text-xl font-black text-white italic uppercase truncate w-24">{(t.ranked.ranks as any)[userRank.toLowerCase().replace(' ', '') === 'economylegend' ? 'legend' : userRank.toLowerCase()] || userRank}</p>
+        {/* Scrollable Area */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar px-6 py-4 space-y-3">
+          {loading ? (
+            <div className="flex flex-col items-center justify-center h-full space-y-4">
+              <div className="w-12 h-12 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin" />
+              <p className="text-slate-400 font-bold italic animate-pulse tracking-widest">{t.ui.loading}</p>
             </div>
-            <div className="bg-white border-[2px] border-slate-900 p-1 shadow-[4px_4px_0px_#000]">
-               <RankBadge rank={userRank} language={language} size="sm" showName={false} />
-            </div>
-          </div>
-          <div className="bg-emerald-400 border-[4px] border-slate-900 p-4 shadow-[8px_8px_0px_#000] group cursor-pointer hover:bg-emerald-300 transition-colors" onClick={onEnterRoadmap}>
-             <p className="text-[10px] font-black uppercase text-slate-800">Total Mastery</p>
-             <div className="flex items-center gap-1">
-               <p className="text-2xl font-black text-slate-900">✨ {formatNumber(userSrp)}</p>
-               <span className="text-xs group-hover:translate-x-1 transition-transform">➔</span>
-             </div>
-          </div>
-        </div>
-
-        {/* Leaderboard Block */}
-        <div className="flex-1 bg-white border-[4px] border-slate-900 shadow-[8px_8px_0px_#000] flex flex-col overflow-hidden">
-          <div className="bg-slate-900 text-white p-3 flex justify-between items-center border-b-[4px] border-slate-900">
-            <span className="text-[10px] font-black uppercase tracking-widest">TOP 50 STRATEGISTS</span>
-            <div className="flex gap-1">
-               <div className="w-2 h-2 rounded-full bg-rose-500" />
-               <div className="w-2 h-2 rounded-full bg-amber-400" />
-               <div className="w-2 h-2 rounded-full bg-emerald-400" />
-            </div>
-          </div>
-          
-          <div className="flex-1 overflow-y-auto custom-scrollbar-light p-4 space-y-3">
-            {loading ? (
-              <div className="h-full flex flex-col items-center justify-center gap-4">
-                 <div className="w-12 h-12 border-[6px] border-slate-200 border-t-slate-900 border-l-slate-900 animate-spin" />
-                 <p className="text-xs font-black uppercase italic">Calculating supremacy...</p>
-              </div>
-            ) : (
-              players.map((player, idx) => (
-                <motion.div 
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.05 }}
+          ) : (
+            <AnimatePresence>
+              {entries.map((player, index) => (
+                <motion.div
                   key={player.id}
-                  className={`flex items-center gap-3 border-[3px] border-slate-900 p-3 shadow-[4px_4px_0px_#000] relative group hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#000] transition-all bg-white
-                  ${player.id === currentUserId ? 'bg-amber-100 !border-amber-500 shadow-amber-500' : ''}`}
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: index * 0.05 }}
+                  className={`
+                    flex items-center gap-3 p-3 rounded-[2rem] border-2 shadow-lg transition-all
+                    ${getRankColor(index)}
+                    ${player.id === currentUserId ? 'ring-2 ring-white ring-offset-2 ring-offset-slate-900 border-white/50' : ''}
+                  `}
                 >
-                  <div className="text-sm font-black italic w-6 text-center">{idx + 1}</div>
-                  <div className="w-10 h-10 border-[2px] border-slate-900 bg-white p-1">
-                    <img src={`/assets/${player.avatar_url}.png`} className="w-full h-full object-contain" />
+                  <div className={`
+                    w-12 h-12 rounded-full overflow-hidden border-2 flex-shrink-0 bg-slate-800
+                    ${index < 3 ? 'border-white/40' : 'border-white/10'}
+                  `}>
+                    <img src={player.avatar_url} alt={player.username} className="w-full h-full object-cover" />
                   </div>
+                  
                   <div className="flex-1 overflow-hidden">
-                    <h4 className="font-black uppercase italic text-xs truncate">{player.username}</h4>
                     <div className="flex items-center gap-2">
-                       <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">#{player.id.substring(0, 6).toUpperCase()}</span>
+                      <span className="text-xs font-black opacity-50">{getRankNumberIcon(index)}</span>
+                      <p className="font-bold truncate tracking-tight text-sm">
+                        {player.username} 
+                        {player.id === currentUserId && <span className="ml-1 opacity-60 text-[10px] italic">{t.ui.you}</span>}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                       <RankBadge rank={player.rank} language={language} size="sm" showName={true} />
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm font-black text-indigo-600">{formatNumber(player.srp)} SRP</p>
-                    <div className="flex justify-end mt-1">
-                       <RankBadge rank={player.rank} language={language} size="sm" showName={false} />
+
+                  <div className="text-right flex-shrink-0">
+                    <div className={`px-4 py-1.5 rounded-full font-black text-sm flex items-center gap-1.5 shadow-inner ${index < 2 ? 'bg-black/10' : 'bg-black/20'}`}>
+                      <span className="text-xs">✨</span>
+                      {formatNumber(player.srp)}
                     </div>
                   </div>
                 </motion.div>
-              ))
-            )}
-          </div>
+              ))}
+            </AnimatePresence>
+          )}
         </div>
 
-        {/* Footer Block */}
-        <div className="bg-slate-900 text-white p-4 flex justify-between items-center shadow-[8px_8px_0px_#000] border-[4px] border-slate-900">
-           <div className="flex flex-col">
-             <span className="text-[8px] font-black uppercase text-slate-400">Current Season</span>
-             <span className="text-xs font-black uppercase italic tracking-tighter">Season 2: Industrial Boom</span>
-           </div>
-           <button 
-             onClick={onEnterRoadmap}
-             className="bg-amber-400 text-slate-900 border-[3px] border-slate-900 px-4 py-2 font-black uppercase text-[10px] shadow-[4px_4px_0px_white] hover:bg-amber-300 transition-colors active:scale-95"
-           >
-             View Roadmap ➔
-           </button>
+        {/* Footer Info */}
+        <div className="p-6 bg-slate-800/50 rounded-b-[3rem] border-t border-white/5">
+          <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-slate-400">
+            <span>{t.ranked.rank}: {userRank}</span>
+            <span>{t.ranked.srp}: {formatNumber(userSrp)}</span>
+          </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
