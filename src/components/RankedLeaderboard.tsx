@@ -142,13 +142,13 @@ export const RankedLeaderboard: React.FC<RankedLeaderboardProps> = ({
                   `}
                 >
                   <div className={`
-                    w-12 h-12 rounded-full overflow-hidden border-2 flex-shrink-0 bg-slate-800
-                    ${index < 3 ? 'border-white/40' : 'border-white/10'}
+                    w-16 h-16 rounded-full overflow-hidden border-4 flex-shrink-0 bg-slate-800 shadow-2xl
+                    ${index < 3 ? 'border-white/60' : 'border-white/20'}
                   `}>
-                    <img src={player.avatar_url} alt={player.username} className="w-full h-full object-cover" />
+                    <img src={`/assets/${player.avatar_url}.png`} alt={player.username} className="w-full h-full object-cover scale-110" />
                   </div>
                   
-                  <div className="flex-1 overflow-hidden">
+                  <div className="flex-1 overflow-hidden ml-1">
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-black opacity-50">{getRankNumberIcon(index)}</span>
                       <p className="font-bold truncate tracking-tight text-sm">
