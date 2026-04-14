@@ -10,8 +10,9 @@ import { LegalScreen } from './LegalScreen';
 import { formatNumber } from '../utils/format';
 import { AVATAR_MAP } from '../data/avatars';
 import { DailyChallenges } from './DailyChallenges';
+import { RankBadge } from './RankBadge';
 import { RankedRoadMap } from './RankedRoadMap';
-import { RankedLeaderboard } from './RankedLeaderboard';
+import { ChallengeService } from '../services/ChallengeService';
 import { Profile, AvatarType } from '../types/game';
 
 interface StartScreenProps {
@@ -42,7 +43,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   const t = translations[language];
   const [name, setName] = useState(initialName);
   const [avatar, setAvatar] = useState<string>(initialAvatar);
-  const [mode, setMode] = useState<'initial' | 'create' | 'join' | 'single' | 'profile' | 'socials' | 'leaderboard' | 'education' | 'legal' | 'roadmap' | 'challenges' | 'ranked'>('initial');
+  const [mode, setMode] = useState<'initial' | 'create' | 'join' | 'single' | 'profile' | 'socials' | 'leaderboard' | 'education' | 'legal' | 'roadmap'>('initial');
   const [legalSection, setLegalSection] = useState<'terms' | 'privacy' | 'refund'>('terms');
   const [roomCode, setRoomCode] = useState('');
   const [userId, setUserId] = useState<string | null>(null);
@@ -173,50 +174,11 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   if (mode === 'roadmap') {
     return (
       <RankedRoadMap 
-        onBack={() => setMode('ranked')} 
+        onBack={() => setMode('profile')} 
         currentSrp={profileData?.srp || 0} 
         currentRank={profileData?.rank || 'Novice'} 
         language={language} 
       />
-    );
-  }
-
-  if (mode === 'ranked') {
-    return (
-      <RankedLeaderboard 
-        onBack={() => setMode('initial')}
-        onEnterRoadmap={() => setMode('roadmap')}
-        currentUserId={userId || ''}
-        language={language}
-        userSrp={profileData?.srp || 0}
-        userRank={profileData?.rank || 'Novice'}
-      />
-    );
-  }
-
-  if (mode === 'challenges') {
-    return (
-      <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 z-50 overflow-hidden">
-        <div className="max-w-md w-full space-y-6 bg-white/5 p-8 rounded-[32px] border border-white/10 backdrop-blur-xl max-h-[90vh] overflow-y-auto custom-scrollbar shadow-2xl">
-          <button
-            onClick={() => setMode('initial')}
-            className="text-slate-500 hover:text-white transition-colors text-sm flex items-center gap-2 mb-4"
-          >
-            ← {t.ui.back_to_menu}
-          </button>
-          
-          <div className="mb-6">
-            <h2 className="text-3xl font-black text-white italic tracking-tighter uppercase">{t.ranked.daily_title}</h2>
-            <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em]">{t.ranked.reset_at}</p>
-          </div>
-
-          <DailyChallenges 
-            challenges={profileData?.daily_challenges || []} 
-            onClaim={handleClaimChallenge} 
-            language={language} 
-          />
-        </div>
-      </div>
     );
   }
 
@@ -319,14 +281,45 @@ export const StartScreen: React.FC<StartScreenProps> = ({
             </div>
           </div>
 
-          {/* Moved Sections Info */}
-          <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-2xl flex items-center gap-3">
-             <span className="text-xl">🏆</span>
-             <div>
-               <p className="text-white font-bold text-[10px] uppercase tracking-wider">{language === 'en' ? 'Ranked & Challenges' : 'Rangirano i Izazovi'}</p>
-               <p className="text-slate-500 text-[9px] font-medium leading-tight">{language === 'en' ? 'These are now available directly on the main screen!' : 'Sada su dostupni direktno na glavnom ekranu!'}</p>
-             </div>
+          {/* New Ranked Section with Road Map Access */}
+          <div 
+            onClick={() => setMode('roadmap')}
+            className="group/rank bg-white/5 border border-white/10 rounded-2xl p-4 space-y-4 shadow-inner cursor-pointer hover:bg-white/10 hover:border-blue-500/30 transition-all active:scale-[0.98]"
+          >
+            <div className="flex items-center justify-between">
+              <RankBadge rank={profileData?.rank || 'Novice'} language={language} size="md" />
+              <div className="text-right">
+                <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest flex items-center justify-end gap-1">
+                  {t.ranked.srp} <span className="text-blue-400 group-hover/rank:translate-x-1 transition-transform">➔</span>
+                </p>
+                <p className="text-xl font-black text-amber-400 italic drop-shadow-[0_0_8px_rgba(251,191,36,0.3)]">✨ {formatNumber(profileData?.srp || 0)}</p>
+              </div>
+            </div>
+            
+            {ChallengeService.getNextRank(profileData?.srp || 0) && (
+              <div className="space-y-1.5">
+                <div className="flex justify-between text-[9px] font-black uppercase tracking-[0.15em]">
+                  <span className="text-slate-500">{language === 'en' ? 'Next Rank Progress' : 'Napredak ka sledećem rangu'}</span>
+                  <span className="text-slate-300">
+                    {formatNumber(profileData?.srp || 0)} / {formatNumber(ChallengeService.getNextRank(profileData?.srp || 0)?.minSrp || 0)}
+                  </span>
+                </div>
+                <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                  <div 
+                    className="h-full bg-gradient-to-r from-amber-500 to-yellow-300 transition-all duration-1000 shadow-[0_0_10px_rgba(245,158,11,0.3)]"
+                    style={{ width: `${Math.min(100, ((profileData?.srp || 0) / (ChallengeService.getNextRank(profileData?.srp || 0)?.minSrp || 1)) * 100)}%` }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
+
+          {/* Daily Challenges */}
+          <DailyChallenges 
+            challenges={profileData?.daily_challenges || []} 
+            onClaim={handleClaimChallenge} 
+            language={language} 
+          />
 
           {isChangingAvatar && (
             <div className="bg-black/30 p-4 rounded-2xl border border-white/10 animate-fade-in">
@@ -601,46 +594,33 @@ export const StartScreen: React.FC<StartScreenProps> = ({
                 </div>
               </button>
 
-              <div className="grid grid-cols-2 gap-4 mt-2">
-                <button
-                  onClick={() => setMode('ranked')}
-                  className="group relative flex flex-col items-center gap-2 p-5 bg-gradient-to-br from-amber-400/20 to-orange-500/20 border-2 border-amber-500/40 rounded-[2rem] hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(245,158,11,0.2)]"
-                >
-                  <div className="absolute inset-0 bg-white/5 rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <span className="text-3xl group-hover:rotate-[15deg] transition-all transform shadow-amber-500/50 drop-shadow-lg">✨</span>
-                  <span className="text-[11px] font-black text-amber-500 uppercase tracking-widest">{language === 'en' ? 'Ranked' : 'Rangirano'}</span>
-                </button>
-                <button
-                  onClick={() => setMode('challenges')}
-                  className="group relative flex flex-col items-center gap-2 p-5 bg-gradient-to-br from-blue-400/20 to-cyan-500/20 border-2 border-blue-500/40 rounded-[2rem] hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(59,130,246,0.2)]"
-                >
-                  <div className="absolute inset-0 bg-white/5 rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <span className="text-3xl group-hover:scale-125 transition-all transform drop-shadow-lg">📅</span>
-                  <span className="text-[11px] font-black text-blue-400 uppercase tracking-widest">{language === 'en' ? 'Challenges' : 'Izazovi'}</span>
-                </button>
-              </div>
+              <button
+                onClick={() => setMode('education')}
+                className="group relative w-full bg-indigo-600/10 border border-indigo-500/30 p-4 rounded-3xl shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative flex items-center justify-center gap-3">
+                  <span className="text-2xl group-hover:scale-110 transition-transform">🎓</span>
+                  <span className="text-sm font-black text-indigo-400 uppercase tracking-widest group-hover:text-white transition-colors">
+                    {t.lobby.learn_more}
+                  </span>
+                </div>
+              </button>
 
-              <div className="grid grid-cols-3 gap-3 mt-2">
+              <div className="grid grid-cols-2 gap-4 mt-2">
                 <button
                   onClick={() => setMode('socials')}
                   className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-all group"
                 >
-                  <span className="text-xl group-hover:scale-110 transition-transform">🤝</span>
-                  <span className="text-[9px] font-black text-white/60 uppercase tracking-widest group-hover:text-white transition-colors">{language === 'en' ? 'Social' : 'Prijatelji'}</span>
+                  <span className="text-2xl group-hover:scale-110 transition-transform">🤝</span>
+                  <span className="text-[10px] font-black text-white uppercase tracking-widest">{language === 'en' ? 'Social' : 'Prijatelji'}</span>
                 </button>
                 <button
                   onClick={() => setMode('leaderboard')}
                   className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-all group"
                 >
-                  <span className="text-xl group-hover:scale-110 transition-transform">🌍</span>
-                  <span className="text-[9px] font-black text-white/60 uppercase tracking-widest group-hover:text-white transition-colors">{language === 'en' ? 'Global' : 'Globalno'}</span>
-                </button>
-                <button
-                  onClick={() => setMode('education')}
-                  className="flex flex-col items-center gap-2 p-4 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-all group"
-                >
-                  <span className="text-xl group-hover:scale-110 transition-transform">📚</span>
-                  <span className="text-[9px] font-black text-white/60 uppercase tracking-widest group-hover:text-white transition-colors">{language === 'en' ? 'Learning' : 'Učenje'}</span>
+                  <span className="text-2xl group-hover:scale-110 transition-transform">🏆</span>
+                  <span className="text-[10px] font-black text-white uppercase tracking-widest">{language === 'en' ? 'Global' : 'Rang lista'}</span>
                 </button>
               </div>
             </div>

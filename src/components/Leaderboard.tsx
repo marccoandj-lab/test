@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { translations } from '../i18n/translations';
+import { RankBadge } from './RankBadge';
 
 interface LeaderboardProps {
   onBack: () => void;
@@ -21,7 +22,7 @@ interface PlayerStats {
   rank: string;
 }
 
-type TabCategory = 'wins' | 'quizzes' | 'capital' | 'chains' | 'intruders';
+type TabCategory = 'wins' | 'quizzes' | 'capital' | 'chains' | 'intruders' | 'srp';
 
 export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId, language }) => {
   const t = translations[language];
@@ -59,7 +60,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
         activeTab === 'wins' ? 'wins' : 
         activeTab === 'quizzes' ? 'correct_quizzes' : 
         activeTab === 'capital' ? 'total_capital' :
-        activeTab === 'chains' ? 'value_chain_correct' : 'uljez_correct';
+        activeTab === 'chains' ? 'value_chain_correct' : 
+        activeTab === 'intruders' ? 'uljez_correct' : 'srp';
       
       console.log(`Fetching leaderboard ordered by ${orderBy}...`);
       let { data, error } = await supabase
@@ -119,7 +121,8 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
               activeTab === 'wins' ? typedMyData.wins : 
               activeTab === 'quizzes' ? typedMyData.correct_quizzes : 
               activeTab === 'capital' ? typedMyData.total_capital :
-              activeTab === 'chains' ? typedMyData.value_chain_correct : typedMyData.uljez_correct;
+              activeTab === 'chains' ? typedMyData.value_chain_correct : 
+              activeTab === 'intruders' ? typedMyData.uljez_correct : typedMyData.srp;
             
             const { count } = await supabase
               .from('profiles')
@@ -156,6 +159,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
       case 'capital': return `$${player.total_capital.toLocaleString()}`;
       case 'chains': return player.value_chain_correct;
       case 'intruders': return player.uljez_correct;
+      case 'srp': return `${player.srp} SRP`;
     }
   };
 
@@ -193,8 +197,9 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
           </p>
         </div>
 
+        {/* Tab Switcher */}
         <div className="flex flex-wrap gap-1.5 p-1.5 bg-black/40 rounded-3xl border border-white/5 mb-8">
-          {(['wins', 'quizzes', 'capital', 'chains', 'intruders'] as const).map(tab => (
+          {(['wins', 'quizzes', 'capital', 'chains', 'intruders', 'srp'] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -204,7 +209,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
                 : 'text-slate-500 hover:text-slate-300'
               }`}
             >
-              {tab.toUpperCase()}
+              {tab === 'srp' ? 'Ranked' : tab.toUpperCase()}
             </button>
           ))}
         </div>
@@ -295,6 +300,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
                         {player.id && <span className="text-blue-400 font-mono text-[8px] font-black uppercase tracking-widest">#{player.id.substring(0, 6).toUpperCase()}</span>}
                       </div>
                       <div className="flex items-center gap-2">
+                        {activeTab === 'srp' && <RankBadge rank={player.rank || 'Novice'} language={language} size="sm" showName={false} />}
                         {player.id === currentUserId && <span className="text-indigo-400 text-[8px] font-black uppercase tracking-widest italic">{language === 'en' ? "That's You" : "To si ti"}</span>}
                       </div>
                     </div>                  </div>
@@ -348,5 +354,6 @@ const tabToMetric = (tab: TabCategory, language: 'en' | 'sr') => {
     case 'capital': return 'USD';
     case 'chains': return language === 'en' ? 'Chains' : 'Lanci';
     case 'intruders': return language === 'en' ? 'Found' : 'Pronađeno';
+    case 'srp': return 'SRP';
   }
 };
