@@ -248,6 +248,32 @@ export const translations = {
         }
       }
       },
+      quiz: {
+        entry_title: "Quiz Mode",
+        entry_desc: "Ranked daily challenges",
+        attempts_remaining: "Attempts left",
+        attempts_exhausted: "Limit reached",
+        reset_info: "Resets in",
+        starting_on: "Starting on:",
+        linear_board: "Linear Economy",
+        circular_board: "Circular Economy",
+        phase_1: "Phase 1",
+        phase_2: "Phase 2",
+        swot_phase: "SWOT Analysis",
+        swot_intro: "SWOT Inter-phase: Analyze the scenario!",
+        swot_fixed: "Fixed ±35,000 SC",
+        summary_title: "Quiz Summary",
+        capital_earned: "Final Capital",
+        srp_earned: "SRP Awarded",
+        correct_answers: "Correct Answers",
+        wrong_answers: "Wrong Answers",
+        back_to_lobby: "Back to Lobby",
+        cooldown_msg: "Get Ready!",
+        next_phase: "Prepare for the next phase...",
+        start_button: "Start Quiz",
+        board_blue: "Linear (Blue)",
+        board_green: "Circular (Green)"
+      },
       legal: {
       title: "Legal Information",
       terms: "Terms of Service",
@@ -533,6 +559,32 @@ export const translations = {
           mode: "both"
         }
       }
+      },
+      quiz: {
+        entry_title: "Kviz Mod",
+        entry_desc: "Rangirani dnevni izazovi",
+        attempts_remaining: "Preostalo pokušaja",
+        attempts_exhausted: "Limit dostignut",
+        reset_info: "Resetuje se za",
+        starting_on: "Počinješ na:",
+        linear_board: "Linearna Ekonomija",
+        circular_board: "Cirkularna Ekonomija",
+        phase_1: "Faza 1",
+        phase_2: "Faza 2",
+        swot_phase: "SWOT Analiza",
+        swot_intro: "SWOT Inter-faza: Analiziraj scenario!",
+        swot_fixed: "Fiksno ±35,000 SC",
+        summary_title: "Rezultat Kviza",
+        capital_earned: "Konačni Kapital",
+        srp_earned: "Dodeljeni SRP",
+        correct_answers: "Tačni Odgovori",
+        wrong_answers: "Netačni Odgovori",
+        back_to_lobby: "Nazad u Lobby",
+        cooldown_msg: "Spremi se!",
+        next_phase: "Pripremi se za sledeću fazu...",
+        start_button: "Započni Kviz",
+        board_blue: "Linearna (Plava)",
+        board_green: "Cirkularna (Zelena)"
       },
       legal: {
       title: "Pravne Informacije",

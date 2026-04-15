@@ -13,9 +13,11 @@ import { AVATAR_MAP } from '../data/avatars';
 import { DailyChallenges } from './DailyChallenges';
 import { RankedRoadMap } from './RankedRoadMap';
 import { Profile, AvatarType } from '../types/game';
+import { QuizEntryButton } from './quiz/QuizEntryButton';
 
 interface StartScreenProps {
   onStart: (name: string, avatar: string, isSingle: boolean) => void;
+  onStartQuiz: () => void;
   initialName?: string;
   initialAvatar?: string;
   onProfileUpdate?: (name: string, avatar: string) => void;
@@ -29,6 +31,7 @@ interface StartScreenProps {
 
 export const StartScreen: React.FC<StartScreenProps> = ({ 
   onStart, 
+  onStartQuiz,
   onProfileUpdate,
   initialName = '', 
   initialAvatar = '1',
@@ -594,6 +597,12 @@ export const StartScreen: React.FC<StartScreenProps> = ({
                   <span className="text-4xl group-hover:rotate-12 transition-transform">👥</span>
                 </div>
               </button>
+
+              <QuizEntryButton 
+                userId={userId || undefined}
+                language={language}
+                onClick={onStartQuiz}
+              />
 
               <button
                 onClick={() => setMode('education')}

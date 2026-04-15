@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { GameMap } from './components/GameMap';
 import GameModal from './components/GameModalContainer';
 import { StartScreen } from './components/StartScreen';
+import { QuizGame } from './components/quiz/QuizGame';
 import { Sidebar } from './components/Sidebar';
 import { generateLevels } from './data/levelGenerator';
 import { Level, GameMode } from './data/gameData';
@@ -50,7 +51,7 @@ export const App: React.FC = () => {
     return result;
   };
 
-  const [gameState, setGameState] = useState<'start' | 'lobby' | 'playing' | 'victory'>('start');
+  const [gameState, setGameState] = useState<'start' | 'lobby' | 'playing' | 'victory' | 'quiz'>('start');
   const [isSinglePlayer, setIsSinglePlayer] = useState(true);
   const [mpState, setMpState] = useState<MPState | null>(null);
   const [pendingInvite, setPendingInvite] = useState<{ id: string, roomCode: string, issuerName: string, issuerId: string } | null>(null);
@@ -940,6 +941,18 @@ export const App: React.FC = () => {
           language={language}
           onOpenSettings={() => setIsSettingsOpen(true)}
           onClaimChallenge={handleClaimChallenge}
+          onStartQuiz={() => {
+            setGameState('quiz');
+          }}
+        />
+      ) : gameState === 'quiz' ? (
+        <QuizGame
+          userId={session?.user.id}
+          language={language}
+          onClose={() => {
+            setGameState('start');
+            if (session?.user.id) fetchProfile(session.user.id);
+          }}
         />
       ) : gameState === 'lobby' && mpState ? (
         <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 z-50">

@@ -10,3 +10,7 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+interface Window {
+  playSFX?: (type: 'click' | 'dice_roll' | 'correct' | 'incorrect' | 'victory' | 'move') => void;
+}
