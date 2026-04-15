@@ -156,11 +156,17 @@ export const Socials: React.FC<SocialsProps> = ({ onBack, onInviteSent, currentU
     }
   };
 
-  const inviteToPlay = async (friendId: string) => {    try {
+  const inviteToPlay = async (friendId: string) => {
+    try {
       // 1. Create a room locally
       const myProfile = (await supabase.from('profiles').select('username, avatar_url').eq('id', currentUserId).single()).data;
       const roomCode = multiplayer.createRoom(myProfile?.username || 'Host', (myProfile?.avatar_url as any) || '1');
       
+      console.log(`[Socials] Room ${roomCode} created. Waiting for signaling registration before sending invite...`);
+      // Add a 1.2s delay to ensure the Peer ID is registered on the signaling server
+      // before the guest tries to connect.
+      await new Promise(resolve => setTimeout(resolve, 1200));
+
       // 2. Send invite via Supabase
       const { error } = await supabase
         .from('game_invites')

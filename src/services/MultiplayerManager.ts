@@ -388,17 +388,28 @@ class MultiplayerManager {
     this.setupPeer(clientPeerId);
   }
 
-  private performJoinRoom(roomId: string) {
+  private performJoinRoom(roomId: string, retryCount = 0) {
     if (!this.peer || this.peer.destroyed) return;
     
-    this.updateStatus('Locating Host...');
+    this.updateStatus(retryCount > 0 ? `Locating Host (Attempt ${retryCount + 1}/5)...` : 'Locating Host...');
+    
     const conn = this.peer.connect(roomId, {
-      metadata: { playerId: this.myId }
+      metadata: { playerId: this.myId },
+      reliable: true
     });
 
     this.hostConnection = conn;
 
+    // Timeout for connection attempt
+    const timeout = setTimeout(() => {
+      if (conn && !conn.open) {
+        console.warn(`[Multiplayer] Connection to ${roomId} timed out (Attempt ${retryCount + 1})`);
+        conn.close();
+      }
+    }, 5000);
+
     conn.on('open', () => {
+      clearTimeout(timeout);
       this.pendingJoinRoomId = null; // Clear pending once join is initiated
       this.updateStatus('Joining Room...');
       this.sendMessage(conn, { type: 'JOIN_REQUEST', profile: this.myProfile! });
@@ -409,6 +420,13 @@ class MultiplayerManager {
     });
 
     conn.on('close', () => {
+      clearTimeout(timeout);
+      if (this.pendingJoinRoomId && retryCount < 5) {
+        console.log(`[Multiplayer] Connection closed before opening, retrying in 1.5s...`);
+        setTimeout(() => this.performJoinRoom(roomId, retryCount + 1), 1500);
+        return;
+      }
+      
       console.warn('Disconnected from Host (Player:', this.myId, ')');
       this.onError('Disconnected from Host');
       this.updateStatus('disconnected');
@@ -416,8 +434,16 @@ class MultiplayerManager {
       setTimeout(() => window.location.reload(), 2000);
     });
 
-    conn.on('error', (err) => {
-      console.error('Connection error with host:', err);
+    conn.on('error', (err: any) => {
+      clearTimeout(timeout);
+      console.error(`[Multiplayer] Connection error with host (Attempt ${retryCount + 1}):`, err.type);
+      
+      if (this.pendingJoinRoomId && (err.type === 'peer-unavailable' || err.type === 'not-found') && retryCount < 5) {
+        console.log(`[Multiplayer] Host not found yet, retrying in 2s...`);
+        setTimeout(() => this.performJoinRoom(roomId, retryCount + 1), 2000);
+        return;
+      }
+
       this.onError('Could not connect to host.');
       this.updateStatus('error');
     });
