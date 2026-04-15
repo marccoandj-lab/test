@@ -194,12 +194,12 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ onBack, currentUserId,
         </div>
 
         {/* Tab Switcher */}
-        <div className="grid grid-cols-3 sm:flex sm:flex-wrap gap-1 md:gap-1.5 p-1 md:p-1.5 bg-black/40 rounded-2xl md:rounded-3xl border border-white/5 mb-4 md:mb-8">
+        <div className="flex flex-wrap gap-1 md:gap-2 p-1 md:p-1.5 bg-black/40 rounded-2xl md:rounded-3xl border border-white/5 mb-4 md:mb-8">
           {(['wins', 'quizzes', 'capital', 'chains', 'intruders'] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`py-2 md:py-3 rounded-xl md:rounded-2xl text-[8px] md:text-[9px] font-black uppercase tracking-wider transition-all ${
+              className={`flex-1 min-w-[50px] py-2 md:py-3 px-1 rounded-xl md:rounded-2xl text-[7px] xs:text-[8px] md:text-[10px] font-black uppercase tracking-wider transition-all ${
                 activeTab === tab 
                 ? 'bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-lg' 
                 : 'text-slate-500 hover:text-slate-300'

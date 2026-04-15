@@ -707,9 +707,13 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('toggle-mobile-sidebar', handler);
   }, []);
 
-  const handleStart = () => {
+  const handleStart = (name: string, avatar: string, isSingle: boolean) => {
     // Logic for starting the game
-    setGameState('playing');
+    setUserName(name);
+    setUserAvatar(avatar as AvatarType);
+    setIsSinglePlayer(isSingle);
+    setGameState(isSingle ? 'playing' : 'lobby');
+    hasWonThisGame.current = false;
   };
 
   const handleClaimChallenge = async (idx: number) => {
@@ -922,9 +926,8 @@ export const App: React.FC = () => {
       {/* Screen Routing */}
       {gameState === 'start' ? (
         <StartScreen
-          onStart={() => {
-            hasWonThisGame.current = false;
-            handleStart();
+          onStart={(name, avatar, isSingle) => {
+            handleStart(name, avatar, isSingle);
           }}
           initialRoomCode={urlRoomCode || ''}
           initialName={userName}
