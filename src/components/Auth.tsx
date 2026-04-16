@@ -59,7 +59,7 @@ export const Auth: React.FC<AuthProps> = ({ language = 'en' }) => {
         // If Supabase returned a session, it means "Confirm Email" is OFF in the dashboard
         if (data.session) {
           console.warn("User was automatically logged in. 'Confirm Email' is likely DISABLED in Supabase Dashboard.");
-          // No need to set viewState to verification if they are already in
+          setLoading(false);
           return;
         }
 
@@ -304,6 +304,17 @@ export const Auth: React.FC<AuthProps> = ({ language = 'en' }) => {
                   </svg>
                   Google
                 </button>
+
+                {/* Info Hint for Yahoo/Hotmail users */}
+                {(email.toLowerCase().includes('yahoo') || email.toLowerCase().includes('hotmail') || email.toLowerCase().includes('outlook')) && (
+                  <motion.p 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center text-[9px] text-slate-600 font-bold uppercase tracking-tight px-4"
+                  >
+                    💡 {language === 'sr' ? 'Napomena: Proverite "Spam" folder za verifikacioni kod.' : 'Note: Check your "Spam" folder for the verification code.'}
+                  </motion.p>
+                )}
               </motion.div>
             ) : (
               <motion.div
