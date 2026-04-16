@@ -853,7 +853,7 @@ export const App: React.FC = () => {
   }
 
   if (!session) {
-    return <Auth />;
+    return <Auth language={language} />;
   }
 
   const gameMode = isSinglePlayer ? mode : (mpState?.mode || 'finance');

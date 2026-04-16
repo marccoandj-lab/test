@@ -125,6 +125,31 @@ export const translations = {
       intruders: "Intruders",
       top_players: "Top Players",
     },
+    auth: {
+      login: "Log In",
+      signup: "Sign Up",
+      email: "Email Address",
+      password: "Password",
+      confirm_password: "Confirm Password",
+      forgot_password: "Forgot Password?",
+      welcome_back: "Welcome back",
+      create_account: "Create your account",
+      processing: "PROCESSING...",
+      google_auth: "Continue with Google",
+      no_account: "Don't have an account?",
+      has_account: "Already have an account?",
+      verification_sent: "Verification Sent!",
+      check_inbox: "Check your inbox",
+      email_sent_to: "We've sent a verification link to",
+      resend_email: "Resend Email",
+      back_to_login: "Back to Login",
+      resend_cooldown: "Resend in {seconds}s",
+      errors: {
+        passwords_dont_match: "Passwords do not match!",
+        rate_limit: "Too many requests. Please wait.",
+        unknown: "An unexpected error occurred."
+      }
+    },
     modals: {
       quiz: "Quiz",
       uljez: "Intruder",
@@ -437,6 +462,31 @@ export const translations = {
       value_chains: "Lanci",
       intruders: "Uljezi",
       top_players: "Najbolji igrači",
+      },
+      auth: {
+        login: "Prijavi se",
+        signup: "Registruj se",
+        email: "Email Adresa",
+        password: "Lozinka",
+        confirm_password: "Potvrdi lozinku",
+        forgot_password: "Zaboravljena lozinka?",
+        welcome_back: "Dobrodošli nazad",
+        create_account: "Kreirajte svoj nalog",
+        processing: "OBRADA...",
+        google_auth: "Nastavi sa Google-om",
+        no_account: "Nemate nalog?",
+        has_account: "Već imate nalog?",
+        verification_sent: "Verifikacija poslata!",
+        check_inbox: "Proverite sanduče",
+        email_sent_to: "Poslali smo link za verifikaciju na",
+        resend_email: "Ponovo pošalji email",
+        back_to_login: "Nazad na prijavu",
+        resend_cooldown: "Pošalji ponovo za {seconds}s",
+        errors: {
+          passwords_dont_match: "Lozinke se ne podudaraju!",
+          rate_limit: "Previše zahteva. Molimo sačekajte.",
+          unknown: "Došlo je do neočekivane greške."
+        }
       },
     modals: {
       quiz: "Kviz",
