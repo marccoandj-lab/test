@@ -103,7 +103,6 @@ export const Auth: React.FC<AuthProps> = ({ language = 'en' }) => {
     }
   };
 
-  const accentColor = activeTab === 'login' ? 'blue' : 'emerald';
 
   return (
     <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 z-50 overflow-hidden">
