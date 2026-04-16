@@ -43,14 +43,26 @@ export const Auth: React.FC<AuthProps> = ({ language = 'en' }) => {
           return;
         }
 
-        const { error } = await supabase.auth.signUp({
+        console.log("Attempting sign up for:", email);
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
             emailRedirectTo: window.location.origin,
           }
         });
+        
+        console.log("Supabase SignUp response:", { data, error });
+
         if (error) throw error;
+        
+        // If Supabase returned a session, it means "Confirm Email" is OFF in the dashboard
+        if (data.session) {
+          console.warn("User was automatically logged in. 'Confirm Email' is likely DISABLED in Supabase Dashboard.");
+          // No need to set viewState to verification if they are already in
+          return;
+        }
+
         setViewState('verification');
       } else {
         const { error } = await supabase.auth.signInWithPassword({
@@ -71,14 +83,16 @@ export const Auth: React.FC<AuthProps> = ({ language = 'en' }) => {
   const handleResend = async () => {
     if (resendTimer > 0 || !email) return;
     setLoading(true);
+    console.log("Attempting resend for:", email);
     try {
-      const { error } = await supabase.auth.resend({
+      const { data, error } = await supabase.auth.resend({
         type: 'signup',
         email,
         options: {
           emailRedirectTo: window.location.origin,
         }
       });
+      console.log("Supabase Resend response:", { data, error });
       if (error) throw error;
       setResendTimer(60);
       setMessage({ type: 'success', text: t.auth.verification_sent });
