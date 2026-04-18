@@ -28,7 +28,7 @@ export const Step2_SwitchFlip: React.FC<Step2Props> = ({ onNext, language }) => 
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, x: -100 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="absolute inset-0 flex flex-col p-4 sm:p-6 bg-slate-950 overflow-y-auto overflow-x-hidden min-h-screen pb-12"
+      className="absolute inset-0 flex flex-col p-4 sm:p-6 bg-slate-950 overflow-hidden pb-8"
     >
       {/* Dynamic Background */}
       <motion.div 
@@ -164,7 +164,7 @@ export const Step2_SwitchFlip: React.FC<Step2Props> = ({ onNext, language }) => 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={onNext}
-                className="w-full relative group"
+                className="w-full relative group shrink-0 min-h-[56px]"
               >
                 <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-2xl blur opacity-60 group-hover:opacity-100 transition duration-300"></div>
                 <div className="relative w-full py-4 bg-slate-900/90 text-white font-black uppercase tracking-widest text-sm rounded-2xl border border-white/10 backdrop-blur-md flex items-center justify-center gap-3">

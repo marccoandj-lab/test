@@ -16,7 +16,7 @@ export const Step1_Intro: React.FC<Step1Props> = ({ onNext, language }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
       transition={{ duration: 0.5 }}
-      className="absolute inset-0 flex flex-col items-center justify-between p-4 sm:p-6 bg-slate-950 overflow-y-auto overflow-x-hidden min-h-screen pb-12"
+      className="absolute inset-0 flex flex-col items-center justify-between p-4 sm:p-6 bg-slate-950 overflow-hidden pb-8"
     >
       {/* Background Animated Orbs */}
       <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-600/30 rounded-full blur-[100px] animate-pulse pointer-events-none" />
@@ -61,7 +61,7 @@ export const Step1_Intro: React.FC<Step1Props> = ({ onNext, language }) => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={onNext}
-          className="relative w-full max-w-sm group"
+          className="relative w-full max-w-sm group shrink-0 min-h-[56px]"
         >
           <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-green-500 rounded-2xl blur opacity-60 group-hover:opacity-100 transition duration-300"></div>
           <div className="relative w-full py-5 bg-slate-900/90 text-white font-black uppercase tracking-widest text-sm rounded-2xl border border-white/10 backdrop-blur-md flex items-center justify-center gap-3">

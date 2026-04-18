@@ -31,7 +31,7 @@ export const Step3_CTA: React.FC<Step3Props> = ({ onComplete, language }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, scale: 1.05 }}
       transition={{ duration: 0.5 }}
-      className="absolute inset-0 flex flex-col items-center justify-start sm:justify-center p-4 sm:p-6 bg-slate-950 overflow-y-auto overflow-x-hidden min-h-screen pb-16" 
+      className="absolute inset-0 flex flex-col items-center justify-center p-4 sm:p-6 bg-slate-950 overflow-hidden pb-8" 
     >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black" />
 
@@ -103,7 +103,7 @@ export const Step3_CTA: React.FC<Step3Props> = ({ onComplete, language }) => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={onComplete}
-        className="w-full max-w-sm py-5 bg-gradient-to-r from-emerald-500 to-blue-600 outline-none text-white font-black uppercase tracking-widest rounded-2xl shadow-[0_0_40px_rgba(16,185,129,0.4)] hover:shadow-[0_0_60px_rgba(59,130,246,0.6)] transition-all text-sm mb-6 z-10 relative overflow-hidden group border border-white/20"
+        className="shrink-0 min-h-[64px] w-full max-w-sm py-5 bg-gradient-to-r from-emerald-500 to-blue-600 outline-none text-white font-black uppercase tracking-widest rounded-2xl shadow-[0_0_40px_rgba(16,185,129,0.4)] hover:shadow-[0_0_60px_rgba(59,130,246,0.6)] transition-all text-sm mb-6 z-10 relative overflow-hidden group border border-white/20"
       >
         <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:animate-[shimmer_1.5s_infinite]" />
         <span className="drop-shadow-md">{t.create_account_and_start}</span>
