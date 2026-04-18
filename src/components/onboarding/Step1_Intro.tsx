@@ -43,10 +43,10 @@ export const Step1_Intro: React.FC<Step1Props> = ({ onNext, language }) => {
          className="relative z-10 flex flex-col items-center mt-auto mb-16 px-4 w-full"
       >
         {/* Avatars Hero */}
-        <div className="flex -space-x-4 mb-8">
-           <motion.img animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} src="/assets/1.png" className="w-16 h-16 rounded-full border-2 border-slate-900 shadow-[0_0_20px_rgba(59,130,246,0.5)] bg-blue-900/50 object-cover" />
-           <motion.img animate={{ y: [0, -15, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }} src="/assets/2.png" className="w-20 h-20 rounded-full border-4 border-slate-900 shadow-[0_0_30px_rgba(34,197,94,0.5)] z-10 bg-green-900/50 object-cover" />
-           <motion.img animate={{ y: [0, -10, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }} src="/assets/3.png" className="w-16 h-16 rounded-full border-2 border-slate-900 shadow-[0_0_20px_rgba(59,130,246,0.5)] bg-purple-900/50 object-cover" />
+        <div className="flex justify-center items-end -space-x-6 mb-8 mt-4 relative h-32 w-full">
+           <motion.img animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} src="/assets/1.png" className="w-24 h-24 object-contain drop-shadow-[0_10px_10px_rgba(59,130,246,0.6)]" />
+           <motion.img animate={{ y: [0, -15, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }} src="/assets/2.png" className="w-32 h-32 lg:w-40 lg:h-40 object-contain drop-shadow-[0_15px_15px_rgba(34,197,94,0.6)] z-10 -mt-8" />
+           <motion.img animate={{ y: [0, -10, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }} src="/assets/3.png" className="w-24 h-24 object-contain drop-shadow-[0_10px_10px_rgba(168,85,247,0.6)]" />
         </div>
 
         <h2 className="text-3xl md:text-4xl font-black text-center text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-400 mb-6 drop-shadow-sm max-w-sm leading-tight tracking-tight">

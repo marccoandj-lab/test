@@ -15,12 +15,8 @@ export const Step2_SwitchFlip: React.FC<Step2Props> = ({ onNext, language }) => 
   useEffect(() => {
     if (flipped) {
       setShowWords(true);
-      const timer = setTimeout(() => {
-        onNext();
-      }, 3500); // 3.5 seconds to let them admire the back before moving to step 3
-      return () => clearTimeout(timer);
     }
-  }, [flipped, onNext]);
+  }, [flipped]);
 
   const handleFlip = () => {
     if (!flipped) setFlipped(true);
@@ -70,7 +66,7 @@ export const Step2_SwitchFlip: React.FC<Step2Props> = ({ onNext, language }) => 
                      animate={{ y: [0, -10, 0] }} 
                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                      src="/assets/6.png" 
-                     className="w-36 h-36 object-contain drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] relative z-10" 
+                     className="w-44 h-44 object-contain drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] relative z-10" 
                    />
                  </div>
                  <h3 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-white mb-2">Linear</h3>
@@ -111,7 +107,7 @@ export const Step2_SwitchFlip: React.FC<Step2Props> = ({ onNext, language }) => 
                      animate={{ y: [0, -10, 0] }} 
                      transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
                      src="/assets/8.png" 
-                     className="w-36 h-36 object-contain drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] relative z-10" 
+                     className="w-44 h-44 object-contain drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] relative z-10" 
                    />
                  </div>
                  <h3 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-200 to-white mb-2">Circular</h3>
@@ -139,17 +135,29 @@ export const Step2_SwitchFlip: React.FC<Step2Props> = ({ onNext, language }) => 
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ type: "spring", stiffness: 200, damping: 20 }}
-            className="absolute z-20 flex flex-col gap-3 w-full max-w-sm px-6 pointer-events-none"
+            className="absolute z-20 flex flex-col gap-3 w-full max-w-sm px-6 pointer-events-auto"
             style={{ bottom: "5%" }}
           >
             <div className="bg-slate-900/95 border border-emerald-500/30 p-4 sm:p-5 rounded-2xl shadow-2xl backdrop-blur-xl flex items-center justify-center gap-3">
               <span className="text-2xl">⚖️</span>
               <span className="text-white font-black tracking-wide text-base sm:text-lg">{t.profit_vs_sustainability}</span>
             </div>
-            <div className="bg-slate-900/95 border border-emerald-500/30 p-4 sm:p-5 rounded-2xl shadow-2xl backdrop-blur-xl flex items-center justify-center gap-3 ml-6 sm:ml-8">
+            <div className="bg-slate-900/95 border border-emerald-500/30 p-4 sm:p-5 rounded-2xl shadow-2xl backdrop-blur-xl flex items-center justify-center gap-3 ml-6 sm:ml-8 mb-4">
               <span className="text-2xl">🛡️</span>
               <span className="text-white font-black tracking-wide text-base sm:text-lg">{t.risk_vs_resilience}</span>
             </div>
+            
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={onNext}
+              className="w-full relative group"
+            >
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-2xl blur opacity-60 group-hover:opacity-100 transition duration-300"></div>
+              <div className="relative w-full py-4 sm:py-5 bg-slate-900/90 text-white font-black uppercase tracking-widest text-sm rounded-2xl border border-white/10 backdrop-blur-md flex items-center justify-center gap-3">
+                {language === 'en' ? 'Continue' : 'Nastavi'} <span className="text-xl">→</span>
+              </div>
+            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>

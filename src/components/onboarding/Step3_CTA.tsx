@@ -52,11 +52,11 @@ export const Step3_CTA: React.FC<Step3Props> = ({ onComplete, language }) => {
       {/* Character Avatars Row */}
       <motion.div 
          initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }}
-         className="flex items-end justify-center mb-8 z-10 relative"
+         className="flex items-end justify-center mb-8 z-10 relative h-36"
       >
-         <img src="/assets/7.png" className="w-20 h-20 -mr-4 drop-shadow-2xl z-0 blur-[1px] opacity-70" />
-         <img src="/assets/5.png" className="w-28 h-28 z-20 drop-shadow-[0_20px_20px_rgba(0,0,0,0.8)]" />
-         <img src="/assets/4.png" className="w-24 h-24 -ml-6 drop-shadow-2xl z-10 opacity-90" />
+         <img src="/assets/7.png" className="w-28 h-28 object-contain -mr-6 drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] z-0 opacity-80" />
+         <img src="/assets/5.png" className="w-40 h-40 object-contain z-20 drop-shadow-[0_20px_30px_rgba(0,0,0,0.9)]" />
+         <img src="/assets/4.png" className="w-32 h-32 object-contain -ml-8 drop-shadow-[0_15px_25px_rgba(0,0,0,0.9)] z-10 opacity-95" />
       </motion.div>
 
       <motion.div variants={listVariants} initial="hidden" animate="show" className="flex flex-col gap-4 w-full max-w-sm mb-10 z-10 relative">
