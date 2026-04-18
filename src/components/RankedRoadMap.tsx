@@ -65,71 +65,6 @@ export const RankedRoadMap: React.FC<RankedRoadMapProps> = ({ onBack, currentSrp
         </div>
 
         <div className="flex-1 overflow-y-auto custom-scrollbar px-4 md:px-12 relative group/roadmap">
-          {/* Animated SVG Connector Path */}
-          <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden px-4 md:px-12 py-10">
-            <svg 
-              className="w-full h-full min-h-[1000px] opacity-40 md:opacity-60" 
-              viewBox="0 0 100 1000" 
-              preserveAspectRatio="none"
-              fill="none"
-            >
-              <defs>
-                <linearGradient id="path-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#3b82f6" /> {/* blue-500 */}
-                  <stop offset="50%" stopColor="#10b981" /> {/* emerald-500 */}
-                  <stop offset="100%" stopColor="#f59e0b" /> {/* amber-500 */}
-                </linearGradient>
-                <filter id="glow">
-                  <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
-                  <feMerge>
-                    <feMergeNode in="coloredBlur"/>
-                    <feMergeNode in="SourceGraphic"/>
-                  </feMerge>
-                </filter>
-              </defs>
-              
-              <motion.path
-                d="M 50 0 L 50 40 C 50 80 85 100 85 140 C 85 180 15 200 15 240 C 15 280 85 300 85 340 C 85 380 15 400 15 440 C 15 480 85 500 85 540 C 85 580 15 600 15 640 C 15 680 85 700 85 740 C 85 780 15 800 15 840 C 15 880 85 900 85 940 L 85 1000"
-                stroke="url(#path-gradient)"
-                strokeWidth="1.5"
-                strokeDasharray="4 8"
-                strokeLinecap="round"
-                filter="url(#glow)"
-                initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ 
-                  pathLength: 1, 
-                  opacity: 1,
-                  strokeDashoffset: [0, -48]
-                }}
-                transition={{ 
-                  pathLength: { duration: 3, ease: "easeInOut" },
-                  opacity: { duration: 1 },
-                  strokeDashoffset: { duration: 4, repeat: Infinity, ease: "linear" }
-                }}
-              />
-
-              {/* Secondary pulse path */}
-              <motion.path
-                d="M 50 0 L 50 40 C 50 80 85 100 85 140 C 85 180 15 200 15 240 C 15 280 85 300 85 340 C 85 380 15 400 15 440 C 15 480 85 500 85 540 C 85 580 15 600 15 640 C 15 680 85 700 85 740 C 85 780 15 800 15 840 C 15 880 85 900 85 940 L 85 1000"
-                stroke="url(#path-gradient)"
-                strokeWidth="3"
-                strokeLinecap="round"
-                opacity="0.2"
-                initial={{ pathLength: 0 }}
-                animate={{ 
-                  pathLength: 1,
-                  strokeWidth: [2, 4, 2],
-                  opacity: [0.1, 0.3, 0.1]
-                }}
-                transition={{ 
-                  pathLength: { duration: 3, ease: "easeInOut" },
-                  strokeWidth: { duration: 2, repeat: Infinity, ease: "easeInOut" },
-                  opacity: { duration: 2, repeat: Infinity, ease: "easeInOut" }
-                }}
-              />
-            </svg>
-          </div>
-
           <motion.div 
             variants={containerVariants}
             initial="hidden"
@@ -180,11 +115,6 @@ export const RankedRoadMap: React.FC<RankedRoadMapProps> = ({ onBack, currentSrp
                         }}
                         transition={{ duration: 4, repeat: Infinity }}
                       />
-                    )}
-
-                    {/* Connection Line to Next (Mobile) */}
-                    {nextRank && (
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 h-12 w-0.5 bg-gradient-to-b from-white/10 to-transparent md:hidden" />
                     )}
                   </div>
 
