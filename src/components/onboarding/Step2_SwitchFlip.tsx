@@ -28,7 +28,7 @@ export const Step2_SwitchFlip: React.FC<Step2Props> = ({ onNext, language }) => 
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, x: -100 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="absolute inset-0 flex flex-col p-6 bg-slate-950 overflow-hidden"
+      className="absolute inset-0 flex flex-col p-4 sm:p-6 bg-slate-950 overflow-y-auto overflow-x-hidden min-h-screen pb-12"
     >
       {/* Dynamic Background */}
       <motion.div 

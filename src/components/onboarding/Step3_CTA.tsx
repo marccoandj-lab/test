@@ -31,7 +31,7 @@ export const Step3_CTA: React.FC<Step3Props> = ({ onComplete, language }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, scale: 1.05 }}
       transition={{ duration: 0.5 }}
-      className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-slate-950 overflow-hidden" 
+      className="absolute inset-0 flex flex-col items-center justify-start sm:justify-center p-4 sm:p-6 bg-slate-950 overflow-y-auto overflow-x-hidden min-h-screen pb-16" 
     >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black" />
 

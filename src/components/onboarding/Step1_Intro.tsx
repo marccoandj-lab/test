@@ -16,7 +16,7 @@ export const Step1_Intro: React.FC<Step1Props> = ({ onNext, language }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
       transition={{ duration: 0.5 }}
-      className="absolute inset-0 flex flex-col items-center justify-between p-6 bg-slate-950 overflow-hidden"
+      className="absolute inset-0 flex flex-col items-center justify-between p-4 sm:p-6 bg-slate-950 overflow-y-auto overflow-x-hidden min-h-screen pb-12"
     >
       {/* Background Animated Orbs */}
       <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-600/30 rounded-full blur-[100px] animate-pulse pointer-events-none" />
@@ -49,14 +49,12 @@ export const Step1_Intro: React.FC<Step1Props> = ({ onNext, language }) => {
            <motion.img animate={{ y: [0, -10, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }} src="/assets/3.png" className="w-24 h-24 object-contain drop-shadow-[0_10px_10px_rgba(168,85,247,0.6)]" />
         </div>
 
-        <h2 className="text-3xl md:text-4xl font-black text-center text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-400 mb-6 drop-shadow-sm max-w-sm leading-tight tracking-tight">
-          {t.intro_text}
+        <h2 className="text-3xl md:text-5xl font-black text-center text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-400 mb-4 drop-shadow-sm max-w-sm leading-tight tracking-tight">
+          EconomySwitch
         </h2>
         
-        <p className="text-slate-400 text-sm md:text-base text-center max-w-sm mb-12 leading-relaxed font-medium px-4">
-          {language === 'en' 
-            ? "Step into a simulation where your financial decisions shape the world. Will you optimize for profit, or build for the future?" 
-            : "Zakorači u simulaciju gde tvoje finansijske odluke oblikuju svet. Da li optimizuješ za profit, ili gradiš za budućnost?"}
+        <p className="text-slate-400 text-xs sm:text-sm md:text-base text-center max-w-sm mb-10 leading-relaxed font-medium px-2">
+          {t.intro_text}
         </p>
 
         <motion.button 
