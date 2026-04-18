@@ -1,95 +1,35 @@
-# EconomySwitch - Development & Technical Specification
+# EconomySwitch - Dokumentacija arhitekture i razvoja
 
-Ovaj fajl služi kao "Source of Truth" za projekat EconomySwitch. Svi razvojni koraci i komunikacija sa AI asistentom moraju se pridržavati informacija u ovom dokumentu kako bi se izbegli nesporazumi i tehničke greške.
+Ovaj dokument definiše tehnički "Source of Truth" za **EconomySwitch**, edukativnu P2P aplikaciju koja integriše finansijsku simulaciju sa principima održivog razvoja.
 
-## 1. Pregled Projekta
-EconomySwitch je edukativna "board game" aplikacija koja simulira finansijsko tržište i ekološku održivost. Igrači se kreću po beskonačnoj mapi, rešavaju kvizove, investiraju kapital i upravljaju porezima u cilju dostizanja kapitala od 1,000,000.
+## 1. Konceptualni okvir
+EconomySwitch je distribuirana igra na ploči dizajnirana za edukaciju korisnika o funkcionisanju tržišta kapitala i ekološkoj odgovornosti. Igrački progres se ostvaruje kroz interakciju sa dinamički generisanom mapom, rešavanje edukativnih modula i upravljanje portfoliom.
 
-## 2. Tehnološki Stack
-- **Frontend**: React 19 (Vite 7), TypeScript 5.9
-- **Styling**: Tailwind CSS 4.1.x, Framer Motion (animacije)
-- **Multiplayer**: PeerJS (P2P komunikacija), dedicated signaling server na Renderu
-- **Backend/Server**: Express (Signaling server, Web Push servis i statički hosting)
-- **Database/Auth**: Supabase (@supabase/supabase-js) sa Realtime podrškom
-- **Notifications**: Web Push API, `web-push`, `node-cron` za periodične podsetnike
-- **PWA**: Service Workers, Manifest v3
-- **I18n**: Podrška za Engleski i Srpski jezik
+## 2. Tehnološki stek
+*   **Frontend**: React 19 (Vite 7), TypeScript 5.9, Tailwind CSS 4.1.x, Framer Motion (animacije).
+*   **Komunikacija**: PeerJS za P2P sesije; Express signaling server na Render platformi.
+*   **Infrastruktura i podaci**: Supabase (PostgreSQL, Realtime, Auth), Node.js (Web Push, Cron).
+*   **PWA**: Service Worker manifest v3 za offline dostupnost.
 
-## 3. Struktura Projekta
-- `server.js`: Glavni server fajl koji orkestrira PeerJS signaling, statički hosting i inicijalizaciju notifikacija.
-- `src/App.tsx`: Glavni kontejner igre, state management, auth i UI orkestracija.
-- `src/services/`:
-  - `MultiplayerManager.ts`: Kompleksna P2P logika. Host je "Source of Truth", upravlja špilovima (decks) i sinhronizacijom.
-  - `NotificationService.js`: Server-side logika za push notifikacije i cron poslove.
-- `src/components/`:
-  - `GameMap.tsx`: Vizuelni prikaz table, animacija kretanja i dice roll.
-  - `GameModalContainer.tsx`: Centralna logika za polja (Kvizovi, Investicije, Porezi, Jail).
-  - `GameModal.tsx`: UI komponenta za prikaz sadržaja polja.
-  - `StartScreen.tsx`: Lobby interfejs sa profilima i statistikama.
-  - `Leaderboard.tsx`: Globalni rang igrača iz baze.
-  - `Socials.tsx`: Sistem prijatelja, pretraga korisnika i slanje pozivnica za igru.
-  - `EducationScreen.tsx`: Edukativni resursi.
-  - `Auth.tsx`: Login i registracija korisnika preko Supabase.
-  - `Sidebar.tsx`: Navigacija i brzi pristup profilu.
-  - `SettingsModal.tsx`: Podešavanja jezika i notifikacija.
-  - `LegalScreen.tsx`: TOS i Privacy Policy.
-- `src/data/`:
-  - `gameData.ts`: Centralni repozitorijum kvizova, investicija i lanca vrednosti.
-  - `levelGenerator.ts`: Generator "beskonačne" mape.
-  - `avatars.ts`: Definisanje dostupnih avatara.
-- `src/i18n/`: `translations.ts` (prevodi za sve UI elemente).
-- `src/lib/`: `supabase.ts` (inicijalizacija Supabase klijenta).
-- `src/utils/`: `cn.ts` (Tailwind class merging), `format.ts` (formatiranje valuta).
-- `src/types/`: `game.ts` (TypeScript interfejsi).
-- `database_sql_scripts/`: SQL migracije za Supabase (01-07).
+## 3. Arhitektura sistema
+*   **Multiplayer logika**: Bazirana na Peer-to-Peer modelu gde "Host" peer deluje kao autoritativni izvor stanja sesije, upravljajući sinhronizacijom špilova i akcijama igrača.
+*   **Generisanje sveta**: Algoritam za dinamičko proširenje mape ("infinite map") baziran na poziciji igrača.
+*   **Upravljanje stanjem**: Centralizovani state menadžment preko `App.tsx` sa obaveznom propagacijom akcija kroz `MultiplayerManager.ts`.
 
-## 4. Ključne Mehanike i Logika
-### Multiplayer & Infinite Map
-- **P2P Model**: PeerJS povezuje igrače direktno. Host upravlja globalnim state-om.
-- **Infinite Generation**: Mapa se dinamički proširuje kada bilo koji igrač priđe kraju trenutne dužine.
-- **Deck Management**: Quizzes, Cost Analysis, Value Chain i Uljez se izvlače iz mešanih špilova (decks) kako bi se osigurala jedinstvenost pitanja.
-- **Timers**: `turnTimer` (60s) i `interactionTimer` (35s) za održavanje tempa.
+## 4. Šema baze podataka (`profiles` tabela)
+Tabela `profiles` služi kao primarno skladište korisničkih podataka:
+*   **Identifikacija**: `id` (UUID), `display_id` (6-char unique).
+*   **Statistike**: `wins`, `games_played`, `total_capital` (BigInt), detaljne statistike po tipovima polja.
+*   **Konfiguracija**: `notification_settings` (JSONB), `character_usage` (JSONB).
 
-### Supabase Integracija & Stats
-- **Atomic Increments**: Statistike profila se ažuriraju putem `increment_profile_stats` RPC funkcije kako bi se izbeglo gubljenje podataka pri paralelnim sesijama.
-- **Realtime Invites**: Igrači primaju pozivnice za igru trenutno preko Supabase Realtime kanala.
+## 5. Razvojna pravila i standardi
+1.  **Tipizacija**: Obavezna upotreba interfejsa iz `src/types/game.ts`.
+2.  **Audio**: Centralizovan sistem kroz `playSFX(type)`.
+3.  **Responzivnost**: Mobile-first Tailwind dizajn uz primenu glassmorphism estetike.
+4.  **Integritet podataka**: Ažuriranje statistika isključivo putem RPC funkcije `increment_profile_stats` kako bi se osigurala atomičnost u distribuiranom okruženju.
+5.  **Putanja resursa**: Svi asseti se referenciraju sa `/assets/` putanjom (mapirano na `/public/assets/`).
 
-### Push Notifikacije
-- **VAPID Keys**: Obavezni za autentifikaciju push servisa.
-- **Scheduled Reminders**: `node-cron` šalje motivacione poruke korisnicima u definisanim slotovima (npr. 09:00, 18:00).
-
-### Game Modes
-- `finance`: Tamno plava tema (Slate-900), fokus na kapitalu i tržištu.
-- `sustainability`: Zelena tema (Emerald-950), fokus na cirkularnoj ekonomiji.
-
-## 5. Tabela `profiles` (Schema)
-- `id` (uuid, primary key)
-- `display_id` (text, unique 6-char ID)
-- `username` (text), `avatar_url` (text)
-- `wins`, `games_played`, `total_capital` (bigint)
-- `character_usage` (jsonb) - mapa korišćenja karaktera
-- `notification_settings` (jsonb) - enabled, slots
-- **Statistike (integer/bigint):**
-  - `correct_quizzes`, `wrong_quizzes`
-  - `cost_analysis_correct`, `cost_analysis_wrong`
-  - `value_chain_correct`, `value_chain_wrong`
-  - `uljez_correct`, `uljez_wrong`
-  - `investment_gains`, `investment_losses`
-  - `jail_visits`, `jail_skips`, `auction_wins`, `taxes_paid`
-- `updated_at` (timestamptz)
-
-## 6. Pravila za Razvoj (Pravilo 0)
-1. **Tipovi**: Uvek koristi definisane interfejse iz `src/types/game.ts`.
-2. **SFX**: Koristi globalnu `playSFX(type)` funkciju za zvučne efekte.
-3. **Putanja**: Asseti su u `/public/assets/`, ali se u kodu referenciraju kao `/assets/`.
-4. **Responzivnost**: Mobile-first pristup sa Tailwind klasama.
-5. **Multiplayer State**: Svaka akcija koja menja kapital ili poziciju mora ići kroz `multiplayer.sendAction`.
-6. **Statistike**: Koristi RPC `increment_profile_stats` za ažuriranje statistika u bazi.
-
-## 7. Uputstva za AI Asistenta
-- **Estetika**: Glassmorphism, vibrantni gradijenti i visoki kontrast su standard.
-- **Environment**: Proveri `.env` za `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_VAPID_PUBLIC_KEY` i `VAPID_PRIVATE_KEY`.
-- **Consistency**: Održavaj konzistentnost između koda i SQL skripti u `database_sql_scripts/`.
-
----
-*Poslednja izmena: 2026-04-13*
+## 6. Operativne smernice
+*   Sve promene u šemi baze moraju pratiti migracione skripte u `database_sql_scripts/`.
+*   Konfiguracija okruženja (Supabase, VAPID ključevi) je obavezna za lokalni rad.
+*   Konzistentnost između koda i SQL skripti je imperativ.
