@@ -15,6 +15,7 @@ import { Auth } from './components/Auth';
 import { Session } from '@supabase/supabase-js';
 import { translations, Language } from './i18n/translations';
 import { ChallengeService } from './services/ChallengeService';
+import { OnboardingFlow } from './components/onboarding/OnboardingFlow';
 
 const WINNING_BALANCE = 1000000;
 const MUSIC_TRACKS = [
@@ -35,6 +36,7 @@ const STAT_TO_CHALLENGE_MAP: Record<string, ChallengeType> = {
 type NumericProfileKeys = keyof { [K in keyof Profile as Profile[K] extends number ? K : never]: any };
 
 export const App: React.FC = () => {
+  const [onboardingDone, setOnboardingDone] = useState<boolean | null>(null);
   const [urlRoomCode, setUrlRoomCode] = useState<string | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -182,6 +184,8 @@ export const App: React.FC = () => {
       if (session) {
         multiplayer.setMyId(session.user.id);
         fetchProfile(session.user.id);
+      } else {
+        setOnboardingDone(sessionStorage.getItem('eco_onboard_done') === 'true');
       }
       setIsAuthLoading(false);
     });
@@ -191,6 +195,8 @@ export const App: React.FC = () => {
       if (session) {
         multiplayer.setMyId(session.user.id);
         fetchProfile(session.user.id);
+      } else {
+        setOnboardingDone(sessionStorage.getItem('eco_onboard_done') === 'true');
       }
     });
 
@@ -203,7 +209,7 @@ export const App: React.FC = () => {
       // Try fetching all columns including new ranked columns
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, cost_analysis_correct, cost_analysis_wrong, value_chain_correct, value_chain_wrong, uljez_correct, uljez_wrong, investment_gains, investment_losses, jail_visits, jail_skips, auction_wins, taxes_paid, srp, rank, daily_challenges, last_challenge_reset')
+        .select('username, avatar_url, wins, games_played, total_capital, character_usage, correct_quizzes, wrong_quizzes, cost_analysis_correct, cost_analysis_wrong, value_chain_correct, value_chain_wrong, uljez_correct, uljez_wrong, investment_gains, investment_losses, jail_visits, jail_skips, auction_wins, taxes_paid, srp, rank, daily_challenges, last_challenge_reset, onboarding_completed')
         .eq('id', userId)
         .single();
 
@@ -248,6 +254,7 @@ export const App: React.FC = () => {
 
   const handleProfileFound = (data: any) => {
     console.log("Profile data found:", data.username);
+    setOnboardingDone(data.onboarding_completed ?? false);
     setProfile(data as any);
     const newName = data.username || "Player";
     const newAvatar = (data.avatar_url as AvatarType) || "1";
@@ -844,12 +851,27 @@ export const App: React.FC = () => {
     }
   }, [currentBalance, isSinglePlayer]);
 
-  if (isAuthLoading) {
+  if (isAuthLoading || (onboardingDone === null && !session)) {
     return (
       <div className="fixed inset-0 bg-slate-900 flex items-center justify-center">
         <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
+  }
+
+  if (onboardingDone === false && !session) {
+    return <OnboardingFlow onComplete={() => {
+      sessionStorage.setItem('eco_onboard_done', 'true');
+      setOnboardingDone(true);
+    }} language={language} />;
+  }
+
+  if (onboardingDone === false && session) {
+    return <OnboardingFlow onComplete={async () => {
+      sessionStorage.setItem('eco_onboard_done', 'true');
+      setOnboardingDone(true);
+      await updateSupabaseProfile({ onboarding_completed: true } as any);
+    }} language={language} />;
   }
 
   if (!session) {

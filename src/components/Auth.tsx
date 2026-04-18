@@ -59,17 +59,26 @@ export const Auth: React.FC<AuthProps> = ({ language = 'en' }) => {
         // If Supabase returned a session, it means "Confirm Email" is OFF in the dashboard
         if (data.session) {
           console.warn("User was automatically logged in. 'Confirm Email' is likely DISABLED in Supabase Dashboard.");
+          await supabase.from('profiles').update({ onboarding_completed: true }).eq('id', data.user?.id);
           setLoading(false);
           return;
         }
 
+        if (data.user) {
+          await supabase.from('profiles').update({ onboarding_completed: true }).eq('id', data.user.id);
+        }
+
         setViewState('verification');
       } else {
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
         if (error) throw error;
+        
+        if (data.user) {
+          await supabase.from('profiles').update({ onboarding_completed: true }).eq('id', data.user.id);
+        }
       }
     } catch (error: any) {
       let errorText = error.error_description || error.message;

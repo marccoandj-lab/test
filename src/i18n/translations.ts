@@ -299,6 +299,18 @@ export const translations = {
         board_blue: "Linear (Blue)",
         board_green: "Circular (Green)"
       },
+      onboarding: {
+        intro_text: "Linear economy builds profit. Circular preserves resources. What if you must manage both?",
+        start_experience: "Start Experience",
+        profit_vs_sustainability: "Profit ↔ Sustainability",
+        risk_vs_resilience: "Risk ↔ Resilience",
+        cta_text: "You have seen both sides. Now play.",
+        financial_literacy: "Financial Literacy",
+        circular_economy: "Circular Economy",
+        play_based_learning: "Game Based Learning",
+        create_account_and_start: "Create account and start",
+        social_proof: "🟢 1,200+ students are already testing their perspective"
+      },
       legal: {
       title: "Legal Information",
       terms: "Terms of Service",
@@ -635,6 +647,18 @@ export const translations = {
         start_button: "Započni Kviz",
         board_blue: "Linearna (Plava)",
         board_green: "Cirkularna (Zelena)"
+      },
+      onboarding: {
+        intro_text: "Linearna ekonomija gradi profit. Cirkularna čuva resurse. Šta ako moraš da upravljaš oba?",
+        start_experience: "Započni iskustvo",
+        profit_vs_sustainability: "Profit ↔ Održivost",
+        risk_vs_resilience: "Rizik ↔ Otpornost",
+        cta_text: "Već si video obe strane. Sada igraj.",
+        financial_literacy: "Finansijska pismenost",
+        circular_economy: "Cirkularna ekonomija",
+        play_based_learning: "Učenje kroz igru",
+        create_account_and_start: "Kreiraj nalog i započni",
+        social_proof: "🟢 1.200+ učenika već testira perspektivu"
       },
       legal: {
       title: "Pravne Informacije",
