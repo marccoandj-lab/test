@@ -120,7 +120,7 @@ export const RankedRoadMap: React.FC<RankedRoadMapProps> = ({ onBack, currentSrp
 
                   {/* Floating Info Card */}
                   <div className={cn(
-                    "flex-1 w-full max-w-[340px] p-6 rounded-[32px] border backdrop-blur-3xl transition-all duration-500 relative group",
+                    "flex-1 w-full max-w-[380px] p-5 md:p-7 rounded-[32px] border backdrop-blur-3xl transition-all duration-500 relative group",
                     isCurrent 
                       ? "bg-white/10 border-blue-500/40 shadow-[0_0_50px_rgba(59,130,246,0.15)] ring-1 ring-blue-500/20" 
                       : isUnlocked 
@@ -129,12 +129,12 @@ export const RankedRoadMap: React.FC<RankedRoadMapProps> = ({ onBack, currentSrp
                   )}>
                     <div className="space-y-4">
                       <div className="flex justify-between items-start gap-4">
-                        <div className="min-w-0">
-                          <span className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] leading-none block mb-1">
+                        <div className="min-w-0 flex-1">
+                          <span className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] leading-none block mb-1.5">
                             {t.ranked.rank}
                           </span>
                           <h3 className={cn(
-                            "font-black italic tracking-tighter text-2xl md:text-3xl uppercase truncate leading-none",
+                            "font-black italic tracking-tight text-xl sm:text-2xl md:text-3xl uppercase leading-[0.9] break-words",
                             isUnlocked ? "text-white" : "text-slate-500"
                           )}>
                             {(t.ranked.ranks as any)[rank.name.toLowerCase().replace(' ', '') === 'economylegend' ? 'legend' : rank.name.toLowerCase()]}
