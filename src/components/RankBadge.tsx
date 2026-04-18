@@ -1,11 +1,13 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { translations, Language } from '../i18n/translations';
 import { cn } from '../utils/cn';
 
 interface RankBadgeProps {
   rank: string;
   language: Language;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  variant?: 'default' | 'roadmap';
   showName?: boolean;
   className?: string;
 }
@@ -30,7 +32,14 @@ const RANK_COLORS: Record<string, string> = {
   'Economy Legend': 'from-yellow-300 via-amber-500 to-yellow-600 animate-pulse',
 };
 
-export const RankBadge: React.FC<RankBadgeProps> = ({ rank, language, size = 'md', showName = true, className }) => {
+export const RankBadge: React.FC<RankBadgeProps> = ({ 
+  rank, 
+  language, 
+  size = 'md', 
+  variant = 'default',
+  showName = true, 
+  className 
+}) => {
   const t = translations[language];
   
   const getRankKey = (r: string) => {
@@ -53,26 +62,71 @@ export const RankBadge: React.FC<RankBadgeProps> = ({ rank, language, size = 'md
     sm: 'w-8 h-8',
     md: 'w-14 h-14',
     lg: 'w-24 h-24',
+    xl: 'w-32 h-32 md:w-40 md:h-40',
   };
+
+  const isRoadmap = variant === 'roadmap';
+
+  const badgeContent = (
+    <div className={cn(
+      "relative rounded-xl overflow-hidden shadow-lg border border-white/20 group",
+      sizeClasses[size],
+      "bg-gradient-to-br",
+      colorClass
+    )}>
+      <img 
+        src={RANK_ICONS[rank] || RANK_ICONS['Novice']}
+        alt={rank}
+        className="absolute inset-0 w-full h-full object-cover transition-transform group-hover:scale-110"
+      />
+      
+      {/* Glossy overlay */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent pointer-events-none" />
+    </div>
+  );
+
+  if (isRoadmap) {
+    return (
+      <div className={cn("flex flex-col items-center gap-6", className)}>
+        <motion.div
+          animate={{
+            y: [0, -10, 0],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="relative"
+        >
+          {badgeContent}
+          {/* Roadmap glow effect */}
+          <div className={cn(
+            "absolute -inset-4 rounded-[40px] blur-2xl -z-10 opacity-40",
+            "bg-gradient-to-br",
+            colorClass
+          )} />
+        </motion.div>
+
+        {showName && (
+          <div className="flex flex-col items-center text-center">
+            <span className="text-xs md:text-sm text-slate-500 font-black uppercase tracking-[0.2em] leading-none mb-1">
+              {t.ranked.rank}
+            </span>
+            <span className={cn(
+              "font-black italic tracking-tighter text-2xl md:text-4xl uppercase bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60 drop-shadow-2xl"
+            )}>
+              {t.ranked.ranks[rankKey as keyof typeof t.ranked.ranks]}
+            </span>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className={cn("flex items-center gap-3", className)}>
-      <div className={cn(
-        "relative rounded-xl overflow-hidden shadow-lg border border-white/20 group",
-        sizeClasses[size],
-        "bg-gradient-to-br",
-        colorClass
-      )}>
-        <img 
-          src={RANK_ICONS[rank] || RANK_ICONS['Novice']}
-          alt={rank}
-          className="absolute inset-0 w-full h-full object-cover transition-transform group-hover:scale-110"
-        />
-        
-        {/* Glossy overlay */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent pointer-events-none" />
-      </div>
-
+      {badgeContent}
       
       {showName && (
         <div className="flex flex-col">

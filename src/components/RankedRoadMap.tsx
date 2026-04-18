@@ -39,7 +39,7 @@ export const RankedRoadMap: React.FC<RankedRoadMapProps> = ({ onBack, currentSrp
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500 rounded-full blur-[160px]" />
       </div>
 
-      <div className="relative z-10 max-w-lg w-full h-[95dvh] bg-white/5 p-4 md:p-8 rounded-[40px] border border-white/10 backdrop-blur-2xl shadow-2xl flex flex-col">
+      <div className="relative z-10 max-w-4xl w-full h-[95dvh] bg-white/5 p-4 md:p-8 rounded-[40px] border border-white/10 backdrop-blur-2xl shadow-2xl flex flex-col">
         <div className="flex items-center justify-between mb-4 md:mb-8 px-2">
           <button
             onClick={onBack}
@@ -56,30 +56,85 @@ export const RankedRoadMap: React.FC<RankedRoadMapProps> = ({ onBack, currentSrp
         </div>
 
         <div className="text-center space-y-1 md:space-y-2 mb-6 md:mb-10">
-          <h1 className="text-2xl md:text-3xl font-black text-white italic tracking-tight drop-shadow-xl">
+          <h1 className="text-3xl md:text-5xl font-black text-white italic tracking-tight drop-shadow-xl uppercase">
             {t.ranked.roadmap_title}
           </h1>
-          <p className="text-slate-500 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.2em] max-w-[280px] mx-auto leading-relaxed">
+          <p className="text-slate-500 text-[8px] md:text-[12px] font-bold uppercase tracking-[0.3em] max-w-[400px] mx-auto leading-relaxed">
             {t.ranked.roadmap_desc}
           </p>
         </div>
 
-        <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 relative">
-          {/* Vertical Path Line */}
-          <div className="absolute left-[23px] md:left-[31px] top-4 bottom-4 w-1 bg-white/5 rounded-full overflow-hidden">
-            <motion.div 
-              initial={{ height: 0 }}
-              animate={{ height: '100%' }}
-              transition={{ duration: 2, ease: "easeInOut" }}
-              className="w-full bg-gradient-to-b from-blue-500 via-emerald-500 to-amber-500 opacity-20"
-            />
+        <div className="flex-1 overflow-y-auto custom-scrollbar px-4 md:px-12 relative group/roadmap">
+          {/* Animated SVG Connector Path */}
+          <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden px-4 md:px-12 py-10">
+            <svg 
+              className="w-full h-full min-h-[1000px] opacity-40 md:opacity-60" 
+              viewBox="0 0 100 1000" 
+              preserveAspectRatio="none"
+              fill="none"
+            >
+              <defs>
+                <linearGradient id="path-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#3b82f6" /> {/* blue-500 */}
+                  <stop offset="50%" stopColor="#10b981" /> {/* emerald-500 */}
+                  <stop offset="100%" stopColor="#f59e0b" /> {/* amber-500 */}
+                </linearGradient>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              
+              <motion.path
+                d="M 50 0 L 50 40 C 50 80 85 100 85 140 C 85 180 15 200 15 240 C 15 280 85 300 85 340 C 85 380 15 400 15 440 C 15 480 85 500 85 540 C 85 580 15 600 15 640 C 15 680 85 700 85 740 C 85 780 15 800 15 840 C 15 880 85 900 85 940 L 85 1000"
+                stroke="url(#path-gradient)"
+                strokeWidth="1.5"
+                strokeDasharray="4 8"
+                strokeLinecap="round"
+                filter="url(#glow)"
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ 
+                  pathLength: 1, 
+                  opacity: 1,
+                  strokeDashoffset: [0, -48]
+                }}
+                transition={{ 
+                  pathLength: { duration: 3, ease: "easeInOut" },
+                  opacity: { duration: 1 },
+                  strokeDashoffset: { duration: 4, repeat: Infinity, ease: "linear" }
+                }}
+              />
+
+              {/* Secondary pulse path */}
+              <motion.path
+                d="M 50 0 L 50 40 C 50 80 85 100 85 140 C 85 180 15 200 15 240 C 15 280 85 300 85 340 C 85 380 15 400 15 440 C 15 480 85 500 85 540 C 85 580 15 600 15 640 C 15 680 85 700 85 740 C 85 780 15 800 15 840 C 15 880 85 900 85 940 L 85 1000"
+                stroke="url(#path-gradient)"
+                strokeWidth="3"
+                strokeLinecap="round"
+                opacity="0.2"
+                initial={{ pathLength: 0 }}
+                animate={{ 
+                  pathLength: 1,
+                  strokeWidth: [2, 4, 2],
+                  opacity: [0.1, 0.3, 0.1]
+                }}
+                transition={{ 
+                  pathLength: { duration: 3, ease: "easeInOut" },
+                  strokeWidth: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+                  opacity: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                }}
+              />
+            </svg>
           </div>
 
           <motion.div 
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="space-y-8 relative"
+            className="space-y-12 md:space-y-24 py-10 relative z-10"
           >
             {RANK_THRESHOLDS.map((rank, idx) => {
               const isUnlocked = currentSrp >= rank.minSrp;
@@ -89,81 +144,125 @@ export const RankedRoadMap: React.FC<RankedRoadMapProps> = ({ onBack, currentSrp
                 ? Math.min(100, Math.max(0, ((currentSrp - rank.minSrp) / (nextRank.minSrp - rank.minSrp)) * 100))
                 : 100;
 
+              const isEven = idx % 2 === 0;
+
               return (
                 <motion.div 
                   key={rank.name}
                   variants={cardVariants}
-                  className="flex gap-6 relative"
+                  whileHover={{ scale: 1.02 }}
+                  className={cn(
+                    "flex flex-col md:flex-row items-center gap-6 md:gap-20 relative w-full",
+                    isEven ? "md:flex-row" : "md:flex-row-reverse"
+                  )}
                 >
-                  {/* Rank Node */}
+                  {/* Rank Island */}
                   <div className="relative z-10 flex-shrink-0">
-                    <div className={cn(
-                      "w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center border transition-all duration-500",
-                      isUnlocked ? "bg-white/10 border-white/20 shadow-lg" : "bg-black/40 border-white/5 opacity-40 grayscale"
-                    )}>
-                      <div className="scale-75 md:scale-100">
-                        <RankBadge rank={rank.name} language={language} size="sm" showName={false} />
-                      </div>
-                    </div>
+                    <RankBadge 
+                      rank={rank.name} 
+                      language={language} 
+                      size="xl" 
+                      variant="roadmap" 
+                      showName={false}
+                      className={cn(
+                        "transition-all duration-700",
+                        !isUnlocked && "opacity-30 grayscale blur-[1px]"
+                      )}
+                    />
+                    
                     {isCurrent && (
                       <motion.div 
-                        layoutId="active-glow"
-                        className="absolute -inset-1 md:-inset-2 bg-blue-500/20 rounded-[24px] blur-xl -z-10"
-                        animate={{ opacity: [0.3, 0.6, 0.3] }}
-                        transition={{ duration: 2, repeat: Infinity }}
+                        layoutId="active-island-glow"
+                        className="absolute -inset-10 bg-blue-500/20 rounded-full blur-[60px] -z-10"
+                        animate={{ 
+                          scale: [1, 1.2, 1],
+                          opacity: [0.3, 0.6, 0.3] 
+                        }}
+                        transition={{ duration: 4, repeat: Infinity }}
                       />
+                    )}
+
+                    {/* Connection Line to Next (Mobile) */}
+                    {nextRank && (
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 h-12 w-0.5 bg-gradient-to-b from-white/10 to-transparent md:hidden" />
                     )}
                   </div>
 
-                  {/* Rank Content */}
+                  {/* Floating Info Card */}
                   <div className={cn(
-                    "flex-1 p-3 md:p-5 rounded-3xl border transition-all duration-500 min-w-0",
+                    "flex-1 w-full max-w-[340px] p-6 rounded-[32px] border backdrop-blur-3xl transition-all duration-500 relative group",
                     isCurrent 
-                      ? "bg-white/10 border-blue-500/30 shadow-[0_0_30px_rgba(59,130,246,0.1)]" 
+                      ? "bg-white/10 border-blue-500/40 shadow-[0_0_50px_rgba(59,130,246,0.15)] ring-1 ring-blue-500/20" 
                       : isUnlocked 
-                        ? "bg-white/5 border-white/10" 
-                        : "bg-black/20 border-white/5 opacity-40"
+                        ? "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 shadow-xl" 
+                        : "bg-black/40 border-white/5 opacity-40"
                   )}>
-                    <div className="flex flex-col sm:flex-row justify-between items-start gap-1 mb-2">
-                      <div className="min-w-0">
-                        <h3 className={cn(
-                          "font-black italic tracking-tight text-sm md:text-lg uppercase truncate",
-                          isUnlocked ? "text-white" : "text-slate-500"
-                        )}>
-                          {(t.ranked.ranks as any)[rank.name.toLowerCase().replace(' ', '') === 'economylegend' ? 'legend' : rank.name.toLowerCase()]}
-                        </h3>
-                        <p className="text-[8px] md:text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                          {isUnlocked ? `✨ ${formatNumber(rank.minSrp)} SRP` : `🔒 ${formatNumber(rank.minSrp)} SRP`}
-                        </p>
-                      </div>
-                      <div className="flex gap-1 shrink-0">
-                        {isUnlocked && !isCurrent && (
-                          <span className="text-[7px] md:text-[10px] bg-emerald-500/20 text-emerald-400 px-1.5 md:px-2 py-0.5 rounded-full font-black uppercase tracking-tighter border border-emerald-500/20">
-                            {t.ranked.unlocked}
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-start gap-4">
+                        <div className="min-w-0">
+                          <span className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] leading-none block mb-1">
+                            {t.ranked.rank}
                           </span>
-                        )}
-                        {isCurrent && (
-                          <span className="text-[7px] md:text-[10px] bg-blue-500/20 text-blue-400 px-1.5 md:px-2 py-0.5 rounded-full font-black uppercase tracking-tighter border border-blue-500/20 animate-pulse">
-                            {t.ranked.current_rank}
-                          </span>
-                        )}
+                          <h3 className={cn(
+                            "font-black italic tracking-tighter text-2xl md:text-3xl uppercase truncate leading-none",
+                            isUnlocked ? "text-white" : "text-slate-500"
+                          )}>
+                            {(t.ranked.ranks as any)[rank.name.toLowerCase().replace(' ', '') === 'economylegend' ? 'legend' : rank.name.toLowerCase()]}
+                          </h3>
+                        </div>
+                        
+                        <div className="shrink-0 pt-1">
+                          {isCurrent ? (
+                            <div className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,1)] animate-pulse" />
+                          ) : isUnlocked ? (
+                            <div className="text-emerald-500">
+                              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                              </svg>
+                            </div>
+                          ) : (
+                            <div className="text-slate-700">
+                              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
                       </div>
+
+                      <div className="flex items-center gap-3">
+                         <span className="text-[11px] font-black text-slate-300 bg-white/5 px-2.5 py-1 rounded-xl border border-white/10 shadow-inner">
+                           ✨ {formatNumber(rank.minSrp)} SRP
+                         </span>
+                         {isCurrent && (
+                           <span className="text-[9px] font-black uppercase tracking-widest text-blue-400 animate-pulse bg-blue-500/10 px-2 py-1 rounded-lg border border-blue-500/20">
+                             {t.ranked.current_rank}
+                           </span>
+                         )}
+                      </div>
+
+                      {isCurrent && nextRank && (
+                        <div className="pt-4 space-y-3">
+                          <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-400">
+                            <span>{t.ranked.next_rank_req}</span>
+                            <span className="text-blue-400">+{formatNumber(nextRank.minSrp - currentSrp)} SRP</span>
+                          </div>
+                          <div className="h-2.5 w-full bg-black/60 rounded-full overflow-hidden p-[2px] ring-1 ring-white/10 shadow-inner">
+                            <motion.div 
+                              initial={{ width: 0 }}
+                              animate={{ width: `${progressToNext}%` }}
+                              transition={{ duration: 2, ease: "circOut" }}
+                              className="h-full bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-400 rounded-full shadow-[0_0_20px_rgba(59,130,246,0.6)]"
+                            />
+                          </div>
+                        </div>
+                      )}
                     </div>
 
-                    {isCurrent && nextRank && (
-                      <div className="mt-4 space-y-2">
-                        <div className="flex justify-between text-[8px] font-black uppercase tracking-widest text-slate-400">
-                          <span>{t.ranked.next_rank_req}</span>
-                          <span className="text-blue-400">{formatNumber(currentSrp)} / {formatNumber(nextRank.minSrp)}</span>
-                        </div>
-                        <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden border border-white/5 p-[1px]">
-                          <motion.div 
-                            initial={{ width: 0 }}
-                            animate={{ width: `${progressToNext}%` }}
-                            transition={{ duration: 1, delay: 0.5 }}
-                            className="h-full bg-gradient-to-r from-blue-600 to-indigo-400 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]"
-                          />
-                        </div>
+                    {/* Decorative corner accent */}
+                    {isCurrent && (
+                      <div className="absolute -top-2 -right-2 w-10 h-10 overflow-hidden pointer-events-none">
+                        <div className="absolute top-0 right-0 w-[141%] h-[141%] bg-blue-500/20 rotate-45 translate-x-[50%] -translate-y-[50%] blur-sm" />
                       </div>
                     )}
                   </div>
