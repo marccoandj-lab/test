@@ -51,11 +51,11 @@ export const Auth: React.FC<AuthProps> = ({ language = 'en' }) => {
             emailRedirectTo: window.location.origin,
           }
         });
-        
+
         console.log("Supabase SignUp response:", { data, error });
 
         if (error) throw error;
-        
+
         // If Supabase returned a session, it means "Confirm Email" is OFF in the dashboard
         if (data.session) {
           console.warn("User was automatically logged in. 'Confirm Email' is likely DISABLED in Supabase Dashboard.");
@@ -122,28 +122,27 @@ export const Auth: React.FC<AuthProps> = ({ language = 'en' }) => {
     <div className="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center p-6 z-50 overflow-hidden">
       {/* Dynamic Background Glow */}
       <div className="absolute inset-0 opacity-20 pointer-events-none transition-all duration-1000">
-        <motion.div 
+        <motion.div
           animate={{
             x: activeTab === 'login' ? '10%' : '-10%',
             backgroundColor: activeTab === 'login' ? '#3b82f6' : '#10b981'
           }}
-          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-[120px]" 
+          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-[120px]"
         />
-        <motion.div 
+        <motion.div
           animate={{
             x: activeTab === 'login' ? '-10%' : '10%',
             backgroundColor: activeTab === 'login' ? '#10b981' : '#3b82f6'
           }}
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-[120px]" 
+          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-[120px]"
         />
       </div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className={`relative z-10 max-w-sm w-full bg-slate-900/40 p-1 rounded-[40px] border transition-all duration-500 shadow-2xl backdrop-blur-2xl ${
-          activeTab === 'login' ? 'border-blue-500/30 shadow-blue-500/10' : 'border-emerald-500/30 shadow-emerald-500/10'
-        }`}
+        className={`relative z-10 max-w-sm w-full bg-slate-900/40 p-1 rounded-[40px] border transition-all duration-500 shadow-2xl backdrop-blur-2xl ${activeTab === 'login' ? 'border-blue-500/30 shadow-blue-500/10' : 'border-emerald-500/30 shadow-emerald-500/10'
+          }`}
       >
         <div className="bg-slate-900/80 p-8 rounded-[38px] space-y-8">
           <div className="text-center space-y-2">
@@ -170,23 +169,20 @@ export const Auth: React.FC<AuthProps> = ({ language = 'en' }) => {
                   <motion.div
                     animate={{ x: activeTab === 'login' ? 0 : '100%' }}
                     transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                    className={`absolute inset-y-1 left-1 w-[calc(50%-4px)] rounded-xl shadow-lg ${
-                      activeTab === 'login' ? 'bg-blue-600' : 'bg-emerald-600'
-                    }`}
+                    className={`absolute inset-y-1 left-1 w-[calc(50%-4px)] rounded-xl shadow-lg ${activeTab === 'login' ? 'bg-blue-600' : 'bg-emerald-600'
+                      }`}
                   />
                   <button
                     onClick={() => { setActiveTab('login'); setMessage(null); }}
-                    className={`flex-1 py-2 text-[10px] font-black uppercase tracking-widest relative z-10 transition-colors ${
-                      activeTab === 'login' ? 'text-white' : 'text-slate-500 hover:text-slate-300'
-                    }`}
+                    className={`flex-1 py-2 text-[10px] font-black uppercase tracking-widest relative z-10 transition-colors ${activeTab === 'login' ? 'text-white' : 'text-slate-500 hover:text-slate-300'
+                      }`}
                   >
                     {t.auth.login}
                   </button>
                   <button
                     onClick={() => { setActiveTab('signup'); setMessage(null); }}
-                    className={`flex-1 py-2 text-[10px] font-black uppercase tracking-widest relative z-10 transition-colors ${
-                      activeTab === 'signup' ? 'text-white' : 'text-slate-500 hover:text-slate-300'
-                    }`}
+                    className={`flex-1 py-2 text-[10px] font-black uppercase tracking-widest relative z-10 transition-colors ${activeTab === 'signup' ? 'text-white' : 'text-slate-500 hover:text-slate-300'
+                      }`}
                   >
                     {t.auth.signup}
                   </button>
@@ -245,14 +241,13 @@ export const Auth: React.FC<AuthProps> = ({ language = 'en' }) => {
                   </AnimatePresence>
 
                   {message && (
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      className={`text-[11px] font-bold p-4 rounded-2xl border ${
-                        message.type === 'success' 
-                          ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' 
+                      className={`text-[11px] font-bold p-4 rounded-2xl border ${message.type === 'success'
+                          ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
                           : 'bg-red-500/10 border-red-500/20 text-red-400'
-                      }`}
+                        }`}
                     >
                       {message.text}
                     </motion.div>
@@ -261,11 +256,10 @@ export const Auth: React.FC<AuthProps> = ({ language = 'en' }) => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className={`w-full text-white font-black py-5 rounded-[20px] shadow-2xl transition-all active:scale-95 disabled:opacity-50 text-xs tracking-widest uppercase ${
-                      activeTab === 'login' 
-                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 shadow-blue-900/40 hover:shadow-blue-500/20' 
+                    className={`w-full text-white font-black py-5 rounded-[20px] shadow-2xl transition-all active:scale-95 disabled:opacity-50 text-xs tracking-widest uppercase ${activeTab === 'login'
+                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 shadow-blue-900/40 hover:shadow-blue-500/20'
                         : 'bg-gradient-to-r from-emerald-600 to-teal-600 shadow-emerald-900/40 hover:shadow-emerald-500/20'
-                    }`}
+                      }`}
                   >
                     {loading ? t.auth.processing : (activeTab === 'login' ? t.auth.login : t.auth.signup)}
                   </button>
@@ -307,7 +301,7 @@ export const Auth: React.FC<AuthProps> = ({ language = 'en' }) => {
 
                 {/* Info Hint for Yahoo/Hotmail users */}
                 {(email.toLowerCase().includes('yahoo') || email.toLowerCase().includes('hotmail') || email.toLowerCase().includes('outlook')) && (
-                  <motion.p 
+                  <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     className="text-center text-[9px] text-slate-600 font-bold uppercase tracking-tight px-4"
@@ -327,7 +321,7 @@ export const Auth: React.FC<AuthProps> = ({ language = 'en' }) => {
                 <div className="w-20 h-20 bg-emerald-500/10 border border-emerald-500/20 rounded-3xl flex items-center justify-center mx-auto text-4xl animate-bounce">
                   📧
                 </div>
-                
+
                 <div className="space-y-2">
                   <h2 className="text-xl font-black text-white">{t.auth.check_inbox}</h2>
                   <p className="text-slate-400 text-xs px-4">
@@ -341,8 +335,8 @@ export const Auth: React.FC<AuthProps> = ({ language = 'en' }) => {
                     disabled={loading || resendTimer > 0}
                     className="w-full bg-emerald-600/10 hover:bg-emerald-600/20 border border-emerald-500/20 text-emerald-400 font-black text-[10px] uppercase tracking-widest py-4 rounded-2xl transition-all disabled:opacity-50"
                   >
-                    {resendTimer > 0 
-                      ? t.auth.resend_cooldown.replace('{seconds}', resendTimer.toString()) 
+                    {resendTimer > 0
+                      ? t.auth.resend_cooldown.replace('{seconds}', resendTimer.toString())
                       : t.auth.resend_email
                     }
                   </button>

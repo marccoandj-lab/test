@@ -35,8 +35,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What defines the 'take-make-dispose' model?", sr: "Šta definiše model 'uzmi-napravi-odloži'?" },
     options: {
-      en: ["Circular economy", "Linear economy", "Sustainable economy", "Green economy"],
-      sr: ["Cirkularna ekonomija", "Linearna ekonomija", "Održiva ekonomija", "Zelena ekonomija"]
+      en: ["Sustainable economy", "Linear economy", "Circular economy", "Green economy"],
+      sr: ["Održiva ekonomija", "Linearna ekonomija", "Cirkularna ekonomija", "Zelena ekonomija"]
     },
     correct: 1,
     explanation: { en: "The linear economy follows a straight path from extraction to waste.", sr: "Linearna ekonomija prati pravolinijski put od eksploatacije do otpada." }
@@ -47,10 +47,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is the primary goal of short-term profit maximization?", sr: "Šta je primarni cilj maksimizacije profita u kratkom roku?" },
     options: {
-      en: ["Long-term stability", "Linear growth", "Resource conservation", "Social equity"],
-      sr: ["Dugoročna stabilnost", "Linearni rast", "Očuvanje resursa", "Socijalna pravda"]
+      en: ["Resource conservation", "Social equity goals", "Long-term stability", "Linear growth trend"],
+      sr: ["Očuvanje prirodnih resursa", "Ciljevi socijalne pravde", "Dugoročna stabilnost sistema", "Linearni rast profita"]
     },
-    correct: 1,
+    correct: 3,
     explanation: { en: "Linear models prioritize immediate growth over long-term sustainability.", sr: "Linearni modeli daju prioritet trenutnom rastu u odnosu na dugoročnu održivost." }
   },
   {
@@ -59,10 +59,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What happens to most products in a linear economy after use?", sr: "Šta se dešava sa većinom proizvoda u linearnoj ekonomiji nakon upotrebe?" },
     options: {
-      en: ["They are recycled", "They become waste", "They are remanufactured", "They are composted"],
-      sr: ["Recikliraju se", "Postaju otpad", "Ponovo se proizvode", "Kompostiraju se"]
+      en: ["They become waste", "They get recycled", "They are remanufactured", "They are composted"],
+      sr: ["Postaju nepotreban otpad", "Oni se recikliraju", "Ponovo se proizvode", "Oni se kompostiraju"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "In linear models, products are typically discarded after their first use.", sr: "U linearnim modelima, proizvodi se obično odbacuju nakon prve upotrebe." }
   },
   {
@@ -71,10 +71,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "Which resource type is heavily exploited in linear models?", sr: "Koji tip resursa se intenzivno eksploatiše u linearnim modelima?" },
     options: {
-      en: ["Renewable", "Finite/Non-renewable", "Atmospheric", "Intangible"],
-      sr: ["Obnovljivi", "Konačni/Neobnovljivi", "Atmosferski", "Nematerijalni"]
+      en: ["Renewable natural assets", "Atmospheric gas components", "Non-renewable finite resources", "Intangible digital products"],
+      sr: ["Obnovljivi prirodni resursi", "Atmosferske komponente vazduha", "Neobnovljivi konačni resursi", "Nematerijalna digitalna imovina"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Linear economy relies on the constant extraction of finite natural resources.", sr: "Linearna ekonomija se oslanja na stalnu eksploataciju konačnih prirodnih resursa." }
   },
   {
@@ -83,10 +83,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'planned obsolescence'?", sr: "Šta je 'planirano zastarevanje'?" },
     options: {
-      en: ["Making products last longer", "Designing products to break or become obsolete", "Recycling old electronics", "Upgrading software regularly"],
-      sr: ["Pravljenje dugovečnijih proizvoda", "Dizajniranje proizvoda da se pokvare ili zastare", "Recikliranje stare elektronike", "Redovno ažuriranje softvera"]
+      en: ["Items lasting longer", "Recycling old devices", "Frequent software updates", "Designing early failure"],
+      sr: ["Pravljenje trajnih stvari", "Recikliranje starih uređaja", "Česta ažuriranja softvera", "Dizajniranje ranog kvara"]
     },
-    correct: 1,
+    correct: 3,
     explanation: { en: "Planned obsolescence encourages frequent replacement of goods.", sr: "Planirano zastarevanje podstiče čestu zamenu robe." }
   },
   {
@@ -95,10 +95,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "Where does most linear waste end up?", sr: "Gde završava većina linearnog otpada?" },
     options: {
-      en: ["Back in production", "Landfills or incineration", "Community gardens", "Digital storage"],
-      sr: ["Nazad u proizvodnji", "Deponije ili spaljivanje", "Zajedničke bašte", "Digitalno skladište"]
+      en: ["Back in production", "In community gardens", "Landfills or incineration", "Digital storage facilities"],
+      sr: ["Nazad u proizvodnji", "Zajedničke gradske bašte", "Deponije ili spaljivanje", "Digitalni skladišni kapaciteti"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Linear waste management focuses on disposal rather than recovery.", sr: "Linearno upravljanje otpadom fokusira se na odlaganje umesto na oporavak." }
   },
   {
@@ -107,8 +107,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is the main driver of cost in a linear model?", sr: "Šta je glavni pokretač troškova u linearnom modelu?" },
     options: {
-      en: ["Recycling logistics", "Raw material extraction", "Ecosystem restoration", "Circular design"],
-      sr: ["Logistika reciklaže", "Ekstrakcija sirovina", "Obnova ekosistema", "Cirkularni dizajn"]
+      en: ["Logistics of recycling", "Raw material extraction", "Ecosystem restoration work", "Modular circular design"],
+      sr: ["Logistika procesa reciklaže", "Ekstrakcija sirovih materijala", "Rad na obnovi ekosistema", "Modularni cirkularni dizajn"]
     },
     correct: 1,
     explanation: { en: "Extracting new materials is the primary cost and activity in linear supply chains.", sr: "Ekstrakcija novih materijala je primarni trošak i aktivnost u linearnim lancima snabdevanja." }
@@ -119,10 +119,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What characterizes linear consumption?", sr: "Šta karakteriše linearnu potrošnju?" },
     options: {
-      en: ["Sharing economy", "High volume, low durability", "Subscription models", "Repair and reuse"],
-      sr: ["Ekonomija deljenja", "Veliki obim, niska trajnost", "Modeli pretplate", "Popravka i ponovna upotreba"]
+      en: ["Sharing economy models", "Repair and reuse culture", "Subscription service plans", "High volume, low durability"],
+      sr: ["Modeli ekonomije deljenja", "Kultura popravke i upotrebe", "Planovi usluga pretplate", "Veliki obim, niska trajnost"]
     },
-    correct: 1,
+    correct: 3,
     explanation: { en: "Linear consumption encourages 'buying more' rather than 'using better'.", sr: "Linearna potrošnja podstiče 'kupovinu više' umesto 'boljeg korišćenja'." }
   },
   {
@@ -131,10 +131,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is a major environmental impact of linear production?", sr: "Koji je glavni uticaj linearne proizvodnje na životnu sredinu?" },
     options: {
-      en: ["Biodiversity increase", "Pollution and resource depletion", "Carbon sequestration", "Water purification"],
-      sr: ["Povećanje biodiverziteta", "Zagađenje i iscrpljivanje resursa", "Skladištenje ugljenika", "Prečišćavanje vode"]
+      en: ["Pollution and resource depletion", "Local biodiversity population increase", "Natural carbon sequestration growth", "Groundwater purification process results"],
+      sr: ["Zagađenje i iscrpljivanje resursa", "Povećanje populacije lokalnog biodiverziteta", "Rast prirodnog skladištenja ugljenika", "Rezultati procesa prečišćavanja podzemnih voda"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "The linear model causes significant damage to ecosystems through waste and emissions.", sr: "Linearni model uzrokuje značajnu štetu ekosistemima kroz otpad i emisije." }
   },
   {
@@ -143,8 +143,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "Why is 'single-use' plastic linear?", sr: "Zašto je 'jednokratna' plastika linearna?" },
     options: {
-      en: ["It lasts forever", "It is designed to be thrown away after one use", "It is made of plants", "It is expensive"],
-      sr: ["Traje zauvek", "Dizajnirana je da se baci nakon jedne upotrebe", "Napravljena je od biljaka", "Skupa je"]
+      en: ["Lasting for generations", "Designed for disposal", "Made from plants", "Expensive to produce"],
+      sr: ["Traje mnogo generacija", "Dizajnirana za odlaganje", "Napravljena od biljaka", "Skupa za proizvodnju"]
     },
     correct: 1,
     explanation: { en: "Single-use items exemplify the 'dispose' part of the linear model.", sr: "Jednokratni predmeti su primer 'odlaganja' u linearnom modelu." }
@@ -155,10 +155,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What does 'downcycling' mean?", sr: "Šta znači 'downcycling'?" },
     options: {
-      en: ["Upgrading a product", "Recycling into lower quality material", "Producing more with less", "Ending production"],
-      sr: ["Unapređenje proizvoda", "Recikliranje u materijal nižeg kvaliteta", "Proizvodnja više sa manje", "Prekid proizvodnje"]
+      en: ["Upgrading product quality", "Increasing total production", "Ending current production", "Lowering material quality"],
+      sr: ["Poboljšanje kvaliteta proizvoda", "Povećanje ukupne proizvodnje", "Prekid trenutne proizvodnje", "Smanjenje kvaliteta materijala"]
     },
-    correct: 1,
+    correct: 3,
     explanation: { en: "Downcycling is often the limit of recycling in linear systems.", sr: "Downcycling je često granica reciklaže u linearnim sistemima." }
   },
   {
@@ -167,8 +167,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is the 'throwaway culture'?", sr: "Šta je 'kultura bacanja'?" },
     options: {
-      en: ["A culture of saving", "Consumer focus on disposable products", "Art made from trash", "Zero-waste lifestyle"],
-      sr: ["Kultura štednje", "Fokus potrošača na jednokratne proizvode", "Umetnost od smeća", "Lifestyle bez otpada"]
+      en: ["Zero-waste lifestyle choice", "Preference for disposable items", "General culture of saving", "Art made from trash"],
+      sr: ["Izbor lifestyle-a bez otpada", "Sklonost ka jednokratnim stvarima", "Opšta kultura štednje", "Umetnost napravljena od smeća"]
     },
     correct: 1,
     explanation: { en: "Throwaway culture is a social result of linear economic incentives.", sr: "Kultura bacanja je društveni rezultat linearnih ekonomskih podsticaja." }
@@ -179,10 +179,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is an externality?", sr: "Šta je eksternalija?" },
     options: {
-      en: ["Internal profit", "Unintended side effect affecting others", "Marketing strategy", "Legal contract"],
-      sr: ["Interni profit", "Nenamerni sporedni efekat koji utiče na druge", "Marketinška strategija", "Pravni ugovor"]
+      en: ["Strategic marketing plan", "Binding legal contract", "Unintended side effect", "Primary internal profit"],
+      sr: ["Strateški marketinški plan", "Obavezujući pravni ugovor", "Nenamerni sporedni efekat", "Primarni interni profit"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Linear models often 'externalize' environmental costs to society.", sr: "Linearni modeli često 'eksternalizuju' ekološke troškove društvu." }
   },
   {
@@ -191,10 +191,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "How does linear economy view natural capital?", sr: "Kako linearna ekonomija posmatra prirodni kapital?" },
     options: {
-      en: ["As a sacred asset", "As an infinite source of raw materials", "As a liability", "As a service provider"],
-      sr: ["Kao svetinju", "Kao beskonačan izvor sirovina", "Kao obavezu", "Kao pružaoca usluga"]
+      en: ["Infinite raw material source", "Sacred and protected asset", "Financial and legal liability", "External ecosystem service provider"],
+      sr: ["Beskonačan izvor sirovih materijala", "Svetu i zaštićenu imovinu", "Finansijsku i pravnu obavezu", "Eksternog pružaoca usluga ekosistema"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Linear models often assume resources are always available and cheap.", sr: "Linearni modeli često pretpostavljaju da su resursi uvek dostupni i jeftini." }
   },
   {
@@ -203,10 +203,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is the main risk of resource scarcity?", sr: "Šta je glavni rizik oskudice resursa?" },
     options: {
-      en: ["Lower prices", "Supply chain disruption", "Faster production", "Better quality"],
-      sr: ["Niže cene", "Prekid lanca snabdevanja", "Brža proizvodnja", "Bolji kvalitet"]
+      en: ["Lower market prices", "Faster industrial production", "Better product quality", "Supply chain disruption"],
+      sr: ["Niže tržišne cene", "Brža industrijska proizvodnja", "Bolji kvalitet proizvoda", "Prekid lanca snabdevanja"]
     },
-    correct: 1,
+    correct: 3,
     explanation: { en: "Relying on finite resources makes linear businesses vulnerable to scarcity.", sr: "Oslanjanje na konačne resurse čini linearne poslove ranjivim na oskudicu." }
   },
   {
@@ -215,8 +215,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'fast fashion'?", sr: "Šta je 'brza moda'?" },
     options: {
-      en: ["Slowly made durable clothes", "Cheap, trendy clothes made quickly", "Handmade traditional wear", "Recycled textile brand"],
-      sr: ["Sporo pravljena trajna odeća", "Jeftina, moderna odeća pravljena brzo", "Ručno rađena tradicionalna odeća", "Brend recikliranog tekstila"]
+      en: ["Slowly made durable luxury clothes", "Cheap trendy clothes made quickly", "Durable handmade traditional wear", "Recycled and sustainable textile brand"],
+      sr: ["Sporo pravljena trajna luksuzna odeća", "Jeftina moderna odeća pravljena brzo", "Trajna ručno rađena odeća", "Reciklirani i održivi brend tekstila"]
     },
     correct: 1,
     explanation: { en: "Fast fashion is a prime example of linear high-turnover consumption.", sr: "Brza moda je glavni primer linearne potrošnje sa brzim obrtom." }
@@ -227,10 +227,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "Which energy source is typically linear?", sr: "Koji izvor energije je tipično linearan?" },
     options: {
-      en: ["Solar", "Coal", "Wind", "Geothermal"],
-      sr: ["Solarna", "Ugalj", "Vatrena", "Geotermalna"]
+      en: ["Geothermal heat", "Solar energy", "Coal fuel", "Wind power"],
+      sr: ["Geotermalna toplota", "Solarna energija", "Ugalj gorivo", "Snaga vetra"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Fossil fuels are extracted, burned (used), and emitted (wasted).", sr: "Fosilna goriva se vade, sagorevaju (koriste) i emituju (otpad)." }
   },
   {
@@ -239,10 +239,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What does 'virgin material' refer to?", sr: "Na šta se odnosi 'devizni/novi materijal' (virgin material)?" },
     options: {
-      en: ["Recycled material", "Material extracted from nature for the first time", "Organic material", "Plastic"],
-      sr: ["Reciklirani materijal", "Materijal izvučen iz prirode po prvi put", "Organski materijal", "Plastika"]
+      en: ["Newly extracted raw material", "Items recycled from products", "Natural organic wood plants", "Common synthetic hard plastic"],
+      sr: ["Materijal izvučen iz prirode", "Stvari reciklirane od proizvoda", "Prirodno organsko drvo biljke", "Obična sintetička tvrda plastika"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Linear economy depends heavily on virgin materials.", sr: "Linearna ekonomija u velikoj meri zavisi od novih (virgin) materijala." }
   },
   {
@@ -251,10 +251,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is the goal of a landfill?", sr: "Šta je cilj deponije?" },
     options: {
-      en: ["To store materials for future use", "To isolate and bury waste", "To generate biodiversity", "To clean the air"],
-      sr: ["Skladištenje materijala za budućnost", "Izolacija i zakopavanje otpada", "Generisanje biodiverziteta", "Prečišćavanje vazduha"]
+      en: ["Isolate and bury waste materials", "Store materials for future use", "Generate high local biodiversity", "Purify and clean the air"],
+      sr: ["Izolacija i zakopavanje otpadnih materijala", "Skladištenje materijala za buduću upotrebu", "Generisanje visokog lokalnog biodiverziteta", "Prečišćavanje i čišćenje vazduha"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Landfills are the final stage of the linear 'dispose' phase.", sr: "Deponije su završna faza linearnog 'odlaganja'." }
   },
   {
@@ -263,8 +263,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "How does linear design affect repairability?", sr: "Kako linearni dizajn utiče na mogućnost popravke?" },
     options: {
-      en: ["Makes it easier", "Often makes it impossible or too expensive", "Encourages DIY culture", "Requires simple tools"],
-      sr: ["Olakšava je", "Često je čini nemogućom ili preskupom", "Podstiče DIY kulturu", "Zahteva jednostavne alate"]
+      en: ["Makes the process much easier", "Design prevents easy product repair", "Encourages a local DIY culture", "Requires only very simple tools"],
+      sr: ["Čini proces mnogo lakšim", "Dizajn sprečava laku popravku proizvoda", "Podstiče lokalnu DIY kulturu", "Zahteva samo veoma jednostavne alate"]
     },
     correct: 1,
     explanation: { en: "Linear products are often glued or sealed to prevent repair.", sr: "Linearni proizvodi su često zalepljeni ili zapečaćeni da bi se sprečila popravka." }
@@ -275,10 +275,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'e-waste'?", sr: "Šta je 'e-otpad'?" },
     options: {
-      en: ["Email spam", "Discarded electronic devices", "Electric car fuel", "Digital currency"],
-      sr: ["Email spam", "Odbačeni elektronski uređaji", "Gorivo za električne automobile", "Digitalna valuta"]
+      en: ["Discarded electronic devices", "Unsolicited email spam", "Electric car fuel", "New digital currency"],
+      sr: ["Odbačeni elektronski uređaji", "Nepoželjna email pošta", "Gorivo za automobile", "Nova digitalna valuta"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Electronics are a fast-growing category of linear waste.", sr: "Elektronika je brzorastuća kategorija linearnog otpada." }
   },
   {
@@ -287,10 +287,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is a 'linear supply chain'?", sr: "Šta je 'linearni lanac snabdevanja'?" },
     options: {
-      en: ["A loop", "A one-way flow of materials", "A network of recyclers", "A community market"],
-      sr: ["Petlja", "Jednosmerni tok materijala", "Mreža reciklera", "Lokalna pijaca"]
+      en: ["One-way material flow", "Continuous circular loop", "Network of recyclers", "Local community market"],
+      sr: ["Jednosmerni tok materijala", "Kontinuirana cirkularna petlja", "Mreža lokalnih reciklera", "Lokalna gradska pijaca"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Linear supply chains move from extraction to disposal without returning.", sr: "Linearni lanci snabdevanja se kreću od ekstrakcije do odlaganja bez povratka." }
   },
   {
@@ -299,10 +299,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is the impact of toxic additives in products?", sr: "Kakav je uticaj toksičnih aditiva u proizvodima?" },
     options: {
-      en: ["They help recycling", "They prevent material recovery", "They make products smell good", "They reduce weight"],
-      sr: ["Pomažu reciklaži", "Sprečavaju oporavak materijala", "Čine da proizvodi mirišu", "Smanjuju težinu"]
+      en: ["Improve the recycling", "Improve product smell", "Prevent material recovery", "Reduce total weight"],
+      sr: ["Poboljšavaju proces reciklaže", "Poboljšavaju miris proizvoda", "Sprečavaju oporavak materijala", "Smanjuju ukupnu težinu"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Toxic additives make it dangerous to recycle linear materials.", sr: "Toksični aditivi čine recikliranje linearnih materijala opasnim." }
   },
   {
@@ -311,8 +311,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'take-back' usually NOT in linear systems?", sr: "Šta 'preuzimanje' (take-back) obično NIJE u linearnim sistemima?" },
     options: {
-      en: ["A marketing stunt", "A way to truly recover all materials", "A rare occurrence", "A cost for the brand"],
-      sr: ["Marketinški trik", "Način da se zaista vrate svi materijali", "Retka pojava", "Trošak za brend"]
+      en: ["Brief marketing stunt", "Effective material recovery", "Very rare occurrence", "Fixed brand cost"],
+      sr: ["Kratak marketinški trik", "Efikasan oporavak materijala", "Veoma retka pojava", "Fiksni trošak brenda"]
     },
     correct: 1,
     explanation: { en: "True material recovery is difficult in systems designed for disposal.", sr: "Istinski oporavak materijala je težak u sistemima dizajniranim za odlaganje." }
@@ -323,10 +323,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "How does the linear model view waste?", sr: "Kako linearni model posmatra otpad?" },
     options: {
-      en: ["As a resource", "As an end-of-pipe problem", "As an investment", "As energy"],
-      sr: ["Kao resurs", "Kao problem na kraju cevi", "Kao investiciju", "Kao energiju"]
+      en: ["End-of-pipe problem", "Valuable future resource", "Strategic long-term investment", "Renewable energy source"],
+      sr: ["Problem na kraju", "Vredan budući resurs", "Stratešku dugoročnu investiciju", "Obnovljivi izvor energije"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Waste is seen as something to be managed, not avoided or reused.", sr: "Otpad se posmatra kao nešto čime treba upravljati, a ne izbegavati ili ponovo koristiti." }
   },
   {
@@ -335,10 +335,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is the 'linear mindset'?", sr: "Šta je 'linearni način razmišljanja'?" },
     options: {
-      en: ["Holistic thinking", "Focusing on isolated parts of the process", "Loop-based logic", "Systemic awareness"],
-      sr: ["Holističko razmišljanje", "Fokusiranje na izolovane delove procesa", "Logika zasnovana na petljama", "Sistemska svest"]
+      en: ["Holistic systemic thinking", "Circular loop-based logic", "Full systemic awareness", "Isolated process focus"],
+      sr: ["Holističko sistemsko razmišljanje", "Cirkularna logika petlje", "Puna sistemska svest", "Fokus na proces"]
     },
-    correct: 1,
+    correct: 3,
     explanation: { en: "Linear thinking ignores the systemic consequences of extraction and waste.", sr: "Linearno razmišljanje ignoriše sistemske posledice ekstrakcije i otpada." }
   },
   {
@@ -347,10 +347,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is the primary motivation for linear businesses?", sr: "Šta je primarna motivacija za linearne biznise?" },
     options: {
-      en: ["Ecological health", "Sales volume and quick turnover", "Product longevity", "Social welfare"],
-      sr: ["Ekološko zdravlje", "Obim prodaje i brz obrt", "Dugovečnost proizvoda", "Socijalno blagostanje"]
+      en: ["Global ecological health", "Extended product longevity", "Quick sales volume", "General social welfare"],
+      sr: ["Globalno ekološko zdravlje", "Produžena dugovečnost proizvoda", "Brz obim prodaje", "Opšte socijalno blagostanje"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Linear profits are often tied to selling more units as fast as possible.", sr: "Linearni profiti su često vezani za prodaju što više jedinica što je brže moguće." }
   },
   {
@@ -359,10 +359,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'incineration with energy recovery' in a linear context?", sr: "Šta je 'spaljivanje sa povratkom energije' u linearnom kontekstu?" },
     options: {
-      en: ["The best possible solution", "A way to justify wasting high-value materials", "Circular economy", "Zero emissions"],
-      sr: ["Najbolje moguće rešenje", "Način da se opravda traćenje vrednih materijala", "Cirkularna ekonomija", "Nulta emisija"]
+      en: ["Way to justify waste", "Best possible solution", "Circular economy practice", "Zero emission strategy"],
+      sr: ["Način opravdanja otpada", "Najbolje moguće rešenje", "Praksa cirkularne ekonomije", "Strategija nulte emisije"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Incineration destroys the material's structural value forever.", sr: "Spaljivanje zauvek uništava strukturnu vrednost materijala." }
   },
   {
@@ -371,8 +371,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "How does linear growth affect the planet's boundaries?", sr: "Kako linearni rast utiče na granice planete?" },
     options: {
-      en: ["It stays within them", "It pushes past them (overshoot)", "It restores them", "It ignores them"],
-      sr: ["Ostaje unutar njih", "Gura ih (premašuje - overshoot)", "Obnavlja ih", "Ignoriše ih"]
+      en: ["Stays within them", "Pushes past them", "Actively restores them", "Completely ignores them"],
+      sr: ["Ostaje unutar njih", "Gura preko njih", "Aktivno ih obnavlja", "Potpuno ih ignoriše"]
     },
     correct: 1,
     explanation: { en: "Linear economy requires more resources than the planet can regenerate.", sr: "Linearna ekonomija zahteva više resursa nego što planeta može da regeneriše." }
@@ -383,10 +383,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'material throughput'?", sr: "Šta je 'materijalni protok' (material throughput)?" },
     options: {
-      en: ["Material saved", "Amount of material flowing through the system", "Recycling rate", "Durability score"],
-      sr: ["Sačuvani materijal", "Količina materijala koja protiče kroz sistem", "Stopa reciklaže", "Ocena trajnosti"]
+      en: ["Total material saved", "Overall recycling rate", "High durability score", "Flow through system"],
+      sr: ["Ukupno sačuvani materijal", "Opšta stopa reciklaže", "Visoka ocena trajnosti", "Tok kroz sistem"]
     },
-    correct: 1,
+    correct: 3,
     explanation: { en: "Linear systems aim for high throughput to drive GDP.", sr: "Linearni sistemi teže velikom protoku kako bi podstakli BDP." }
   },
   {
@@ -395,10 +395,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is the 'rebound effect' in linear efficiency?", sr: "Šta je 'rebound efekat' u linearnoj efikasnosti?" },
     options: {
-      en: ["Saving more", "Efficiency gains leading to more consumption", "Recycling more", "Higher quality"],
-      sr: ["Veća štednja", "Dobici u efikasnosti koji vode većoj potrošnji", "Više reciklaže", "Bolji kvalitet"]
+      en: ["Higher efficiency consumption", "Higher total recycling", "Saving more materials", "Providing better quality"],
+      sr: ["Veća potrošnja efikasnosti", "Veća ukupna reciklaža", "Štednja više materijala", "Pružanje boljeg kvaliteta"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Making linear items cheaper often leads to people buying even more of them.", sr: "Činiti linearne predmete jeftinijim često vodi do toga da ih ljudi kupuju još više." }
   },
   {
@@ -407,8 +407,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is the typical lifespan of a linear smartphone?", sr: "Koliki je tipičan životni vek linearnog smartfona?" },
     options: {
-      en: ["10-15 years", "2-3 years", "50 years", "Forever"],
-      sr: ["10-15 godina", "2-3 godine", "50 godina", "Zauvek"]
+      en: ["Ten years time", "Two years time", "Fifty years time", "Forever and ever"],
+      sr: ["Deset godina vremena", "Dve godine vremena", "Pedeset godina vremena", "Zauvek i zauvek"]
     },
     correct: 1,
     explanation: { en: "Smartphones are often designed for short cycles and frequent upgrades.", sr: "Smartfoni su često dizajnirani za kratke cikluse i česte nadogradnje." }
@@ -419,8 +419,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "Why is repair often more expensive than buying new?", sr: "Zašto je popravka često skuplja od kupovine novog?" },
     options: {
-      en: ["Parts are free", "Labor costs and lack of spare parts", "Products are too simple", "Repair is forbidden"],
-      sr: ["Delovi su besplatni", "Troškovi rada i nedostatak rezervnih delova", "Proizvodi su previše jednostavni", "Popravka je zabranjena"]
+      en: ["Free spare parts", "Costly labor fees", "Simple product design", "Forbidden repair laws"],
+      sr: ["Besplatni rezervni delovi", "Skupi troškovi rada", "Jednostavan dizajn proizvoda", "Zabranjeni zakoni popravke"]
     },
     correct: 1,
     explanation: { en: "Linear systems subsidize extraction but not repair labor.", sr: "Linearni sistemi subvencionišu ekstrakciju, ali ne i rad na popravci." }
@@ -431,8 +431,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'greenwashing'?", sr: "Šta je 'greenwashing'?" },
     options: {
-      en: ["Cleaning parks", "Misleading claims about environmental benefits", "Planting trees", "Saving water"],
-      sr: ["Čišćenje parkova", "Obmanjujuće tvrdnje o ekološkim prednostima", "Sređivanje drveća", "Štednja vode"]
+      en: ["Planting many trees", "Misleading environmental claims", "Cleaning public parks", "Saving drinking water"],
+      sr: ["Sadnja mnogo drveća", "Obmanjujuće ekološke tvrdnje", "Čišćenje javnih parkova", "Štednja pijaće vode"]
     },
     correct: 1,
     explanation: { en: "Linear companies sometimes use greenwashing to hide their impact.", sr: "Linearne kompanije ponekad koriste greenwashing da sakriju svoj uticaj." }
@@ -443,8 +443,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "How does linear farming affect soil?", sr: "Kako linearna poljoprivreda utiče na zemljište?" },
     options: {
-      en: ["Enriches it naturally", "Depletes nutrients and relies on chemicals", "Creates forest", "Purifies groundwater"],
-      sr: ["Prirodno ga obogaćuje", "Iscrpljuje hranljive materije i oslanja se na hemiju", "Stvara šumu", "Prečišćava podzemne vode"]
+      en: ["Enriches it naturally", "Depletes soil nutrients", "Creates new forests", "Purifies deep groundwater"],
+      sr: ["Prirodno ga obogaćuje", "Iscrpljuje hranljive materije", "Stvara nove šume", "Prečišćava duboke vode"]
     },
     correct: 1,
     explanation: { en: "Linear agriculture 'extracts' soil health without returning organic matter.", sr: "Linearna poljoprivreda 'izvlači' zdravlje zemljišta bez vraćanja organske materije." }
@@ -455,8 +455,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'embodied energy'?", sr: "Šta je 'otelovljena energija' (embodied energy)?" },
     options: {
-      en: ["Battery life", "Total energy used to make a product", "Energy used by the user", "Static electricity"],
-      sr: ["Trajanje baterije", "Ukupna energija utrošena na pravljenje proizvoda", "Energija koju troši korisnik", "Statički elektricitet"]
+      en: ["Battery charging life", "Total production energy", "User consumption energy", "Static electricity flow"],
+      sr: ["Trajanje punjenja baterije", "Ukupna proizvodna energija", "Korisnička potrošnja energije", "Tok statičkog elektriciteta"]
     },
     correct: 1,
     explanation: { en: "Linear waste discards all the embodied energy used in production.", sr: "Linearni otpad odbacuje svu otelovljenu energiju utrošenu u proizvodnji." }
@@ -467,8 +467,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is a 'disposable' item?", sr: "Šta je 'jednokratni' (disposable) predmet?" },
     options: {
-      en: ["A tool", "Something intended to be used once and thrown away", "An heirloom", "A high-quality asset"],
-      sr: ["Alat", "Nešto namenjeno jednoj upotrebi pa bacanju", "Porodično nasleđe", "Vredna imovina"]
+      en: ["Durable workshop tool", "Single use object", "Valuable family heirloom", "High quality asset"],
+      sr: ["Trajni radionički alat", "Jednokratni upotrebni predmet", "Vredno porodično nasleđe", "Vredna poslovna imovina"]
     },
     correct: 1,
     explanation: { en: "Disposability is the heart of linear logic.", sr: "Jednokratnost je srce linearne logike." }
@@ -479,10 +479,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What happens to the value of materials in a landfill?", sr: "Šta se dešava sa vrednošću materijala na deponiji?" },
     options: {
-      en: ["It grows", "It is lost (economic leak)", "It stays the same", "It is harvested"],
-      sr: ["Raste", "Gubi se (ekonomsko curenje)", "Ostaje ista", "Skuplja se"]
+      en: ["Economic value lost", "Material value grows", "Value stays same", "Value is harvested"],
+      sr: ["Ekonomski gubitak vrednosti", "Vrednost materijala raste", "Vrednost ostaje ista", "Vrednost se sakuplja"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Landfilling represents a total loss of economic value for that material.", sr: "Odlaganje na deponiju predstavlja potpuni gubitak ekonomske vrednosti tog materijala." }
   },
   {
@@ -491,8 +491,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "Which packaging is most linear?", sr: "Koja ambalaža je najlinearnija?" },
     options: {
-      en: ["Glass bottles for return", "Multi-layer non-recyclable sachets", "Paper bags", "Metal tins"],
-      sr: ["Staklene flaše za povrat", "Višeslojne kesice koje se ne recikliraju", "Papirne kese", "Metalne kutije"]
+      en: ["Reusable glass bottles", "Non-recyclable plastic sachets", "Simple paper bags", "Durable metal tins"],
+      sr: ["Povratne staklene flaše", "Nereciklažne plastične kesice", "Obične papirne kese", "Trajne metalne kutije"]
     },
     correct: 1,
     explanation: { en: "Multi-layer materials are nearly impossible to separate and recycle.", sr: "Višeslojne materijale je skoro nemoguće odvojiti i reciklirati." }
@@ -503,10 +503,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'easy',
       question: { en: "What is the ultimate end of the linear economy?", sr: "Šta je krajnji ishod linearne ekonomije?" },
       options: {
-        en: ["Universal wealth", "Waste and resource depletion", "Infinite growth", "Perfect efficiency"],
-        sr: ["Univerzalno bogatstvo", "Otpad i iscrpljivanje resursa", "Beskonačan rast", "Savršena efikasnost"]
+        en: ["Waste resource depletion", "Universal global wealth", "Infinite economic growth", "Perfect operational efficiency"],
+        sr: ["Iscrpljivanje prirodnih resursa", "Univerzalno globalno bogatstvo", "Beskonačan ekonomski rast", "Savršena operativna efikasnost"]
       },
-      correct: 1,
+      correct: 0,
       explanation: { en: "A linear system on a finite planet eventually runs out of inputs and overflows with waste.", sr: "Linearni sistem na konačnoj planeti na kraju ostaje bez ulaza i biva preplavljen otpadom." }
     },
     // MEDIUM (41-70)
@@ -516,10 +516,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "How does over-exploitation affect raw material prices long-term?", sr: "Kako prekomerna eksploatacija utiče na dugoročnu cenu sirovina?" },
       options: {
-        en: ["Prices decrease due to abundance", "Prices increase due to scarcity", "Prices stay constant", "Prices are eliminated"],
-        sr: ["Cene opadaju zbog obilja", "Cene rastu zbog oskudice", "Cene ostaju konstantne", "Cene se ukidaju"]
+        en: ["Prices rise from scarcity", "Prices are totally removed", "Prices drop from abundance", "Prices remain fully stable"],
+        sr: ["Cene rastu zbog oskudice", "Cene se potpuno ukidaju", "Cene padaju zbog obilja", "Cene ostaju sasvim stabilne"]
       },
-      correct: 1,
+      correct: 0,
       explanation: { en: "As finite resources become harder to extract, their market price inevitably rises.", sr: "Kako konačni resursi postaju teži za eksploataciju, njihova tržišna cena neizbežno raste." }
     },
     {
@@ -528,8 +528,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is 'resource volatility'?", sr: "Šta je 'nestabilnost resursa' (resource volatility)?" },
       options: {
-        en: ["Stable supply", "Unpredictable changes in resource availability and price", "A new recycling technology", "Government regulation"],
-        sr: ["Stabilno snabdevanje", "Nepredvidive promene u dostupnosti i ceni resursa", "Nova tehnologija reciklaže", "Državna regulativa"]
+        en: ["Strict official government rules", "Unpredictable resource price swings", "Highly stable resource supply", "Advanced material recovery tech"],
+        sr: ["Stroga zvanična državna pravila", "Nepredvidive promene cene resursa", "Vrlo stabilno snabdevanje resursima", "Napredna tehnologija oporavka materijala"]
       },
       correct: 1,
       explanation: { en: "Linear businesses face high risks from price swings in raw materials.", sr: "Linearni biznisi se suočavaju sa velikim rizicima od promena cena sirovina." }
@@ -540,10 +540,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is the 'linear lock-in'?", sr: "Šta je 'linearna zarobljenost' (linear lock-in)?" },
       options: {
-        en: ["Being trapped in a recycling loop", "Infrastructure and habits that favor linear models", "A secure material storage", "A legal requirement to recycle"],
-        sr: ["Biti zarobljen u petlji reciklaže", "Infrastruktura i navike koje favorizuju linearne modele", "Sigurno skladište materijala", "Zakonska obaveza recikliranja"]
+        en: ["Infrastructure favoring linear models", "Endless material recycling loops", "Mandatory legal recycling rules", "Secure raw material storage"],
+        sr: ["Infrastruktura favorizuje linearne modele", "Beskonačne petlje reciklaže materijala", "Obavezujuća pravna pravila recikliranja", "Sigurno skladište sirovih materijala"]
       },
-      correct: 1,
+      correct: 0,
       explanation: { en: "Existing systems (like waste collection) are often built only for linear flows.", sr: "Postojeći sistemi (poput sakupljanja otpada) često su izgrađeni samo za linearne tokove." }
     },
     {
@@ -552,8 +552,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "How does the linear model contribute to climate change?", sr: "Kako linearni model doprinosi klimatskim promenama?" },
       options: {
-        en: ["By cooling the planet", "Through high energy use in extraction and disposal", "By promoting electric cars", "Through reforestation"],
-        sr: ["Hlađenjem planete", "Kroz veliku potrošnju energije u ekstrakciji i odlaganju", "Promovisanjem električnih automobila", "Kroz pošumljavanje"]
+        en: ["Active electric car promotion", "Resource extraction and disposal", "Global planet cooling effect", "Large scale global reforestation"],
+        sr: ["Aktivna promocija električnih automobila", "Ekstrakcija resursa i odlaganje", "Globalni efekat hlađenja planete", "Globalno pošumljavanje velikih razmera"]
       },
       correct: 1,
       explanation: { en: "About 45% of CO2 emissions come from material production and land use.", sr: "Oko 45% emisija CO2 dolazi od proizvodnje materijala i korišćenja zemljišta." }
@@ -564,10 +564,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is the 'entropy' problem in linear systems?", sr: "Šta je problem 'entropije' u linearnim sistemima?" },
       options: {
-        en: ["Materials becoming more organized", "Materials becoming dispersed and hard to recover", "Energy becoming cheaper", "Infinite material life"],
-        sr: ["Materijali postaju organizovaniji", "Materijali postaju raspršeni i teški za oporavak", "Energija postaje jeftinija", "Beskonačan život materijala"]
+        en: ["Better material organizational structure", "Infinite material service life", "Hard to recover dispersion", "Cheap industrial energy costs"],
+        sr: ["Bolja organizaciona struktura materijala", "Beskonačan vek trajanja materijala", "Težak oporavak raspršenih materijala", "Jeftini industrijski troškovi energije"]
       },
-      correct: 1,
+      correct: 2,
       explanation: { en: "Mixing and polluting materials increases entropy, making recovery difficult.", sr: "Mešanje i zagađivanje materijala povećava entropiju, čineći oporavak težim." }
     },
     {
@@ -576,10 +576,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "Why is 'extended producer responsibility' (EPR) rare in linear models?", sr: "Zašto je 'proširena odgovornost proizvođača' (EPR) retka u linearnim modelima?" },
       options: {
-        en: ["Producers want to be responsible", "Producers stop caring once the product is sold", "It is too cheap", "Consumers refuse it"],
-        sr: ["Proizvođači žele da budu odgovorni", "Proizvođače prestaje da bude briga čim se proizvod proda", "Previše je jeftino", "Potrošači to odbijaju"]
+        en: ["Lack of post-sale care", "Low total production costs", "High producer social responsibility", "General consumer refusal trends"],
+        sr: ["Nedostatak brige posle prodaje", "Niski ukupni troškovi proizvodnje", "Visoka socijalna odgovornost proizvođača", "Opšti trendovi odbijanja potrošača"]
       },
-      correct: 1,
+      correct: 0,
       explanation: { en: "Linearity separates the 'selling' phase from the 'disposal' phase responsibility.", sr: "Linearnost odvaja fazu 'prodaje' od odgovornosti za fazu 'odlaganja'." }
     },
     {
@@ -588,8 +588,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is the impact of 'perceived obsolescence'?", sr: "Kakav je uticaj 'percipiranog zastarevanja'?" },
       options: {
-        en: ["Actual technical failure", "Believing a product is outdated even if it works", "Better software", "Lower emissions"],
-        sr: ["Stvarni tehnički kvar", "Uverenje da je proizvod zastareo iako još radi", "Bolji softver", "Niže emisije"]
+        en: ["High quality software updates", "Subjective feeling of outdatedness", "Actual functional technical failure", "Lower total industrial emissions"],
+        sr: ["Visokokvalitetna ažuriranja softverskih sistema", "Subjektivni osećaj zastarelosti proizvoda", "Stvarni funkcionalni tehnički kvar", "Niže ukupne industrijske emisije"]
       },
       correct: 1,
       explanation: { en: "Marketing often creates a desire for new things to maintain linear sales.", sr: "Marketing često stvara želju za novim stvarima kako bi se održala linearna prodaja." }
@@ -600,10 +600,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "How does linear economy impact global supply chains?", sr: "Kako linearna ekonomija utiče na globalne lance snabdevanja?" },
       options: {
-        en: ["Simplifies them", "Creates long, fragile chains dependent on extraction sites", "Makes them local", "Increases transparency"],
-        sr: ["Pojednostavljuje ih", "Stvara duge, krhke lance zavisne od mesta ekstrakcije", "Čini ih lokalnim", "Povećava transparentnost"]
+        en: ["Greatly simplifies global logistics", "Increases full system transparency", "Fragile extraction dependent chains", "Promotes local supply networks"],
+        sr: ["Znatno pojednostavljuje globalnu logistiku", "Povećava potpunu transparentnost sistema", "Krhki lanci zavisni ekstrakciji", "Promoviše lokalne mreže snabdevanja"]
       },
-      correct: 1,
+      correct: 2,
       explanation: { en: "Linearity forces businesses to source materials from across the globe.", sr: "Linearnost primorava biznise da nabavljaju materijale širom sveta." }
     },
     {
@@ -612,8 +612,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is 'externalizing' environmental costs?", sr: "Šta je 'eksternalizacija' ekoloških troškova?" },
       options: {
-        en: ["Paying for cleanup", "Letting society and nature pay for the damage", "Investing in green tech", "Reducing waste"],
-        sr: ["Plaćanje čišćenja", "Puštanje društva i prirode da plate za štetu", "Investiranje u zelenu tehnologiju", "Smanjenje otpada"]
+        en: ["Actively reducing total waste", "Passing costs to society", "Investing in green technology", "Paying for full cleanup"],
+        sr: ["Aktivno smanjenje ukupnog otpada", "Prenošenje troškova na društvo", "Investiranje u zelenu tehnologiju", "Plaćanje potpunog čišćenja otpada"]
       },
       correct: 1,
       explanation: { en: "Linear business models often don't include the cost of pollution in the price.", sr: "Linearni biznis modeli često ne uključuju trošak zagađenja u cenu." }
@@ -624,10 +624,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "Why is most recycling actually 'downcycling'?", sr: "Zašto je većina reciklaže zapravo 'downcycling'?" },
       options: {
-        en: ["Lack of technology", "Material degradation during use and processing", "It is a choice", "For better colors"],
-        sr: ["Nedostatak tehnologije", "Degradacija materijala tokom upotrebe i obrade", "To je izbor", "Zbog boljih boja"]
+        en: ["General lack of technology", "Namerni strateški poslovni izbor", "Material degradation during processing", "Obtaining better product colors"],
+        sr: ["Opšti nedostatak moderne tehnologije", "Namerni strateški poslovni izbor", "Degradacija materijala tokom obrade", "Dobijanje boljih boja proizvoda"]
       },
-      correct: 1,
+      correct: 2,
       explanation: { en: "In linear systems, materials are often mixed, making high-quality recovery hard.", sr: "U linearnim sistemima, materijali su često pomešani, što otežava kvalitetan oporavak." }
     },
     {
@@ -636,8 +636,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is the relationship between GDP and material use in linear models?", sr: "Kakav je odnos između BDP-a i upotrebe materijala u linearnim modelima?" },
       options: {
-        en: ["Decoupled", "Coupled (they grow together)", "Inverse", "None"],
-        sr: ["Razdvojen (decoupled)", "Povezan (rastu zajedno)", "Inverzan", "Nikakav"]
+        en: ["No relationship", "Positively coupled", "Strongly decoupled", "Strictly inverse"],
+        sr: ["Nema povezanosti", "Pozitivno povezan", "Potpuno razdvojen", "Strogo inverzan"]
       },
       correct: 1,
       explanation: { en: "Linear growth usually means extracting and wasting more materials.", sr: "Linearni rast obično znači ekstrakciju i traćenje više materijala." }
@@ -648,10 +648,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "How does the linear model view biodiversity?", sr: "Kako linearni model posmatra biodiverzitet?" },
       options: {
-        en: ["As an asset", "As a resource to be harvested or an obstacle", "As a shareholder", "As a customer"],
-        sr: ["Kao imovinu", "Kao resurs za eksploataciju ili prepreku", "Kao akcionara", "Kao kupca"]
+        en: ["Resource or obstacle", "Strategic long-term asset", "Essential shareholder", "Primary target customer"],
+        sr: ["Resurs ili prepreku", "Strateška dugoročna imovina", "Suštinski akcionar", "Primarni ciljni kupac"]
       },
-      correct: 1,
+      correct: 0,
       explanation: { en: "Linear progress often ignores its impact on biological diversity.", sr: "Linearni napredak često ignoriše svoj uticaj na biološku raznolikost." }
     },
     {
@@ -660,8 +660,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is 'material leakage'?", sr: "Šta je 'curenje materijala' (material leakage)?" },
       options: {
-        en: ["Spilling liquids", "Materials leaving the economic cycle as waste", "Theft", "Exporting goods"],
-        sr: ["Prosipanje tečnosti", "Materijali koji napuštaju ekonomski ciklus kao otpad", "Krađa", "Izvoz robe"]
+        en: ["Exporting finished goods", "Waste leaving the cycle", "Theft of raw materials", "Accidental liquid spills"],
+        sr: ["Izvoz gotovih proizvoda", "Otpad napušta ciklus", "Krađa sirovih materijala", "Slučajno prosipanje tečnosti"]
       },
       correct: 1,
       explanation: { en: "Linear economy is defined by constant material leakage into the environment.", sr: "Linearnu ekonomiju definiše stalno curenje materijala u životnu sredinu." }
@@ -672,10 +672,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "Why is the linear model socially risky?", sr: "Zašto je linearni model društveno rizičan?" },
       options: {
-        en: ["It creates too many jobs", "It can lead to resource wars and health issues", "It is too stable", "It empowers everyone"],
-        sr: ["Stvara previše poslova", "Može dovesti do ratova za resurse i zdravstvenih problema", "Previše je stabilan", "Ona osnažuje sve"]
+        en: ["Causes wars and health risks", "Creates excessive job roles", "Empowers all global citizens", "System remains too stable"],
+        sr: ["Uzrokuje ratove i rizike", "Stvara preveliki broj poslova", "Osnažuje sve svetske građane", "Sistem ostaje previše stabilan"]
       },
-      correct: 1,
+      correct: 0,
       explanation: { en: "Inequity in resource access and pollution impacts the most vulnerable.", sr: "Nepravda u pristupu resursima i zagađenju utiče na najranjivije." }
     },
     {
@@ -684,8 +684,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What characterizes linear investment?", sr: "Šta karakteriše linearno investiranje?" },
       options: {
-        en: ["Focus on ESG", "Focus on quarterly financial returns", "Long-term legacy", "Circular infrastructure"],
-        sr: ["Fokus na ESG", "Fokus na kvartalne finansijske prinose", "Dugoročno nasleđe", "Cirkularna infrastruktura"]
+        en: ["Long-term social legacy", "Quarterly profit focus", "Focus on ESG goals", "Circular city systems"],
+        sr: ["Dugoročno društveno nasleđe", "Kvartalni profitni fokus", "Fokus na ESG ciljeve", "Cirkularni gradski sistemi"]
       },
       correct: 1,
       explanation: { en: "Investors often demand quick profits, favoring short-term linear tactics.", sr: "Investitori često zahtevaju brzi profit, favorizujući kratkoročne linearne taktike." }
@@ -696,10 +696,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is 'take-back' inflation?", sr: "Šta je 'inflacija preuzimanja'?" },
       options: {
-        en: ["Higher prices", "When collection costs more than the material value", "More recycling", "Currency devaluation"],
-        sr: ["Više cene", "Kada sakupljanje košta više od vrednosti materijala", "Više reciklaže", "Devalvacija valute"]
+        en: ["Higher market retail prices", "Local currency devaluation", "Collection costs > value", "More efficient recycling"],
+        sr: ["Više maloprodajne cene", "Lokalna devalvacija valute", "Trošak sakupljanja > vrednosti", "Efikasnije recikliranje"]
       },
-      correct: 1,
+      correct: 2,
       explanation: { en: "Linear products are often so cheap or complex that collecting them is unprofitable.", sr: "Linearni proizvodi su često toliko jeftini ili složeni da je njihovo sakupljanje neprofitabilno." }
     },
     {
@@ -708,10 +708,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is 'planned obsolescence' in software?", sr: "Šta je 'planirano zastarevanje' u softveru?" },
       options: {
-        en: ["Updates that slow down old devices", "Security patches", "Free trials", "Open source"],
-        sr: ["Ažuriranja koja usporavaju stare uređaje", "Sigurnosne zakrpe", "Besplatne probe", "Open source"]
+        en: ["Open source software", "Critical security patches", "Updates slowing old hardware", "Limited free trials"],
+        sr: ["Softver otvorenog koda", "Kritične sigurnosne zakrpe", "Ažuriranja usporavaju hardver", "Ograničene besplatne probe"]
       },
-      correct: 0,
+      correct: 2,
       explanation: { en: "Software can be used to force users to buy new hardware.", sr: "Softver se može koristiti da natera korisnike da kupe novi hardver." }
     },
     {
@@ -720,10 +720,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "How does linear design impact disassembly?", sr: "Kako linearni dizajn utiče na rasklapanje?" },
       options: {
-        en: ["Standardized tools", "Permanent bonding (glues/welds)", "Modular parts", "Clear labels"],
-        sr: ["Standardizovani alati", "Trajno spajanje (lepkovi/zavarivanje)", "Modularni delovi", "Jasne oznake"]
+        en: ["Modular replaceable parts", "Standardized repair tools", "Permanent glues and welds", "Clear instructional labels"],
+        sr: ["Modularni zamenljivi delovi", "Standardni alati za popravku", "Trajni lepkovi i zavarivanje", "Jasne oznake sa uputstvom"]
       },
-      correct: 1,
+      correct: 2,
       explanation: { en: "Linear products are designed to be cheap to assemble, not easy to disassemble.", sr: "Linearni proizvodi su dizajnirani da budu jeftini za sklapanje, a ne laki za rasklapanje." }
     },
     {
@@ -732,10 +732,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is the 'linear efficiency trap'?", sr: "Šta je 'linearna zamka efikasnosti'?" },
       options: {
-        en: ["Being too efficient", "Being efficient at doing the wrong thing", "Recycling perfectly", "Saving energy"],
-        sr: ["Biti previše efikasan", "Biti efikasan u rađenju pogrešne stvari", "Savršeno recikliranje", "Štednja energije"]
+        en: ["Efficiency in wrong goals", "Perfect recycling systems", "Standard energy saving", "Overly efficient processes"],
+        sr: ["Efikasnost u pogrešnom", "Savršeni sistemi reciklaže", "Standardna štednja energije", "Previše efikasni procesi"]
       },
-      correct: 1,
+      correct: 0,
       explanation: { en: "Making a linear process 'efficient' still results in waste, just faster.", sr: "Učiniti linearni proces 'efikasnim' i dalje rezultira otpadom, samo brže." }
     },
     {
@@ -744,10 +744,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is the role of advertising in linearity?", sr: "Koja je uloga oglašavanja u linearnosti?" },
       options: {
-        en: ["Educational", "To stimulate continuous demand for new goods", "To promote repair", "To save resources"],
-        sr: ["Edukativna", "Stimulisanje stalne potražnje za novom robom", "Promovisanje popravke", "Ušteda resursa"]
+        en: ["Stimulating demand", "General education", "Saving resources", "Promoting repair"],
+        sr: ["Stimulacija tražnje", "Opšta edukacija", "Ušteda resursa", "Promocija popravke"]
       },
-      correct: 1,
+      correct: 0,
       explanation: { en: "Advertising drives the high consumption needed for linear growth.", sr: "Oglašavanje podstiče veliku potrošnju neophodnu za linearni rast." }
     },
     {
@@ -756,10 +756,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is a 'linear city'?", sr: "Šta je 'linearni grad'?" },
       options: {
-        en: ["A city in a line", "A city that extracts resources and exports waste", "A walkable city", "A smart city"],
-        sr: ["Grad u liniji", "Grad koji uzima resurse i izvozi otpad", "Grad po meri pešaka", "Pametan grad"]
+        en: ["Resource extracting waste exporting", "Highly walkable urban center", "Uniform linear city structure", "Advanced smart city infrastructure"],
+        sr: ["Ekstrakcija resursa izvoz otpada", "Visoko prohodan gradski centar", "Jedinstvena linearna struktura grada", "Napredna infrastruktura pametnog grada"]
       },
-      correct: 1,
+      correct: 0,
       explanation: { en: "Most modern cities function as linear consumers of rural resources.", sr: "Većina modernih gradova funkcioniše kao linearni potrošači ruralnih resursa." }
     },
     {
@@ -768,10 +768,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is 'carbon leakage'?", sr: "Šta je 'curenje ugljenika' (carbon leakage)?" },
       options: {
-        en: ["Gas leak", "Moving production to countries with lower emissions rules", "Tree planting", "Carbon capture"],
-        sr: ["Curenje gasa", "Premeštanje proizvodnje u zemlje sa labavijim pravilima o emisiji", "Sadnja drveća", "Hvatanje ugljenika"]
+        en: ["Advanced carbon capture tech", "Accidental natural gas leak", "Moving to low emissions", "Active urban tree planting"],
+        sr: ["Napredna tehnologija hvatanja ugljenika", "Slučajno curenje prirodnog gasa", "Selidba u niske emisije", "Aktivna gradska sadnja drveća"]
       },
-      correct: 1,
+      correct: 2,
       explanation: { en: "Linear companies often move to avoid environmental costs.", sr: "Linearne kompanije se često sele kako bi izbegle ekološke troškove." }
     },
     {
@@ -780,8 +780,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "How does linearity impact water?", sr: "Kako linearnost utiče na vodu?" },
       options: {
-        en: ["Closed loop usage", "Pollution and over-extraction from basins", "Purification", "Rainmaking"],
-        sr: ["Upotreba u zatvorenom krugu", "Zagađenje i prekomerna ekstrakcija iz slivova", "Prečišćavanje", "Pravljenje kiše"]
+        en: ["Water purification system process", "Pollution and over extraction", "Artificial industrial rainmaking methods", "Sustainable closed loop usage"],
+        sr: ["Proces sistema prečišćavanja vode", "Zagađenje i prekomerna ekstrakcija", "Veštačke industrijske metode pravljenja kiše", "Održiva upotreba zatvorenog kruga"]
       },
       correct: 1,
       explanation: { en: "Linear industry often discharges contaminated water as waste.", sr: "Linearna industrija često ispušta zagađenu vodu kao otpad." }
@@ -792,10 +792,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is 'biological nutrient' loss?", sr: "Gubitak 'bioloških hranljivih materija'?" },
       options: {
-        en: ["Weight loss", "Organic waste ending up in landfills instead of soil", "Farming", "Eating healthy"],
-        sr: ["Gubitak težine", "Organski otpad koji završava na deponiji umesto u zemlji", "Poljoprivreda", "Zdrava ishrana"]
+        en: ["Gradual biological weight loss", "Eating healthy organic food", "Organic waste landfill ending", "Standard industrial farming practices"],
+        sr: ["Postepeni biološki gubitak težine", "Ishrana zdravom organskom hranom", "Završetak organskog otpada deponiji", "Standardne industrijske poljoprivredne prakse"]
       },
-      correct: 1,
+      correct: 2,
       explanation: { en: "Linear systems prevent organic matter from returning to the ecosystem.", sr: "Linearni sistemi sprečavaju vraćanje organske materije u ekosistem." }
     },
     {
@@ -804,10 +804,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is 'single-stream' recycling's linear flaw?", sr: "Koja je linearna mana 'single-stream' reciklaže (sve u jednu kantu)?" },
       options: {
-        en: ["It is too easy", "High contamination and lower material quality", "It is too fast", "It saves money"],
-        sr: ["Previše je lako", "Velika kontaminacija i niži kvalitet materijala", "Previše je brzo", "Štedi novac"]
+        en: ["Contamination lower material quality", "Extremely fast processing speeds", "Extremely easy processing steps", "Saving total operational money"],
+        sr: ["Kontaminacija niži kvalitet materijala", "Izuzetno velike brzine obrade", "Izuzetno laki koraci obrade", "Ušteda ukupnog operativnog novca"]
       },
-      correct: 1,
+      correct: 0,
       explanation: { en: "Mixing everything often makes high-quality recycling impossible.", sr: "Mešanje svega često čini kvalitetnu reciklažu nemogućom." }
     },
     {
@@ -816,10 +816,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "How does linearity view 'repair' as a business?", sr: "Kako linearnost posmatra 'popravku' kao biznis?" },
       options: {
-        en: ["As a core service", "As a threat to new product sales", "As an opportunity", "As a requirement"],
-        sr: ["Kao osnovnu uslugu", "Kao pretnju prodaji novih proizvoda", "Kao priliku", "Kao obavezu"]
+        en: ["Mandatory legal system requirement", "Primary core business service", "Threat to new sales", "Strategic future business opportunity"],
+        sr: ["Obavezujući pravni sistemski zahtev", "Primarna osnovna poslovna usluga", "Pretnja novoj prodaji proizvoda", "Strateška buduća poslovna prilika"]
       },
-      correct: 1,
+      correct: 2,
       explanation: { en: "Selling new is usually more profitable than repairing in linear models.", sr: "Prodaja novog je obično profitabilnija od popravke u linearnim modelima." }
     },
     {
@@ -828,8 +828,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is 'resource nationalism'?", sr: "Šta je 'resursni nacionalizam'?" },
       options: {
-        en: ["Recycling together", "Countries controlling their finite resources as power", "Global sharing", "Free trade"],
-        sr: ["Zajednička reciklaža", "Zemlje koje kontrolišu svoje konačne resurse kao moć", "Globalno deljenje", "Slobodna trgovina"]
+        en: ["Global resource sharing programs", "Countries controlling finite resources", "Active shared recycling efforts", "International free trade agreements"],
+        sr: ["Globalni programi deljenja resursa", "Zemlje kontrolišu konačne resurse", "Aktivni zajednički napori reciklaže", "Međunarodni sporazumi slobodne trgovine"]
       },
       correct: 1,
       explanation: { en: "Scarcity leads to political tension over material control.", sr: "Oskudica vodi do političkih tenzija oko kontrole materijala." }
@@ -840,10 +840,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is a 'legacy' environmental problem?", sr: "Šta je 'nasleđeni' ekološki problem?" },
       options: {
-        en: ["New technology", "Contamination left for future generations to clean", "Clean energy", "Heritage site"],
-        sr: ["Nova tehnologija", "Zagađenje ostavljeno budućim generacijama da očiste", "Čista energija", "Kulturna baština"]
+        en: ["Advanced modern industrial technology", "Renewable clean energy sources", "Future generations cleanup costs", "Protected cultural heritage site"],
+        sr: ["Napredna moderna industrijska tehnologija", "Obnovljivi izvori čiste energije", "Troškovi čišćenja budućih generacija", "Zaštićeni lokalitet kulturne baštine"]
       },
-      correct: 1,
+      correct: 2,
       explanation: { en: "Linearity 'borrows' from the future and leaves the cleanup cost.", sr: "Linearnost 'pozajmljuje' od budućnosti i ostavlja trošak čišćenja." }
     },
     {
@@ -852,10 +852,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is 'downstream' impact?", sr: "Šta je 'nizvodni' (downstream) uticaj?" },
       options: {
-        en: ["Fishing", "Impact of a product after it is sold/discarded", "Impact of raw extraction", "Internal office cost"],
-        sr: ["Pecanje", "Uticaj proizvoda nakon što je prodat/odbačen", "Uticaj sirove ekstrakcije", "Interni kancelarijski trošak"]
+        en: ["Post sale product impact", "Internal company office cost", "Commercial deep sea fishing", "Initial raw extraction impact"],
+        sr: ["Uticaj proizvoda posle prodaje", "Interni kancelarijski trošak kompanije", "Komercijalni dubokomorski ribolov", "Početni uticaj sirove ekstrakcije"]
       },
-      correct: 1,
+      correct: 0,
       explanation: { en: "Linear companies often ignore what happens downstream.", sr: "Linearne kompanije često ignorišu šta se dešava 'nizvodno' (posle prodaje)." }
     },
     {
@@ -864,10 +864,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'medium',
       question: { en: "What is 'material intensity'?", sr: "Šta je 'materijalni intenzitet'?" },
       options: {
-        en: ["Strong materials", "Amount of material needed to generate $1 of GDP", "Density", "Hardness"],
-        sr: ["Jaki materijali", "Količina materijala potrebna za generisanje 1$ BDP-a", "Gustina", "Tvrdoća"]
+        en: ["Overall material surface hardness", "Total physical substance density", "Material needed per dollar", "Extremely strong industrial materials"],
+        sr: ["Opšta površinska tvrdoća materijala", "Ukupna gustina fizičke supstance", "Materijal potreban po dolaru", "Izuzetno jaki industrijski materijali"]
       },
-      correct: 1,
+      correct: 2,
       explanation: { en: "Linearity usually requires high material intensity.", sr: "Linearnost obično zahteva veliki materijalni intenzitet." }
     },
 
@@ -878,20 +878,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'hard',
       question: { en: "Explain the concept of 'externalities' in linear pollution.", sr: "Objasnite koncept eksternalija u kontekstu zagađenja u linearnom modelu." },
       options: {
-        en: [
-          "Internal company costs",
-          "Costs of production not reflected in the market price",
-          "Export duties",
-          "Cleaning fees"
-        ],
-        sr: [
-          "Interni troškovi kompanije",
-          "Troškovi proizvodnje koji se ne vide u tržišnoj ceni",
-          "Izvozne dažbine",
-          "Naknade za čišćenje"
-        ]
+        en: ["Market price production costs", "International product export duties", "Internal company operational costs", "Standard municipal cleaning fees"],
+        sr: ["Tržišna cena troškova proizvodnje", "Međunarodne izvozne dažbine proizvoda", "Interni operativni troškovi kompanije", "Standardne opštinske naknade čišćenja"]
       },
-      correct: 1,
+      correct: 0,
       explanation: { en: "Society pays for health and environmental damage, not the buyer or seller.", sr: "Društvo plaća za štetu po zdravlje i okolinu, a ne kupac ili prodavac." }
     },
     {
@@ -900,10 +890,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'hard',
       question: { en: "What is the 'Jevons Paradox'?", sr: "Šta je 'Dževonsov paradoks' (Jevons Paradox)?" },
       options: {
-        en: ["Efficiency leads to lower use", "Efficiency increases the total use of a resource", "Recycling is impossible", "Growth is infinite"],
-        sr: ["Efikasnost vodi manjoj upotrebi", "Efikasnost povećava ukupnu upotrebu resursa", "Reciklaža je nemoguća", "Rast je beskonačan"]
+        en: ["Economic growth is infinite", "Efficiency lowers total use", "Efficiency increases total use", "Recycling is totally impossible"],
+        sr: ["Ekonomski rast je beskonačan", "Efikasnost smanjuje ukupnu upotrebu", "Efikasnost povećava ukupnu upotrebu", "Reciklaža je potpuno nemoguća"]
       },
-      correct: 1,
+      correct: 2,
       explanation: { en: "In linear systems, tech progress often speeds up resource depletion.", sr: "U linearnim sistemima, tehnički napredak često ubrzava iscrpljivanje resursa." }
     },
     {
@@ -912,8 +902,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'hard',
       question: { en: "What is 'thermodynamic irreversible loss'?", sr: "Šta je 'termodinamički nepovratni gubitak'?" },
       options: {
-        en: ["Energy saving", "When materials are so dispersed they can't be recovered", "Battery discharge", "Heat"],
-        sr: ["Ušteda energije", "Kada su materijali toliko raspršeni da se ne mogu povratiti", "Pražnjenje baterije", "Toplota"]
+        en: ["Total internal battery discharge", "Irrecoverable material resource dispersion", "Waste heat industrial byproduct", "Sustainable industrial energy saving"],
+        sr: ["Potpuno unutrašnje pražnjenje baterije", "Nepovratna disperzija materijalnih resursa", "Otpadna toplota industrijski nusproizvod", "Održiva industrijska ušteda energije"]
       },
       correct: 1,
       explanation: { en: "Mixing metals in electronics often leads to irreversible losses.", sr: "Mešanje metala u elektronici često vodi do nepovratnih gubitaka." }
@@ -924,10 +914,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'hard',
       question: { en: "What is 'resource decoupling'?", sr: "Šta je 'razdvajanje resursa' (resource decoupling)?" },
       options: {
-        en: ["Splitting materials", "Growing GDP without growing material use", "Quitting mining", "Recycling plastic"],
-        sr: ["Cepanje materijala", "Rast BDP-a bez rasta upotrebe materijala", "Prestanak rudarenja", "Recikliranje plastike"]
+        en: ["Active splitting industrial materials", "Advanced plastic recycling systems", "Decoupling GDP material growth", "Quitting all mining activities"],
+        sr: ["Aktivno cepanje industrijskih materijala", "Napredni sistemi recikliranja plastike", "Razdvajanje BDP materijal rasta", "Prekid svih rudarskih aktivnosti"]
       },
-      correct: 1,
+      correct: 2,
       explanation: { en: "Linearity makes absolute decoupling extremely difficult.", sr: "Linearnost čini apsolutno razdvajanje (decoupling) ekstremno teškim." }
     },
     {
@@ -936,10 +926,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'hard',
       question: { en: "What is the 'linear subsidy' from nature?", sr: "Šta je 'linearna subvencija' od prirode?" },
       options: {
-        en: ["Government grants", "Unpaid ecological services and free resources", "Taxes", "Charity"],
-        sr: ["Državni grantovi", "Neplaćene ekološke usluge i besplatni resursi", "Porezi", "Dobrotvorne svrhe"]
+        en: ["Unpaid ecological service resources", "Standard internal company taxes", "Major government financial grants", "Private non profit charity"],
+        sr: ["Neplaćeni resursi ekoloških usluga", "Standardni interni porezi kompanije", "Glavni državni finansijski grantovi", "Privatna neprofitna dobrotvorna organizacija"]
       },
-      correct: 1,
+      correct: 0,
       explanation: { en: "Linear profits often rely on not paying the true cost of natural capital.", sr: "Linearni profiti se često oslanjaju na neplaćanje stvarne cene prirodnog kapitala." }
     },
     {
@@ -948,10 +938,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'hard',
       question: { en: "What is 'path dependency' in linear systems?", sr: "Šta je 'zavisnost od puta' (path dependency) u linearnim sistemima?" },
       options: {
-        en: ["GPS tracking", "Past decisions making it hard to change current models", "Supply routes", "Road construction"],
-        sr: ["GPS praćenje", "Prošle odluke koje otežavaju promenu trenutnih modela", "Rute snabdevanja", "Izgradnja puteva"]
+        en: ["Global industrial supply routes", "Advanced GPS tracking systems", "Large scale road construction", "Past decisions block change"],
+        sr: ["Globalne industrijske rute snabdevanja", "Napredni sistemi GPS praćenja", "Izgradnja puteva velikih razmera", "Prošle odluke blokiraju promene"]
       },
-      correct: 1,
+      correct: 3,
       explanation: { en: "Massive investment in linear infra makes switching to circular slow.", sr: "Ogromna investicija u linearnu infrastrukturu usporava prelazak na cirkularnu." }
     },
     {
@@ -960,8 +950,8 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'hard',
       question: { en: "What is 'toxic lock-in'?", sr: "Šta je 'toksična zarobljenost' (toxic lock-in)?" },
       options: {
-        en: ["Being stuck in a lab", "Materials that can't be recycled due to harmful additives", "Chemical storage", "Poisoning"],
-        sr: ["Biti zaglavljen u laboratoriji", "Materijali koji se ne mogu reciklirati zbog štetnih aditiva", "Skladištenje hemikalija", "Trovanje"]
+        en: ["Acute industrial chemical poisoning", "Harmful additives prevent recycling", "Being stuck inside labs", "Large chemical storage facility"],
+        sr: ["Akutno industrijsko hemijsko trovanje", "Štetni aditivi sprečavaju reciklažu", "Biti zaglavljen unutar laboratorija", "Veliko postrojenje skladištenja hemikalija"]
       },
       correct: 1,
       explanation: { en: "Design choices from decades ago still prevent recycling today.", sr: "Dizajnerski izbori od pre nekoliko decenija i danas sprečavaju reciklažu." }
@@ -972,10 +962,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'hard',
       question: { en: "What is the 'Tragedy of the Commons' in linearity?", sr: "Šta je 'tragedija zajedničkog dobra' u linearnosti?" },
       options: {
-        en: ["Poor people", "Individuals over-extracting shared resources for self-interest", "Lack of parks", "Pollution"],
-        sr: ["Siromašni ljudi", "Pojedinci koji previše eksploatišu zajedničke resurse zbog ličnog interesa", "Nedostatak parkova", "Zagađenje"]
+        en: ["Poor global population segments", "General industrial environmental pollution", "Selfish shared resource extraction", "Lack of public parks"],
+        sr: ["Siromašni segmenti svetske populacije", "Opšte industrijsko zagađenje okoline", "Sebična ekstrakcija zajedničkih resursa", "Nedostatak javnih gradskih parkova"]
       },
-      correct: 1,
+      correct: 2,
       explanation: { en: "Linearity encourages taking as much as possible before others do.", sr: "Linearnost podstiče uzimanje što je više moguće pre nego što drugi to urade." }
     },
     {
@@ -984,10 +974,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'hard',
       question: { en: "What is 'planned systemic failure'?", sr: "Šta je 'planirani sistemski neuspeh'?" },
       options: {
-        en: ["A mistake", "When a system is designed to fail at recovery", "Bankruptcy", "Bad weather"],
-        sr: ["Greška", "Kada je sistem dizajniran da ne uspe u oporavku", "Bankrot", "Loše vreme"]
+        en: ["Dizajnirani neuspeh oporavka sistema", "Potpuni korporativni finansijski bankrot", "Jedna slučajna ljudska greška", "Nepredvidivo ekstremno loše vreme"],
+        sr: ["Dizajnirani neuspeh oporavka sistema", "Potpuni korporativni finansijski bankrot", "Jedna slučajna ljudska greška", "Nepredvidivo ekstremno loše vreme"]
       },
-      correct: 1,
+      correct: 0,
       explanation: { en: "Linearity isn't broken; it's performing exactly as designed (to waste).", sr: "Linearnost nije pokvarena; ona radi tačno kako je dizajnirana (da traći)." }
     },
     {
@@ -996,20 +986,10 @@ export const rankedLinearQuizzes: RankedQuestion[] = [
       difficulty: 'hard',
       question: { en: "Explain 'embedded emissions' in global trade.", sr: "Objasnite 'ugrađene emisije' u globalnoj trgovini." },
       options: {
-        en: [
-          "Car exhausts",
-          "CO2 emitted in one country to produce goods consumed in another",
-          "Smoke",
-          "Carbon in soil"
-        ],
-        sr: [
-          "Izduvni gasovi",
-          "CO2 emitovan u jednoj zemlji za proizvodnju robe koja se troši u drugoj",
-          "Dim",
-          "Ugljenik u zemlji"
-        ]
+        en: ["Carbon sequestered in soil", "Car exhaust pipe emissions", "Cross border CO2 emissions", "Industrial chimney smoke clouds"],
+        sr: ["Ugljenik skladišten u zemljištu", "Emisije izduvnih cevi automobila", "Prekogranične emisije CO2 gasova", "Oblaci dima industrijskih dimnjaka"]
       },
-      correct: 1,
+      correct: 2,
       explanation: { en: "Rich linear economies often export their carbon footprint.", sr: "Bogate linearne ekonomije često izvoze svoj ugljenični otisak." }
     },
 ];
@@ -1022,10 +1002,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What does the '3R' acronym stand for?", sr: "Šta znači skraćenica '3R'?" },
     options: {
-      en: ["Reduce, Reuse, Recycle", "Refine, Reform, Rebuild", "Reset, Replace, Restore", "Read, Research, Report"],
-      sr: ["Smanji, Ponovo koristi, Recikliraj", "Prečisti, Reformiši, Ponovo izgradi", "Resetuj, Zameni, Obnovi", "Čitaj, Istraži, Izvesti"]
+      en: ["Refine Reform Rebuild", "Reduce Reuse Recycle", "Read Research Report", "Reset Replace Restore"],
+      sr: ["Prečisti Reformiši Izgradi", "Smanji Koristi Recikliraj", "Čitaj Istraži Izvesti", "Resetuj Zameni Obnovi"]
     },
-    correct: 0,
+    correct: 1,
     explanation: { en: "The 3Rs are the foundation of waste hierarchy in circularity.", sr: "3R su osnova hijerarhije otpada u cirkularnosti." }
   },
   {
@@ -1034,10 +1014,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "Which resources are in focus on the Green board?", sr: "Koji resursi su u fokusu zelene table?" },
     options: {
-      en: ["Non-renewable", "Renewable", "Fossil fuels", "Rare earth metals"],
-      sr: ["Neobnovljivi", "Obnovljivi", "Fosilna goriva", "Retki metali"]
+      en: ["Renewable natural energy sources", "Critical rare earth metals", "Non renewable finite resources", "Polluting ancient fossil fuels"],
+      sr: ["Obnovljivi prirodni izvori energije", "Kritični retki zemni metali", "Neobnovljivi konačni prirodni resursi", "Zagađujuća drevna fosilna goriva"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Circular economy focuses on using renewable resources and keeping materials in use.", sr: "Cirkularna ekonomija se fokusira na korišćenje obnovljivih resursa i očuvanje materijala u upotrebi." }
   },
   {
@@ -1046,10 +1026,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'composting'?", sr: "Šta je 'kompostiranje'?" },
     options: {
-      en: ["Recycling plastic", "Turning organic waste into nutrient-rich soil", "Incinerating paper", "Purifying water"],
-      sr: ["Recikliranje plastike", "Pretvaranje organskog otpada u plodno zemljište", "Spaljivanje papira", "Prečišćavanje vode"]
+      en: ["Industrial scale plastic recycling", "Incinerating used office paper", "Turning waste into soil", "Purifying urban drinking water"],
+      sr: ["Industrijska reciklaža otpadne plastike", "Spaljivanje korišćenog kancelarijskog papira", "Pretvaranje otpada u zemljište", "Prečišćavanje gradske pijaće vode"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Composting returns biological nutrients back to the soil.", sr: "Kompostiranje vraća biološke hranljive materije nazad u zemljište." }
   },
   {
@@ -1058,8 +1038,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What does 'closing the loop' mean?", sr: "Šta znači 'zatvaranje kruga'?" },
     options: {
-      en: ["Ending a business", "Preventing materials from becoming waste", "Locking a warehouse", "Reducing production"],
-      sr: ["Zatvaranje firme", "Sprečavanje da materijali postanu otpad", "Zaključavanje magacina", "Smanjenje proizvodnje"]
+      en: ["Reducing total industrial production", "Preventing material waste generation", "Locking main storage warehouse", "Ending current business operations"],
+      sr: ["Smanjenje ukupne industrijske proizvodnje", "Sprečavanje stvaranja materijalnog otpada", "Zaključavanje glavnog skladišnog magacina", "Zatvaranje trenutnih poslovnih operacija"]
     },
     correct: 1,
     explanation: { en: "Closing the loop means returning materials back into the production cycle.", sr: "Zatvaranje kruga znači vraćanje materijala nazad u proizvodni ciklus." }
@@ -1070,10 +1050,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'reuse'?", sr: "Šta je 'ponovna upotreba'?" },
     options: {
-      en: ["Using an item again for its original purpose", "Throwing it away", "Melting it down", "Burning it for energy"],
-      sr: ["Ponovno korišćenje predmeta za originalnu svrhu", "Bacanje predmeta", "Topljenje materijala", "Spaljivanje za energiju"]
+      en: ["Throwing item away forever", "Melting down used materials", "Using item original purpose", "Burning item energy recovery"],
+      sr: ["Bacanje predmeta zauvek daleko", "Topljenje svih korišćenih materijala", "Korišćenje predmeta originalnu svrhu", "Spaljivanje predmeta energiju oporavka"]
     },
-    correct: 0,
+    correct: 2,
     explanation: { en: "Reuse keeps products at their highest value without processing.", sr: "Ponovna upotreba čuva proizvode u njihovoj najvišoj vrednosti bez obrade." }
   },
   {
@@ -1082,8 +1062,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'repair'?", sr: "Šta je 'popravka'?" },
     options: {
-      en: ["Buying a new one", "Fixing a faulty product to extend its life", "Recycling parts", "Discarding used items"],
-      sr: ["Kupovina novog", "Popravljanje pokvarenog proizvoda radi dužeg trajanja", "Recikliranje delova", "Odbacivanje korišćenih predmeta"]
+      en: ["Buying brand new item", "Fixing product extending life", "Discarding all used items", "Recycling individual component parts"],
+      sr: ["Kupovina potpuno novog predmeta", "Popravka proizvoda produženje života", "Odbacivanje svih korišćenih predmeta", "Recikliranje pojedinačnih komponentnih delova"]
     },
     correct: 1,
     explanation: { en: "Repairing products avoids the need for new material extraction.", sr: "Popravka proizvoda izbegava potrebu za vađenjem novih materijala." }
@@ -1094,8 +1074,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is the 'Sharing Economy'?", sr: "Šta je 'Ekonomija deljenja'?" },
     options: {
-      en: ["Giving away money", "Collective use of products by multiple users", "Selling products", "Opening a bank"],
-      sr: ["Poklanjanje novca", "Kolektivno korišćenje proizvoda od strane više korisnika", "Prodaja proizvoda", "Otvaranje banke"]
+      en: ["Selling mass produced products", "Collective product user access", "Giving away personal money", "Opening new commercial bank"],
+      sr: ["Prodaja masovno proizvedenih proizvoda", "Kolektivni pristup korisnika proizvodu", "Poklanjanje ličnog novca drugima", "Otvaranje nove komercijalne banke"]
     },
     correct: 1,
     explanation: { en: "Sharing models increase the utilization rate of individual products.", sr: "Modeli deljenja povećavaju stopu korišćenja pojedinačnih proizvoda." }
@@ -1106,10 +1086,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'refurbishment'?", sr: "Šta je 'obnova' (refurbishment)?" },
     options: {
-      en: ["Demolishing a building", "Restoring an old product to good working order", "Creating waste", "Extracting coal"],
-      sr: ["Rušenje zgrade", "Vraćanje starog proizvoda u ispravno stanje", "Stvaranje otpada", "Vađenje uglja"]
+      en: ["Extracting raw brown coal", "Demolishing old city building", "Restoring product working order", "Creating more industrial waste"],
+      sr: ["Ekstrakcija sirovog braon uglja", "Rušenje stare gradske zgrade", "Obnova ispravnog stanja proizvoda", "Stvaranje još industrijskog otpada"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Refurbished products are cleaned and repaired for resale.", sr: "Obnovljeni proizvodi se čiste i popravljaju za dalju prodaju." }
   },
   {
@@ -1118,10 +1098,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'remanufacturing'?", sr: "Šta je 'ponovna proizvodnja' (remanufacturing)?" },
     options: {
-      en: ["Industrial-scale restoration of products to 'as new' condition", "Handmade crafts", "Recycling plastic bottles", "Building from scratch"],
-      sr: ["Industrijska obnova proizvoda u stanje 'kao novo'", "Ručna izrada", "Recikliranje plastičnih flaša", "Gradnja od nule"]
+      en: ["Creating handmade local crafts", "Recycling used plastic bottles", "Building completely from scratch", "Industrial scale product restoration"],
+      sr: ["Stvaranje ručno rađenih zanata", "Reciklaža korišćenih plastičnih flaša", "Izgradnja potpuno od nule", "Industrijska obnova proizvoda razmera"]
     },
-    correct: 0,
+    correct: 3,
     explanation: { en: "Remanufacturing uses original parts to build a high-quality product.", sr: "Ponovna proizvodnja koristi originalne delove za izradu visokokvalitetnog proizvoda." }
   },
   {
@@ -1130,22 +1110,21 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'upcycling'?", sr: "Šta je 'upcycling'?" },
     options: {
-      en: ["Recycling into something of lower quality", "Creative reuse of waste to create something higher value", "Buying more things", "Driving a bike uphill"],
-      sr: ["Recikliranje u nešto nižeg kvaliteta", "Kreativna ponovna upotreba otpada za stvaranje veće vrednosti", "Kupovina više stvari", "Vožnja bicikla uzbrdo"]
+      en: ["Recycling lower quality items", "Creative high value reuse", "Buying many more things", "Driving heavy bike uphill"],
+      sr: ["Reciklaža predmeta nižeg kvaliteta", "Kreativna ponovna upotreba vrednosti", "Kupovina mnogo više stvari", "Vožnja teškog bicikla uzbrdo"]
     },
     correct: 1,
     explanation: { en: "Upcycling adds aesthetic or functional value to discarded items.", sr: "Upcycling dodaje estetsku ili funkcionalnu vrednost odbačenim predmetima." }
-  },
-  {
+  },  {
     id: 'c_e_11',
     category: 'circular',
     difficulty: 'easy',
     question: { en: "What is 'design for longevity'?", sr: "Šta je 'dizajn za dugovečnost'?" },
     options: {
-      en: ["Making things break fast", "Designing products to last as long as possible", "Short-term fashion", "Disposable design"],
-      sr: ["Pravljenje stvari da se brzo pokvare", "Dizajniranje proizvoda da traju što duže", "Kratkoročna moda", "Jednokratni dizajn"]
+      en: ["Designing longest lasting products", "Promoting short term fashion", "Making items break quickly", "Default single use design"],
+      sr: ["Dizajniranje najdugotrajnijih mogućih proizvoda", "Promovisanje kratkoročne moderne mode", "Pravljenje predmeta brzim kvarom", "Standardni jednokratni upotrebni dizajn"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Durability is a key principle of circular design.", sr: "Trajnost je ključni princip cirkularnog dizajna." }
   },
   {
@@ -1154,8 +1133,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'modular design'?", sr: "Šta je 'modularni dizajn'?" },
     options: {
-      en: ["One single block", "Product made of easily replaceable parts", "Complex assembly", "Secret design"],
-      sr: ["Jedan čvrst blok", "Proizvod napravljen od lako zamenljivih delova", "Složeno sklapanje", "Tajni dizajn"]
+      en: ["Secret proprietary industrial design", "Easily replaceable component parts", "Extremely complex manual assembly", "Single solid material block"],
+      sr: ["Tajni vlasnički industrijski dizajn", "Lako zamenljivi komponentni delovi", "Izuzetno složeno ručno sklapanje", "Jedan čvrsti materijalni blok"]
     },
     correct: 1,
     explanation: { en: "Modular products are easier to repair and upgrade.", sr: "Modularni proizvodi se lakše popravljaju i nadograđuju." }
@@ -1166,10 +1145,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'Product-as-a-Service'?", sr: "Šta je 'Proizvod kao usluga'?" },
     options: {
-      en: ["Selling a product once", "Renting or leasing a product instead of buying it", "Customer support", "Giving a product for free"],
-      sr: ["Jednokratna prodaja proizvoda", "Iznajmljivanje proizvoda umesto kupovine", "Korisnička podrška", "Davanje proizvoda besplatno"]
+      en: ["Selling single physical product", "Giving away free products", "Renting product versus buying", "Basic technical customer support"],
+      sr: ["Prodaja jednog fizičkog proizvoda", "Davanje besplatnih promotivnih proizvoda", "Iznajmljivanje proizvoda umesto kupovine", "Osnovna tehnička korisnička podrška"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Users pay for the function of the product, not ownership.", sr: "Korisnici plaćaju za funkciju proizvoda, a ne za vlasništvo." }
   },
   {
@@ -1178,8 +1157,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'circular sourcing'?", sr: "Šta je 'cirkularna nabavka'?" },
     options: {
-      en: ["Buying only new materials", "Sourcing recycled or renewable materials", "Global transport", "Secret suppliers"],
-      sr: ["Kupovina samo novih materijala", "Nabavka recikliranih ili obnovljivih materijala", "Globalni transport", "Tajni dobavljači"]
+      en: ["Managing global transport logistics", "Sourcing recycled renewable materials", "Buying only new materials", "Using secret industrial suppliers"],
+      sr: ["Upravljanje globalnom transportnom logistikom", "Nabavka recikliranih obnovljivih materijala", "Kupovina isključivo novih materijala", "Korišćenje tajnih industrijskih dobavljača"]
     },
     correct: 1,
     explanation: { en: "Circular sourcing reduces the demand for virgin raw materials.", sr: "Cirkularna nabavka smanjuje potražnju za novim sirovinama." }
@@ -1190,10 +1169,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'renewable energy'?", sr: "Šta je 'obnovljiva energija'?" },
     options: {
-      en: ["Coal and Oil", "Solar, Wind, and Hydro", "Nuclear only", "Natural Gas"],
-      sr: ["Ugalj i nafta", "Sunce, vetar i voda", "Samo nuklearna", "Prirodni gas"]
+      en: ["Solar wind hydro energy", "Extracted natural gas fuel", "Single nuclear energy source", "Polluting coal and oil"],
+      sr: ["Sunce vetar hidro energija", "Ekstrahovano prirodno gasno gorivo", "Jedan nuklearni izvor energije", "Zagađujući ugalj i nafta"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Renewable energy powers circular production cycles sustainably.", sr: "Obnovljiva energija napaja cirkularne proizvodne cikluse na održiv način." }
   },
   {
@@ -1202,10 +1181,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'industrial symbiosis'?", sr: "Šta je 'industrijska simbioza'?" },
     options: {
-      en: ["Competition between companies", "One company's waste becoming another's resource", "Biological research", "A merger of firms"],
-      sr: ["Takmičenje između firmi", "Otpad jedne kompanije postaje resurs druge", "Biološko istraživanje", "Spajanje firmi"]
+      en: ["Advanced internal biological research", "High competition between firms", "Waste becomes another's resource", "Large corporate firms merger"],
+      sr: ["Napredno interno biološko istraživanje", "Velika konkurencija između firmi", "Otpad postaje tuđi resurs", "Spajanje velikih korporativnih firmi"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Industrial symbiosis mimics natural ecosystems in business.", sr: "Industrijska simbioza imitira prirodne ekosisteme u biznisu." }
   },
   {
@@ -1214,10 +1193,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'closed-loop recycling'?", sr: "Šta je 'reciklaža zatvorenog kruga'?" },
     options: {
-      en: ["Recycling into the same product", "Recycling once", "Downcycling", "Incineration"],
-      sr: ["Recikliranje u isti proizvod", "Recikliranje samo jednom", "Downcycling", "Spaljivanje"]
+      en: ["High temperature waste incineration", "Same product loop recycling", "Lowering quality downcycling process", "Single cycle material recycling"],
+      sr: ["Spaljivanje otpada visokoj temperaturi", "Reciklaža petlje istog proizvoda", "Smanjenje kvaliteta procesom downcycling", "Jednokratna reciklaža materijalnog ciklusa"]
     },
-    correct: 0,
+    correct: 1,
     explanation: { en: "Closed-loop keeps material quality high for the same application.", sr: "Zatvoreni krug čuva kvalitet materijala za istu primenu." }
   },
   {
@@ -1226,10 +1205,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What are 'biological nutrients'?", sr: "Šta su 'biološki nutrijenti'?" },
     options: {
-      en: ["Plastic and Metal", "Organic materials that can return to nature", "Vitamins", "Chemicals"],
-      sr: ["Plastika i metal", "Organski materijali koji se mogu vratiti u prirodu", "Vitamini", "Hemikalije"]
+      en: ["Nature returning organic materials", "Essential human health vitamins", "Synthetic plastic metal components", "Harmful industrial toxic chemicals"],
+      sr: ["Organski materijali povratka prirodi", "Esencijalni vitamini ljudskog zdravlja", "Sintetičke plastične metalne komponente", "Štetne industrijske toksične hemikalije"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Biological nutrients safely biodegrade and enrich ecosystems.", sr: "Biološki nutrijenti se bezbedno razlažu i obogaćuju ekosisteme." }
   },
   {
@@ -1238,8 +1217,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What are 'technical nutrients'?", sr: "Šta su 'tehnički nutrijenti'?" },
     options: {
-      en: ["Food and water", "Man-made materials like metals and polymers designed to be recovered", "Software", "Electricity"],
-      sr: ["Hrana i voda", "Materijali poput metala i polimera dizajnirani za oporavak", "Softver", "Struja"]
+      en: ["High voltage industrial electricity", "Recoverable man made materials", "Basic food water resources", "Digital computer system software"],
+      sr: ["Visokonaponska industrijska električna struja", "Oporavljivi ljudski stvoreni materijali", "Osnovni resursi hrane vode", "Digitalni softver kompjuterskog sistema"]
     },
     correct: 1,
     explanation: { en: "Technical nutrients should circulate in industrial loops without degradation.", sr: "Tehnički nutrijenti treba da cirkulišu u industrijskim krugovima bez degradacije." }
@@ -1250,10 +1229,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'zero waste'?", sr: "Šta je 'nula otpada' (zero waste)?" },
     options: {
-      en: ["Producing only a little trash", "Designing systems where all materials are reused", "Total destruction of goods", "A marketing slogan"],
-      sr: ["Proizvodnja malo smeća", "Dizajniranje sistema gde se svi materijali ponovo koriste", "Potpuno uništenje robe", "Marketinški slogan"]
+      en: ["Designing material reuse systems", "Misleading circular marketing slogan", "Total physical goods destruction", "Producing small trash amounts"],
+      sr: ["Dizajniranje sistema ponovne upotrebe", "Obmanjujući cirkularni marketinški slogan", "Potpuno fizičko uništenje robe", "Proizvodnja male količine smeća"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Zero waste aims to eliminate the concept of waste entirely.", sr: "Nula otpada teži da potpuno eliminiše koncept otpada." }
   },
   {
@@ -1262,8 +1241,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'circular fashion'?", sr: "Šta je 'cirkularna moda'?" },
     options: {
-      en: ["Fast fashion", "Clothing designed to be reused, repaired, and recycled", "Wearing circles", "Expensive brands"],
-      sr: ["Brza moda", "Odeća dizajnirana da se ponovo koristi, popravlja i reciklira", "Nošenje krugova", "Skupi brendovi"]
+      en: ["Expensive luxury brands", "Circular textile design", "Fast fashion model", "Wearing circle clothes"],
+      sr: ["Skupi luksuzni brendovi", "Cirkularni dizajn tekstila", "Model brze mode", "Nošenje kružne odeće"]
     },
     correct: 1,
     explanation: { en: "Circular fashion tackles the waste crisis in the textile industry.", sr: "Cirkularna moda rešava krizu otpada u tekstilnoj industriji." }
@@ -1274,10 +1253,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'regenerative agriculture'?", sr: "Šta je 'regenerativna poljoprivreda'?" },
     options: {
-      en: ["Chemical farming", "Farming that restores soil health and biodiversity", "Industrial monoculture", "Indoor farming"],
-      sr: ["Hemijska poljoprivreda", "Poljoprivreda koja obnavlja zdravlje zemljišta i biodiverzitet", "Industrijska monokultura", "Uzgoj u zatvorenom"]
+      en: ["Industrial monoculture", "Standard chemical farming", "Restorative soil farming", "Advanced indoor farming"],
+      sr: ["Industrijska monokultura", "Standardna hemijska polja", "Obnova zdravlja zemljišta", "Napredni uzgoj unutra"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Regenerative farming fixes carbon and improves water cycles.", sr: "Regenerativna poljoprivreda vezuje ugljenik i poboljšava vodene cikluse." }
   },
   {
@@ -1286,10 +1265,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is a 'resource loop'?", sr: "Šta je 'resursna petlja'?" },
     options: {
-      en: ["A dead end", "The continuous flow of materials within a system", "A circle drawn on a map", "A type of knot"],
-      sr: ["Slepa ulica", "Kontinuirani tok materijala unutar sistema", "Krug nacrtan na mapi", "Vrsta čvora"]
+      en: ["Continuous flow loop", "Common rope knot", "Economic dead end", "Map drawing circle"],
+      sr: ["Kontinuirani tok u krugu", "Obični čvor na konopcu", "Ekonomska slepa ulica", "Krug nacrtan na mapi"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Resource loops prevent material leakage from the economy.", sr: "Resursne petlje sprečavaju curenje materijala iz ekonomije." }
   },
   {
@@ -1298,8 +1277,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'circular procurement'?", sr: "Šta je 'cirkularna javna nabavka'?" },
     options: {
-      en: ["Buying the cheapest option", "Buying goods/services with circular criteria", "Buying in bulk", "Buying from one person"],
-      sr: ["Kupovina najjeftinije opcije", "Kupovina robe/usluga po cirkularnim kriterijumima", "Grupna kupovina", "Kupovina od jedne osobe"]
+      en: ["Buying bulk goods units", "Using circular criteria sets", "Selecting cheapest option available", "Purchasing from single individual"],
+      sr: ["Grupna kupovina robe jedinica", "Cirkularni kriterijumi nabavke set", "Izbor najjeftinije opcije dostupno", "Kupovina od jedne osobe"]
     },
     correct: 1,
     explanation: { en: "Procurement can drive market demand for circular products.", sr: "Nabavka može podstaći tržišnu potražnju za cirkularnim proizvodima." }
@@ -1310,10 +1289,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'bio-based material'?", sr: "Šta je 'bio-materijal'?" },
     options: {
-      en: ["Plastic from oil", "Material derived from living organisms (plants, fungi)", "Steel", "Glass"],
-      sr: ["Plastika od nafte", "Materijal dobijen od živih organizama (biljke, gljive)", "Čelik", "Staklo"]
+      en: ["Bio based materials", "Recyclable steel", "Oil based plastic", "Recyclable glass"],
+      sr: ["Bio bazirani materijali", "Reciklažni čelik", "Plastika od nafte", "Reciklažno staklo"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Bio-based materials are part of the biological cycle.", sr: "Bio-materijali su deo biološkog ciklusa." }
   },
   {
@@ -1322,10 +1301,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'dematerialization'?", sr: "Šta je 'dematerijalizacija'?" },
     options: {
-      en: ["Magic trick", "Using less material to provide the same service", "Losing resources", "Deleting files"],
-      sr: ["Mađioničarski trik", "Korišćenje manje materijala za istu uslugu", "Gubitak resursa", "Brisanje fajlova"]
+      en: ["Using less material", "Illusionary magic trick", "Deleting digital files", "Losing valuable resources"],
+      sr: ["Korišćenje manje materijala", "Iluzionistički mađioničarski trik", "Brisanje digitalnih fajlova", "Gubitak vrednih resursa"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Digital services often achieve dematerialization (e.g., streaming vs CDs).", sr: "Digitalne usluge često postižu dematerijalizaciju (npr. striming umesto CD-ova)." }
   },
   {
@@ -1334,8 +1313,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'urban mining'?", sr: "Šta je 'urbano rudarenje'?" },
     options: {
-      en: ["Digging under cities", "Recovering raw materials from used products in cities", "City planning", "Building subways"],
-      sr: ["Kopanje ispod gradova", "Oporavak sirovina iz korišćenih proizvoda u gradovima", "Planiranje grada", "Gradnja metroa"]
+      en: ["Standard city planning", "Recovering raw materials", "Digging under cities", "Building urban subways"],
+      sr: ["Standardno planiranje grada", "Oporavak sirovih materijala", "Kopanje ispod gradova", "Gradnja gradskog metroa"]
     },
     correct: 1,
     explanation: { en: "Electronic waste is a major source for urban mining.", sr: "Elektronski otpad je glavni izvor za urbano rudarenje." }
@@ -1346,8 +1325,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'circular electronics'?", sr: "Šta je 'cirkularna elektronika'?" },
     options: {
-      en: ["Round computers", "Devices built to be repaired, upgraded, and recycled", "Old TVs", "Broken phones"],
-      sr: ["Okrugli kompjuteri", "Uređaji napravljeni da se popravljaju, nadograđuju i recikliraju", "Stari televizori", "Polomljeni telefoni"]
+      en: ["Damaged broken smartphones", "Repairable circular devices", "Obsolete old televisions", "Spherical round computers"],
+      sr: ["Oštećeni polomljeni smartfoni", "Popravljivi cirkularni uređaji", "Zastareli stari televizori", "Sferični okrugli kompjuteri"]
     },
     correct: 1,
     explanation: { en: "Circular electronics reduce e-waste and material scarcity.", sr: "Cirkularna elektronika smanjuje e-otpad i oskudicu materijala." }
@@ -1358,10 +1337,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'cascading' use?", sr: "Šta je 'kaskadna' upotreba?" },
     options: {
-      en: ["Using water for a waterfall", "Using a material for different purposes as its quality decreases", "Using things once", "Infinite use"],
-      sr: ["Korišćenje vode za vodopad", "Korišćenje materijala za različite svrhe kako kvalitet opada", "Jednokratna upotreba", "Beskonačna upotreba"]
+      en: ["Sequential material reuse", "Single use once", "Water for waterfalls", "Continuous infinite use"],
+      sr: ["Sekvencijalna ponovna upotreba", "Jednokratna upotreba jednom", "Voda za vodopade", "Kontinuirana beskonačna upotreba"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Example: High-quality wood -> furniture -> chipboard -> energy.", sr: "Primer: Kvalitetno drvo -> nameštaj -> iverica -> energija." }
   },
   {
@@ -1370,8 +1349,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'design for disassembly'?", sr: "Šta je 'dizajn za rasklapanje'?" },
     options: {
-      en: ["Gluing parts together", "Making it easy to take a product apart for repair or recycling", "Destroying things", "Secret assembly"],
-      sr: ["Lepljenje delova", "Olakšavanje rastavljanja proizvoda radi popravke ili reciklaže", "Uništavanje stvari", "Tajno sklapanje"]
+      en: ["Gluing parts together", "Easy disassembly process", "Destroying old things", "Secret assembly methods"],
+      sr: ["Lepljenje delova zajedno", "Laki proces rasklapanja", "Uništavanje starih stvari", "Tajne metode sklapanja"]
     },
     correct: 1,
     explanation: { en: "Fasteners like screws are better than glues for disassembly.", sr: "Spone poput šrafova su bolje od lepkova za rasklapanje." }
@@ -1382,10 +1361,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'eco-design'?", sr: "Šta je 'eko-dizajn'?" },
     options: {
-      en: ["Aesthetic design", "Design that reduces environmental impact throughout the life cycle", "Green-colored products", "Cheap design"],
-      sr: ["Estetski dizajn", "Dizajn koji smanjuje uticaj na okolinu tokom celog životnog veka", "Zeleno obojeni proizvodi", "Jeftin dizajn"]
+      en: ["Purely aesthetic design", "Cheap industrial design", "Impact reduction design", "Green colored products"],
+      sr: ["Čisto estetski dizajn", "Jeftin industrijski dizajn", "Dizajn smanjenja uticaja", "Zeleno obojeni proizvodi"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Eco-design considers everything from raw materials to end-of-life.", sr: "Eko-dizajn razmatra sve, od sirovina do kraja životnog veka." }
   },
   {
@@ -1394,10 +1373,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is a 'circular city'?", sr: "Šta je 'cirkularni grad'?" },
     options: {
-      en: ["A round city", "A city that aims to eliminate waste and circulate resources", "A high-tech city", "A crowded city"],
-      sr: ["Okrugli grad", "Grad koji teži eliminaciji otpada i cirkulaciji resursa", "Visokotehnološki grad", "Prenaseljen grad"]
+      en: ["Advanced high tech city", "Circular shaped city", "Waste free resource city", "Highly crowded city"],
+      sr: ["Visokotehnološki grad", "Okrugli oblik grada", "Grad bez otpada", "Veoma prenaseljen grad"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Circular cities focus on food, mobility, and construction loops.", sr: "Cirkularni gradovi se fokusiraju na hranu, mobilnost i građevinske petlje." }
   },
   {
@@ -1406,10 +1385,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'material value retention'?", sr: "Šta je 'očuvanje vrednosti materijala'?" },
     options: {
-      en: ["Storing gold", "Keeping materials in the economy as long as possible", "Selling at high price", "Saving money"],
-      sr: ["Čuvanje zlata", "Zadržavanje materijala u ekonomiji što je duže moguće", "Prodaja po visokoj ceni", "Štednja novca"]
+      en: ["Saving financial money", "Storing gold reserves", "Keeping materials in use", "Selling at high prices"],
+      sr: ["Štednja novčanog iznosa", "Čuvanje zlatnih rezervi", "Zadržavanje materijala", "Prodaja po visokoj ceni"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Circularity aims to keep material value from leaking out.", sr: "Cirkularnost teži da spreči curenje vrednosti materijala." }
   },
   {
@@ -1418,10 +1397,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'biological cycle'?", sr: "Šta je 'biološki ciklus'?" },
     options: {
-      en: ["The life of an animal", "The process of organic materials returning to soil", "Manufacturing loop", "Financial cycle"],
-      sr: ["Život životinje", "Proces povratka organskih materija u zemljište", "Proizvodna petlja", "Finansijski ciklus"]
+      en: ["Animal life cycle", "Manufacturing loop", "Organic return cycle", "Financial cycle"],
+      sr: ["Životni ciklus životinje", "Proizvodna petlja", "Ciklus povratka organskog", "Finansijski ciklus"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Biological materials should safely return to the biosphere.", sr: "Biološki materijali treba bezbedno da se vrate u biosferu." }
   },
   {
@@ -1430,10 +1409,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'technical cycle'?", sr: "Šta je 'tehnički ciklus'?" },
     options: {
-      en: ["A bicycle made of metal", "The recovery and reuse of non-biological materials", "Software update", "Construction site"],
-      sr: ["Bicikl od metala", "Oporavak i ponovna upotreba nebioloških materijala", "Ažuriranje softvera", "Gradilište"]
+      en: ["Standard software update", "Metal bicycle vehicle", "Technical material reuse", "Large construction site"],
+      sr: ["Standardno ažuriranje softvera", "Metalno biciklističko vozilo", "Tehnička ponovna upotreba", "Veliko aktivno gradilište"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Technical materials circulate in industrial loops without degrading.", sr: "Tehnički materijali cirkulišu u industrijskim krugovima bez degradacije." }
   },
   {
@@ -1442,10 +1421,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'systemic thinking'?", sr: "Šta je 'sistemsko razmišljanje'?" },
     options: {
-      en: ["Thinking about one part", "Understanding how different parts of a system interact", "Linear logic", "Quick decisions"],
-      sr: ["Razmišljanje o jednom delu", "Razumevanje kako različiti delovi sistema utiču jedni na druge", "Linearna logika", "Brze odluke"]
+      en: ["System interaction focus", "Standard linear logic", "Isolated component focus", "Rapid decision making"],
+      sr: ["Fokus na interakcije", "Standardna linearna logika", "Fokus na jednu komponentu", "Brzo donošenje odluka"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Circularity requires understanding the whole supply chain.", sr: "Cirkularnost zahteva razumevanje celog lanca snabdevanja." }
   },
   {
@@ -1454,10 +1433,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'renewable material'?", sr: "Šta je 'obnovljiv materijal'?" },
     options: {
-      en: ["Plastic", "Wood, Cotton, or Bamboo", "Steel", "Aluminum"],
-      sr: ["Plastika", "Drvo, pamuk ili bambus", "Čelik", "Aluminijum"]
+      en: ["Bio based fibers", "Synthetic plastic", "Recyclable steel", "Recyclable aluminum"],
+      sr: ["Bio bazirana vlakna", "Sintetička plastika", "Reciklažni čelik", "Reciklažni aluminijum"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Renewable materials grow back naturally if managed well.", sr: "Obnovljivi materijali ponovo rastu prirodno ako se njima dobro upravlja." }
   },
   {
@@ -1466,8 +1445,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'take-back' scheme?", sr: "Šta je 'program preuzimanja' (take-back)?" },
     options: {
-      en: ["Stealing products", "When a company collects used products from customers for recycling", "Returning a gift", "Bankruptcy"],
-      sr: ["Krađa proizvoda", "Kada kompanija sakuplja korišćene proizvode od kupaca za reciklažu", "Vraćanje poklona", "Bankrot"]
+      en: ["Corporate bankruptcy", "Company collection scheme", "Theft of products", "Returning a gift"],
+      sr: ["Korporativni bankrot", "Šema sakupljanja", "Krađa proizvoda", "Vraćanje poklona"]
     },
     correct: 1,
     explanation: { en: "Take-back ensures materials stay in the technical cycle.", sr: "Preuzimanje obezbeđuje da materijali ostanu u tehničkom ciklusu." }
@@ -1478,10 +1457,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is 'waste hierarchy'?", sr: "Šta je 'hijerarhija otpada'?" },
     options: {
-      en: ["A pile of trash", "The priority order for waste management (Prevention > Reuse > Recycling)", "A government office", "Recycling rules"],
-      sr: ["Gomila smeća", "Prioritetni red upravljanja otpadom (Prevencija > Ponovna upotreba > Reciklaža)", "Državna kancelarija", "Pravila reciklaže"]
+      en: ["Waste priority order", "Standard pile of trash", "Local government office", "Basic recycling rules"],
+      sr: ["Prioritetni red otpada", "Standardna gomila smeća", "Lokalna državna kancelarija", "Osnovna pravila reciklaže"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "The hierarchy prioritizes preventing waste over managing it.", sr: "Hijerarhija daje prioritet sprečavanju nastanka otpada u odnosu na upravljanje njime." }
   },
   {
@@ -1490,10 +1469,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'easy',
     question: { en: "What is the ultimate goal of the circular economy?", sr: "Šta je krajnji cilj cirkularne ekonomije?" },
     options: {
-      en: ["Universal wealth", "Waste-free world and planetary balance", "Infinite growth", "Perfect efficiency"],
-      sr: ["Univerzalno bogatstvo", "Svet bez otpada i planetarna ravnoteža", "Beskonačan rast", "Savršena efikasnost"]
+      en: ["Global universal wealth", "Infinite economic growth", "Waste free planet balance", "Perfect system efficiency"],
+      sr: ["Globalno univerzalno blago", "Beskonačan ekonomski rast", "Svet bez otpada i balans", "Savršena sistemska efikasnost"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "A circular economy aims for long-term survival within planetary boundaries.", sr: "Cirkularna ekonomija teži dugoročnom opstanku u okviru granica planete." }
   },
   // MEDIUM (41-70)
@@ -1503,8 +1482,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is the 'Butterfly Diagram'?", sr: "Šta je 'Leptir dijagram' (Butterfly Diagram)?" },
     options: {
-      en: ["A chart showing species growth", "A visual representation of circular economy flows (technical and biological)", "A map of trade routes", "A weather forecast tool"],
-      sr: ["Grafikon rasta vrsta", "Vizuelni prikaz tokova cirkularne ekonomije (tehnički i biološki)", "Mapa trgovačkih puteva", "Alat za vremensku prognozu"]
+      en: ["Trade route map", "Circular flow visual", "Species growth chart", "Weather forecast tool"],
+      sr: ["Mapa trgovine", "Prikaz tokova kruga", "Grafikon rasta vrsta", "Vremenska prognoza"]
     },
     correct: 1,
     explanation: { en: "Developed by Ellen MacArthur Foundation, it separates technical and biological cycles.", sr: "Razvijen od strane Ellen MacArthur Fondacije, on razdvaja tehničke i biološke cikluse." }
@@ -1515,10 +1494,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'Cradle to Cradle' (C2C)?", sr: "Šta je 'Cradle to Cradle' (C2C)?" },
     options: {
-      en: ["A baby store", "A framework for designing products as healthy nutrients for cycles", "Waste management strategy", "Linear production line"],
-      sr: ["Prodavnica za bebe", "Okvir za dizajniranje proizvoda kao zdravih nutrijenata za cikluse", "Strategija upravljanja otpadom", "Linearna proizvodna traka"]
+      en: ["C2C design framework", "Linear production line", "Standard baby store", "Waste management plan"],
+      sr: ["C2C okvir za dizajn", "Linearna proizvodna traka", "Obična prodavnica za bebe", "Plan upravljanja otpada"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "C2C eliminates the concept of waste by design.", sr: "C2C eliminiše koncept otpada kroz dizajn." }
   },
   {
@@ -1527,8 +1506,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'Extended Producer Responsibility' (EPR)?", sr: "Šta je 'Proširena odgovornost proizvođača' (EPR)?" },
     options: {
-      en: ["Paying employees more", "Producers' responsibility for the entire life cycle of their products", "Fast shipping", "Selling in more countries"],
-      sr: ["Povećanje plata", "Odgovornost proizvođača za ceo životni vek njihovih proizvoda", "Brza dostava", "Prodaja u više zemalja"]
+      en: ["Express shipping speed", "Full life cycle responsibility", "Increasing worker pay", "Market expansion goals"],
+      sr: ["Ekspresna brzina dostave", "Odgovornost celog ciklusa", "Povećanje plata radnika", "Ciljevi širenja tržišta"]
     },
     correct: 1,
     explanation: { en: "EPR incentivizes producers to design for recyclability and repair.", sr: "EPR podstiče proizvođače da dizajniraju za reciklažu i popravku." }
@@ -1539,10 +1518,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'reverse logistics'?", sr: "Šta je 'povratna logistika' (reverse logistics)?" },
     options: {
-      en: ["Driving backwards", "Moving goods from consumers back to producers for recovery", "Inventory management", "International shipping"],
-      sr: ["Vožnja unazad", "Kretanje robe od potrošača nazad do proizvođača radi oporavka", "Upravljanje zalihama", "Međunarodna dostava"]
+      en: ["Driving vehicle backward", "Standard inventory plan", "Goods recovery logistics", "International cargo ship"],
+      sr: ["Vožnja vozila unazad", "Plan upravljanja zalihama", "Logistika oporavka robe", "Međunarodni teretni brod"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Reverse logistics is essential for take-back and recycling systems.", sr: "Povratna logistika je neophodna za sisteme preuzimanja i reciklaže." }
   },
   {
@@ -1551,10 +1530,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'upcycling' vs 'recycling'?", sr: "Šta je 'upcycling' u odnosu na 'recikliranje'?" },
     options: {
-      en: ["They are the same", "Upcycling increases value; Recycling often involves downcycling", "Recycling is always better", "Upcycling is only for art"],
-      sr: ["To je isto", "Upcycling povećava vrednost; recikliranje često uključuje downcycling", "Recikliranje je uvek bolje", "Upcycling je samo za umetnost"]
+      en: ["Upcycle vs Downcycle", "Processes are identical", "Recycling always superior", "Upcycling limited to art"],
+      sr: ["Upcycle naspram Downcycle", "Procesi su identični", "Recikliranje uvek bolje", "Upcycling samo za umetnost"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Upcycling creative reuse avoids destroying the material's structure.", sr: "Upcycling kreativna ponovna upotreba izbegava uništavanje strukture materijala." }
   },
   {
@@ -1563,8 +1542,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is the 'Performance Economy'?", sr: "Šta je 'Ekonomija performansi'?" },
     options: {
-      en: ["Economic growth rate", "Selling services and performance instead of physical goods", "Stock market results", "Sport events economy"],
-      sr: ["Stopa ekonomskog rasta", "Prodaja usluga i performansi umesto fizičke robe", "Rezultati na berzi", "Ekonomija sportskih događaja"]
+      en: ["Major sports economy", "Selling performance services", "GDP growth percentage", "Stock market performance"],
+      sr: ["Ekonomija velikog sporta", "Prodaja usluga performansi", "BDP procenat rasta", "Berzanski učinak sistema"]
     },
     correct: 1,
     explanation: { en: "Walter Stahel's model focuses on loops and product-life extension.", sr: "Model Waltera Stahela fokusira se na petlje i produženje života proizvoda." }
@@ -1575,10 +1554,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'bio-mimicry' in design?", sr: "Šta je 'biomimikrija' u dizajnu?" },
     options: {
-      en: ["Making products look like animals", "Emulating nature's patterns and strategies to solve human challenges", "Using wood only", "Protecting forests"],
-      sr: ["Pravljenje proizvoda da liče na životinje", "Oponašanje prirodnih obrazaca i strategija za rešavanje ljudskih izazova", "Korišćenje samo drveta", "Zaštita šuma"]
+      en: ["Nature emulation strategy", "Exclusive use of wood", "Animal like product design", "General forest protection"],
+      sr: ["Strategija oponašanja prirode", "Isključiva upotreba drveta", "Dizajn po ugledu na životinje", "Opšta zaštita šumskih zona"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Nature has already solved many problems with zero waste.", sr: "Priroda je već rešila mnoge probleme sa nula otpada." }
   },
   {
@@ -1587,10 +1566,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'pre-consumer' vs 'post-consumer' waste?", sr: "Šta je 'pre-potrošački' u odnosu na 'post-potrošački' otpad?" },
     options: {
-      en: ["Waste from factories vs waste from households", "Waste from kids vs adults", "Old vs new waste", "Organic vs inorganic"],
-      sr: ["Otpad iz fabrika vs otpad iz domaćinstava", "Otpad od dece vs odraslih", "Stari vs novi otpad", "Organski vs neorganski"]
+      en: ["Organic vs inorganic", "Factory vs home waste", "Kids vs adults waste", "Old vs new waste"],
+      sr: ["Organski naspram neorganskog", "Fabrički naspram kućnog", "Dečiji naspram odraslih", "Stari naspram novog"]
     },
-    correct: 0,
+    correct: 1,
     explanation: { en: "Pre-consumer waste includes production scraps; post-consumer is discarded after use.", sr: "Pre-potrošački otpad uključuje ostatke iz proizvodnje; post-potrošački se odbacuje nakon upotrebe." }
   },
   {
@@ -1599,8 +1578,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is the 'R-ladder'?", sr: "Šta je 'R-lestvica'?" },
     options: {
-      en: ["A tool for painting", "A ranking of circularity strategies by impact (Refuse > Reduce > Reuse...)", "A financial index", "A career path"],
-      sr: ["Alat za krečenje", "Rangiranje cirkularnih strategija po uticaju (Odbij > Smanji > Ponovo koristi...)", "Finansijski indeks", "Put u karijeri"]
+      en: ["Global financial index", "Strategy impact rank", "Common painting tool", "Strategic career path"],
+      sr: ["Globalni finansijski indeks", "Rang uticaja strategije", "Obični alat za krečenje", "Strateški razvoj karijere"]
     },
     correct: 1,
     explanation: { en: "Higher 'R' strategies (Refuse/Reduce) are more impactful than lower ones (Recycle).", sr: "Više 'R' strategije (Odbij/Smanji) su uticajnije od nižih (Recikliraj)." }
@@ -1611,8 +1590,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'circularity gap'?", sr: "Šta je 'cirkularni jaz' (circularity gap)?" },
     options: {
-      en: ["Hole in a product", "The difference between total material use and circular use", "A bridge design", "Missing data"],
-      sr: ["Rupa u proizvodu", "Razlika između ukupne upotrebe materijala i cirkularne upotrebe", "Dizajn mosta", "Nedostajući podaci"]
+      en: ["Missing statistical data", "Circularity gap margin", "Physical product hole", "Structural bridge design"],
+      sr: ["Nedostajući podaci u bazi", "Margina cirkularnog jaza", "Fizička rupa u robi", "Dizajn čvrstog mosta"]
     },
     correct: 1,
     explanation: { en: "Globally, only about 7-9% of materials are circular.", sr: "Globalno, samo oko 7-9% materijala je cirkularno." }
@@ -1623,8 +1602,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "How does the circular economy reduce business risk?", sr: "Kako cirkularna ekonomija smanjuje poslovni rizik?" },
     options: {
-      en: ["By avoiding taxes", "By reducing dependence on volatile raw material prices", "By firing employees", "By ignoring laws"],
-      sr: ["Izbegavanjem poreza", "Smanjenjem zavisnosti od nestabilnih cena sirovina", "Otpuštanjem radnika", "Ignorisanjem zakona"]
+      en: ["Firing redundant staff", "Reducing price volatility", "Avoiding local taxes", "Ignoring legal laws"],
+      sr: ["Otpuštanje viška radnika", "Smanjenje cenovne nestabilnosti", "Izbegavanje lokalnih poreza", "Ignorisanje zakonskih normi"]
     },
     correct: 1,
     explanation: { en: "Decoupling from virgin resources provides supply security.", sr: "Razdvajanje od novih resursa pruža sigurnost snabdevanja." }
@@ -1635,8 +1614,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'functional economy'?", sr: "Šta je 'funkcionalna ekonomija'?" },
     options: {
-      en: ["An economy that works", "Focusing on delivering functions rather than selling objects", "A government plan", "Digital economy"],
-      sr: ["Ekonomija koja radi", "Fokus na pružanje funkcija umesto prodaje predmeta", "Vladin plan", "Digitalna ekonomija"]
+      en: ["Digital economy model", "Selling functions logic", "Working economy system", "Standard government plan"],
+      sr: ["Model digitalne ekonomije", "Fokus na funkcije rada", "Sistem ekonomije rada", "Standardni vladin plan"]
     },
     correct: 1,
     explanation: { en: "Service-based models align producer and consumer interests in durability.", sr: "Modeli zasnovani na uslugama usklađuju interese proizvođača i potrošača u pogledu trajnosti." }
@@ -1647,10 +1626,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'downcycling' in the context of plastics?", sr: "Šta je 'downcycling' u kontekstu plastike?" },
     options: {
-      en: ["Recycling it many times", "Turning high-quality plastic into low-quality mixed plastic items", "Better plastic", "Burning plastic"],
-      sr: ["Recikliranje više puta", "Pretvaranje kvalitetne plastike u mešane plastične predmete niskog kvaliteta", "Bolja plastika", "Spaljivanje plastike"]
+      en: ["Infinite recycling loop", "Burning waste plastic", "High to low grade shift", "Improved plastic quality"],
+      sr: ["Beskonačna petlja reciklaže", "Spaljivanje otpadne plastike", "Prelazak sa visokog na nisko", "Poboljšani kvalitet plastike"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Most plastic recycling results in lower-grade materials that can't be recycled again.", sr: "Većina reciklaže plastike rezultira materijalima nižeg kvaliteta koji se ne mogu ponovo reciklirati." }
   },
   {
@@ -1659,8 +1638,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'blue economy'?", sr: "Šta je 'plava ekonomija'?" },
     options: {
-      en: ["Ocean-based economy", "Gunter Pauli's concept of using waste from one process as input for another", "Water sports", "Sky exploration"],
-      sr: ["Ekonomija zasnovana na okeanu", "Koncept Guntera Paulija o korišćenju otpada jednog procesa kao ulaza za drugi", "Sportovi na vodi", "Istraživanje neba"]
+      en: ["Takmičarski vodeni sport", "Koncept Guntera Paulija", "Ekonomija baze okeana", "Napredno istraživanje neba"],
+      sr: ["Takmičarski vodeni sport", "Koncept Guntera Paulija", "Ekonomija baze okeana", "Napredno istraživanje neba"]
     },
     correct: 1,
     explanation: { en: "Blue economy focuses on local resources and zero emissions.", sr: "Plava ekonomija se fokusira na lokalne resurse i nultu emisiju." }
@@ -1671,10 +1650,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What are 'circular indicators'?", sr: "Šta su 'cirkularni indikatori'?" },
     options: {
-      en: ["Traffic lights", "Metrics used to measure the circularity of a product or company", "Clock hands", "Stock charts"],
-      sr: ["Semafori", "Metrike koje se koriste za merenje cirkularnosti proizvoda ili kompanije", "Kazaljke na satu", "Berzanski grafikoni"]
+      en: ["Circularity metric data", "Moving clock hands", "Standard traffic lights", "Standard stock charts"],
+      sr: ["Podaci metriker cirkularnosti", "Pokretne kazaljke na satu", "Standardni ulični semafori", "Standardni berzanski grafikoni"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Indicators like Material Circularity Indicator (MCI) help track progress.", sr: "Indikatori poput MCI pomažu u praćenju napretka." }
   },
   {
@@ -1683,8 +1662,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'circular bio-economy'?", sr: "Šta je 'cirkularna bio-ekonomija'?" },
     options: {
-      en: ["Biological research", "Using renewable biological resources to produce food, materials, and energy in loops", "Eating organic", "Forest protection"],
-      sr: ["Biološko istraživanje", "Korišćenje obnovljivih bioloških resursa za hranu, materijale i energiju u krugovima", "Organska ishrana", "Zaštita šuma"]
+      en: ["General forest protection", "Renewable bio loops", "Pure biological research", "Eating organic food"],
+      sr: ["Opšta zaštita šumskih zona", "Obnovljive bio petlje", "Čisto biološko istraživanje", "Ishrana organskom hranom"]
     },
     correct: 1,
     explanation: { en: "It combines bioscience with circular principles.", sr: "Ona kombinuje bionauku sa cirkularnim principima." }
@@ -1695,10 +1674,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'resource productivity'?", sr: "Šta je 'produktivnost resursa'?" },
     options: {
-      en: ["Amount of materials produced", "Generating more economic value per unit of material used", "Mining speed", "Total material consumption"],
-      sr: ["Količina proizvedenih materijala", "Stvaranje veće ekonomske vrednosti po jedinici korišćenog materijala", "Brzina rudarenja", "Ukupna potrošnja materijala"]
+      en: ["Value per material unit", "Total material production", "Standard mining speed", "Total system consumption"],
+      sr: ["Vrednost po jedinici materije", "Ukupna proizvodna materijala", "Standardna brzina rudarenja", "Ukupna sistemska potrošnja"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Circular economy aims to maximize resource productivity.", sr: "Cirkularna ekonomija teži maksimizaciji produktivnosti resursa." }
   },
   {
@@ -1707,8 +1686,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'design for repair'?", sr: "Šta je 'dizajn za popravku'?" },
     options: {
-      en: ["Making products look broken", "Ensuring products can be fixed easily with standard tools", "Selling tools", "Self-healing materials"],
-      sr: ["Pravljenje pokvarenih proizvoda", "Obezbeđivanje da se proizvodi lako poprave standardnim alatima", "Prodaja alata", "Samozaceljujući materijali"]
+      en: ["Selling workshop tools", "Easy standard tool repair", "Broken look product design", "Advanced self healing tech"],
+      sr: ["Prodaja alata", "Laka popravka alatima", "Dizajn pokvarenog izgleda", "Napredna tehnologija zaceljenja"]
     },
     correct: 1,
     explanation: { en: "Right to repair is a key consumer movement in circularity.", sr: "Pravo na popravku je ključni pokret potrošača u cirkularnosti." }
@@ -1719,8 +1698,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'open-loop' vs 'closed-loop' recycling?", sr: "Šta je 'otvoreni' naspram 'zatvorenog' kruga reciklaže?" },
     options: {
-      en: ["Loop size", "Recycling into a different product vs recycling into the same product", "Recycling plastic vs metal", "Global vs local"],
-      sr: ["Veličina petlje", "Recikliranje u drugi proizvod vs recikliranje u isti proizvod", "Recikliranje plastike vs metala", "Globalno vs lokalno"]
+      en: ["Global vs local recycling", "Different vs same product", "Plastic vs metal recycling", "Circular loop size"],
+      sr: ["Globalna naspram lokalne", "Drugi naspram istog proizvoda", "Plastika naspram metala", "Veličina cirkularne petlje"]
     },
     correct: 1,
     explanation: { en: "Closed-loop is generally better for material quality retention.", sr: "Zatvoreni krug je generalno bolji za očuvanje kvaliteta materijala." }
@@ -1731,10 +1710,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'waste-to-energy' position in circularity?", sr: "Koja je pozicija 'otpada u energiju' u cirkularnosti?" },
     options: {
-      en: ["Top priority", "Last resort after all recovery options are exhausted", "Circular strategy", "Illegal"],
-      sr: ["Glavni prioritet", "Poslednja opcija nakon što se iscrpe sve mogućnosti oporavka", "Cirkularna strategija", "Ilegalno"]
+      en: ["Core circular strategy", "Highest system priority", "Last resort recovery", "Illegal illegal action"],
+      sr: ["Osnovna cirkularna strategija", "Najviši sistemski prioritet", "Poslednja opcija oporavka", "Ilegalna i zabranjena radnja"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Incineration destroys materials; it is better than landfilling but worse than recycling.", sr: "Spaljivanje uništava materijale; bolje je od deponije, ali gore od reciklaže." }
   },
   {
@@ -1743,10 +1722,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'circular business model innovation'?", sr: "Šta je 'inovacija cirkularnog biznis modela'?" },
     options: {
-      en: ["New logo", "Creating value by changing how a company operates and interacts with resources", "Building a website", "Selling more"],
-      sr: ["Novi logo", "Stvaranje vrednosti menjanjem načina rada i odnosa prema resursima", "Izrada sajta", "Veća prodaja"]
+      en: ["Operational value shift", "Increasing total sales", "Designing new logo", "Building company website"],
+      sr: ["Promena vrednosti rada", "Povećanje ukupne prodaje", "Dizajniranje novog logotipa", "Izrada sajta kompanije"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "It involves shifting from selling ownership to selling access or results.", sr: "Ona uključuje prelazak sa prodaje vlasništva na prodaju pristupa ili rezultata." }
   },
   {
@@ -1755,10 +1734,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'regenerative design'?", sr: "Šta je 'regenerativni dizajn'?" },
     options: {
-      en: ["Recycled design", "Design that actively improves the environment instead of just reducing harm", "Old-fashioned design", "Colorful design"],
-      sr: ["Reciklirani dizajn", "Dizajn koji aktivno poboljšava okolinu umesto da samo smanjuje štetu", "Staromodni dizajn", "Šareni dizajn"]
+      en: ["Standard recycled design", "Old fashioned design", "Active improvement design", "Bright colorful design"],
+      sr: ["Standardni reciklirani dizajn", "Staromodni stil dizajna", "Aktivni dizajn poboljšanja", "Svetli šareni dizajn"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Regenerative design seeks to restore ecosystems.", sr: "Regenerativni dizajn teži obnavljanju ekosistema." }
   },
   {
@@ -1767,10 +1746,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'material efficiency'?", sr: "Šta je 'materijalna efikasnost'?" },
     options: {
-      en: ["Heavy materials", "Providing more service with less material mass", "Fast production", "Recycling speed"],
-      sr: ["Teški materijali", "Pružanje više usluga sa manjom masom materijala", "Brza proizvodnja", "Brzina reciklaže"]
+      en: ["More service less mass", "Fast material recycling", "Heavy weight materials", "Rapid industrial production"],
+      sr: ["Više usluge manje mase", "Brza reciklaža materijala", "Teški materijali mase", "Brza industrijska proizvodnja"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Material efficiency reduces the overall footprint of the economy.", sr: "Materijalna efikasnost smanjuje ukupni otisak ekonomije." }
   },
   {
@@ -1779,8 +1758,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'circular construction'?", sr: "Šta je 'cirkularna gradnja'?" },
     options: {
-      en: ["Building round houses", "Designing buildings as material banks for future reuse", "Fast building", "Concrete only"],
-      sr: ["Gradnja okruglih kuća", "Dizajniranje zgrada kao banaka materijala za buduću upotrebu", "Brza gradnja", "Samo beton"]
+      en: ["Rapid building construction", "Buildings as material banks", "Building round houses", "Exclusive concrete usage"],
+      sr: ["Brza izgradnja objekata", "Zgrade kao banke materije", "Gradnja okruglih kuća", "Isključiva upotreba betona"]
     },
     correct: 1,
     explanation: { en: "Buildings are designed to be disassembled, not demolished.", sr: "Zgrade se dizajniraju tako da se mogu rastaviti, a ne srušiti." }
@@ -1791,10 +1770,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'biocyclic' industry?", sr: "Šta je 'biociklična' industrija?" },
     options: {
-      en: ["Bicycle industry", "Industry based on biological cycles and renewable materials", "Chemical industry", "Mining"],
-      sr: ["Biciklistička industrija", "Industrija zasnovana na biološkim ciklusima i obnovljivim materijalima", "Hemijska industrija", "Rudarstvo"]
+      en: ["Biological cycle industry", "Heavy chemical industry", "Standard bicycle industry", "Raw material mining"],
+      sr: ["Industrija bioloških ciklusa", "Teška hemijska industrija", "Standardna bicikl industrija", "Rudarenje sirovih materijala"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "It aligns industrial processes with the biosphere.", sr: "Ona usklađuje industrijske procese sa biosferom." }
   },
   {
@@ -1803,10 +1782,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'resource resilience'?", sr: "Šta je 'resursna otpornost'?" },
     options: {
-      en: ["Hard materials", "The ability to maintain supply despite global shocks by using local loops", "Endless resources", "Saving money"],
-      sr: ["Jaki materijali", "Sposobnost održavanja snabdevanja uprkos šokovima korišćenjem lokalnih petlji", "Beskonačni resursi", "Štednja novca"]
+      en: ["Durable hard materials", "Infinite resource supply", "Supply maintenance ability", "Standard money saving"],
+      sr: ["Trajni i jaki materijali", "Beskonačno snabdevanje", "Sposobnost održanja mreže", "Standardna štednja novca"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Circular loops make businesses and cities more resilient.", sr: "Cirkularne petlje čine biznise i gradove otpornijim." }
   },
   {
@@ -1815,10 +1794,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'collaborative consumption'?", sr: "Šta je 'kolaborativna potrošnja'?" },
     options: {
-      en: ["Eating together", "The shared use of a good or service by a group (e.g., car sharing)", "Buying together", "Global trade"],
-      sr: ["Zajednička ishrana", "Zajedničko korišćenje dobra ili usluge od strane grupe (npr. car sharing)", "Zajednička kupovina", "Globalna trgovina"]
+      en: ["Shared group usage", "General global trade", "Eating meals together", "Buying goods together"],
+      sr: ["Zajednička grupna upotreba", "Opšta globalna trgovina", "Zajednička ishrana obroka", "Zajednička kupovina robe"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "It is a key driver of the sharing economy.", sr: "Ona je ključni pokretač ekonomije deljenja." }
   },
   {
@@ -1827,8 +1806,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'nutrient recovery' from waste water?", sr: "Šta je 'oporavak nutrijenata' iz otpadnih voda?" },
     options: {
-      en: ["Cleaning water", "Extracting phosphorus and nitrogen to use as fertilizer", "Desalination", "Water sports"],
-      sr: ["Prečišćavanje vode", "Ekstrakcija fosfora i azota za upotrebu kao đubrivo", "Desalinizacija", "Sportovi na vodi"]
+      en: ["Desalinizacija okeanske vode", "Oporavak đubriva iz vode", "Standardno čišćenje vode", "Takmičarski vodeni sportovi"],
+      sr: ["Desalinizacija okeanske vode", "Oporavak đubriva iz vode", "Standardno čišćenje vode", "Takmičarski vodeni sportovi"]
     },
     correct: 1,
     explanation: { en: "Waste water is a source of valuable biological nutrients.", sr: "Otpadna voda je izvor vrednih bioloških nutrijenata." }
@@ -1839,8 +1818,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'closed-loop supply chain'?", sr: "Šta je 'lanac snabdevanja zatvorenog kruga'?" },
     options: {
-      en: ["Secret chain", "Integrating forward and reverse logistics to maximize material recovery", "Local chain", "A short chain"],
-      sr: ["Tajni lanac", "Integracija direktne i povratne logistike radi maksimizacije oporavka materijala", "Lokalni lanac", "Kratak lanac"]
+      en: ["Short supply chain", "Logistics integration model", "Secret supply chain", "Local supply chain"],
+      sr: ["Kratak lanac snabdevanja", "Model integracije logistike", "Tajni lanac snabdevanja", "Lokalni lanac snabdevanja"]
     },
     correct: 1,
     explanation: { en: "It manages the product flow in both directions.", sr: "On upravlja tokom proizvoda u oba smera." }
@@ -1851,10 +1830,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'medium',
     question: { en: "What is 'material passport'?", sr: "Šta je 'materijalni pasoš'?" },
     options: {
-      en: ["Document for travel", "Digital record of all materials in a product or building for future recovery", "Identity card", "Quality stamp"],
-      sr: ["Dokument za putovanje", "Digitalni zapis svih materijala u proizvodu ili zgradi za budući oporavak", "Lična karta", "Pečat kvaliteta"]
+      en: ["Standard travel document", "Personal identity card", "Digital material record", "Quality control stamp"],
+      sr: ["Standardni putni dokument", "Lična karta pojedinca", "Digitalni zapis materije", "Pečat kontrole kvaliteta"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Passports help identify and sort materials at the end of life.", sr: "Pasoši pomažu u identifikaciji i sortiranju materijala na kraju veka." }
   },
 
@@ -1865,10 +1844,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'hard',
     question: { en: "How does the 'Rebound Effect' threaten circular economy goals?", sr: "Kako 'Rebound efekat' ugrožava ciljeve cirkularne ekonomije?" },
     options: {
-      en: ["Materials bounce back", "Efficiency gains leading to increased total consumption", "Lower quality", "Technical failure"],
-      sr: ["Materijali se vraćaju", "Dobici u efikasnosti koji vode povećanju ukupne potrošnje", "Niži kvalitet", "Tehnički neuspeh"]
+      en: ["Efficiency consumption gain", "Materials bouncing back", "Lowering product quality", "Acute technical failure"],
+      sr: ["Dobitak u potrošnji", "Materijali koji se vraćaju", "Smanjenje kvaliteta robe", "Akutni tehnički neuspeh"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "If we make things 2x more circular but consume 3x more, the planet still suffers.", sr: "Ako stvari učinimo 2x cirkularnijim, a trošimo 3x više, planeta i dalje trpi." }
   },
   {
@@ -1877,8 +1856,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'hard',
     question: { en: "Explain 'thermodynamic limits' to recycling.", sr: "Objasnite 'termodinamička ograničenja' reciklaže." },
     options: {
-      en: ["Recycling is too hot", "Energy required to sort dispersed materials can exceed the benefit", "Lack of machines", "Material melting point"],
-      sr: ["Reciklaža je pretopla", "Energija potrebna za sortiranje raspršenih materijala može premašiti korist", "Nedostatak mašina", "Tačka topljenja materijala"]
+      en: ["Lack of recycling machines", "Energy vs benefit ratio", "Recycling heat levels", "Material melting points"],
+      sr: ["Manjak mašina za rad", "Odnos energije i koristi", "Nivoi toplote reciklaže", "Tačke topljenja materije"]
     },
     correct: 1,
     explanation: { en: "Entropy makes it impossible to recycle everything with 100% efficiency.", sr: "Entropija čini nemogućim recikliranje svega sa 100% efikasnošću." }
@@ -1889,10 +1868,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'hard',
     question: { en: "What is 'absolute' vs 'relative' decoupling?", sr: "Šta je 'apsolutno' naspram 'relativnog' razdvajanja (decoupling)?" },
     options: {
-      en: ["Math terms", "Impact staying flat vs impact falling while growth continues", "Fast vs slow", "Good vs bad"],
-      sr: ["Matematički termini", "Uticaj ostaje isti vs uticaj opada dok rast traje", "Brzo vs sporo", "Dobro vs loše"]
+      en: ["Impact flat vs falling", "Good versus bad impact", "Fast versus slow growth", "Common math terms"],
+      sr: ["Uticaj isti naspram pada", "Dobar naspram lošeg uticaja", "Brz naspram sporog rasta", "Obični matematički pojmovi"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Absolute decoupling is the ultimate goal: economic growth with shrinking environmental impact.", sr: "Apsolutno razdvajanje je krajnji cilj: ekonomski rast uz smanjenje uticaja na okolinu." }
   },
   {
@@ -1901,8 +1880,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'hard',
     question: { en: "How do 'Digital Product Passports' (DPP) impact global trade?", sr: "Kako 'Digitalni pasoši proizvoda' (DPP) utiču na globalnu trgovinu?" },
     options: {
-      en: ["They make it slower", "By providing transparent data on origin, materials, and repair across the chain", "They increase taxes", "They replace logos"],
-      sr: ["Čine je sporijom", "Pružanjem transparentnih podataka o poreklu, materijalima i popravci kroz lanac", "Povećavaju poreze", "Zamenjuju logotipe"]
+      en: ["Increasing trade taxes", "Transparent chain data", "Slowing trade speeds", "Replacing brand logos"],
+      sr: ["Povećanje poreza trgovine", "Transparentni podaci lanca", "Usporavanje brzine trgovine", "Zamena logotipa brenda"]
     },
     correct: 1,
     explanation: { en: "DPPs enable better sorting and policy enforcement globally.", sr: "DPP-ovi omogućavaju bolje sortiranje i sprovođenje politika globalno." }
@@ -1913,10 +1892,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'hard',
     question: { en: "Explain the 'Slow, Narrow, Close' framework for loops.", sr: "Objasnite okvir 'Uspori, Suzi, Zatvori' (Slow, Narrow, Close) za petlje." },
     options: {
-      en: ["Traffic rules", "Strategies: Use longer, use less, use again", "Financial models", "Marketing tactics"],
-      sr: ["Saobraćajna pravila", "Strategije: Koristi duže, koristi manje, koristi ponovo", "Finansijski modeli", "Marketinške taktike"]
+      en: ["Standard traffic rules", "Global financial models", "Longer less again logic", "Standard marketing tactics"],
+      sr: ["Standardna saobraćajna pravila", "Globalni finansijski modeli", "Duže manje ponovo logika", "Standardne marketinške taktike"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Slow (longevity), Narrow (efficiency), Close (recycling).", sr: "Uspori (dugovečnost), Suzi (efikasnost), Zatvori (reciklaža)." }
   },
   {
@@ -1925,8 +1904,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'hard',
     question: { en: "What is 'Circular Economy 2.0' focusing on?", sr: "Na šta se fokusira 'Cirkularna ekonomija 2.0'?" },
     options: {
-      en: ["More recycling", "Regeneration and systemic social equity", "Better machines", "Digital marketing"],
-      sr: ["Više reciklaže", "Regeneracija i sistemska socijalna pravda", "Bolje mašine", "Digitalni marketing"]
+      en: ["Modern digital marketing", "Regeneration and systemic social equity", "Increased recycling rates", "Improved machine tech"],
+      sr: ["Moderni digitalni marketing", "Regeneracija i sistemska socijalna pravda", "Povećane stope reciklaže", "Poboljšana tehnologija mašina"]
     },
     correct: 1,
     explanation: { en: "2.0 goes beyond material efficiency to restore nature and society.", sr: "2.0 ide dalje od materijalne efikasnosti ka obnovi prirode i društva." }
@@ -1937,10 +1916,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'hard',
     question: { en: "What is the role of 'Tax Shifting' in circularity?", sr: "Koja je uloga 'pomeranja poreza' (tax shifting) u cirkularnosti?" },
     options: {
-      en: ["Lowering all taxes", "Taxing resources and pollution instead of labor", "Higher income tax", "Sales tax"],
-      sr: ["Smanjenje svih poreza", "Oporezivanje resursa i zagađenja umesto rada", "Veći porez na prihod", "Porez na promet"]
+      en: ["Resource vs labor taxing", "Higher income tax levels", "Lowering all system taxes", "Standard sales tax model"],
+      sr: ["Porez na resurse naspram rada", "Veći nivoi poreza na prihod", "Smanjenje svih poreza sistema", "Standardni model poreza promet"]
     },
-    correct: 1,
+    correct: 0,
     explanation: { en: "Taxing resources makes virgin materials expensive and human labor (repair) cheaper.", sr: "Oporezivanje resursa čini nove materijale skupim, a ljudski rad (popravku) jeftinijim." }
   },
   {
@@ -1949,8 +1928,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'hard',
     question: { en: "Explain the concept of 'Enabling Technologies' in circularity.", sr: "Objasnite koncept 'Omogućavajućih tehnologija' u cirkularnosti." },
     options: {
-      en: ["Social media", "AI, IoT, and Blockchain for tracking and optimizing resource flows", "Faster trucks", "Better screens"],
-      sr: ["Društvene mreže", "AI, IoT i Blockchain za praćenje i optimizaciju tokova resursa", "Brži kamioni", "Bolji ekrani"]
+      en: ["Faster transport trucks", "AI IoT Blockchain tech", "General social media", "Improved display screens"],
+      sr: ["Brži transportni kamioni", "AI IoT Blockchain tehnika", "Opšte društvene mreže", "Poboljšani ekrani prikaza"]
     },
     correct: 1,
     explanation: { en: "Tech like IoT allows for real-time monitoring of product health and usage.", sr: "Tehnologije poput IoT-a omogućavaju praćenje stanja i korišćenja proizvoda u realnom vremenu." }
@@ -1961,10 +1940,10 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'hard',
     question: { en: "What is 'Circular Risk' in financial reporting?", sr: "Šta je 'cirkularni rizik' u finansijskom izveštavanju?" },
     options: {
-      en: ["Going in circles", "The risk that linear business models will become obsolete and face stranded assets", "Bad credit", "Inflation"],
-      sr: ["Kretanje u krug", "Rizik da će linearni biznis modeli zastareti i suočiti se sa 'zarobljenom' imovinom", "Loš kredit", "Inflacija"]
+      en: ["Moving in circular paths", "Local inflation rates", "Linear obsolescence risk", "Bad corporate credit"],
+      sr: ["Kretanje u krugu putanja", "Lokalne stope inflacije", "Rizik linearne zastarelosti", "Loš korporativni kredit"]
     },
-    correct: 1,
+    correct: 2,
     explanation: { en: "Stranded assets include mines or factories that become unusable due to policy changes.", sr: "Zarobljena imovina uključuje rudnike ili fabrike koje postaju neupotrebljive zbog promene politike." }
   },
   {
@@ -1973,8 +1952,8 @@ export const rankedCircularQuizzes: RankedQuestion[] = [
     difficulty: 'hard',
     question: { en: "What is 'Bioregionalism' in circular economy?", sr: "Šta je 'bioregionalizam' u cirkularnoj ekonomiji?" },
     options: {
-      en: ["Eating only plants", "Aligning economic loops with local biological and geographic boundaries", "Global shipping", "Moving to the countryside"],
-      sr: ["Ishrana biljkama", "Usklađivanje ekonomskih petlji sa lokalnim biološkim i geografskim granicama", "Globalna dostava", "Selidba na selo"]
+      en: ["Global export shipping routes", "Local regional economic loops", "Moving to remote countryside", "Exclusive plant based diet"],
+      sr: ["Globalne rute izvoza robe", "Lokalne regionalne ekonomske petlje", "Selidba u daleka sela", "Isključivo biljna ishrana ljudi"]
     },
     correct: 1,
     explanation: { en: "Bioregionalism promotes local resilience and reduces transport impact.", sr: "Bioregionalizam promoviše lokalnu otpornost i smanjuje uticaj transporta." }
