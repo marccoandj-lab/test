@@ -300,11 +300,11 @@ export const translations = {
         board_green: "Circular (Green)"
       },
       onboarding: {
-        intro_text: "Linear economy builds profit. Circular preserves resources. What if you must manage both?",
+        intro_text: "EconomySwitch is a multiplayer board game where you manage companies. Navigate through two distinct economic worlds, balance your investments, and build the ultimate financial strategy.",
         start_experience: "Start Experience",
-        profit_vs_sustainability: "Profit ↔ Sustainability",
-        risk_vs_resilience: "Risk ↔ Resilience",
-        cta_text: "You have seen both sides. Now play.",
+        profit_vs_sustainability: "Profit vs Ecology",
+        risk_vs_resilience: "Risk vs Stability",
+        cta_text: "Master the markets, beat your friends, and reach 1,000,000 SC.",
         financial_literacy: "Financial Literacy",
         circular_economy: "Circular Economy",
         play_based_learning: "Game Based Learning",
@@ -649,11 +649,11 @@ export const translations = {
         board_green: "Cirkularna (Zelena)"
       },
       onboarding: {
-        intro_text: "Linearna ekonomija gradi profit. Cirkularna čuva resurse. Šta ako moraš da upravljaš oba?",
+        intro_text: "EconomySwitch je multiplayer igra na ploči gde upravljaš kompanijama. Kreći se kroz dva različita ekonomska sveta, balansiraj investicije i izgradi ultimativnu finansijsku strategiju.",
         start_experience: "Započni iskustvo",
-        profit_vs_sustainability: "Profit ↔ Održivost",
-        risk_vs_resilience: "Rizik ↔ Otpornost",
-        cta_text: "Već si video obe strane. Sada igraj.",
+        profit_vs_sustainability: "Profit ili Ekologija",
+        risk_vs_resilience: "Rizik ili Stabilnost",
+        cta_text: "Savladi tržište, pobedi prijatelje i osvoji 1,000,000 SC.",
         financial_literacy: "Finansijska pismenost",
         circular_economy: "Cirkularna ekonomija",
         play_based_learning: "Učenje kroz igru",
