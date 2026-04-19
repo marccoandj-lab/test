@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useQuizGame } from '../../hooks/useQuizGame';
+import { useQuizGame, PHASE_TIME } from '../../hooks/useQuizGame';
 import { AnimatedBackground } from './AnimatedBackground';
 import { QuestionCard } from './QuestionCard';
 import { CooldownOverlay } from './CooldownOverlay';
@@ -73,7 +73,7 @@ export const QuizGame: React.FC<QuizGameProps> = ({ userId, language, onClose })
             onAnswer={handleAnswer}
             language={language}
             timeLeft={state.timeLeft}
-            totalTime={15}
+            totalTime={PHASE_TIME}
             currentCapital={state.capital}
             currentIndex={state.phase === 'phase1' ? state.currentIndex : state.phase === 'phase2' ? state.currentIndex + 12 : state.currentIndex + 8}
             totalQuestions={20}

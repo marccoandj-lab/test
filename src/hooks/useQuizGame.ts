@@ -23,7 +23,7 @@ interface QuizState {
 
 const QUESTIONS_PER_PHASE = 8;
 const SWOT_QUESTIONS = 4;
-const PHASE_TIME = 15; // seconds per question
+export const PHASE_TIME = 30; // seconds per question
 
 export const useQuizGame = (userId: string | undefined) => {
   const [state, setState] = useState<QuizState>({
@@ -88,8 +88,10 @@ export const useQuizGame = (userId: string | undefined) => {
     const startTheme: QuizTheme = Math.random() > 0.5 ? 'linear' : 'circular';
     const oppositeTheme: QuizTheme = startTheme === 'linear' ? 'circular' : 'linear';
 
-    const p1Pool = startTheme === 'linear' ? rankedLinearQuizzes : rankedCircularQuizzes;
-    const p2Pool = oppositeTheme === 'linear' ? rankedLinearQuizzes : rankedCircularQuizzes;
+    // Strict filtering from all available ranked questions to ensure category integrity
+    const allRankedPool = [...rankedLinearQuizzes, ...rankedCircularQuizzes];
+    const p1Pool = allRankedPool.filter(q => q.category === startTheme);
+    const p2Pool = allRankedPool.filter(q => q.category === oppositeTheme);
 
     const p1Questions = shuffle(p1Pool).slice(0, QUESTIONS_PER_PHASE);
     const p2Questions = shuffle(p2Pool).slice(0, QUESTIONS_PER_PHASE);
