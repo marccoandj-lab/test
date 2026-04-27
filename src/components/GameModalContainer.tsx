@@ -114,8 +114,8 @@ const GameModalContainer: React.FC<GameModalContainerProps> = ({
   if (globalModal === 'switch') {
     return (
       <SwitchModal
-        fromMode={mode}
-        toMode={mode === 'finance' ? 'sustainability' : 'finance'}
+        fromMode={mode === 'finance' ? 'sustainability' : 'finance'}
+        toMode={mode}
         language={language}
         onClose={() => {
           const myId = multiplayer.getMyId();
