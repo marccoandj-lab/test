@@ -9,13 +9,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-app.use(cors()); // Allow Cross-Origin requests
-app.use(express.json()); // Enable JSON body parsing
+app.use(cors({
+  origin: '*', // Možeš kasnije ograničiti na svoje Vercel domene
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+app.use(express.json()); 
 const port = process.env.PORT || 9000;
 
 // Initialize Notifications
 initNotifications(app);
-
 
 // Serve static files from the dist directory
 const distPath = path.join(__dirname, 'dist');
@@ -29,7 +32,8 @@ const server = app.listen(port, () => {
 const peerServer = ExpressPeerServer(server, {
   debug: true,
   path: '/',
-  proxied: true // Important for Render/Vercel reverse proxies
+  proxied: true, // Obavezno za Render/Vercel reverse proxy
+  allow_discovery: true
 });
 
 app.use('/peerjs', peerServer);

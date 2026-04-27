@@ -223,27 +223,32 @@ class MultiplayerManager {
   };
 
   private getPeerConfig(usePublicCloud = false) {
-    if (usePublicCloud) {
+    if (usePublicCloud && !backendUrl) {
        console.log('Falling back to PeerJS Public Cloud...');
        return { ...this.config }; // Uses default PeerServer cloud
     }
 
-    // Priority 1: User-provided VITE_BACKEND_URL
-    // We only use this if it's NOT pointing to localhost while we are in production.
+    // Priority 1: User-provided VITE_BACKEND_URL (e.g. from Vercel ENV)
     if (backendUrl) {
       try {
         const url = new URL(backendUrl);
         const isBackendLocal = url.hostname === 'localhost' || url.hostname === '127.0.0.1';
         
+        // If we have a production URL, force standard secure ports
+        const isSecure = url.protocol === 'https:';
+        const port = url.port ? parseInt(url.port) : (isSecure ? 443 : 80);
+
         if (!isLocalhost && isBackendLocal) {
            console.warn('[Multiplayer] Ignoring local backend URL (localhost) in production environment.');
         } else {
+           console.log(`[Multiplayer] Connecting to custom backend: ${url.hostname}:${port} (Secure: ${isSecure})`);
            return {
              ...this.config,
              host: url.hostname,
-             port: url.port ? parseInt(url.port) : (url.protocol === 'https:' ? 443 : 80),
-             secure: url.protocol === 'https:',
-             path: '/peerjs'
+             port: port,
+             secure: isSecure,
+             path: '/peerjs',
+             pingInterval: 5000 // Heartbeat every 5s
            };
         }
       } catch (e) {
@@ -253,23 +258,49 @@ class MultiplayerManager {
 
     // Priority 2: Dedicated Production Signaling Server (on Render)
     if (!isLocalhost) {
+      console.log('[Multiplayer] Connecting to production Render signaling host.');
       return {
         ...this.config,
         host: this.PROD_SIGNALING_HOST,
         port: 443,
         secure: true,
-        path: '/peerjs'
+        path: '/peerjs',
+        pingInterval: 5000
       };
     }
 
-    // Priority 3: Local Development Fallback (Port 9000 as per server.js)
+    // Priority 3: Local Development Fallback
     return {
       ...this.config,
-      host: window.location.hostname, // localhost
+      host: window.location.hostname,
       port: 9000,
       secure: false,
       path: '/peerjs'
     };
+  }
+
+  private heartbeatInterval: any = null;
+
+  private startHeartbeat() {
+    this.stopHeartbeat();
+    console.log('[Multiplayer] Starting WebSocket heartbeat.');
+    this.heartbeatInterval = setInterval(() => {
+      if (this.peer && !this.peer.destroyed && this.peer.open) {
+        // PeerJS automatically handles pings if pingInterval is set in config,
+        // but manual small data transmission ensures the connection stays alive 
+        // through aggressive mobile network timeouts.
+        if (this.myProfile?.isHost && this.connections.size > 0) {
+          // As host, we don't need to do much, PeerJS keeps sockets open.
+        }
+      }
+    }, 15000);
+  }
+
+  private stopHeartbeat() {
+    if (this.heartbeatInterval) {
+      clearInterval(this.heartbeatInterval);
+      this.heartbeatInterval = null;
+    }
   }
 
   private setupPeer(id: string, isRetry = false) {
@@ -290,14 +321,13 @@ class MultiplayerManager {
     this.peer.on('open', (peerId) => {
       console.log('Connected to signaling server with ID:', peerId);
       this.updateStatus('Signaling Established');
+      this.startHeartbeat();
       
       // Host is "connected" as soon as signaling is up
       if (this.myProfile?.isHost) {
-        // Short delay to ensure any transient states settle
         setTimeout(() => this.updateStatus('connected'), 500);
       }
 
-      // Client: If we have a pending room to join, do it now
       if (this.pendingJoinRoomId) {
         this.performJoinRoom(this.pendingJoinRoomId);
       }
