@@ -1,7 +1,11 @@
 import { Peer, DataConnection } from 'peerjs';
-import { nanoid } from 'nanoid';
+import { nanoid, customAlphabet } from 'nanoid';
 import { Player, AvatarType } from '../types/game';
 import { generateLevels } from '../data/levelGenerator';
+
+// Safe alphabet for PeerJS and human readability (no underscores, no confusing chars)
+const generateRoomId = customAlphabet('ABCDEFGHJKLMNPQRSTUVWXYZ23456789', 6);
+const generateSafePlayerId = customAlphabet('abcdefghijklmnopqrstuvwxyz0123456789', 10);
 import { 
   Level, 
   financeQuizzes, sustainabilityQuizzes, 
@@ -170,7 +174,7 @@ class MultiplayerManager {
   setMyId(id: string) {
     if (!id || id === 'undefined' || id === '[object Object]' || id.includes('undefined')) {
       console.warn('[Multiplayer] Invalid ID passed to setMyId, keeping current or generating fallback.');
-      if (!this.myId) this.myId = 'player_' + nanoid(6);
+      if (!this.myId) this.myId = 'player_' + generateSafePlayerId();
       return;
     }
     this.myId = id;
@@ -358,11 +362,11 @@ class MultiplayerManager {
   createRoom(name: string, avatar: AvatarType): string {
     // ID Safety: We MUST have a valid ID before creating a room
     if (!this.myId || this.myId.includes('undefined')) {
-      this.myId = 'player_' + nanoid(6);
+      this.myId = 'player_' + generateSafePlayerId();
       console.warn('[Multiplayer] ID missing or invalid during createRoom. Generated fallback ID:', this.myId);
     }
 
-    const roomId = nanoid(6).toUpperCase();
+    const roomId = generateRoomId();
     this.state.roomId = roomId;
     this.state.status = 'waiting';
     this.state.levels = generateLevels(250, 'finance', 0, undefined, false);
@@ -392,7 +396,7 @@ class MultiplayerManager {
   joinRoom(roomId: string, name: string, avatar: AvatarType) {
     // ID Safety: We MUST have a valid ID before joining a room
     if (!this.myId || this.myId.includes('undefined')) {
-      this.myId = 'player_' + nanoid(6);
+      this.myId = 'player_' + generateSafePlayerId();
       console.warn('[Multiplayer] ID missing or invalid during joinRoom. Generated fallback ID:', this.myId);
     }
 
@@ -413,7 +417,7 @@ class MultiplayerManager {
       stats: this.createInitialStats()
     };
 
-    const clientPeerId = this.myId + '_' + nanoid(4);
+    const clientPeerId = this.myId + '_' + generateSafePlayerId();
     this.pendingJoinRoomId = roomId;
     this.setupPeer(clientPeerId);
   }
